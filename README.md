@@ -38,28 +38,62 @@ A skill at this scope can be opinionated. It can carry concrete have-nots, named
 
 A single mega-skill cannot do any of these things at the same time without becoming the "god skill" the suite exists to prevent.
 
-## Install
+## One-command install
 
-Same on every platform. Install only the skills you actually use.
+Installs every skill into every detected harness (Claude Code, Codex, Cursor) with a single command. Idempotent. Re-run anytime.
 
-**Claude Code:**
 ```bash
+curl -sSL https://raw.githubusercontent.com/aihxp/ready-suite/main/install.sh | bash
+```
+
+Or, if you prefer to read the script first:
+
+```bash
+git clone https://github.com/aihxp/ready-suite.git
+bash ready-suite/install.sh
+```
+
+What it does:
+
+1. Detects which harnesses you have (`~/.claude`, `~/.codex`, `~/.cursor`). Skips ones that aren't installed.
+2. For each of the eleven skills, ensures a dev copy at `~/Projects/<skill>/`. Clones from `aihxp/<skill>` if missing; reuses the existing copy if it's a clean git working tree.
+3. Symlinks `SKILL.md` and `references/` from the dev copy into every detected harness's skills directory.
+4. Existing non-symlink installs are backed up to `<target>.backup-<timestamp>/` first.
+
+Edit a file in `~/Projects/<skill>/` and the change is live in every harness immediately. No re-install needed.
+
+Verbose mode shows every step:
+
+```bash
+bash install.sh -v
+```
+
+## Per-skill install (manual)
+
+If you want only one skill or prefer not to clone all eleven:
+
+```bash
+# Claude Code
 git clone https://github.com/aihxp/<skill-name>.git ~/.claude/skills/<skill-name>
-```
 
-**Codex:**
-```bash
+# Codex
 git clone https://github.com/aihxp/<skill-name>.git ~/.codex/skills/<skill-name>
-```
 
-**Cursor:**
-```bash
+# Cursor
 git clone https://github.com/aihxp/<skill-name>.git ~/.cursor/skills/<skill-name>
 ```
 
 **Windsurf or other agents:** point your project rules or system prompt at the skill's `SKILL.md` and load reference files as needed.
 
-**Symlink trick.** If you keep dev copies under `~/Projects/<skill-name>/`, symlink each platform's skills directory at the dev copy. Updates in the dev copy propagate instantly to every harness without re-installing.
+**Symlink trick.** If you keep dev copies under `~/Projects/<skill-name>/`, symlink each platform's skills directory at the dev copy. Updates in the dev copy propagate instantly to every harness without re-installing. (`install.sh` does this for you.)
+
+## Uninstall
+
+Removes the suite's symlinks from every detected harness. Leaves dev copies in `~/Projects/` and any `.backup-*/` directories untouched.
+
+```bash
+bash uninstall.sh
+```
 
 ## Composition
 
