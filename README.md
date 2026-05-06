@@ -38,9 +38,36 @@ A skill at this scope can be opinionated. It can carry concrete have-nots, named
 
 A single mega-skill cannot do any of these things at the same time without becoming the "god skill" the suite exists to prevent.
 
-## One-command install
+## Claude Code plugin install
 
-Installs every skill into every detected harness (Claude Code, Codex, Cursor) with a single command. Idempotent. Re-run anytime.
+Inside Claude Code:
+
+```text
+/plugin marketplace add aihxp/ready-suite
+/plugin install ready-suite@ready-suite
+```
+
+This adds the suite's marketplace and installs the `ready-suite` meta plugin, which depends on every specialist (`prd-ready`, `architecture-ready`, ..., `harden-ready`). One install command, eleven skills.
+
+Want only one skill? Install it directly:
+
+```text
+/plugin install prd-ready@ready-suite
+```
+
+The marketplace lives in this hub repo at [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json). Each plugin is vendored under [`plugins/<skill-name>/`](plugins/) with its own manifest. See [`references/PLUGIN-RESEARCH.md`](references/PLUGIN-RESEARCH.md) for the format research that shaped these decisions.
+
+Plugin maintainers refresh the vendored copies via:
+
+```bash
+bash scripts/refresh-plugin-skills.sh
+```
+
+This re-reads version + description from each sibling's `SKILL.md` frontmatter, re-vendors `SKILL.md` + `references/` from `~/Projects/<skill>/`, and rewrites the manifests. Run it whenever a sibling cuts a release, then commit and tag `plugin-v<x.y.z>`.
+
+## One-command install (Codex, Cursor, all platforms)
+
+Installs every skill into every detected harness (Claude Code, Codex, Cursor) with a single shell command. Idempotent. Re-run anytime.
 
 ```bash
 curl -sSL https://raw.githubusercontent.com/aihxp/ready-suite/main/install.sh | bash

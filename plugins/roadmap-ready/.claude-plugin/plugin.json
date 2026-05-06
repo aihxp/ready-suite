@@ -1,0 +1,10 @@
+{
+  "name": "roadmap-ready",
+  "description": "Sequence software work over time with discipline. Ingests the PRD (from prd-ready) and the architecture dependency graph (from architecture-ready); requires a team-capacity input; produces a Markdown `ROADMAP.md` with Now-Next-Later horizons, named milestones with completion gates, topologically-sorted slice queues for production-ready, cutover cadence for deploy-ready, KPI handoffs for observe-ready, and explicit launch-milestone gate dates for launch-ready. Refuses fictional precision (Gantt-to-the-day with no capacity input), fictional parallelism (more concurrent tracks than engineers), quarter-stuffing (all four quarters equally full), speculative features (items absent from the PRD or architecture), feature-factory output (rows that are bare feature names with no outcome or commitment), shelf roadmaps (written once, never consulted), and roadmap theater (Gantt aesthetics with no commitments). Triggers on 'build a roadmap,' 'milestone plan,' 'quarterly plan,' 'sequence the work,' 'Now-Next-Later,' 'Shape Up cycle,' 'PI planning,' 'what ships first,' 'when does the beta happen,' 'roadmap for this quarter.' Does not redefine the product (prd-ready), design the architecture (architecture-ready), pick the stack (stack-ready), build the app (production-ready), scaffold the repo (repo-ready), deploy (deploy-ready), monitor (observe-ready), or launch (launch-ready). Planning tier; consumes `.prd-ready/PRD.md` and `.architecture-ready/ARCH.md`; produces `.roadmap-ready/ROADMAP.md` and `HANDOFF.md`. Full trigger list in README.",
+  "version": "1.0.4",
+  "author": { "name": "aihxp", "url": "https://github.com/aihxp" },
+  "homepage": "https://github.com/aihxp/roadmap-ready",
+  "repository": "https://github.com/aihxp/roadmap-ready",
+  "license": "MIT",
+  "keywords": ["ready-suite", "ai-skill"]
+}

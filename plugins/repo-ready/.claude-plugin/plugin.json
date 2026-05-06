@@ -1,0 +1,10 @@
+{
+  "name": "repo-ready",
+  "description": "Set up production-grade repository structure, documentation, CI/CD, quality tooling, and platform configuration -- across any stack (Node/Python/Go/Rust/Java/Ruby/Swift/C#/PHP/Elixir/C++/Dart) and any platform (GitHub/GitLab/Bitbucket). Use this skill whenever the user asks to 'set up a repo,' 'initialize a project,' 'add documentation,' 'set up CI,' 'configure linting,' 'add a README,' 'set up GitHub Actions,' 'make my repo professional,' 'add contributing guidelines,' 'set up release automation,' or describes wanting a clean, well-structured repository. Triggers also include requests to add a LICENSE, CHANGELOG, SECURITY.md, CODE_OF_CONDUCT, issue templates, PR templates, branch protection, dependency scanning, badges, .gitignore, .editorconfig, Makefile, devcontainer, or any 'repo hygiene' task. This skill enforces a no-placeholder rule -- every generated file must contain actionable content tailored to the project's stack, type, and stage, not generic TODO markers or lorem ipsum.",
+  "version": "1.6.8",
+  "author": { "name": "aihxp", "url": "https://github.com/aihxp" },
+  "homepage": "https://github.com/aihxp/repo-ready",
+  "repository": "https://github.com/aihxp/repo-ready",
+  "license": "MIT",
+  "keywords": ["ready-suite", "ai-skill"]
+}

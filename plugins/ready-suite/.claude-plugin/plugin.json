@@ -1,0 +1,23 @@
+{
+  "name": "ready-suite",
+  "description": "Bundle of all eleven ready-suite specialist skills. Installing this plugin pulls every specialist via dependencies; install one of the specialists directly if you want only that skill.",
+  "version": "1.0.0",
+  "author": { "name": "aihxp", "url": "https://github.com/aihxp" },
+  "homepage": "https://github.com/aihxp/ready-suite",
+  "repository": "https://github.com/aihxp/ready-suite",
+  "license": "MIT",
+  "keywords": ["ready-suite", "meta", "bundle"],
+  "dependencies": [
+    "kickoff-ready",
+    "prd-ready",
+    "architecture-ready",
+    "roadmap-ready",
+    "stack-ready",
+    "repo-ready",
+    "production-ready",
+    "deploy-ready",
+    "observe-ready",
+    "launch-ready",
+    "harden-ready"
+  ]
+}

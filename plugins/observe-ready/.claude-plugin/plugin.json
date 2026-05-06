@@ -1,0 +1,10 @@
+{
+  "name": "observe-ready",
+  "description": "Keep a deployed app healthy once real users are on it. Refuses paper SLOs (numbers with no error-budget policy), blind dashboards (charts bound to no SLO), and paper runbooks (written once, never executed). Triggers on 'add monitoring,' 'define an SLO,' 'alerts when X,' 'add Datadog / Honeycomb / Sentry / Grafana,' 'write a runbook,' 'on-call setup,' 'post-mortem,' 'structured logging,' 'OpenTelemetry,' 'distributed tracing,' 'error budget policy,' or any request to wire operational signals for a live service. Does not pick the tool (stack-ready), deploy the app (deploy-ready), build the app (production-ready), or manage secrets (security). Pairs with deploy-ready. Full trigger list in README.",
+  "version": "1.0.9",
+  "author": { "name": "aihxp", "url": "https://github.com/aihxp" },
+  "homepage": "https://github.com/aihxp/observe-ready",
+  "repository": "https://github.com/aihxp/observe-ready",
+  "license": "MIT",
+  "keywords": ["ready-suite", "ai-skill"]
+}

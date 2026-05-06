@@ -1,0 +1,72 @@
+{
+  "name": "ready-suite",
+  "description": "Eleven AI skills covering the full arc from idea to launch, plus a meta plugin that bundles them all.",
+  "owner": { "name": "aihxp", "url": "https://github.com/aihxp" },
+  "metadata": {
+    "version": "1.0.0",
+    "homepage": "https://github.com/aihxp/ready-suite"
+  },
+  "plugins": [
+    {
+      "name": "ready-suite",
+      "source": "./plugins/ready-suite",
+      "description": "Install all eleven ready-suite skills in one shot. Pulls every specialist via plugin dependencies."
+    }
+,
+    {
+      "name": "kickoff-ready",
+      "source": "./plugins/kickoff-ready",
+      "description": "Sequence the ten ready-suite specialists for a greenfield project from raw user intent. Triggers on 'kickoff,' 'new project from scratch,' 'walk me through idea to launch,' 'help me ship it end-to-end,' 'orchestrate the whole arc,' 'I have an idea, what next.' Owns sequence decision, handoff invocation, progress ledger (`.kickoff-ready/PROGRESS.md`), resume protocol, skip-and-import detection. The only meta-tier skill; every other ready-suite sibling is downstream from this one. Refuses scope leak (writing PRD/architecture/roadmap/launch content the specialists own), rubber-stamp orchestration (advancing the ledger without verifying artifact on disk), phantom resume (claiming resume but starting fresh), ghost handoff (invoking a sibling without verifying upstream artifact), and happy-path orchestration (no policy for skip, re-invoke, import, or sibling failure). Does not produce specialist content; routes to prd-ready, architecture-ready, roadmap-ready, stack-ready, repo-ready, production-ready, deploy-ready, observe-ready, launch-ready, harden-ready. Greenfield only; existing-codebase migrations route to the relevant specialist directly. Full trigger list in README."
+    },
+    {
+      "name": "prd-ready",
+      "source": "./plugins/prd-ready",
+      "description": "Write a PRD that engineering, design, QA, and downstream planning skills can consume without a clarification meeting. Owns problem framing, target-user specificity, success metrics, functional and non-functional requirements, scope and no-gos, appetite and rabbit holes, open-question log, downstream handoff block, and the iterate-vs-freeze lifecycle. Refuses hollow PRDs (sections filled, no decisions), invisible PRDs (reads the same across any product), feature laundry lists (un-prioritized feature dumps), solution-first PRDs (problem box names the solution), assumption-soup PRDs (we-assume-users-will-love-it claims), and moving-target PRDs (silent edits, engineer whiplash). Triggers on 'write a PRD,' 'product spec,' 'requirements doc,' 'one-pager,' 'product brief,' 'pitch for this feature,' 'problem statement.' Does not design the architecture (architecture-ready), sequence the roadmap (roadmap-ready), pick the stack (stack-ready), build the app (production-ready), or write launch copy (launch-ready). Top of the planning tier; no upstream siblings. Full trigger list in README."
+    },
+    {
+      "name": "architecture-ready",
+      "source": "./plugins/architecture-ready",
+      "description": "Given a PRD, produce an architecture that says what system shape to build and why, before any code is written or any tool is chosen. Triggers on 'design the architecture,' 'system diagram,' 'monolith or microservices,' 'integration shape,' 'service boundaries,' 'data architecture,' 'how do the pieces fit,' 'ADR,' 'trust boundaries,' 'C4 diagram,' 'arc42,' 'non-functional requirements map to architecture.' Refuses architecture theater (diagrams with no load-bearing decisions), paper-tiger architecture (looks robust until first real load), cargo-cult cloud-native (Kubernetes and Kafka for a ten-user CRUD), stackitecture (stack picked and called architecture), resume-driven architecture, and 'scalable' as a claim with no numbers. Planning tier; consumes .prd-ready/PRD.md; produces .architecture-ready/ARCH.md for stack-ready, roadmap-ready, and production-ready. Does not pick tools (stack-ready), sequence milestones (roadmap-ready), or build the app (production-ready). Full trigger list in README."
+    },
+    {
+      "name": "roadmap-ready",
+      "source": "./plugins/roadmap-ready",
+      "description": "Sequence software work over time with discipline. Ingests the PRD (from prd-ready) and the architecture dependency graph (from architecture-ready); requires a team-capacity input; produces a Markdown `ROADMAP.md` with Now-Next-Later horizons, named milestones with completion gates, topologically-sorted slice queues for production-ready, cutover cadence for deploy-ready, KPI handoffs for observe-ready, and explicit launch-milestone gate dates for launch-ready. Refuses fictional precision (Gantt-to-the-day with no capacity input), fictional parallelism (more concurrent tracks than engineers), quarter-stuffing (all four quarters equally full), speculative features (items absent from the PRD or architecture), feature-factory output (rows that are bare feature names with no outcome or commitment), shelf roadmaps (written once, never consulted), and roadmap theater (Gantt aesthetics with no commitments). Triggers on 'build a roadmap,' 'milestone plan,' 'quarterly plan,' 'sequence the work,' 'Now-Next-Later,' 'Shape Up cycle,' 'PI planning,' 'what ships first,' 'when does the beta happen,' 'roadmap for this quarter.' Does not redefine the product (prd-ready), design the architecture (architecture-ready), pick the stack (stack-ready), build the app (production-ready), scaffold the repo (repo-ready), deploy (deploy-ready), monitor (observe-ready), or launch (launch-ready). Planning tier; consumes `.prd-ready/PRD.md` and `.architecture-ready/ARCH.md`; produces `.roadmap-ready/ROADMAP.md` and `HANDOFF.md`. Full trigger list in README."
+    },
+    {
+      "name": "stack-ready",
+      "source": "./plugins/stack-ready",
+      "description": "Choose the right stack for a project before building it. Triggers on 'what stack should I use,' 'Next.js vs. Remix,' 'pick a database,' 'Postgres or Mongo,' 'which auth provider,' 'should I use Convex,' 'hosting recommendation,' 'move from Firebase to Supabase,' or any request to evaluate tech choices for a specific job. Outputs a ranked, scored shortlist with tradeoffs, pairing compatibility checks, and bundle recommendations tailored to domain, team size, budget, and time-to-ship. Stops at the recommendation: does not build the app (that's production-ready) or configure the repo (that's repo-ready). Not for purely abstract language debates with no project attached. Full trigger list in README."
+    },
+    {
+      "name": "repo-ready",
+      "source": "./plugins/repo-ready",
+      "description": "Set up production-grade repository structure, documentation, CI/CD, quality tooling, and platform configuration -- across any stack (Node/Python/Go/Rust/Java/Ruby/Swift/C#/PHP/Elixir/C++/Dart) and any platform (GitHub/GitLab/Bitbucket). Use this skill whenever the user asks to 'set up a repo,' 'initialize a project,' 'add documentation,' 'set up CI,' 'configure linting,' 'add a README,' 'set up GitHub Actions,' 'make my repo professional,' 'add contributing guidelines,' 'set up release automation,' or describes wanting a clean, well-structured repository. Triggers also include requests to add a LICENSE, CHANGELOG, SECURITY.md, CODE_OF_CONDUCT, issue templates, PR templates, branch protection, dependency scanning, badges, .gitignore, .editorconfig, Makefile, devcontainer, or any 'repo hygiene' task. This skill enforces a no-placeholder rule -- every generated file must contain actionable content tailored to the project's stack, type, and stage, not generic TODO markers or lorem ipsum."
+    },
+    {
+      "name": "production-ready",
+      "source": "./plugins/production-ready",
+      "description": "Build production-grade, end-to-end connected apps across any stack: dashboards, admin panels, internal tools, SaaS back-offices, analytics consoles, ops centers. Triggers on 'dashboard,' 'admin panel,' 'internal tool,' 'back office,' 'control panel,' 'analytics view,' or any multi-page interface with auth, navigation, and CRUD over domain data. Enforces vertical-slice discipline and a no-scaffold-no-placeholder rule: every feature ships wired end-to-end to a real backend, not stubbed with TODO, fake JSON, or 'hook this up later.' Pairs with repo-ready for repo hygiene. Not for single components, marketing sites, or pure repo scaffolding. Full trigger list in README."
+    },
+    {
+      "name": "deploy-ready",
+      "source": "./plugins/deploy-ready",
+      "description": "Ship an app from a known-green build into real user-facing environments safely, repeatably, and reversibly. Triggers on 'deploy this,' 'CI/CD pipeline,' 'promote to staging,' 'zero-downtime migration,' 'expand-contract,' 'rollback,' 'canary,' 'blue/green,' 'progressive rollout,' 'first deploy,' 'environment parity,' 'GitHub Actions pipeline,' 'GitOps,' 'promote the same artifact,' or any request to move code from pre-prod to prod. Enforces same-artifact promotion, expand/contract as a multi-deploy calendar, code-vs-data rollback asymmetry, and paper-canary detection. Does not pick IaC tools (stack-ready), wire observability (observe-ready), or manage secrets vaults (security). Pairs with observe-ready. Full trigger list in README."
+    },
+    {
+      "name": "observe-ready",
+      "source": "./plugins/observe-ready",
+      "description": "Keep a deployed app healthy once real users are on it. Refuses paper SLOs (numbers with no error-budget policy), blind dashboards (charts bound to no SLO), and paper runbooks (written once, never executed). Triggers on 'add monitoring,' 'define an SLO,' 'alerts when X,' 'add Datadog / Honeycomb / Sentry / Grafana,' 'write a runbook,' 'on-call setup,' 'post-mortem,' 'structured logging,' 'OpenTelemetry,' 'distributed tracing,' 'error budget policy,' or any request to wire operational signals for a live service. Does not pick the tool (stack-ready), deploy the app (deploy-ready), build the app (production-ready), or manage secrets (security). Pairs with deploy-ready. Full trigger list in README."
+    },
+    {
+      "name": "launch-ready",
+      "source": "./plugins/launch-ready",
+      "description": "Put a deployed, healthy app in front of real users without shipping AI-slop. Owns landing page, positioning, launch-day SEO, Open Graph cards, waitlist and email funnel, launch channels (Product Hunt, Show HN, Reddit, X, IH, dev.to, LinkedIn), press outreach, launch-day telemetry, and the D-7 to D+7 runbook. Refuses AI-slop landings, hero-fatigue copy, spec-sheet positioning, paper waitlists, unrendered OG cards, and silent launches (launch-day signups with no source attribution). Triggers on 'launch my product,' 'build a landing page,' 'Product Hunt,' 'Show HN,' 'waitlist,' 'OG card,' 'launch-day SEO,' 'press kit,' 'launch week plan.' Does not build the app (production-ready), deploy it (deploy-ready), monitor it (observe-ready), pick tools (stack-ready), or own ongoing marketing. Pairs with deploy-ready and observe-ready. Full trigger list in README."
+    },
+    {
+      "name": "harden-ready",
+      "source": "./plugins/harden-ready",
+      "description": "Verify a deployed app survives adversarial attention and prove it to an auditor. Owns post-deploy adversarial review, OWASP Top 10 systematic walkthroughs (Web / API / LLM), compliance mapping (SOC 2 CC, HIPAA 164.312, PCI-DSS 4.0, GDPR Article 32) with control-to-code evidence, pen-test preparation and retest discipline, responsible-disclosure program design beyond SECURITY.md, and class-not-instance post-incident hardening. Refuses scanner-first security (the Snyk-passed-but-front-door-exploitable pattern), paper trust boundaries (declared in docs, absent in code), hardening-as-ritual (annual pen test, nothing between), compliance-without-security (checklist green, app still vulnerable), shallow-audit traps (only finds what tools surface), and CVE-of-the-week patching. Triggers on 'adversarial review,' 'pen-test prep,' 'OWASP walkthrough,' 'SOC 2 / HIPAA / PCI-DSS / GDPR gap check,' 'responsible disclosure,' 'bug bounty,' 'post-incident hardening,' 'security review before launch.' Does not build the app (production-ready), deploy it (deploy-ready), monitor it (observe-ready), pick the tool (stack-ready), or own repo-hygiene security (repo-ready). Pairs with deploy-ready, observe-ready, launch-ready. Full trigger list in README."
+    }
+  ]
+}
