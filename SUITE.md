@@ -53,6 +53,9 @@ Every skill installs the same way on every platform. On a machine where the dev 
 | Claude Code | `~/.claude/skills/<skill-name>/` |
 | Codex | `~/.codex/skills/<skill-name>/` |
 | Cursor | `~/.cursor/skills/<skill-name>/` |
+| pi | `~/.agents/skills/<skill-name>/` (neutral Agent Skills path) |
+| OpenClaw | `~/.agents/skills/<skill-name>/` (neutral Agent Skills path) |
+| Any Agent Skills harness | `~/.agents/skills/<skill-name>/` |
 | Windsurf | Project rules or system prompt |
 | Other agents | Upload `SKILL.md` and relevant reference files to the project context |
 
@@ -67,6 +70,12 @@ Every skill installs the same way on every platform. On a machine where the dev 
 7. **Byte-identical SUITE.md across siblings.** When any sibling releases, every sibling's SUITE.md row bumps. This keeps the known-good-versions table authoritative from any entry point.
 8. **Orchestration is one-way.** kickoff-ready knows about the ten specialist siblings and invokes them; the specialists do not know about kickoff-ready and do not call back. Phase orchestrators (GSD, BMAD) compose at the boundary; ready-suite specialists never couple to a specific orchestrator.
 
+## Standards
+
+Ready-suite skills implement the [Agent Skills standard](https://agentskills.io). The contract is plain: a `SKILL.md` with YAML frontmatter (`name`, `description`, plus the suite-specific lifecycle fields) and an optional `references/` directory that the harness loads on demand. Any harness that parses this format runs every skill in the suite first-class.
+
+Tested with: Claude Code, Codex, Cursor, Windsurf, [pi](https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent), and [OpenClaw](https://github.com/openclaw/openclaw). pi and OpenClaw both load skills from the neutral `~/.agents/skills/` path defined by the standard, so future AgentSkills-compatible harnesses inherit support with no per-tool integration work. The `compatible_with` frontmatter field on each skill names the verified harnesses plus `any-agentskills-compatible-harness` as the standards-level guarantee.
+
 ## Why a ready suite at all
 
 AI-generated apps fail in predictable ways: hollow buttons, placeholder READMEs, missing CI, unshipped half-migrations, unmonitored production, silent launches, and security surfaces that pass SAST/SCA and fail adversarial review. AI-generated multi-step orchestration fails in equally predictable ways: scope leak, rubber-stamp orchestration, phantom resume, ghost handoff, happy-path orchestration. One giant skill covering everything becomes unfocused and bloats past the point of usefulness. Separate tight skills composing through explicit handoffs stays sharp; a small orchestration-tier skill stays small by refusing to fill the blank page.
@@ -75,16 +84,16 @@ AI-generated apps fail in predictable ways: hollow buttons, placeholder READMEs,
 
 | Skill | Current version | Repo |
 |---|---|---|
-| **kickoff-ready** | 1.0.0 | https://github.com/aihxp/kickoff-ready |
-| **production-ready** | 2.5.13 | https://github.com/aihxp/production-ready |
-| **repo-ready** | 1.6.8 | https://github.com/aihxp/repo-ready |
-| **stack-ready** | 1.1.11 | https://github.com/aihxp/stack-ready |
-| **deploy-ready** | 1.0.10 | https://github.com/aihxp/deploy-ready |
-| **observe-ready** | 1.0.9 | https://github.com/aihxp/observe-ready |
-| **launch-ready** | 1.0.7 | https://github.com/aihxp/launch-ready |
-| **prd-ready** | 1.0.6 | https://github.com/aihxp/prd-ready |
-| **architecture-ready** | 1.0.5 | https://github.com/aihxp/architecture-ready |
-| **roadmap-ready** | 1.0.4 | https://github.com/aihxp/roadmap-ready |
-| **harden-ready** | 1.0.3 | https://github.com/aihxp/harden-ready |
+| **kickoff-ready** | 1.0.1 | https://github.com/aihxp/kickoff-ready |
+| **production-ready** | 2.5.14 | https://github.com/aihxp/production-ready |
+| **repo-ready** | 1.6.9 | https://github.com/aihxp/repo-ready |
+| **stack-ready** | 1.1.12 | https://github.com/aihxp/stack-ready |
+| **deploy-ready** | 1.0.11 | https://github.com/aihxp/deploy-ready |
+| **observe-ready** | 1.0.10 | https://github.com/aihxp/observe-ready |
+| **launch-ready** | 1.0.8 | https://github.com/aihxp/launch-ready |
+| **prd-ready** | 1.0.7 | https://github.com/aihxp/prd-ready |
+| **architecture-ready** | 1.0.6 | https://github.com/aihxp/architecture-ready |
+| **roadmap-ready** | 1.0.5 | https://github.com/aihxp/roadmap-ready |
+| **harden-ready** | 1.0.4 | https://github.com/aihxp/harden-ready |
 
 The suite is additive. A skill not yet released does not block any other skill from functioning. When a skill reaches v1.0.0, update this table and ship the change across all installed siblings. With kickoff-ready v1.0.0 the suite is eleven skills across orchestration (one), planning (four), building (two), and shipping (four).

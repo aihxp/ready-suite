@@ -1,10 +1,22 @@
 #!/usr/bin/env bash
 # install.sh: install the ready-suite into every detected harness.
 #
-# - Detects ~/.claude, ~/.codex, ~/.cursor (skills/ subdir).
+# - Detects native-skill harnesses by their config directories:
+#     Claude Code  -> ~/.claude        -> writes ~/.claude/skills/<skill>/
+#     Codex        -> ~/.codex         -> writes ~/.codex/skills/<skill>/
+#     Cursor       -> ~/.cursor        -> writes ~/.cursor/skills/<skill>/
+#     pi           -> ~/.pi            -> via the neutral Agent Skills path
+#     OpenClaw     -> ~/.openclaw      -> via the neutral Agent Skills path
+# - When pi or OpenClaw is detected, writes to the neutral
+#   ~/.agents/skills/<skill>/ path. Both harnesses read this path
+#   natively per the Agent Skills standard at agentskills.io. Future
+#   AgentSkills-compatible harnesses inherit support for free. We
+#   deliberately do NOT write to ~/.pi/agent/skills/ or
+#   ~/.openclaw/skills/ in addition: those are redundant given the
+#   neutral path and only add maintenance surface.
 # - For each of the eleven skills, ensures a dev copy at
 #   ~/Projects/<skill>/, then symlinks SKILL.md and references/
-#   into every detected platform.
+#   into every detected harness.
 # - Idempotent. Re-run anytime.
 # - Bash 3.2 compatible (macOS default). No associative arrays.
 #
@@ -27,8 +39,10 @@ TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
 SKILLS="kickoff-ready prd-ready architecture-ready roadmap-ready stack-ready repo-ready production-ready deploy-ready observe-ready launch-ready harden-ready"
 
 # Platforms: name and skills-dir path. Parallel lists keep bash 3.2 compat.
-PLATFORM_NAMES="Claude_Code Codex Cursor"
-PLATFORM_DIRS="${HOME}/.claude/skills ${HOME}/.codex/skills ${HOME}/.cursor/skills"
+# Agent_Skills is the neutral Agent Skills standard path read by pi,
+# OpenClaw, and any future AgentSkills-compatible harness.
+PLATFORM_NAMES="Claude_Code Codex Cursor Agent_Skills"
+PLATFORM_DIRS="${HOME}/.claude/skills ${HOME}/.codex/skills ${HOME}/.cursor/skills ${HOME}/.agents/skills"
 
 # ANSI colors only when stdout is a TTY.
 if [ -t 1 ]; then
@@ -52,9 +66,10 @@ Usage: install.sh [-v] [-h]
   -v   verbose output
   -h   show this help
 
-Detects Claude Code, Codex, and Cursor; installs the eleven
-ready-suite skills into every detected platform via file-level
-symlinks from ~/Projects/<skill>/ to <platform>/skills/<skill>/.
+Detects Claude Code, Codex, Cursor, pi, and OpenClaw; installs the
+eleven ready-suite skills into every detected harness via file-level
+symlinks from ~/Projects/<skill>/. pi and OpenClaw are served via
+the neutral Agent Skills path at ~/.agents/skills/.
 EOF
 }
 
@@ -96,19 +111,54 @@ platform_dir_for() {
   return 1
 }
 
-# Detect installed platforms (by parent dir presence).
+# Human label for a platform name. Agent_Skills shows the markers
+# that triggered detection so the user sees why ~/.agents/skills/ is
+# in the install set.
+platform_label_for() {
+  local name markers
+  name="$1"
+  case "$name" in
+    Agent_Skills)
+      markers=""
+      [ -d "${HOME}/.pi" ] && markers="pi"
+      if [ -d "${HOME}/.openclaw" ]; then
+        if [ -n "$markers" ]; then markers="$markers, OpenClaw"; else markers="OpenClaw"; fi
+      fi
+      if [ -n "$markers" ]; then
+        printf "Agent Skills (%s)" "$markers"
+      else
+        printf "Agent Skills"
+      fi
+      ;;
+    *)
+      printf '%s' "$name" | tr '_' ' '
+      ;;
+  esac
+}
+
+# Detection: parent-dir presence for first three; pi or OpenClaw
+# marker for the neutral Agent Skills path.
 DETECTED_PLATFORMS=""
 for name in $PLATFORM_NAMES; do
   dir="$(platform_dir_for "$name")"
   parent="$(dirname "$dir")"
-  if [ -d "$parent" ]; then
-    DETECTED_PLATFORMS="$DETECTED_PLATFORMS $name"
-  fi
+  case "$name" in
+    Agent_Skills)
+      if [ -d "${HOME}/.pi" ] || [ -d "${HOME}/.openclaw" ]; then
+        DETECTED_PLATFORMS="$DETECTED_PLATFORMS $name"
+      fi
+      ;;
+    *)
+      if [ -d "$parent" ]; then
+        DETECTED_PLATFORMS="$DETECTED_PLATFORMS $name"
+      fi
+      ;;
+  esac
 done
 
 if [ -z "$DETECTED_PLATFORMS" ]; then
-  printf "%sNo Claude Code, Codex, or Cursor install detected.%s\n" "$C_RED" "$C_RESET" >&2
-  printf "Expected one of ~/.claude, ~/.codex, ~/.cursor.\n" >&2
+  printf "%sNo Claude Code, Codex, Cursor, pi, or OpenClaw install detected.%s\n" "$C_RED" "$C_RESET" >&2
+  printf "Expected one of ~/.claude, ~/.codex, ~/.cursor, ~/.pi, ~/.openclaw.\n" >&2
   exit 1
 fi
 
@@ -118,9 +168,10 @@ log ""
 info "projects dir : $PROJECTS_DIR"
 detected_label=""
 for n in $DETECTED_PLATFORMS; do
-  detected_label="$detected_label $(printf '%s' "$n" | tr '_' ' ')"
+  detected_label="$detected_label, $(platform_label_for "$n")"
 done
-info "platforms    :$detected_label"
+detected_label="${detected_label#, }"
+info "platforms    : $detected_label"
 log ""
 
 mkdir -p "$PROJECTS_DIR"
@@ -223,7 +274,7 @@ for skill in $SKILLS; do
   any_ok=0
   for name in $DETECTED_PLATFORMS; do
     pdir="$(platform_dir_for "$name")"
-    label="$(printf '%s' "$name" | tr '_' ' ')"
+    label="$(platform_label_for "$name")"
     if install_skill_into_platform "$skill" "$name" "$pdir"; then
       ok "$label"
       any_ok=1
