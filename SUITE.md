@@ -78,6 +78,8 @@ Tested with: Claude Code, Codex, Cursor, Windsurf, [pi](https://github.com/badlo
 
 The suite is also compatible with the [`AGENTS.md`](https://agents.md/) cross-tool agent-brief standard (governed by the Linux Foundation's Agentic AI Foundation), the project-root brief read natively by Codex CLI, GitHub Copilot, Cursor, Windsurf, Aider, Zed, Warp, Roo Code, Jules, Factory, Amp, Devin, and others. Two specialists meet that surface: **kickoff-ready** emits a project-root `AGENTS.md` mapping the suite's artifact paths when none exists (Step 6 sub-step 6a), making the suite visible to non-Claude harnesses arriving at the project cold; **repo-ready** scaffolds `AGENTS.md` as the canonical agent brief (project conventions, stack, commands, forbidden actions) with `CLAUDE.md` as a thin overlay or symlink. The two emits are layered: kickoff-ready writes only if `AGENTS.md` is absent, repo-ready writes the conventions side. Both respect any user-authored `AGENTS.md` already on disk.
 
+The suite also consumes the [Google Labs `DESIGN.md`](https://github.com/google-labs-code/design.md) format (Apache 2.0; YAML frontmatter holds machine-readable design tokens, the markdown body holds rationale plus an Agent Prompt Guide). **production-ready** detects a project-root `DESIGN.md` in Step 3 sub-step 3a and consumes it via DTCG export, Tailwind v4 export, or direct YAML read; the linter (`npx @google/design.md lint`) runs before component code so WCAG and token-resolution failures block the slice deterministically. When no `DESIGN.md` is present, production-ready falls back to its archetype + 5-decision derivation (sub-step 3b) and optionally scaffolds a `DESIGN.md` from the chosen tokens before Step 4, so the next agent on the project starts at sub-step 3a, not 3b.
+
 ## Why a ready suite at all
 
 AI-generated apps fail in predictable ways: hollow buttons, placeholder READMEs, missing CI, unshipped half-migrations, unmonitored production, silent launches, and security surfaces that pass SAST/SCA and fail adversarial review. AI-generated multi-step orchestration fails in equally predictable ways: scope leak, rubber-stamp orchestration, phantom resume, ghost handoff, happy-path orchestration. One giant skill covering everything becomes unfocused and bloats past the point of usefulness. Separate tight skills composing through explicit handoffs stays sharp; a small orchestration-tier skill stays small by refusing to fill the blank page.
@@ -86,16 +88,16 @@ AI-generated apps fail in predictable ways: hollow buttons, placeholder READMEs,
 
 | Skill | Current version | Repo |
 |---|---|---|
-| **kickoff-ready** | 1.1.0 | https://github.com/aihxp/kickoff-ready |
-| **production-ready** | 2.5.15 | https://github.com/aihxp/production-ready |
-| **repo-ready** | 1.6.10 | https://github.com/aihxp/repo-ready |
-| **stack-ready** | 1.1.13 | https://github.com/aihxp/stack-ready |
-| **deploy-ready** | 1.0.12 | https://github.com/aihxp/deploy-ready |
-| **observe-ready** | 1.0.11 | https://github.com/aihxp/observe-ready |
-| **launch-ready** | 1.0.9 | https://github.com/aihxp/launch-ready |
-| **prd-ready** | 1.0.8 | https://github.com/aihxp/prd-ready |
-| **architecture-ready** | 1.0.7 | https://github.com/aihxp/architecture-ready |
-| **roadmap-ready** | 1.0.6 | https://github.com/aihxp/roadmap-ready |
-| **harden-ready** | 1.0.5 | https://github.com/aihxp/harden-ready |
+| **kickoff-ready** | 1.1.1 | https://github.com/aihxp/kickoff-ready |
+| **production-ready** | 2.6.0 | https://github.com/aihxp/production-ready |
+| **repo-ready** | 1.6.11 | https://github.com/aihxp/repo-ready |
+| **stack-ready** | 1.1.14 | https://github.com/aihxp/stack-ready |
+| **deploy-ready** | 1.0.13 | https://github.com/aihxp/deploy-ready |
+| **observe-ready** | 1.0.12 | https://github.com/aihxp/observe-ready |
+| **launch-ready** | 1.0.10 | https://github.com/aihxp/launch-ready |
+| **prd-ready** | 1.0.9 | https://github.com/aihxp/prd-ready |
+| **architecture-ready** | 1.0.8 | https://github.com/aihxp/architecture-ready |
+| **roadmap-ready** | 1.0.7 | https://github.com/aihxp/roadmap-ready |
+| **harden-ready** | 1.0.6 | https://github.com/aihxp/harden-ready |
 
 The suite is additive. A skill not yet released does not block any other skill from functioning. When a skill reaches v1.0.0, update this table and ship the change across all installed siblings. With kickoff-ready v1.0.0 the suite is eleven skills across orchestration (one), planning (four), building (two), and shipping (four).
