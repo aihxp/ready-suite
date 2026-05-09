@@ -1,0 +1,46 @@
+# CODEOWNERS for the ready-suite hub.
+#
+# This file routes pull-request review automatically. The current maintainer
+# is @aihxp; that line below covers everything by default. Path-specific
+# rules below the default exist to make the high-blast-radius surfaces
+# explicit, so a future co-maintainer can see at a glance which files
+# trigger which reviewers.
+#
+# When a second maintainer is added, replace `@aihxp` on the load-bearing
+# rules below with `@aihxp @second-maintainer-handle` so PRs touching
+# those paths require both reviewers.
+
+# Default fallback: hub maintainer reviews everything.
+* @aihxp
+
+# SUITE.md is byte-identical across all 12 repos. A change here cascades.
+# Reviewer must verify the lint runs green and the sync to siblings is
+# part of the same coordinated patch.
+/SUITE.md @aihxp
+
+# ORCHESTRATORS.md lives in hub + production-ready (not byte-identical
+# across the full suite, but mirrored at a 2-repo cadence). Updates here
+# need to mirror to production-ready in the same patch.
+/ORCHESTRATORS.md @aihxp
+
+# Install/uninstall scripts touch every consumer's filesystem. Bash 3.2
+# regressions, harness-detection mistakes, and ~/.agents/skills path
+# decisions all break user installs silently. High-blast surface.
+/install.sh @aihxp
+/uninstall.sh @aihxp
+
+# Meta-linter mechanically enforces suite discipline. A check that fails
+# to fail (or fails when it should not) silently degrades the protection
+# the suite has against drift.
+/scripts/ @aihxp
+
+# CI workflows. A workflow regression cascades to every push.
+/.github/workflows/ @aihxp
+
+# Trigger disambiguation table. Adding a row is fine; removing or
+# rewriting a row changes the canonical answer to a routing question.
+/references/TRIGGER-DISAMBIGUATION.md @aihxp
+
+# Plugin marketplace manifest. A manifest typo breaks Claude Code's
+# `/plugin install` command for every consumer.
+/.claude-plugin/marketplace.json @aihxp

@@ -181,6 +181,14 @@ The same lint runs in GitHub Actions on every push to `main`, on pull requests, 
 
 The lint is bash 3.2 compatible (macOS default), uses no associative arrays, and degrades gracefully when `gh` is unavailable (skips the tag-release-parity check rather than failing).
 
+## Contributing
+
+PRs welcome. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the contribution model, the unicode rule, the bash-3.2 rule, and how to land a single-skill or coordinated cross-suite change.
+
+For maintainers (or anyone landing a coordinated cross-repo patch), see [`MAINTAINING.md`](MAINTAINING.md): the SUITE.md sync ritual, version-bump rules, tag-release parity, and the five maintenance rituals (single-skill patch, coordinated cross-suite patch, hub-only patch, lint regression recovery, new-specialist release).
+
+PR review is auto-routed via [`.github/CODEOWNERS`](.github/CODEOWNERS). Path-specific rules name the high-blast-radius surfaces (SUITE.md, install.sh, lint, marketplace manifest); when a second maintainer is added, the CODEOWNERS file is the single place to grant review authority on those paths.
+
 ## License
 
 MIT. Each skill repo carries its own LICENSE file with the same terms.
