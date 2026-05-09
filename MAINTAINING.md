@@ -6,6 +6,8 @@ If you are reading this because you are about to land your first coordinated pat
 
 For the contributor-facing version of these conventions, see [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
+**Pattern source.** The discipline below is the ready-suite-specific instance of the canonical multi-repo-suite layout pattern, which is documented generically in [`repo-ready/references/multi-repo-suite-layout.md`](https://github.com/aihxp/repo-ready/blob/main/references/multi-repo-suite-layout.md) (loaded as `Mode D` of repo-ready). The hub vs. specialist split, byte-identical collection-map invariant, coordinated version-table discipline, tag-release parity, the five rituals: all generalized in that reference. This file overlays the ready-suite specifics on top: the names of the actual files (SUITE.md, the eleven specialist repos, scripts/lint.sh), the version-history quirks (the v2.5.12 precedent retirement), and the git-log of how the discipline evolved. If you are scaffolding a new multi-repo suite (not contributing to ready-suite specifically), start with the generic reference; this file is the worked example.
+
 ## The twelve repos
 
 | Repo | Role | Version-tracked |
