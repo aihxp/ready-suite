@@ -140,8 +140,9 @@ bash uninstall.sh
 Skills do not call each other. The harness is the router.
 
 - **Plain harnesses** (Claude Code, Codex, Cursor, Windsurf): the harness's skill router invokes whichever skill matches the user's words.
-- **Orchestrators** (GSD, BMAD, Superpowers, custom): see [`ORCHESTRATORS.md`](ORCHESTRATORS.md) for command-by-command integration patterns. The orchestrator knows about the suite; the suite stays orchestrator-agnostic.
+- **Orchestrators** (GSD, BMAD, Spec Kit, Superpowers, custom): see [`ORCHESTRATORS.md`](ORCHESTRATORS.md) for command-by-command integration patterns. The orchestrator knows about the suite; the suite stays orchestrator-agnostic.
 - **Artifacts** are the contract. Every skill produces files at `.{skill}-ready/*.md` paths. Downstream skills read them. Skills compose without invoking each other.
+- **Routing ambiguity:** when a user phrase plausibly matches more than one skill ("set up CI," "GitHub Actions," "make this production-ready"), see [`references/TRIGGER-DISAMBIGUATION.md`](references/TRIGGER-DISAMBIGUATION.md) for the canonical resolution table.
 
 ## Composition principles
 
@@ -172,7 +173,9 @@ bash scripts/lint.sh suite-md-sync     # one specific check
 bash scripts/lint.sh --help            # see all checks and flags
 ```
 
-Available checks: `suite-md-sync`, `frontmatter-version`, `tag-release-parity`, `unicode-clean`, `compatible-with`.
+Available checks: `suite-md-sync`, `frontmatter-version`, `tag-release-parity`, `unicode-clean`, `compatible-with`, `trigger-overlap`.
+
+The `trigger-overlap` check is advisory by default: it surfaces cross-skill substring overlaps in the eleven skills' description trigger phrases (e.g., "GitHub Actions" appearing in both repo-ready scaffolding triggers and deploy-ready pipeline triggers) and prompts the maintainer to verify a row exists in [`references/TRIGGER-DISAMBIGUATION.md`](references/TRIGGER-DISAMBIGUATION.md). Pass `--strict-triggers` to make overlap warnings fail the lint.
 
 The same lint runs in GitHub Actions on every push to `main`, on pull requests, and daily at 06:00 UTC (`.github/workflows/lint.yml`). The daily schedule catches drift from sibling-repo pushes that don't trigger the hub's own workflow.
 

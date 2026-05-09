@@ -15,6 +15,9 @@
 #                          hub install/uninstall/ORCHESTRATORS)
 #   compatible-with        compatible_with frontmatter contains the
 #                          expected standards-level values
+#   trigger-overlap        cross-skill substring overlaps in description
+#                          trigger phrases (advisory; warns but does
+#                          not fail unless --strict-triggers)
 #
 # Usage:
 #   bash scripts/lint.sh [check-name | --all] [--verbose] [--fail-fast]
@@ -43,7 +46,14 @@ FORBIDDEN_PATTERN='—|–|―|‐|‒|−|→|←|↑|↓'
 
 VERBOSE=0
 FAIL_FAST=0
+STRICT_TRIGGERS=0
 SELECTED="--all"
+
+# Stopword tokens stripped from trigger phrases before overlap detection.
+# Generic English connectives and common verbs that do not carry the
+# domain signal we care about. Keep concrete domain words (pipeline,
+# database, monitoring, etc.) OUT of this list - they ARE the signal.
+TRIGGER_STOPWORDS=" set up add make use this that the and or for new what when where which who how why a an of in on it is be by from to with vs versus or pick choose write build define your my our any all do does not no yes if as also "
 
 if [ -t 1 ]; then
   C_RESET="$(printf '\033[0m')"
@@ -71,10 +81,12 @@ Checks:
   compatible-with       compatible_with frontmatter standards-level values
 
 Flags:
-  --all          run every check (default)
-  --verbose      show ok lines, not just failures
-  --fail-fast    stop at the first failing check
-  -h, --help     this help
+  --all                run every check (default)
+  --verbose            show ok lines, not just failures
+  --fail-fast          stop at the first failing check
+  --strict-triggers    fail (non-zero exit) on trigger-overlap warnings
+                       (default: advisory only)
+  -h, --help           this help
 
 Env:
   READY_SUITE_REPOS_DIR    where sibling repos live (default ~/Projects)
@@ -83,7 +95,7 @@ EOF
 
 while [ $# -gt 0 ]; do
   case "$1" in
-    --all|--verbose|--fail-fast) ;;
+    --all|--verbose|--fail-fast|--strict-triggers) ;;
     -h|--help) usage; exit 0 ;;
     --*) printf "%sunknown flag: %s%s\n" "$C_RED" "$1" "$C_RESET" >&2; usage >&2; exit 2 ;;
     *) ;;
@@ -91,8 +103,9 @@ while [ $# -gt 0 ]; do
   case "$1" in
     --verbose) VERBOSE=1 ;;
     --fail-fast) FAIL_FAST=1 ;;
+    --strict-triggers) STRICT_TRIGGERS=1 ;;
     --all) SELECTED="--all" ;;
-    suite-md-sync|frontmatter-version|tag-release-parity|unicode-clean|compatible-with) SELECTED="$1" ;;
+    suite-md-sync|frontmatter-version|tag-release-parity|unicode-clean|compatible-with|trigger-overlap) SELECTED="$1" ;;
   esac
   shift
 done
@@ -342,6 +355,101 @@ check_compatible_with() {
 }
 
 # -----------------------------------------------------------------------
+# Check: trigger-overlap
+# -----------------------------------------------------------------------
+# Extracts trigger phrases from each skill's description frontmatter
+# (single-quoted strings inside the description) and reports cross-skill
+# substring overlaps for phrases of significant length.
+#
+# Scope rules:
+# - Phrase length >= 8 characters after normalization (lowercase + strip
+#   non-alphanumeric except spaces). Filters generic short tokens.
+# - Phrases consisting entirely of stopwords (TRIGGER_STOPWORDS) are
+#   excluded.
+# - The longer phrase contains the shorter as a whole-word substring.
+# - Same-skill overlaps are ignored (a skill can have related triggers).
+#
+# Advisory only by default; --strict-triggers makes failures non-zero.
+# Surfacing a new overlap is a prompt to add a row to
+# references/TRIGGER-DISAMBIGUATION.md, not necessarily a real bug.
+# Strip stopwords from a normalized phrase. Echoes the result.
+strip_stopwords() {
+  local phrase="$1"
+  local out="" word
+  for word in $phrase; do
+    case "$TRIGGER_STOPWORDS" in
+      *" $word "*) ;;
+      *) out="$out $word" ;;
+    esac
+  done
+  printf "%s" "$out" | sed 's/^ //; s/ $//'
+}
+
+check_trigger_overlap() {
+  section "trigger-overlap"
+  local fail tmp_index skill s_dir desc q phrase norm core
+  fail=0
+  tmp_index="$(mktemp)"
+
+  for skill in $SKILLS; do
+    s_dir="$(repo_dir_for "$skill")"
+    if [ ! -f "$s_dir/SKILL.md" ]; then continue; fi
+    desc="$(awk '/^description:/{flag=1} flag{print; if (/"$/) exit}' "$s_dir/SKILL.md")"
+    printf "%s" "$desc" | grep -oE "'[^']+'" | while read -r q; do
+      phrase="$(printf "%s" "$q" | sed "s/^'//; s/'\$//")"
+      norm="$(printf "%s" "$phrase" | tr '[:upper:]' '[:lower:]' | tr -c '[:alnum:] ' ' ' | tr -s ' ' | sed 's/^ //; s/ $//')"
+      if [ -z "$norm" ]; then continue; fi
+      core="$(strip_stopwords "$norm")"
+      # Require >= 2 signal tokens to avoid spurious single-token matches.
+      local toks=0 t
+      for t in $core; do toks=$((toks + 1)); done
+      if [ "$toks" -lt 2 ]; then continue; fi
+      printf "%s\t%s\t%s\n" "$skill" "$core" "$phrase" >> "$tmp_index"
+    done
+  done
+
+  local found=0
+  # For each (skill, core_phrase) pair, check whole-word substring
+  # containment against every other skill's core phrases. Sort skills
+  # lexicographically so we report each pair at most once.
+  while IFS="$(printf '\t')" read -r s1 p1 orig1; do
+    while IFS="$(printf '\t')" read -r s2 p2 orig2; do
+      if [ "$s1" = "$s2" ]; then continue; fi
+      if [ "$s1" \> "$s2" ]; then continue; fi
+      if [ "$p1" = "$p2" ]; then
+        warn "$s1 / $s2: shared core \"$p1\" (\"$orig1\" vs \"$orig2\")"
+        found=$((found + 1))
+        continue
+      fi
+      case " $p2 " in
+        *" $p1 "*)
+          warn "$s1 / $s2: \"$p1\" inside \"$p2\" (\"$orig1\" vs \"$orig2\")"
+          found=$((found + 1))
+          continue ;;
+      esac
+      case " $p1 " in
+        *" $p2 "*)
+          warn "$s1 / $s2: \"$p2\" inside \"$p1\" (\"$orig2\" vs \"$orig1\")"
+          found=$((found + 1))
+          continue ;;
+      esac
+    done < "$tmp_index"
+  done < "$tmp_index"
+
+  rm -f "$tmp_index"
+
+  if [ "$found" = "0" ]; then
+    ok "no cross-skill trigger substring overlaps detected"
+  else
+    info "  $found overlap(s). Each is advisory; verify a row exists in references/TRIGGER-DISAMBIGUATION.md or that the overlap is genuinely tier-distinct."
+    if [ "$STRICT_TRIGGERS" = "1" ]; then
+      fail="$found"
+    fi
+  fi
+  return "$fail"
+}
+
+# -----------------------------------------------------------------------
 # Runner
 # -----------------------------------------------------------------------
 run_check() {
@@ -353,6 +461,7 @@ run_check() {
     tag-release-parity)   check_tag_release_parity;   result=$? ;;
     unicode-clean)        check_unicode_clean;        result=$? ;;
     compatible-with)      check_compatible_with;      result=$? ;;
+    trigger-overlap)      check_trigger_overlap;      result=$? ;;
     *) err "unknown check: $name"; return 1 ;;
   esac
   if [ "$result" = "0" ]; then
@@ -362,7 +471,7 @@ run_check() {
   fi
 }
 
-ALL_CHECKS="suite-md-sync frontmatter-version tag-release-parity unicode-clean compatible-with"
+ALL_CHECKS="suite-md-sync frontmatter-version tag-release-parity unicode-clean compatible-with trigger-overlap"
 
 printf "\n%sready-suite-lint%s\n" "$C_BOLD" "$C_RESET"
 info "  hub:   $HUB_DIR"
