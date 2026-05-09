@@ -90,7 +90,7 @@ AI-generated apps fail in predictable ways: hollow buttons, placeholder READMEs,
 |---|---|---|
 | **kickoff-ready** | 1.1.4 | https://github.com/aihxp/kickoff-ready |
 | **production-ready** | 2.6.4 | https://github.com/aihxp/production-ready |
-| **repo-ready** | 1.6.14 | https://github.com/aihxp/repo-ready |
+| **repo-ready** | 1.6.15 | https://github.com/aihxp/repo-ready |
 | **stack-ready** | 1.1.17 | https://github.com/aihxp/stack-ready |
 | **deploy-ready** | 1.0.16 | https://github.com/aihxp/deploy-ready |
 | **observe-ready** | 1.0.15 | https://github.com/aihxp/observe-ready |

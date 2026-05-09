@@ -24,7 +24,7 @@ kickoff-ready  ->        prd-ready           ->    repo-ready      ->    deploy-
 | **architecture-ready** | Planning | Design how the big pieces fit together. | 1.0.11 | [github.com/aihxp/architecture-ready](https://github.com/aihxp/architecture-ready) |
 | **roadmap-ready** | Planning | Sequence work over time. | 1.0.10 | [github.com/aihxp/roadmap-ready](https://github.com/aihxp/roadmap-ready) |
 | **stack-ready** | Planning | Pick the right tools for the job. | 1.1.17 | [github.com/aihxp/stack-ready](https://github.com/aihxp/stack-ready) |
-| **repo-ready** | Building | Set up the repo with production-grade hygiene. | 1.6.14 | [github.com/aihxp/repo-ready](https://github.com/aihxp/repo-ready) |
+| **repo-ready** | Building | Set up the repo with production-grade hygiene. | 1.6.15 | [github.com/aihxp/repo-ready](https://github.com/aihxp/repo-ready) |
 | **production-ready** | Building | Build the app to production grade. | 2.6.4 | [github.com/aihxp/production-ready](https://github.com/aihxp/production-ready) |
 | **deploy-ready** | Shipping | Ship the app to real environments. | 1.0.16 | [github.com/aihxp/deploy-ready](https://github.com/aihxp/deploy-ready) |
 | **observe-ready** | Shipping | Keep the app healthy once it's live. | 1.0.15 | [github.com/aihxp/observe-ready](https://github.com/aihxp/observe-ready) |
