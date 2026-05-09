@@ -1,0 +1,20 @@
+# .gitleaks.toml — secret-scanning configuration for repo-ready
+# Schema: https://github.com/gitleaks/gitleaks
+#
+# This repo is Markdown-only, but reference files (references/*.md) cite
+# API-key-shaped example strings in prose (e.g., `sk_live_*` in security-setup.md).
+# We want the default detectors active everywhere in the repo EXCEPT the
+# reference / audit / changelog / planning files, which document those patterns.
+
+[extend]
+# Pull in all built-in detectors (AWS, GCP, Stripe, GitHub tokens, etc.)
+useDefault = true
+
+[allowlist]
+description = "Documentation files that intentionally contain example secret patterns"
+paths = [
+    '''(^|/)references/.*\.md$''',
+    '''(^|/)AUDIT-REPORT\.md$''',
+    '''(^|/)CHANGELOG\.md$''',
+    '''(^|/)\.planning/.*''',
+]

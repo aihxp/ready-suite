@@ -1,0 +1,26 @@
+# OS / editor artifacts
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# Backup directories created by ready-suite install.sh
+*.backup-*
+
+# Logs
+*.log
+
+# Local Python venvs (in case a contributor scaffolds one for tooling)
+.venv/
+__pycache__/
+
+# Local Node tools (rare in skill repos but documented for safety)
+node_modules/
+
+# Claude Code personal/local overrides (project-level settings.json is committed; .local is not)
+.claude/settings.local.json
+.claude/.local/
+
+# GSD planning artifacts (development-only; not part of the published skill)
+.planning/

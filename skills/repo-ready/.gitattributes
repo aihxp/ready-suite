@@ -1,0 +1,14 @@
+# Normalize line endings across platforms.
+* text=auto eol=lf
+
+# Markdown is text; GitHub renders it.
+*.md text
+
+# Shell scripts must use LF regardless of host OS.
+*.sh text eol=lf
+
+# YAML / JSON / TOML config files are text.
+*.yml text
+*.yaml text
+*.json text
+*.toml text

@@ -1,0 +1,5 @@
+.planning/
+.github/ISSUE_TEMPLATE/
+AUDIT-REPORT.md
+CHANGELOG.md
+node_modules/

@@ -1,0 +1,29 @@
+{
+  "$schema": "https://docs.claude.com/en/docs/claude-code/settings",
+  "_readme": "Project-level denylist for destructive git/shell commands. Blocks the patterns most-reported as causing data loss in AI-assisted sessions (see references/agent-safety.md). To override a single rule for one session, start Claude Code with --dangerously-skip-permissions; to override one command at a time, accept the interactive permission prompt when it appears. To remove a rule permanently, edit this file, commit, and push — treat it like any other repo config.",
+  "permissions": {
+    "deny": [
+      "Bash(git reset --hard *)",
+      "Bash(git reset --hard)",
+      "Bash(git push --force *)",
+      "Bash(git push --force)",
+      "Bash(git push -f *)",
+      "Bash(git push -f)",
+      "Bash(git clean -fd*)",
+      "Bash(git clean -fdx*)",
+      "Bash(git filter-repo *)",
+      "Bash(git filter-branch *)",
+      "Bash(rm -rf ~*)",
+      "Bash(rm -rf /*)",
+      "Bash(rm -rf $HOME*)",
+      "Bash(git commit --no-verify*)",
+      "Bash(git commit -n *)",
+      "Bash(git commit -n)"
+    ],
+    "allow": [
+      "Bash(git push --force-with-lease:*)",
+      "Bash(git reset --mixed *)",
+      "Bash(git reset --soft *)"
+    ]
+  }
+}

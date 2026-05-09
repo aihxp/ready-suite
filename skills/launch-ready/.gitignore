@@ -1,0 +1,8 @@
+.DS_Store
+
+# Claude Code personal/local overrides (project-level settings.json is committed; .local is not)
+.claude/settings.local.json
+.claude/.local/
+
+# GSD planning artifacts (development-only; not part of the published skill)
+.planning/

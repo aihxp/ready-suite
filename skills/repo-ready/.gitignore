@@ -1,0 +1,27 @@
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Editor / IDE
+.idea/
+.vscode/settings.json
+*.swp
+*.swo
+
+# Secrets — never commit real env files
+.env
+.env.*
+
+# Node tooling (defensive — repo is Markdown-only today)
+node_modules/
+
+# Python tooling (defensive)
+__pycache__/
+*.pyc
+
+# Claude Code personal/local overrides (project-level settings.json is committed; .local is not)
+.claude/settings.local.json
+.claude/.local/
+
+# GSD planning artifacts (development-only; not part of the published skill)
+.planning/

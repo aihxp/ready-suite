@@ -1,0 +1,12 @@
+# CODEOWNERS for the stack-ready repo.
+#
+# This file routes pull-request review automatically. The current
+# maintainer is @aihxp; the line below covers everything by default.
+# When a second maintainer is added, replace `@aihxp` on the line below
+# with `@aihxp @second-maintainer-handle` so PRs require both reviewers.
+#
+# Cross-suite governance lives at:
+# https://github.com/aihxp/ready-suite/blob/main/.github/CODEOWNERS
+
+# Default: skill maintainer reviews everything.
+* @aihxp

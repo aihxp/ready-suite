@@ -1,0 +1,69 @@
+#!/bin/sh
+# .githooks/pre-push
+#
+# Blocks non-fast-forward ("force") pushes unless the user opts in.
+# After a rebase, rebased commits are new objects, so the old remote tip is
+# NOT an ancestor of the new local tip. This hook cannot distinguish between
+# `--force` and `--force-with-lease` (git pre-push hooks don't receive flags),
+# so both require the opt-in below after a rebase.
+#
+# `--force-with-lease` is still safer: it aborts if the remote has moved since
+# your last fetch, preventing silent overwrites of collaborator commits.
+#
+# Override: set ALLOW_FORCE_PUSH=1 for a single push. Example:
+#
+#   ALLOW_FORCE_PUSH=1 git push --force-with-lease origin feature/my-branch
+#
+# git invokes pre-push with the remote name and URL as arguments and sends
+# <local_ref> <local_sha> <remote_ref> <remote_sha> on stdin, one push spec
+# per line. We check each line independently.
+
+zero="0000000000000000000000000000000000000000"
+
+while read local_ref local_sha remote_ref remote_sha; do
+    # Skip branch deletions (local_sha is all zeros).
+    if [ "$local_sha" = "$zero" ]; then
+        continue
+    fi
+
+    # Skip new branch creations (remote_sha is all zeros — nothing to overwrite).
+    if [ "$remote_sha" = "$zero" ]; then
+        continue
+    fi
+
+    # Non-force push: remote_sha must be an ancestor of local_sha (fast-forward).
+    if git merge-base --is-ancestor "$remote_sha" "$local_sha" 2>/dev/null; then
+        continue
+    fi
+
+    # At this point we have a non-fast-forward push: either --force, --force-with-lease
+    # where the remote moved, or a legitimate branch rewrite. Honor the opt-in.
+    if [ "$ALLOW_FORCE_PUSH" = "1" ]; then
+        continue
+    fi
+
+    # Block.
+    cat >&2 <<EOF
+
+  Refusing force-push to $remote_ref.
+  Local commit:  $local_sha
+  Remote commit: $remote_sha (not an ancestor of local)
+
+  Override options, in order of preference:
+
+    1. ALLOW_FORCE_PUSH=1 git push --force-with-lease origin <branch>
+       Safer: aborts if the remote has moved since your last fetch.
+       Use after rebase when you know no one else has pushed.
+
+    2. ALLOW_FORCE_PUSH=1 git push --force origin <branch>
+       Less safe: overwrites unconditionally. Only for personal branches
+       when you are certain no one else has pushed.
+
+  Never use plain 'git push --force' from a script or CI job without one
+  of these overrides. See references/agent-safety.md §3 for context.
+
+EOF
+    exit 1
+done
+
+exit 0

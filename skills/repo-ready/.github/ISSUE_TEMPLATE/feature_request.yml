@@ -1,0 +1,87 @@
+name: Feature Request
+description: Suggest a new feature or improvement for the repo-ready skill
+title: "[Feature]: "
+labels: ["enhancement", "triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Propose a change or addition. We prioritize features that solve a real problem for multiple users and fit the byte ceilings (`SKILL.md` ≤ 40KB, each `references/*.md` ≤ 80KB).
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem statement
+      description: What problem does this feature solve? Describe the pain point from a real use case, not a hypothetical.
+      placeholder: "When I run the skill on a <stack> project I have to manually add X because the skill doesn't cover it."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: Describe the change. Be specific about which file(s) would change and what the generated output would look like.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: What alternatives did you consider? Workarounds, other skills, external tools. Explain why they fall short.
+    validations:
+      required: false
+
+  - type: dropdown
+    id: tier
+    attributes:
+      label: Which tier does this belong to?
+      description: See `SKILL.md` for the tier definitions (1 Essentials, 2 Team Ready, 3 Good, 4 Production Ready).
+      options:
+        - Tier 1 — Essentials
+        - Tier 2 — Team Ready
+        - Tier 3 — Good
+        - Tier 4 — Production Ready
+        - Cross-tier / infrastructure
+        - Not sure
+    validations:
+      required: true
+
+  - type: input
+    id: stack
+    attributes:
+      label: Target stack (if stack-specific)
+      description: Which stack does this feature target? Leave blank if it's stack-agnostic.
+      placeholder: "Rust, Elixir, Swift/iOS, etc."
+    validations:
+      required: false
+
+  - type: dropdown
+    id: impact
+    attributes:
+      label: Expected impact
+      description: How broadly useful is this?
+      options:
+        - Nice to have — affects my project
+        - Important — affects a common stack or workflow
+        - Critical — closes a gap users hit repeatedly
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Links to similar implementations, mockups of the proposed output, related discussions.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      options:
+        - label: I would be willing to submit a PR for this feature.
+          required: false

@@ -1,0 +1,103 @@
+name: Bug Report
+description: Report a bug or unexpected behavior in the repo-ready skill
+title: "[Bug]: "
+labels: ["bug", "triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug. Please fill out the form below — the fields exist to cut triage time, not as busywork.
+
+  - type: dropdown
+    id: version
+    attributes:
+      label: Affected version
+      description: Which version of the repo-ready skill are you using? Check the `version:` field in `SKILL.md` frontmatter or the git tag you cloned.
+      options:
+        - v1.4 (current)
+        - v1.3
+        - v1.2
+        - v1.1
+        - v1.0
+        - main (unreleased)
+        - Other / not sure
+    validations:
+      required: true
+
+  - type: input
+    id: reference_file
+    attributes:
+      label: Affected reference file (if any)
+      description: If the bug is in a specific reference file, name it (e.g., `references/platform-github.md`). Leave blank if it's in `SKILL.md` or is repo-wide.
+      placeholder: "references/platform-github.md"
+    validations:
+      required: false
+
+  - type: dropdown
+    id: agent
+    attributes:
+      label: AI coding agent
+      description: Which agent were you running when you hit the bug? This information has been repeatedly useful for triage.
+      options:
+        - Claude Code
+        - Cursor
+        - GitHub Copilot
+        - Windsurf
+        - Aider
+        - Codex CLI
+        - Gemini CLI
+        - Cline
+        - Other
+        - Not using an agent (reading the skill directly)
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What did you expect the skill to generate, say, or do?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What actually happened? Include the generated content or error message if applicable.
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Minimal steps to reproduce the bug.
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Project type, target platform, relevant logs, screenshots — anything that helps.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pre-filing checks
+      options:
+        - label: I searched existing issues and confirmed this is not a duplicate.
+          required: true
+        - label: I checked the relevant reference file and `SKILL.md` to confirm this is a bug, not intended behavior.
+          required: true
+        - label: I can reproduce this consistently.
+          required: false

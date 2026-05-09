@@ -1,0 +1,82 @@
+name: Main Checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  byte-ceilings:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Check sizes
+        run: |
+          set -euo pipefail
+          size=$(wc -c < SKILL.md)
+          if [ "${size}" -gt 40960 ]; then exit 1; fi
+          fail=0
+          for f in references/*.md; do
+            rsz=$(wc -c < "$f")
+            if [ "${rsz}" -gt 81920 ]; then fail=1; fi
+          done
+          exit "${fail}"
+
+  no-placeholders:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Check
+        run: |
+          set -euo pipefail
+          fail=0
+          for f in $(git ls-files '*.md' | grep -v '^\.planning/'); do
+            # Strip:
+            # 1. Fenced code blocks (```...```) — template examples live there
+            # 2. GHA expressions ${{...}} — legitimate in YAML examples
+            # 3. Inline backtick code spans `...` — meta-mentions
+            stripped=$(awk 'BEGIN{inside=0} /^```/{inside=!inside; next} !inside' "$f" \
+              | sed -e 's/[$][{][{][^}]*[}][}]//g' -e 's/`[^`]*`//g')
+            if echo "$stripped" | grep -q '{{'; then
+              echo "::error file=${f}::Unescaped {{ placeholder in prose"
+              fail=1
+            fi
+          done
+          exit "${fail}"
+
+  no-example-com:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Check
+        run: |
+          set -euo pipefail
+          fail=0
+          for f in SECURITY.md CONTRIBUTING.md; do
+            [ -f "$f" ] || continue
+            stripped=$(sed 's/`[^`]*`//g' "$f")
+            if echo "$stripped" | grep -q 'example\.com'; then
+              fail=1
+            fi
+          done
+          exit "${fail}"
+
+  xref-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Check
+        run: |
+          set -euo pipefail
+          fail=0
+          refs=$(grep -oE 'references/[A-Za-z0-9_-]+\.md' SKILL.md | sort -u)
+          while IFS= read -r ref; do
+            if [ ! -f "${ref}" ]; then
+              fail=1
+            fi
+          done <<< "${refs}"
+          exit "${fail}"
