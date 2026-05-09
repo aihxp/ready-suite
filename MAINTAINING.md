@@ -240,6 +240,79 @@ The `unicode-clean` lint check enforces this on the load-bearing files (SUITE.md
 
 The lint output names what failed and where. The precedent for almost every coordinated-patch shape exists in the git history of one of the twelve repos. Read the last few coordinated-patch commits before doing your first one; the format and the rhythm will become obvious.
 
+## File and folder layout per skill repo
+
+The eleven specialist repos converge on a uniform top-level shape after the v1 hygiene-cleanup sweep. The hub has its own shape because it carries cross-cutting infrastructure. Documenting the canonical layout here so future maintainers (and contributors) know what's standard, what's intentional drift, and what's a known inconsistency to leave alone.
+
+### Standard top-level files (every specialist repo)
+
+| File | Purpose |
+|---|---|
+| `SKILL.md` | The skill. Frontmatter declares `version`, `updated`, `suite`, `tier`, `upstream`, `downstream`, `pairs_with`, `compatible_with`. Body is the workflow + reference table. |
+| `CHANGELOG.md` | Skill version history. Top entry's `## v<X.Y.Z>` matches `SKILL.md` frontmatter `version`. Lint check enforces. |
+| `SUITE.md` | Byte-identical across all 12 repos. Lint check enforces. |
+| `README.md` | Skill landing page: install, when to use, link to SUITE.md. |
+| `LICENSE` | MIT. |
+| `SECURITY.md` | Private vulnerability disclosure: GitHub Security Advisories preferred channel, email fallback, severity-tied response SLAs. |
+| `CONTRIBUTING.md` | Thin pointer to the hub's canonical contributor guide. No content duplication. |
+| `.gitignore` | Minimal: OS / editor / install-backup ignores; `.claude/settings.local.json`; `.planning/`. |
+| `.github/CODEOWNERS` | Default `* @aihxp` rule + comment block on the second-maintainer addition path. |
+| `references/` | Skill-specific reference library, lazy-loaded on demand per the SKILL.md reference table. |
+
+### Standard `references/` naming conventions
+
+| Pattern | Use |
+|---|---|
+| `<skill>-research.md` | The on-load research summary the skill loads at Step 0. Example: `prd-research.md`. |
+| `RESEARCH-YYYY-MM.md` | The dated source-citations dump (the deep research pass). Example: `RESEARCH-2026-04.md`. Most specialists carry both this and `<skill>-research.md`; the latter is the workflow-loaded surface, the former is the audit trail of where every claim came from. |
+| `<skill>-anatomy.md` | The artifact-template reference (what the skill's output looks like, annotated). Example: `prd-anatomy.md`, `roadmap-anatomy.md`. |
+| `<skill>-antipatterns.md` | Named failure-mode catalog with grep tests. Example: `prd-antipatterns.md`, `kickoff-antipatterns.md`. |
+| `EXAMPLE-<ARTIFACT>.md` | Worked-example artifact (planning-tier only at v1). Example: `EXAMPLE-PRD.md`. The four planning-tier skills (prd, architecture, roadmap, stack) carry these; the seven other skills do not by design. |
+| `<topic>.md` | Per-topic deep-dive references the workflow loads on demand. Example: `trust-boundaries.md`, `slo-design.md`, `payments-and-billing.md`. |
+
+### Hub repo layout (different shape, intentional)
+
+The hub (`aihxp/ready-suite`) carries cross-cutting infrastructure rather than a single skill. Its top-level shape:
+
+| File / dir | Purpose |
+|---|---|
+| `SUITE.md` | Canonical byte-identical-across-12 suite map. Hub is its source of truth. |
+| `README.md` | Suite hub landing page: discovery, install, the eleven-skill table, standards-compliance section. |
+| `ORCHESTRATORS.md` | Cross-orchestrator composition (GSD, BMAD, Spec Kit, Superpowers, plain harnesses). Mirrored byte-identical to `production-ready` only (the v2.5.12 precedent). |
+| `CONTRIBUTING.md` | Canonical contributor guide for every skill in the suite (the eleven specialists' `CONTRIBUTING.md` files point here). |
+| `MAINTAINING.md` | This file. Maintainer-facing rituals. |
+| `LICENSE` | MIT. |
+| `install.sh`, `uninstall.sh` | Bash 3.2 install scripts. Symlink each skill's `SKILL.md` and `references/` into every detected harness's skills directory. |
+| `scripts/lint.sh` | Meta-linter. Six checks across the 12 repos. |
+| `.github/workflows/lint.yml` | CI on push, PR, and daily 06:00 UTC schedule. |
+| `.github/CODEOWNERS` | Default `* @aihxp`; path-specific rules name the high-blast-radius surfaces. |
+| `references/TRIGGER-DISAMBIGUATION.md` | Canonical resolution table for ambiguous user phrases that match more than one skill. |
+| `references/PLUGIN-RESEARCH.md` | Format research for the Claude Code plugin marketplace. |
+| `plugins/` | Vendored skill manifests for the Claude Code plugin marketplace. |
+| `.claude-plugin/marketplace.json` | Claude Code marketplace manifest. |
+
+The hub does NOT carry: `SKILL.md`, `CHANGELOG.md`, `version` frontmatter. It is not a skill; it does not version itself; it tracks the suite's collective version table inside `SUITE.md`.
+
+### Intentional drift (known and accepted)
+
+These per-repo deviations from the standard layout are deliberate. Do not "fix" them.
+
+- **`repo-ready` carries an elaborate self-scaffold**: `.editorconfig`, `.gitattributes`, `.githooks/`, `.gitleaks.toml`, `.markdownlint.json`, `.pre-commit-config.yaml`, `.prettierignore`, `.prettierrc.json`, `Makefile`, `CODE_OF_CONDUCT.md`, `CLAUDE.md`, `DOCS.md`, `AUDIT-REPORT.md`. **Why:** repo-ready dogfoods its own discipline. The repo IS the demonstration of what a complete repo-ready scaffold looks like. The `AUDIT-REPORT.md` is the self-audit; the `DOCS.md` is the ten-minute reader-facing overview that repo-ready's audit-mode produces.
+- **`production-ready` carries `ORCHESTRATORS.md`**: mirrored from the hub. The v2.5.12 precedent introduced ORCHESTRATORS.md as a patch on production-ready alone (because production-ready was the suite's heavy content at the time); the byte-identical mirror to the hub is the agreed shape.
+- **`production-ready` references library uses `<topic>.md` flatly without an explicit `<skill>-research.md`**: instead `codebase-research.md`. Production-ready predates the `<skill>-research.md` naming convention; the existing scheme works and renaming would churn 38 reference files for no reader benefit.
+- **`kickoff-ready` has only 7 references**: smaller than the planning-tier skills' 11-13. Kickoff-ready is the orchestration-tier meta-skill; its reference set is intentionally narrow (sequencing rules, handoff protocols, scope fence, antipatterns, progress tracking, AGENTS.md emit template).
+- **`repo-ready/.planning/`**: GSD development artifacts kept on the published repo as a transparency trail of how repo-ready itself was built. The other ten specialist repos either don't use GSD or keep `.planning/` in a separate workspace; gitignore exists in the new template to prevent accidental commits in fresh repos.
+
+### Known inconsistencies to leave alone (for now)
+
+These are real inconsistencies that have been considered and explicitly not fixed in v1.0:
+
+- **Six skills lack a dedicated `references/<skill>-antipatterns.md` file**: stack-ready, repo-ready, production-ready, deploy-ready, observe-ready, launch-ready, harden-ready. Some embed antipattern catalogs into other references; some carry the named-failure-mode discipline inline in SKILL.md without a dedicated file. **Why not fixed:** writing six new antipattern files is real research-level content work, not a session-scale unification. Will be addressed when each skill's content is next refreshed materially.
+- **The hub does not carry a `CHANGELOG.md`**: hub-level changes are tracked in commit history alone. **Why not fixed:** the hub has no version of its own; a CHANGELOG implies a release stream; the hub doesn't have one. The git log serves the same purpose.
+- **`production-ready` carries `ORCHESTRATORS.md` but no other shipping-tier skill does**: deploy-ready / observe-ready / launch-ready / harden-ready could each plausibly carry composition guidance. **Why not fixed:** the hub's `ORCHESTRATORS.md` covers the cross-orchestrator story; per-skill orchestration notes would duplicate. Production-ready's mirror is historical.
+
+When in doubt about whether a per-repo file is "supposed to be there," consult this section first; if not addressed here, treat it as an open question and ask before fixing.
+
 ## Checklist for a clean coordinated patch
 
 Before you push:
