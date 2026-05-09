@@ -19,17 +19,17 @@ kickoff-ready  ->        prd-ready           ->    repo-ready      ->    deploy-
 
 | Skill | Tier | One-line purpose | Version | Repo |
 |---|---|---|---|---|
-| **kickoff-ready** | Orchestration | Sequence the ten specialists for a greenfield project from raw user intent. | 1.0.1 | [github.com/aihxp/kickoff-ready](https://github.com/aihxp/kickoff-ready) |
-| **prd-ready** | Planning | Define what we're building and for whom. | 1.0.7 | [github.com/aihxp/prd-ready](https://github.com/aihxp/prd-ready) |
-| **architecture-ready** | Planning | Design how the big pieces fit together. | 1.0.6 | [github.com/aihxp/architecture-ready](https://github.com/aihxp/architecture-ready) |
-| **roadmap-ready** | Planning | Sequence work over time. | 1.0.5 | [github.com/aihxp/roadmap-ready](https://github.com/aihxp/roadmap-ready) |
-| **stack-ready** | Planning | Pick the right tools for the job. | 1.1.12 | [github.com/aihxp/stack-ready](https://github.com/aihxp/stack-ready) |
-| **repo-ready** | Building | Set up the repo with production-grade hygiene. | 1.6.9 | [github.com/aihxp/repo-ready](https://github.com/aihxp/repo-ready) |
-| **production-ready** | Building | Build the app to production grade. | 2.5.14 | [github.com/aihxp/production-ready](https://github.com/aihxp/production-ready) |
-| **deploy-ready** | Shipping | Ship the app to real environments. | 1.0.11 | [github.com/aihxp/deploy-ready](https://github.com/aihxp/deploy-ready) |
-| **observe-ready** | Shipping | Keep the app healthy once it's live. | 1.0.10 | [github.com/aihxp/observe-ready](https://github.com/aihxp/observe-ready) |
-| **launch-ready** | Shipping | Tell the world the product exists. | 1.0.8 | [github.com/aihxp/launch-ready](https://github.com/aihxp/launch-ready) |
-| **harden-ready** | Shipping | Survive adversarial attention; prove it to an auditor. | 1.0.4 | [github.com/aihxp/harden-ready](https://github.com/aihxp/harden-ready) |
+| **kickoff-ready** | Orchestration | Sequence the ten specialists for a greenfield project from raw user intent. | 1.1.0 | [github.com/aihxp/kickoff-ready](https://github.com/aihxp/kickoff-ready) |
+| **prd-ready** | Planning | Define what we're building and for whom. | 1.0.8 | [github.com/aihxp/prd-ready](https://github.com/aihxp/prd-ready) |
+| **architecture-ready** | Planning | Design how the big pieces fit together. | 1.0.7 | [github.com/aihxp/architecture-ready](https://github.com/aihxp/architecture-ready) |
+| **roadmap-ready** | Planning | Sequence work over time. | 1.0.6 | [github.com/aihxp/roadmap-ready](https://github.com/aihxp/roadmap-ready) |
+| **stack-ready** | Planning | Pick the right tools for the job. | 1.1.13 | [github.com/aihxp/stack-ready](https://github.com/aihxp/stack-ready) |
+| **repo-ready** | Building | Set up the repo with production-grade hygiene. | 1.6.10 | [github.com/aihxp/repo-ready](https://github.com/aihxp/repo-ready) |
+| **production-ready** | Building | Build the app to production grade. | 2.5.15 | [github.com/aihxp/production-ready](https://github.com/aihxp/production-ready) |
+| **deploy-ready** | Shipping | Ship the app to real environments. | 1.0.12 | [github.com/aihxp/deploy-ready](https://github.com/aihxp/deploy-ready) |
+| **observe-ready** | Shipping | Keep the app healthy once it's live. | 1.0.11 | [github.com/aihxp/observe-ready](https://github.com/aihxp/observe-ready) |
+| **launch-ready** | Shipping | Tell the world the product exists. | 1.0.9 | [github.com/aihxp/launch-ready](https://github.com/aihxp/launch-ready) |
+| **harden-ready** | Shipping | Survive adversarial attention; prove it to an auditor. | 1.0.5 | [github.com/aihxp/harden-ready](https://github.com/aihxp/harden-ready) |
 
 ## Why eleven skills, not one
 
@@ -42,6 +42,8 @@ A single mega-skill cannot do any of these things at the same time without becom
 ## Standards compliance
 
 Ready-suite skills implement the [Agent Skills standard](https://agentskills.io). The contract is plain: a `SKILL.md` with YAML frontmatter and an optional `references/` directory the harness loads on demand. Any harness that parses this format runs every skill first-class. Verified harnesses today: Claude Code, Codex, Cursor, Windsurf, [pi](https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent), [OpenClaw](https://github.com/openclaw/openclaw). pi and OpenClaw both load skills from the neutral `~/.agents/skills/` path defined by the standard, so future AgentSkills-compatible harnesses inherit support with no per-tool integration work.
+
+The suite also meets the [`AGENTS.md`](https://agents.md/) cross-tool agent-brief standard (governed by the Linux Foundation's Agentic AI Foundation), the project-root brief read natively by Codex CLI, GitHub Copilot, Cursor, Windsurf, Aider, Zed, Warp, Roo Code, Jules, Factory, Amp, Devin, and others. **kickoff-ready** emits a project-root `AGENTS.md` mapping the suite's artifact paths when none exists (Step 6 sub-step 6a); **repo-ready** scaffolds `AGENTS.md` as the canonical agent brief with `CLAUDE.md` as a thin overlay or symlink. Both respect any user-authored `AGENTS.md` already on disk.
 
 ## Claude Code plugin install
 
