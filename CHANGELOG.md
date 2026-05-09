@@ -4,6 +4,14 @@ Curated change history for the [aihxp/ready-suite](https://github.com/aihxp/read
 
 For per-skill changelogs, see each specialist's `CHANGELOG.md` (e.g., [`prd-ready/CHANGELOG.md`](https://github.com/aihxp/prd-ready/blob/main/CHANGELOG.md)). For the audit trail of every coordinated patch and version bump, see the suite's tag-and-release pages.
 
+## 2026-05-09 - Recovery sync after v2.5.12 precedent retirement
+
+The retirement patch (2f4d7cf) released the 10 sync-only specialists, but the catch-up sync to repo-ready (which had been bumped to v1.6.15 BEFORE the precedent was retired and committed with the OLD SUITE.md) didn't land in repo-ready's commit. The CI workflow on the retirement push correctly flagged the drift: `repo-ready: SUITE.md differs from hub`.
+
+Recovery: bump all 11 specialists in one synchronized batch (kickoff 1.1.6, prd 1.0.14, architecture 1.0.13, roadmap 1.0.12, stack 1.1.19, repo 1.6.16, production 2.6.6, deploy 1.0.18, observe 1.0.17, launch 1.0.15, harden 1.0.11) so the SUITE.md table is current to all 11 the moment the commits land. Each specialist gets a "Recovery sync" CHANGELOG entry naming the precedent retirement that triggered it.
+
+The lesson reinforced: bumps on multiple specialists in one patch must update SUITE.md to ALL the new versions BEFORE any specialist commits, otherwise the early commits capture stale tables. The MAINTAINING.md Ritual 2 section already says this; the precedent-retirement patch violated it by ordering operations wrong. This is now also explicit in the new hub CHANGELOG narrative.
+
 ## 2026-05-09 - Hub CHANGELOG + repo-ready audit refresh + v2.5.12 precedent retired
 
 ### Added
