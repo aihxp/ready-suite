@@ -2,6 +2,8 @@
 
 > Eleven composable AI skills covering the full arc from idea to launch. Implements the [Agent Skills standard](https://agentskills.io). Plug them into Claude Code, Codex, Cursor, Windsurf, pi, OpenClaw, or any harness that parses `SKILL.md` frontmatter natively. Each skill stands alone. They compose by reading and writing well-known artifact paths, never by calling each other.
 
+> **Successor available: [`aihxp/arc-ready`](https://github.com/aihxp/arc-ready).** The same eleven-tier discipline, every named failure mode preserved, every grep test preserved, every artifact path unchanged, consolidated into a single skill and a single repo. One install replaces eleven. The eleven-skill suite remains available and supported; arc-ready is the recommended starting point for new projects. See [`arc-ready/MIGRATION.md`](https://github.com/aihxp/arc-ready/blob/main/MIGRATION.md) for the migration matrix.
+
 This is the discovery hub. Every skill lives in its own repo with its own SKILL.md, references library, and CHANGELOG. The byte-identical [`SUITE.md`](SUITE.md) ships in every sibling repo so the suite map is visible from any entry point.
 
 ## The eleven skills, four tiers
