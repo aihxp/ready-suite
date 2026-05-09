@@ -1,8 +1,8 @@
 ---
 name: harden-ready
 description: "Verify a deployed app survives adversarial attention and prove it to an auditor. Owns post-deploy adversarial review, OWASP Top 10 systematic walkthroughs (Web / API / LLM), compliance mapping (SOC 2 CC, HIPAA 164.312, PCI-DSS 4.0, GDPR Article 32) with control-to-code evidence, pen-test preparation and retest discipline, responsible-disclosure program design beyond SECURITY.md, and class-not-instance post-incident hardening. Refuses scanner-first security (the Snyk-passed-but-front-door-exploitable pattern), paper trust boundaries (declared in docs, absent in code), hardening-as-ritual (annual pen test, nothing between), compliance-without-security (checklist green, app still vulnerable), shallow-audit traps (only finds what tools surface), and CVE-of-the-week patching. Triggers on 'adversarial review,' 'pen-test prep,' 'OWASP walkthrough,' 'SOC 2 / HIPAA / PCI-DSS / GDPR gap check,' 'responsible disclosure,' 'bug bounty,' 'post-incident hardening,' 'security review before launch.' Does not build the app (production-ready), deploy it (deploy-ready), monitor it (observe-ready), pick the tool (stack-ready), or own repo-hygiene security (repo-ready). Pairs with deploy-ready, observe-ready, launch-ready. Full trigger list in README."
-version: 1.0.3
-updated: 2026-05-06
+version: 1.0.13
+updated: 2026-05-09
 changelog: CHANGELOG.md
 suite: ready-suite
 tier: shipping
@@ -22,7 +22,9 @@ compatible_with:
   - codex
   - cursor
   - windsurf
-  - any-agent-with-skill-loading
+  - pi
+  - openclaw
+  - any-agentskills-compatible-harness
 ---
 
 # Harden Ready
@@ -450,6 +452,7 @@ The body above is enough to start. Load each reference *before* the step that us
 | `post-incident-hardening.md` | **Tier 3.** Step 13; instance-vs-class discipline, Log4Shell / xz-utils / SolarWinds / Replit 2025 / Lovable CVE-2025-48757 walkthroughs with class-fix examples. | ~8K |
 | `actionable-findings.md` | **Tier 2.** Step 11 and Step 12; finding template, severity vocabulary (CVSS + EPSS + KEV composite), canon examples from Trail of Bits / Doyensec / NCC Group / Latacora, retest protocol. | ~7K |
 | `RESEARCH-2026-04.md` | **On demand.** Source citations behind every guardrail, incident, named failure mode, and banned pattern. ~30K tokens. | ~33K |
+| `harden-antipatterns.md` | **Every adversarial review + Mode C audits.** Named-failure-mode catalog with grep tests, severity, and per-skill guards. Loaded at every pen-test prep + retest cycle. | ~5K |
 
 Skill version and change history live in `CHANGELOG.md`. When resuming a project, confirm the skill version your session loaded matches the version recorded in `.harden-ready/STATE.md`. A skill update between sessions may change the OWASP category mapping (as the 2025 RC1 graduates), the bounty-economics guidance, the tooling landscape, or the compliance framework version references (PCI-DSS 4.0.1, GDPR post-2026 case law updates).
 

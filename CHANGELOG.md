@@ -2,7 +2,37 @@
 
 Curated change history for the [aihxp/ready-suite](https://github.com/aihxp/ready-suite) hub. The hub is not versioned (no `version` frontmatter; the suite's collective version table lives in `SUITE.md`); this file is a narrative layer above `git log` for readers who want the hub's evolution at a glance.
 
-For per-skill changelogs, see each specialist's `CHANGELOG.md` (e.g., [`prd-ready/CHANGELOG.md`](https://github.com/aihxp/prd-ready/blob/main/CHANGELOG.md)). For the audit trail of every coordinated patch and version bump, see the suite's tag-and-release pages.
+For per-skill changelogs, see each skill's `CHANGELOG.md` under [`skills/<skill>/CHANGELOG.md`](skills/) (e.g., [`skills/prd-ready/CHANGELOG.md`](skills/prd-ready/CHANGELOG.md)). For the full audit trail, see `git log` on this hub.
+
+## 2026-05-09 - Monorepo consolidation
+
+The eleven specialist skills, previously each in their own repo (`aihxp/<skill>-ready`), have consolidated into `skills/<skill>/` subdirectories of this hub. The eleven standalone repos have been deleted; this hub is now the canonical home for everything.
+
+### What moved
+
+- All eleven specialist repos copied verbatim under `skills/<skill>/`. Every `SKILL.md`, `CHANGELOG.md`, `SUITE.md`, `README.md`, `references/`, `LICENSE`, `SECURITY.md`, `CONTRIBUTING.md`, and `.github/CODEOWNERS` preserved.
+- All cross-skill GitHub links rewritten from `https://github.com/aihxp/<skill>-ready` to `https://github.com/aihxp/ready-suite/tree/main/skills/<skill>-ready`.
+- Per-skill README install sections rewritten to point at the hub's one-shot installer (`bash install.sh` from a hub clone).
+
+### What changed in the hub tooling
+
+- `install.sh`: now symlinks `SKILL.md` and `references/` from `skills/<skill>/` into every detected harness. No per-skill clone step.
+- `uninstall.sh`: accepts both new (`skills/<skill>/`) and legacy (`~/Projects/<skill>/`) symlink targets so existing installs upgrade cleanly.
+- `scripts/lint.sh`: `repo_dir_for` now resolves to `skills/<skill>/`. `tag-release-parity` check dropped (moot in monorepo). Five remaining checks: `suite-md-sync`, `frontmatter-version`, `unicode-clean`, `compatible-with`, `trigger-overlap`.
+- `.github/workflows/lint.yml`: drops the sibling-clone step and runs lint directly on the checked-out hub.
+- `SUITE.md`: known-good-versions table now points at `skills/<skill>/` paths inside the monorepo.
+- `MAINTAINING.md`: rewritten for the monorepo. Five rituals collapse to three (single-skill patch, coordinated cross-suite patch, lint regression recovery). The v2.5.12 precedent retirement remains documented but is now also moot.
+
+### What did not change
+
+- The byte-identical SUITE.md invariant. Now between hub root and every `skills/<skill>/SUITE.md`.
+- Frontmatter contracts. Every `SKILL.md` still carries `version`, `updated`, `suite`, `tier`, `upstream`, `downstream`, `compatible_with`.
+- The named-failure-mode discipline per skill.
+- Symlink-based install. The user experience is identical: `bash install.sh` once, edits to skill files propagate to every harness immediately.
+
+### Why consolidate
+
+Eleven repos plus a hub meant every coordinated patch touched twelve places. The discipline scaled to v1.x but the cost-per-patch was high. The lint caught drift; the rituals contained the workflow; the hub-level CHANGELOG narrated. Consolidating to a single repo collapses the workflow without abandoning any of the discipline that mattered. CI got simpler. The five rituals collapsed to three. New contributors clone one repo, not twelve.
 
 ## 2026-05-09 - Recovery sync after v2.5.12 precedent retirement
 
@@ -162,4 +192,4 @@ The discovery hub for the ready-suite. README with the eleven-skill table, insta
 
 ---
 
-For the suite's collective version table at any given moment, see [`SUITE.md`](SUITE.md). For tag-release parity (every git tag in every skill repo has a matching GitHub Release), see [`MAINTAINING.md`](MAINTAINING.md) §"Tag-release parity."
+For the suite's collective version table at any given moment, see [`SUITE.md`](SUITE.md). For the maintenance rituals and discipline rules the lint enforces, see [`MAINTAINING.md`](MAINTAINING.md).

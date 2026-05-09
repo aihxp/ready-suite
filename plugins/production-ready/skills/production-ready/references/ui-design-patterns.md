@@ -4,7 +4,9 @@ This file covers the visual design layer — the components, typography, spacing
 
 Dashboard UI is not marketing-site UI. Dashboards are data-dense, functional, used for hours daily. Every decision here optimizes for **scannability, density, and clarity** — not novelty.
 
-**Canonical scope:** component library, typography, spacing and density tokens, visual identity decision framework, 10 archetype token sets, dark mode, micro-copy. **See also:** `states-and-feedback.md` for state patterns, `information-architecture.md` for layout, `data-visualization.md` for charts and tables, `animation-and-motion.md` for transitions.
+**Precedence note.** If a project-root `DESIGN.md` exists (the [Google Labs format](https://github.com/google-labs-code/design.md), Apache 2.0; YAML frontmatter holds machine-readable design tokens), it is the canonical token source and supersedes the archetype + 5-decision derivation in this file. See SKILL.md Step 3 sub-step 3a and `references/design-md-integration.md` for the consumption recipe. This file is the scaffold-from-scratch path: read it when no `DESIGN.md` is present, and optionally use the chosen archetype to scaffold a `DESIGN.md` before Step 4 so the next agent starts from sub-step 3a, not 3b.
+
+**Canonical scope:** component library, typography, spacing and density tokens, visual identity decision framework, 10 archetype token sets, dark mode, micro-copy. **See also:** `design-md-integration.md` for the cross-tool design-system contract, `states-and-feedback.md` for state patterns, `information-architecture.md` for layout, `data-visualization.md` for charts and tables, `animation-and-motion.md` for transitions.
 
 ---
 

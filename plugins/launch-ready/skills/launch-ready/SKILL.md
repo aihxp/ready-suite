@@ -1,8 +1,8 @@
 ---
 name: launch-ready
 description: "Put a deployed, healthy app in front of real users without shipping AI-slop. Owns landing page, positioning, launch-day SEO, Open Graph cards, waitlist and email funnel, launch channels (Product Hunt, Show HN, Reddit, X, IH, dev.to, LinkedIn), press outreach, launch-day telemetry, and the D-7 to D+7 runbook. Refuses AI-slop landings, hero-fatigue copy, spec-sheet positioning, paper waitlists, unrendered OG cards, and silent launches (launch-day signups with no source attribution). Triggers on 'launch my product,' 'build a landing page,' 'Product Hunt,' 'Show HN,' 'waitlist,' 'OG card,' 'launch-day SEO,' 'press kit,' 'launch week plan.' Does not build the app (production-ready), deploy it (deploy-ready), monitor it (observe-ready), pick tools (stack-ready), or own ongoing marketing. Pairs with deploy-ready and observe-ready. Full trigger list in README."
-version: 1.0.7
-updated: 2026-05-06
+version: 1.0.17
+updated: 2026-05-09
 changelog: CHANGELOG.md
 suite: ready-suite
 tier: shipping
@@ -20,7 +20,9 @@ compatible_with:
   - codex
   - cursor
   - windsurf
-  - any-agent-with-skill-loading
+  - pi
+  - openclaw
+  - any-agentskills-compatible-harness
 ---
 
 # Launch Ready
@@ -508,6 +510,7 @@ The body above is enough to start. Load each reference *before* the step that us
 | `launch-week-runbook.md` | **Tier 4.** Step 11; D-7 to D+7 calendar, launch-day schedule, response plans. | ~8K |
 | `post-launch-transition.md` | **Tier 4.** Step 12; transition criteria, handoff to production-ready, retrospective template. | ~5K |
 | `RESEARCH-2026-04.md` | **On demand.** Source citations behind every guardrail, incident, and banned-word choice. | ~35K |
+| `launch-antipatterns.md` | **Every launch artifact draft + Mode C audits.** Named-failure-mode catalog with grep tests, severity, and per-skill guards. Loaded at every landing-page draft review. | ~5K |
 
 Skill version and change history live in `CHANGELOG.md`. When resuming a project, confirm the skill version your session loaded matches the version recorded in `.launch-ready/STATE.md`. A skill update between sessions may change the banned-word list (new AI-slop tells emerge), channel etiquette (Product Hunt algorithm changes, HN flag dynamics), or tool landscape (waitlist-tool entries and exits).
 

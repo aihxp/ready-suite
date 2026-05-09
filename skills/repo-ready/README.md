@@ -1,6 +1,6 @@
 # Repo Ready
 
-[![CI](https://github.com/aihxp/repo-ready/actions/workflows/ci.yml/badge.svg)](https://github.com/aihxp/repo-ready/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Latest release](https://img.shields.io/github/v/release/aihxp/repo-ready?label=release)](https://github.com/aihxp/repo-ready/releases) [![AI Skill](https://img.shields.io/badge/AI%20skill-Markdown-blueviolet)](SKILL.md)
+[![CI](https://github.com/aihxp/ready-suite/actions/workflows/ci.yml/badge.svg)](https://github.com/aihxp/ready-suite/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Latest release](https://img.shields.io/github/v/release/aihxp/repo-ready?label=release)](https://github.com/aihxp/ready-suite/releases) [![AI Skill](https://img.shields.io/badge/AI%20skill-Markdown-blueviolet)](SKILL.md)
 
 An AI skill that sets up production-grade repositories.
 
@@ -8,13 +8,13 @@ Feed it to your AI coding agent. Ask it to set up your repo. It handles everythi
 
 **Works with any AI coding agent** -- Claude Code, Cursor, Cline, Windsurf, Copilot, [pi](https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent), [OpenClaw](https://github.com/openclaw/openclaw), or any harness that parses the [Agent Skills standard](https://agentskills.io).
 
-> **Part of the [ready-suite](SUITE.md)**, a composable set of eleven AI skills covering the full arc from idea to launch (orchestration, planning, building, shipping). Repo Ready is one of the two building-tier skills, alongside [production-ready](https://github.com/aihxp/production-ready) (which owns app wiring; Repo Ready owns repo scaffolding). See [`SUITE.md`](SUITE.md) for the full map.
+> **Part of the [ready-suite](SUITE.md)**, a composable set of eleven AI skills covering the full arc from idea to launch (orchestration, planning, building, shipping). Repo Ready is one of the two building-tier skills, alongside [production-ready](https://github.com/aihxp/ready-suite/tree/main/skills/production-ready) (which owns app wiring; Repo Ready owns repo scaffolding). See [`SUITE.md`](SUITE.md) for the full map.
 
 ## Quick start
 
 **With any AI coding agent:**
 ```bash
-git clone https://github.com/aihxp/repo-ready.git
+git clone https://github.com/aihxp/ready-suite.git
 # Point your AI agent to SKILL.md and the references/ directory
 # Then ask it to set up your repo -- the skill guides the entire process
 ```

@@ -1,8 +1,8 @@
 ---
 name: observe-ready
 description: "Keep a deployed app healthy once real users are on it. Refuses paper SLOs (numbers with no error-budget policy), blind dashboards (charts bound to no SLO), and paper runbooks (written once, never executed). Triggers on 'add monitoring,' 'define an SLO,' 'alerts when X,' 'add Datadog / Honeycomb / Sentry / Grafana,' 'write a runbook,' 'on-call setup,' 'post-mortem,' 'structured logging,' 'OpenTelemetry,' 'distributed tracing,' 'error budget policy,' or any request to wire operational signals for a live service. Does not pick the tool (stack-ready), deploy the app (deploy-ready), build the app (production-ready), or manage secrets (security). Pairs with deploy-ready. Full trigger list in README."
-version: 1.0.9
-updated: 2026-05-06
+version: 1.0.19
+updated: 2026-05-09
 changelog: CHANGELOG.md
 suite: ready-suite
 tier: shipping
@@ -20,7 +20,9 @@ compatible_with:
   - codex
   - cursor
   - windsurf
-  - any-agent-with-skill-loading
+  - pi
+  - openclaw
+  - any-agentskills-compatible-harness
 ---
 
 # Observe Ready
@@ -347,6 +349,7 @@ The body above is enough to start. Load each reference *before* the step that us
 | `post-mortem.md` | **Tier 4.** Step 11; blameless format, Five Whys, action-item tracking, incident-to-learning loop. | ~7K |
 | `vendor-landscape.md` | **On demand.** Datadog / Grafana / Honeycomb / New Relic / OTel self-host deltas, pricing traps, independence considerations. | ~10K |
 | `RESEARCH-2026-04.md` | **On demand.** Source citations behind every guardrail, incident, and naming-lane decision. | ~30K |
+| `observe-antipatterns.md` | **Every SLO definition + Mode C audits.** Named-failure-mode catalog with grep tests, severity, and per-skill guards. Loaded at every alert-routing review. | ~5K |
 
 Skill version and change history live in `CHANGELOG.md`. When resuming a project, confirm the skill version your session loaded matches the version recorded in `.observe-ready/STATE.md`. A skill update between sessions may change guardrails or tier requirements; if versions differ, re-read the changed sections before continuing.
 

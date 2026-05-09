@@ -77,7 +77,11 @@ The Codex docs as of May 2026 do not explicitly document skill-to-skill invocati
 
 ### AGENTS.md
 
-Codex's project-level config is `AGENTS.md` (the Claude Code equivalent of `CLAUDE.md`). kickoff-ready does not write AGENTS.md but can suggest the user add a kickoff-ready note to AGENTS.md so the harness knows kickoff-ready is in use.
+`AGENTS.md` is the cross-tool agent brief read natively by Codex CLI, GitHub Copilot, Cursor, Windsurf, Aider, Zed, Warp, Roo Code, Jules, Factory, Amp, Devin, and others, per the [agents.md open standard](https://agents.md/) (governed by the Linux Foundation's Agentic AI Foundation). On Claude Code the equivalent is `CLAUDE.md`; many teams symlink `CLAUDE.md` -> `AGENTS.md` to avoid drift.
+
+kickoff-ready emits a minimal `AGENTS.md` at project root in Step 6 sub-step 6a if none exists, scoped to artifact metadata only (the per-sibling artifact map). It does not write stack, commands, conventions, or forbidden actions; those belong to repo-ready or to the user. If `AGENTS.md` exists, kickoff-ready records `existing-respected` in PROGRESS.md and does not touch the file. See [`references/agents-md-template.md`](agents-md-template.md) for the template, the substitution rules, and the kickoff-ready / repo-ready handshake on a shared file.
+
+On chat-only harnesses (no file system), kickoff-ready surfaces the template as a guidance string for the user to paste, instead of writing.
 
 ## Antigravity
 

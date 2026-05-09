@@ -1,8 +1,8 @@
 ---
 name: deploy-ready
 description: "Ship an app from a known-green build into real user-facing environments safely, repeatably, and reversibly. Triggers on 'deploy this,' 'CI/CD pipeline,' 'promote to staging,' 'zero-downtime migration,' 'expand-contract,' 'rollback,' 'canary,' 'blue/green,' 'progressive rollout,' 'first deploy,' 'environment parity,' 'GitHub Actions pipeline,' 'GitOps,' 'promote the same artifact,' or any request to move code from pre-prod to prod. Enforces same-artifact promotion, expand/contract as a multi-deploy calendar, code-vs-data rollback asymmetry, and paper-canary detection. Does not pick IaC tools (stack-ready), wire observability (observe-ready), or manage secrets vaults (security). Pairs with observe-ready. Full trigger list in README."
-version: 1.0.10
-updated: 2026-05-06
+version: 1.0.20
+updated: 2026-05-09
 changelog: CHANGELOG.md
 suite: ready-suite
 tier: shipping
@@ -20,7 +20,9 @@ compatible_with:
   - codex
   - cursor
   - windsurf
-  - any-agent-with-skill-loading
+  - pi
+  - openclaw
+  - any-agentskills-compatible-harness
 ---
 
 # Deploy Ready
@@ -386,6 +388,7 @@ The body above is enough to start. Load each reference *before* the step that us
 | `progressive-delivery.md` | **Tier 4.** Step 7; canary, blue/green, ring, the paper-canary rule. | ~10K |
 | `secrets-injection.md` | **Tier 2.** Step 8; path from vault to runtime, per-topology audit. | ~7K |
 | `RESEARCH-2026-04.md` | **On demand.** Source citations behind the guardrails and incident examples. | ~30K |
+| `deploy-antipatterns.md` | **Every cutover + Mode C audits.** Named-failure-mode catalog with grep tests, severity, and per-skill guards. Loaded at every cutover plan review. | ~5K |
 
 Skill version and change history live in `CHANGELOG.md`. When resuming a project, confirm the skill version your session loaded matches the version recorded in `.deploy-ready/STATE.md`. A skill update between sessions may change guardrail lists (new migration footguns, new CI supply-chain patterns) or tier requirements. If versions differ, re-read the changed sections before continuing the ship.
 

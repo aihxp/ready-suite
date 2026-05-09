@@ -10,31 +10,16 @@ None of this is a formatting bug. It is a decision-making failure, and the tooli
 
 ## Install
 
-**Claude Code:**
+This skill ships as part of the [ready-suite](https://github.com/aihxp/ready-suite) monorepo. The hub installer symlinks `SKILL.md` and `references/` for all eleven skills into every detected harness (Claude Code, Codex, Cursor, pi, OpenClaw, any Agent Skills harness):
+
 ```bash
-git clone https://github.com/aihxp/prd-ready.git ~/.claude/skills/prd-ready
+git clone https://github.com/aihxp/ready-suite.git ~/Projects/ready-suite
+bash ~/Projects/ready-suite/install.sh
 ```
 
-**Codex:**
-```bash
-git clone https://github.com/aihxp/prd-ready.git ~/.codex/skills/prd-ready
-```
+Re-run anytime after `git pull` to pick up updates. To remove all symlinks, run `bash ~/Projects/ready-suite/uninstall.sh`.
 
-**pi, OpenClaw, or any [Agent Skills](https://agentskills.io)-compatible harness:**
-```bash
-git clone https://github.com/aihxp/prd-ready.git ~/.agents/skills/prd-ready
-```
-
-**Cursor:**
-```bash
-git clone https://github.com/aihxp/prd-ready.git ~/.cursor/skills/prd-ready
-```
-
-**Windsurf or other agents:**
-Add `SKILL.md` to your project rules or system prompt. Load reference files as needed.
-
-**Any agent with a plan-then-execute loop:**
-Upload `SKILL.md` and the relevant reference files to your project context. The skill produces structured output (Problem sections, Target User bullets, MoSCoW-ranked requirements, Out-of-Scope enumerations, rabbit-hole lists, sign-off ledgers, downstream handoff blocks) that any planner can consume.
+**Windsurf or other agents without a programmatic Skill tool:** add this skill's `SKILL.md` to your project rules or system prompt. Load reference files as needed.
 
 ## The problem this solves
 
@@ -90,12 +75,12 @@ The short frontmatter description is tight on purpose, to speed up skill-routing
 **Negative triggers (route elsewhere):**
 - Designing the architecture ("draw the system diagram," "component breakdown") -> `architecture-ready` (not yet released)
 - Sequencing the roadmap ("quarterly plan," "milestone schedule") -> `roadmap-ready` (not yet released)
-- Picking the stack ("Next.js vs. Remix," "which database") -> [`stack-ready`](https://github.com/aihxp/stack-ready)
-- Building the app ("wire the dashboard," "implement RBAC") -> [`production-ready`](https://github.com/aihxp/production-ready)
-- Setting up the repo ("CI config," "CONTRIBUTING.md") -> [`repo-ready`](https://github.com/aihxp/repo-ready)
-- Deploying ("pipeline," "canary," "rollback") -> [`deploy-ready`](https://github.com/aihxp/deploy-ready)
-- Monitoring ("SLO," "alerts," "runbook") -> [`observe-ready`](https://github.com/aihxp/observe-ready)
-- Writing launch copy ("landing page," "hero," "Product Hunt post") -> [`launch-ready`](https://github.com/aihxp/launch-ready)
+- Picking the stack ("Next.js vs. Remix," "which database") -> [`stack-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/stack-ready)
+- Building the app ("wire the dashboard," "implement RBAC") -> [`production-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/production-ready)
+- Setting up the repo ("CI config," "CONTRIBUTING.md") -> [`repo-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/repo-ready)
+- Deploying ("pipeline," "canary," "rollback") -> [`deploy-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/deploy-ready)
+- Monitoring ("SLO," "alerts," "runbook") -> [`observe-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/observe-ready)
+- Writing launch copy ("landing page," "hero," "Product Hunt post") -> [`launch-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/launch-ready)
 - Pricing strategy ("what to charge") -> business decision, not in scope
 - Competitive analysis as a discipline (feature matrix, market share) -> separate product-research practice
 - Go-to-market planning -> `launch-ready`

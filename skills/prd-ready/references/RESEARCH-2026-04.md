@@ -258,7 +258,7 @@ For each downstream ready-suite skill, what the PRD must supply to let that skil
 
 ### 6.1 architecture-ready needs (planning tier, not yet released)
 
-`architecture-ready` owns "design how the big pieces fit together" ([SUITE.md](https://github.com/aihxp/production-ready/blob/main/SUITE.md)). From the PRD it needs:
+`architecture-ready` owns "design how the big pieces fit together" ([SUITE.md](https://github.com/aihxp/ready-suite/blob/main/skills/production-ready/SUITE.md)). From the PRD it needs:
 
 - **Entities** (the nouns: users, orders, documents, sensors, etc.) with their key attributes and identifiers.
 - **Flows** (the verbs: sign up, checkout, approve, escalate, refund, audit). Primary happy-path flow and at least two error/edge flows per feature.
@@ -283,7 +283,7 @@ For each downstream ready-suite skill, what the PRD must supply to let that skil
 
 ### 6.3 stack-ready needs (live, v1.1.4)
 
-`stack-ready` has six pre-flight questions that drive its scoring ([stack-ready SKILL.md](https://github.com/aihxp/stack-ready/blob/main/SKILL.md)). The PRD should pre-fill all six so `stack-ready` does not start from scratch:
+`stack-ready` has six pre-flight questions that drive its scoring ([stack-ready SKILL.md](https://github.com/aihxp/ready-suite/blob/main/skills/stack-ready/SKILL.md)). The PRD should pre-fill all six so `stack-ready` does not start from scratch:
 
 1. **Domain.** "What real-world job does this stack serve?" PRD's Problem section plus target-user section should name the domain clearly enough that it maps to one of stack-ready's 12 domain profiles (SaaS/multi-tenant, e-commerce, healthcare, fintech, etc.).
 2. **Team.** "How many engineers, what language depth, who is on call?" PRD should include a Team & Constraints section with this information, even if it's "unknown at this stage."
@@ -296,7 +296,7 @@ If the PRD produces all six, `stack-ready` skips interrogation and goes straight
 
 ### 6.4 production-ready needs (live, v2.5.5)
 
-`production-ready` has 12 pre-flight questions ([production-ready SKILL.md](https://github.com/aihxp/production-ready/blob/main/SKILL.md)). It also requires an Architecture Note (Step 2) with specific bullets: stack, data source, auth model, permission model, route map, threat model, visual identity. The PRD should supply:
+`production-ready` has 12 pre-flight questions ([production-ready SKILL.md](https://github.com/aihxp/ready-suite/blob/main/skills/production-ready/SKILL.md)). It also requires an Architecture Note (Step 2) with specific bullets: stack, data source, auth model, permission model, route map, threat model, visual identity. The PRD should supply:
 
 - **Requirements stated concretely enough to build and test against.** "User can reset their password via email link within 10 minutes; link expires after 1 hour; rate-limited to 3 per user per hour." Not "secure password reset."
 - **Entities and their CRUD surface.** Tier 1 of production-ready demands "create/edit/delete one entity" works end-to-end; the PRD must name the entity and specify what operations it supports.

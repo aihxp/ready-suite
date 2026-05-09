@@ -151,7 +151,7 @@ Step 3 gains a new sub-step with a behavior gate (consume `DESIGN.md` when prese
 
 ## v2.5.15 (2026-05-09)
 
-Documentation-only patch. Suite-wide `SUITE.md` sync for the v1.1.0 release of [kickoff-ready](https://github.com/aihxp/kickoff-ready) and the v1.6.10 release of [repo-ready](https://github.com/aihxp/repo-ready), both of which add first-class support for the [`AGENTS.md`](https://agents.md/) cross-tool agent-brief standard (Linux Foundation Agentic AI Foundation). kickoff-ready now emits a project-root `AGENTS.md` mapping the suite's artifact paths when none exists; repo-ready scaffolds `AGENTS.md` as the canonical agent brief with `CLAUDE.md` as a thin overlay or symlink. This skill's behavior, frontmatter contract, and reference library are unchanged.
+Documentation-only patch. Suite-wide `SUITE.md` sync for the v1.1.0 release of [kickoff-ready](https://github.com/aihxp/ready-suite/tree/main/skills/kickoff-ready) and the v1.6.10 release of [repo-ready](https://github.com/aihxp/ready-suite/tree/main/skills/repo-ready), both of which add first-class support for the [`AGENTS.md`](https://agents.md/) cross-tool agent-brief standard (Linux Foundation Agentic AI Foundation). kickoff-ready now emits a project-root `AGENTS.md` mapping the suite's artifact paths when none exists; repo-ready scaffolds `AGENTS.md` as the canonical agent brief with `CLAUDE.md` as a thin overlay or symlink. This skill's behavior, frontmatter contract, and reference library are unchanged.
 
 ### Changed
 
@@ -183,7 +183,7 @@ The skill's behavior, references, and workflow are unchanged. Only the frontmatt
 
 ## v2.5.13 (2026-05-06)
 
-Documentation-only patch. Suite-wide SUITE.md refresh introducing the new **orchestration** tier and the eleventh sibling, [kickoff-ready](https://github.com/aihxp/kickoff-ready) v1.0.0. kickoff-ready sequences the ten core-suite specialists for greenfield projects from raw user intent: it triggers from a fresh idea ("kickoff," "I have an idea help me ship it") and invokes prd-ready -> architecture-ready -> roadmap-ready -> stack-ready -> repo-ready -> production-ready -> deploy-ready -> observe-ready -> (launch-ready || harden-ready), verifying each artifact on disk before advancing. It produces only `.kickoff-ready/PROGRESS.md`; it never produces specialist content. No behavioral changes to this skill.
+Documentation-only patch. Suite-wide SUITE.md refresh introducing the new **orchestration** tier and the eleventh sibling, [kickoff-ready](https://github.com/aihxp/ready-suite/tree/main/skills/kickoff-ready) v1.0.0. kickoff-ready sequences the ten core-suite specialists for greenfield projects from raw user intent: it triggers from a fresh idea ("kickoff," "I have an idea help me ship it") and invokes prd-ready -> architecture-ready -> roadmap-ready -> stack-ready -> repo-ready -> production-ready -> deploy-ready -> observe-ready -> (launch-ready || harden-ready), verifying each artifact on disk before advancing. It produces only `.kickoff-ready/PROGRESS.md`; it never produces specialist content. No behavioral changes to this skill.
 
 ### Changed
 
@@ -247,7 +247,7 @@ Same rationale as prior x.y.z patches: the skill's behavior, frontmatter contrac
 
 ## v2.5.9 (2026-04-23)
 
-Documentation-only patch. Reflects the arrival of `harden-ready` v1.0.0 (https://github.com/aihxp/harden-ready) as a live sibling in the ready-suite. harden-ready is the tenth and final core-suite skill; its v1.0.0 release completes the shipping tier alongside deploy-ready, observe-ready, and launch-ready, and completes the ready-suite across planning (four), building (two), and shipping (four) tiers. harden-ready owns post-deploy adversarial review, OWASP Top 10 walkthroughs (Web / API / LLM), compliance control-to-code mapping (SOC 2 / HIPAA / PCI-DSS / GDPR), pen-test preparation and retest discipline, responsible-disclosure program design beyond SECURITY.md, and class-not-instance post-incident hardening. No behavioral changes to this skill.
+Documentation-only patch. Reflects the arrival of `harden-ready` v1.0.0 (https://github.com/aihxp/ready-suite/tree/main/skills/harden-ready) as a live sibling in the ready-suite. harden-ready is the tenth and final core-suite skill; its v1.0.0 release completes the shipping tier alongside deploy-ready, observe-ready, and launch-ready, and completes the ready-suite across planning (four), building (two), and shipping (four) tiers. harden-ready owns post-deploy adversarial review, OWASP Top 10 walkthroughs (Web / API / LLM), compliance control-to-code mapping (SOC 2 / HIPAA / PCI-DSS / GDPR), pen-test preparation and retest discipline, responsible-disclosure program design beyond SECURITY.md, and class-not-instance post-incident hardening. No behavioral changes to this skill.
 
 ### Changed
 
@@ -260,7 +260,7 @@ The skill's behavior, frontmatter contract, and reference library are unchanged.
 
 ## v2.5.8 (2026-04-23)
 
-Documentation-only patch. Reflects the arrival of `roadmap-ready` v1.0.0 (https://github.com/aihxp/roadmap-ready) as a live sibling in the ready-suite. This release completes the nine-skill suite: `prd-ready` (what), `architecture-ready` (how), `roadmap-ready` (when), `stack-ready` (with what tools), `repo-ready` (the repo), `production-ready` (the app), `deploy-ready` (ship it), `observe-ready` (keep it healthy), `launch-ready` (tell the world). No behavioral changes to this skill.
+Documentation-only patch. Reflects the arrival of `roadmap-ready` v1.0.0 (https://github.com/aihxp/ready-suite/tree/main/skills/roadmap-ready) as a live sibling in the ready-suite. This release completes the nine-skill suite: `prd-ready` (what), `architecture-ready` (how), `roadmap-ready` (when), `stack-ready` (with what tools), `repo-ready` (the repo), `production-ready` (the app), `deploy-ready` (ship it), `observe-ready` (keep it healthy), `launch-ready` (tell the world). No behavioral changes to this skill.
 
 ### Changed
 
@@ -273,7 +273,7 @@ The skill's behavior, frontmatter contract, and reference library are unchanged.
 
 ## v2.5.7 (2026-04-23)
 
-Documentation-only patch. Reflects the arrival of `architecture-ready` v1.0.0 (https://github.com/aihxp/architecture-ready) as a live sibling in the ready-suite. architecture-ready is a new upstream planning-tier sibling; production-ready's Step 2 architecture note and threat model now pre-fill from `.architecture-ready/HANDOFF.md`. No behavioral changes to the skill.
+Documentation-only patch. Reflects the arrival of `architecture-ready` v1.0.0 (https://github.com/aihxp/ready-suite/tree/main/skills/architecture-ready) as a live sibling in the ready-suite. architecture-ready is a new upstream planning-tier sibling; production-ready's Step 2 architecture note and threat model now pre-fill from `.architecture-ready/HANDOFF.md`. No behavioral changes to the skill.
 
 ### Changed
 
@@ -282,7 +282,7 @@ Documentation-only patch. Reflects the arrival of `architecture-ready` v1.0.0 (h
 
 ## v2.5.6 (2026-04-23)
 
-Documentation-only patch. Reflects the arrival of `prd-ready` v1.0.0 (https://github.com/aihxp/prd-ready) as a live sibling in the ready-suite. This release completes the top of the planning tier: prd-ready defines WHAT we are building, upstream of architecture-ready (HOW), roadmap-ready (WHEN), and stack-ready (WITH WHAT TOOLS). No behavioral changes to the skill.
+Documentation-only patch. Reflects the arrival of `prd-ready` v1.0.0 (https://github.com/aihxp/ready-suite/tree/main/skills/prd-ready) as a live sibling in the ready-suite. This release completes the top of the planning tier: prd-ready defines WHAT we are building, upstream of architecture-ready (HOW), roadmap-ready (WHEN), and stack-ready (WITH WHAT TOOLS). No behavioral changes to the skill.
 
 ### Changed
 
@@ -291,7 +291,7 @@ Documentation-only patch. Reflects the arrival of `prd-ready` v1.0.0 (https://gi
 
 ## v2.5.5 (2026-04-23)
 
-Documentation-only patch. Reflects the arrival of launch-ready v1.0.0 (https://github.com/aihxp/launch-ready) as a live sibling in the ready-suite. This release completes the shipping tier: deploy-ready ships it, observe-ready keeps it healthy, launch-ready tells the world. No behavioral changes to production-ready itself.
+Documentation-only patch. Reflects the arrival of launch-ready v1.0.0 (https://github.com/aihxp/ready-suite/tree/main/skills/launch-ready) as a live sibling in the ready-suite. This release completes the shipping tier: deploy-ready ships it, observe-ready keeps it healthy, launch-ready tells the world. No behavioral changes to production-ready itself.
 
 ### Changed
 
@@ -313,7 +313,7 @@ Documentation-only patch. Reflects the arrival of repo-ready v1.6.0 as a live si
 
 ## v2.5.3 (2026-04-22)
 
-Documentation-only patch. Reflects the arrival of observe-ready v1.0.0 (https://github.com/aihxp/observe-ready) as a live sibling in the ready-suite. No behavioral changes to the skill.
+Documentation-only patch. Reflects the arrival of observe-ready v1.0.0 (https://github.com/aihxp/ready-suite/tree/main/skills/observe-ready) as a live sibling in the ready-suite. No behavioral changes to the skill.
 
 ### Changed
 
@@ -328,7 +328,7 @@ Same rationale as 2.5.2: the skill's behavior, frontmatter contract, and referen
 
 ## v2.5.2 (2026-04-22)
 
-Documentation-only patch. Reflects the arrival of deploy-ready v1.0.0 (https://github.com/aihxp/deploy-ready) as a live sibling in the ready-suite. No behavioral changes to the skill.
+Documentation-only patch. Reflects the arrival of deploy-ready v1.0.0 (https://github.com/aihxp/ready-suite/tree/main/skills/deploy-ready) as a live sibling in the ready-suite. No behavioral changes to the skill.
 
 ### Changed
 
@@ -343,7 +343,7 @@ The skill's behavior, frontmatter contract, and reference library are unchanged.
 
 ## v2.5.1 (2026-04-22)
 
-Documentation-only patch. Reflects the arrival of stack-ready v1.1.0 (https://github.com/aihxp/stack-ready) as a live sibling in the ready-suite. No behavioral changes to the skill.
+Documentation-only patch. Reflects the arrival of stack-ready v1.1.0 (https://github.com/aihxp/ready-suite/tree/main/skills/stack-ready) as a live sibling in the ready-suite. No behavioral changes to the skill.
 
 ### Changed
 

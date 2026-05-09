@@ -111,7 +111,7 @@ Why both: granular consumers can install one skill; the user who wants the whole
 
 ### Vendoring, not symlinks or submodules
 
-Each plugin directory contains a vendored copy of the skill's `SKILL.md` and `references/`. Updates land via `scripts/refresh-plugin-skills.sh`, which copies from the eleven sibling repos at `~/Projects/<skill>/` into `plugins/<skill>/skills/<skill>/`. Submodules add cognitive load for users; symlinks are non-portable across marketplace consumers (they install the plugin, not the dev copies).
+Each plugin directory contains a vendored copy of the skill's `SKILL.md` and `references/`. Updates land via a refresh that copies from the canonical content under `skills/<skill>/` into `plugins/<skill>/skills/<skill>/`. Submodules add cognitive load for users; symlinks are non-portable across marketplace consumers (they install the plugin, not the in-tree copies).
 
 ### Versioning cadence
 

@@ -1,8 +1,8 @@
 ---
 name: architecture-ready
 description: "Given a PRD, produce an architecture that says what system shape to build and why, before any code is written or any tool is chosen. Triggers on 'design the architecture,' 'system diagram,' 'monolith or microservices,' 'integration shape,' 'service boundaries,' 'data architecture,' 'how do the pieces fit,' 'ADR,' 'trust boundaries,' 'C4 diagram,' 'arc42,' 'non-functional requirements map to architecture.' Refuses architecture theater (diagrams with no load-bearing decisions), paper-tiger architecture (looks robust until first real load), cargo-cult cloud-native (Kubernetes and Kafka for a ten-user CRUD), stackitecture (stack picked and called architecture), resume-driven architecture, and 'scalable' as a claim with no numbers. Planning tier; consumes .prd-ready/PRD.md; produces .architecture-ready/ARCH.md for stack-ready, roadmap-ready, and production-ready. Does not pick tools (stack-ready), sequence milestones (roadmap-ready), or build the app (production-ready). Full trigger list in README."
-version: 1.0.5
-updated: 2026-05-06
+version: 1.0.15
+updated: 2026-05-09
 changelog: CHANGELOG.md
 suite: ready-suite
 tier: planning
@@ -21,7 +21,9 @@ compatible_with:
   - codex
   - cursor
   - windsurf
-  - any-agent-with-skill-loading
+  - pi
+  - openclaw
+  - any-agentskills-compatible-harness
 ---
 
 # Architecture Ready
@@ -44,16 +46,16 @@ The substitution corollary applies at the architectural level too. For any conta
 
 Route elsewhere if the request is:
 
-- **Product requirements** ("what should we build," "who is this for," "what are the success metrics," "write a PRD"). That is [`prd-ready`](https://github.com/aihxp/prd-ready). architecture-ready reads `.prd-ready/PRD.md` and does not redefine the product; if the PRD is absent or empty, warn the user that designing architecture without a PRD is guessing and offer to invoke prd-ready first.
-- **Specific tools, frameworks, ORMs, databases, auth providers, hosting platforms** ("Next.js or Remix," "Postgres or Mongo," "pick an auth provider," "Supabase or Firebase," "which queue"). That is [`stack-ready`](https://github.com/aihxp/stack-ready). architecture-ready says "we need a relational store with strong consistency for orders and an event log for audit"; stack-ready picks Postgres, or Postgres plus Kafka, or whatever fits the constraints. A recommendation that names a specific tool is either out of scope (delegate to stack-ready) or an ADR that cites the stack-ready DECISION.md by reference.
+- **Product requirements** ("what should we build," "who is this for," "what are the success metrics," "write a PRD"). That is [`prd-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/prd-ready). architecture-ready reads `.prd-ready/PRD.md` and does not redefine the product; if the PRD is absent or empty, warn the user that designing architecture without a PRD is guessing and offer to invoke prd-ready first.
+- **Specific tools, frameworks, ORMs, databases, auth providers, hosting platforms** ("Next.js or Remix," "Postgres or Mongo," "pick an auth provider," "Supabase or Firebase," "which queue"). That is [`stack-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/stack-ready). architecture-ready says "we need a relational store with strong consistency for orders and an event log for audit"; stack-ready picks Postgres, or Postgres plus Kafka, or whatever fits the constraints. A recommendation that names a specific tool is either out of scope (delegate to stack-ready) or an ADR that cites the stack-ready DECISION.md by reference.
 - **Timeline, sequencing, milestone plans, release plans** ("build a quarterly roadmap," "what ships first," "when does the beta happen"). That is `roadmap-ready` (not yet released). architecture-ready produces the component dependency graph; roadmap-ready consumes it to produce the calendar.
-- **Implementation, code organization inside a service, vertical slices, component hierarchy at the file level** ("build the user management slice," "organize the folder layout," "wire the dashboard"). That is [`production-ready`](https://github.com/aihxp/production-ready). architecture-ready ends at service boundaries, interfaces, and responsibilities; production-ready builds the app inside those boundaries.
-- **Deployment pipeline, environments, release cadence, rollback protocol** ("CI/CD pipeline," "blue-green," "canary," "rollback plan"). That is [`deploy-ready`](https://github.com/aihxp/deploy-ready). architecture-ready names the deployment topology ("three services, edge plus two regions") as a decision; deploy-ready wires the pipeline that actually ships it.
-- **Observability instrumentation, dashboards, alerts, SLOs, runbooks** ("add Honeycomb," "define SLOs," "write alert rules," "on-call runbook"). That is [`observe-ready`](https://github.com/aihxp/observe-ready). architecture-ready names observability boundaries (where traces must propagate across services, what audit events cross trust boundaries); observe-ready wires the instrumentation.
-- **Repo structure, monorepo vs. polyrepo, CI configuration, CODEOWNERS, release automation** ("set up the repo," "monorepo or polyrepo," "CI pipeline"). That is [`repo-ready`](https://github.com/aihxp/repo-ready). architecture-ready's service count and team topology shape the decision (one repo per bounded context vs. a single monorepo with code-owner boundaries), but repo-ready owns the actual structure and tooling.
+- **Implementation, code organization inside a service, vertical slices, component hierarchy at the file level** ("build the user management slice," "organize the folder layout," "wire the dashboard"). That is [`production-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/production-ready). architecture-ready ends at service boundaries, interfaces, and responsibilities; production-ready builds the app inside those boundaries.
+- **Deployment pipeline, environments, release cadence, rollback protocol** ("CI/CD pipeline," "blue-green," "canary," "rollback plan"). That is [`deploy-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/deploy-ready). architecture-ready names the deployment topology ("three services, edge plus two regions") as a decision; deploy-ready wires the pipeline that actually ships it.
+- **Observability instrumentation, dashboards, alerts, SLOs, runbooks** ("add Honeycomb," "define SLOs," "write alert rules," "on-call runbook"). That is [`observe-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/observe-ready). architecture-ready names observability boundaries (where traces must propagate across services, what audit events cross trust boundaries); observe-ready wires the instrumentation.
+- **Repo structure, monorepo vs. polyrepo, CI configuration, CODEOWNERS, release automation** ("set up the repo," "monorepo or polyrepo," "CI pipeline"). That is [`repo-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/repo-ready). architecture-ready's service count and team topology shape the decision (one repo per bounded context vs. a single monorepo with code-owner boundaries), but repo-ready owns the actual structure and tooling.
 - **Adversarial security review, compliance-controls mapping, penetration testing, threat-modeling workshops.** That is the future `harden-ready` skill (not yet released). architecture-ready names trust boundaries and the high-blast-radius mutations that a threat model must cover; harden-ready tests them adversarially. The current contract: architecture-ready produces the trust-boundary inputs that production-ready's Step 2 threat model consumes.
 - **UI architecture, component hierarchy, state management, client-side routing, design tokens.** That is production-ready's territory. architecture-ready operates at service and module level, not component level. "Should we use Zustand or Redux" is not an architecture decision.
-- **Launch, positioning, marketing, SEO, landing pages.** That is [`launch-ready`](https://github.com/aihxp/launch-ready). architecture-ready is internal-audience; launch-ready is external.
+- **Launch, positioning, marketing, SEO, landing pages.** That is [`launch-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/launch-ready). architecture-ready is internal-audience; launch-ready is external.
 - **"Just ship it" requests for projects where architecture is not load-bearing.** A single-file CLI, a one-off script, a static marketing site, a toy personal project: architecture-ready should explicitly say "architecture is not load-bearing here" and skip the skill. See Step 1 for the load-bearing check; see [references/system-shape.md](references/system-shape.md) Section 1 for the "skip architecture-ready entirely" criteria.
 
 This section is the scope fence. Every plausible trigger overlap with a sibling gets a route-elsewhere line.
@@ -612,6 +614,7 @@ The body above is enough to start. Load each reference *before* the step that us
 | `evolutionary-architecture.md` | **Tier 3.** Step 10 fitness functions. | ~7K |
 | `architecture-antipatterns.md` | **On demand.** Mode C audits and tier-gate checks. | ~10K |
 | `RESEARCH-2026-04.md` | **On demand.** When the user asks "why this rule"; source citations for v1.0.0. | ~35K |
+| `EXAMPLE-ARCH.md` | **On demand.** A complete worked example architecture for a fictional B2B SaaS product (Pulse, a Customer Success ops platform). Demonstrates C4 context + container diagrams in ASCII, component breakdown, multi-tenant data architecture, named trust boundaries each carrying a code path, NFR-to-mechanism mapping, three ADRs with named alternatives. Passes the skill's grep tests for architecture-theater / paper-tiger / cargo-cult / stackitecture / scalable-without-numbers failure modes. Consumes the worked PRD; feeds the worked roadmap and stack-decision examples in their respective sibling repos. | ~17K |
 
 Skill version and change history live in `CHANGELOG.md`. When resuming an architecture across sessions, confirm the skill version matches the version recorded in the ARCH.md's front matter if one exists. A skill update between sessions can shift have-nots (the banned-phrase list evolves as AI outputs shift), add sections (downstream-skill interfaces tighten), or change tier gates.
 

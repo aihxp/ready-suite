@@ -10,31 +10,16 @@ None of this is a code bug. It is an observability-mechanics bug, and the toolin
 
 ## Install
 
-**Claude Code:**
+This skill ships as part of the [ready-suite](https://github.com/aihxp/ready-suite) monorepo. The hub installer symlinks `SKILL.md` and `references/` for all eleven skills into every detected harness (Claude Code, Codex, Cursor, pi, OpenClaw, any Agent Skills harness):
+
 ```bash
-git clone https://github.com/aihxp/observe-ready.git ~/.claude/skills/observe-ready
+git clone https://github.com/aihxp/ready-suite.git ~/Projects/ready-suite
+bash ~/Projects/ready-suite/install.sh
 ```
 
-**Codex:**
-```bash
-git clone https://github.com/aihxp/observe-ready.git ~/.codex/skills/observe-ready
-```
+Re-run anytime after `git pull` to pick up updates. To remove all symlinks, run `bash ~/Projects/ready-suite/uninstall.sh`.
 
-**pi, OpenClaw, or any [Agent Skills](https://agentskills.io)-compatible harness:**
-```bash
-git clone https://github.com/aihxp/observe-ready.git ~/.agents/skills/observe-ready
-```
-
-**Cursor:**
-```bash
-git clone https://github.com/aihxp/observe-ready.git ~/.cursor/skills/observe-ready
-```
-
-**Windsurf or other agents:**
-Add `SKILL.md` to your project rules or system prompt. Load reference files as needed.
-
-**Any agent with a plan-then-execute loop:**
-Upload `SKILL.md` and the relevant reference files to your project context. The skill produces structured output (SLO entries, alert catalogs, runbook templates, incident logs) that any planner can consume.
+**Windsurf or other agents without a programmatic Skill tool:** add this skill's `SKILL.md` to your project rules or system prompt. Load reference files as needed.
 
 ## The problem this solves
 
@@ -88,10 +73,10 @@ The short frontmatter description is tight on purpose, to speed up skill-routing
 - Mode E: "the bill is detonating; cut without losing signal"
 
 **Negative triggers (route elsewhere):**
-- Tool selection ("Datadog vs. Honeycomb," "self-host Prometheus or Grafana Cloud") -> [`stack-ready`](https://github.com/aihxp/stack-ready)
-- Deployment mechanics ("write the CI/CD pipeline," "canary config," "rollback plan," "migration calendar") -> [`deploy-ready`](https://github.com/aihxp/deploy-ready)
-- App wiring ("build the users page," "add RBAC") -> [`production-ready`](https://github.com/aihxp/production-ready)
-- Repo hygiene ("CODEOWNERS," "branch protection") -> [`repo-ready`](https://github.com/aihxp/repo-ready)
+- Tool selection ("Datadog vs. Honeycomb," "self-host Prometheus or Grafana Cloud") -> [`stack-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/stack-ready)
+- Deployment mechanics ("write the CI/CD pipeline," "canary config," "rollback plan," "migration calendar") -> [`deploy-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/deploy-ready)
+- App wiring ("build the users page," "add RBAC") -> [`production-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/production-ready)
+- Repo hygiene ("CODEOWNERS," "branch protection") -> [`repo-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/repo-ready)
 - Secrets vaulting and rotation -> security territory, not this skill (observe-ready does opinion on PII scrubbing at the telemetry boundary)
 - Product analytics / funnels / A/B testing -> `production-ready`'s telemetry domain, not operational observability
 - Performance tuning -> cloud-provider docs or a future scale-ready

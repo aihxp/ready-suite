@@ -1,8 +1,8 @@
 ---
 name: repo-ready
 description: "Set up production-grade repository structure, documentation, CI/CD, quality tooling, and platform configuration -- across any stack (Node/Python/Go/Rust/Java/Ruby/Swift/C#/PHP/Elixir/C++/Dart) and any platform (GitHub/GitLab/Bitbucket). Use this skill whenever the user asks to 'set up a repo,' 'initialize a project,' 'add documentation,' 'set up CI,' 'configure linting,' 'add a README,' 'set up GitHub Actions,' 'make my repo professional,' 'add contributing guidelines,' 'set up release automation,' or describes wanting a clean, well-structured repository. Triggers also include requests to add a LICENSE, CHANGELOG, SECURITY.md, CODE_OF_CONDUCT, issue templates, PR templates, branch protection, dependency scanning, badges, .gitignore, .editorconfig, Makefile, devcontainer, or any 'repo hygiene' task. This skill enforces a no-placeholder rule -- every generated file must contain actionable content tailored to the project's stack, type, and stage, not generic TODO markers or lorem ipsum."
-version: 1.6.8
-updated: 2026-05-06
+version: 1.7.0
+updated: 2026-05-09
 changelog: CHANGELOG.md
 suite: ready-suite
 tier: building
@@ -14,7 +14,9 @@ compatible_with:
   - codex
   - cursor
   - windsurf
-  - any-agent-with-skill-loading
+  - pi
+  - openclaw
+  - any-agentskills-compatible-harness
 ---
 
 # Repo Ready
@@ -46,8 +48,9 @@ Before generating anything, scan the target directory to determine mode.
 
   **Rollback protocol (Mode B only):** if stack detection returns low-confidence signals, or a generated file would conflict with a non-obvious existing config (example: the project uses Biome but the agent was about to write `.eslintrc`), stop before writing the conflicting file. Describe the conflict to the user in plain language -- what was detected, what already exists, what would be overwritten. Propose two resolutions: (a) re-detect with different signals, or (b) leave the existing file alone and continue with the rest of the setup. Never overwrite an existing config file silently. Never run `git reset`, `git checkout --`, `git clean`, or `rm` on user state -- the agent does not own the working tree. See `references/agent-safety.md` for the full destructive-operations contract.
 - **User asked to audit/improve?** -> Mode C (Audit). Load `references/audit-mode.md` for the scoring workflow; it wraps `references/repo-audit.md` and produces a prioritized fix-it list and AUDIT-REPORT.md at the repo root. Skip to fixing what's broken.
+- **User is building or maintaining a multi-repo suite or library collection?** -> Mode D (Multi-repo suite). Load `references/multi-repo-suite-layout.md` for the canonical pattern (hub vs specialist repos, byte-identical collection map, coordinated version table, tag-release parity, meta-linter, five maintenance rituals). Mode D applies when at least three of these are true: the project ships across multiple git repositories under one org; at least one file lives in N repos and must be byte-identical; there is a cross-repo version table; release rituals propagate across siblings; there is a hub repo structurally distinct from specialists; the collection has its own meta-discipline (lint that runs across N repos; CI that clones siblings; coordinated patches that touch multiple repos in one logical change). Mode D wraps the per-unit scaffolding (Modes A/B) for each unit AND adds the cross-unit invariants (the meta-linter, the coordinated patch rituals, the byte-identical sync). For monorepos (subdirectories under one repo, not multiple repos), use Modes A/B with `references/monorepo-patterns.md` instead.
 
-The scan output replaces guesswork. Do not ask questions the filesystem already answers. Rollback applies only to Mode B -- Greenfield has nothing to roll back, and Audit is read-only.
+The scan output replaces guesswork. Do not ask questions the filesystem already answers. Rollback applies only to Mode B -- Greenfield has nothing to roll back, Audit is read-only, and Mode D operates at the cross-repo invariant layer where rollback is per-repo (use Mode B's protocol within each affected unit).
 
 ### 1. Establish the project profile (mandatory)
 
@@ -612,6 +615,8 @@ The body above is enough to start. For depth on a specific layer, load the match
 | `references/community-standards.md` | **Tier 1** -- README, LICENSE, CONTRIBUTING templates | ~8K |
 | `references/readme-craft.md` | **Tier 1** -- README anatomy, badges, demos, SEO | ~9K |
 | `references/audit-mode.md` | **Tier 2** -- Mode C scoring workflow, AUDIT-REPORT.md template, re-audit loop | ~10K |
+| `references/multi-repo-suite-layout.md` | **Mode D.** Canonical multi-repo-suite layout (hub + N specialists; byte-identical collection map; coordinated version table; tag-release parity; meta-linter; five maintenance rituals). Loaded when the user is building or maintaining a coordinated suite of repos that ship together. Generalized from the aihxp/ready-suite pattern. | ~10K |
+| `references/repo-antipatterns.md` | **Tier 1+ + Mode C audits.** Named-failure-mode catalog with grep tests, severity, and per-skill guards. Complements `repo-audit.md` (the 42-criteria scorecard) and `audit-mode.md` (the scoring engine). | ~5K |
 | `references/quality-tooling.md` | **Tier 2** -- linters, formatters, hooks per stack | ~16K |
 | `references/ci-cd-workflows.md` | **Tier 2** -- GitHub Actions, GitLab CI templates | ~17K |
 | `references/platform-github.md` | **Tier 2** -- issue templates, PR templates, settings | ~10K |

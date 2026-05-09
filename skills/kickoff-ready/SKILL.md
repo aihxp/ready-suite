@@ -286,7 +286,7 @@ If the work is adversarial review, delegate to `harden-ready`. Same protocol.
 
 If the work is ongoing phase or milestone management after the kickoff arc completes, delegate to a phase orchestrator (GSD's command tree is one option; BMAD with the boundary translation in production-ready/ORCHESTRATORS.md is another). kickoff-ready is one-shot per project.
 
-**If your harness exposes a skill-invocation tool** (Claude Code's slash command, Codex's dollar-sign form, Antigravity's Agent Skills standard), invoke the sibling directly when the handoff trigger fires. **Otherwise**, surface the handoff to the user as guidance text per [`references/handoff-protocols.md`](references/handoff-protocols.md): "This step needs `prd-ready`. Install it from https://github.com/aihxp/prd-ready, then run it on this project. When `.prd-ready/PRD.md` exists, return to kickoff-ready and we will verify and advance." Do not generate the sibling's output inline from this skill; the handoff is the contract.
+**If your harness exposes a skill-invocation tool** (Claude Code's slash command, Codex's dollar-sign form, Antigravity's Agent Skills standard), invoke the sibling directly when the handoff trigger fires. **Otherwise**, surface the handoff to the user as guidance text per [`references/handoff-protocols.md`](references/handoff-protocols.md): "This step needs `prd-ready`. Install it from https://github.com/aihxp/ready-suite/tree/main/skills/prd-ready, then run it on this project. When `.prd-ready/PRD.md` exists, return to kickoff-ready and we will verify and advance." Do not generate the sibling's output inline from this skill; the handoff is the contract.
 
 ## Session state and resume
 

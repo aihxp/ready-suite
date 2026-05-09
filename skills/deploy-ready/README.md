@@ -10,31 +10,16 @@ None of these are code bugs. They are shipping-mechanics bugs, and the tooling t
 
 ## Install
 
-**Claude Code:**
+This skill ships as part of the [ready-suite](https://github.com/aihxp/ready-suite) monorepo. The hub installer symlinks `SKILL.md` and `references/` for all eleven skills into every detected harness (Claude Code, Codex, Cursor, pi, OpenClaw, any Agent Skills harness):
+
 ```bash
-git clone https://github.com/aihxp/deploy-ready.git ~/.claude/skills/deploy-ready
+git clone https://github.com/aihxp/ready-suite.git ~/Projects/ready-suite
+bash ~/Projects/ready-suite/install.sh
 ```
 
-**Codex:**
-```bash
-git clone https://github.com/aihxp/deploy-ready.git ~/.codex/skills/deploy-ready
-```
+Re-run anytime after `git pull` to pick up updates. To remove all symlinks, run `bash ~/Projects/ready-suite/uninstall.sh`.
 
-**pi, OpenClaw, or any [Agent Skills](https://agentskills.io)-compatible harness:**
-```bash
-git clone https://github.com/aihxp/deploy-ready.git ~/.agents/skills/deploy-ready
-```
-
-**Cursor:**
-```bash
-git clone https://github.com/aihxp/deploy-ready.git ~/.cursor/skills/deploy-ready
-```
-
-**Windsurf or other agents:**
-Add `SKILL.md` to your project rules or system prompt. Load reference files as needed.
-
-**Any agent with a plan-then-execute loop:**
-Upload `SKILL.md` and the relevant reference files to your project context. The skill produces structured output (deploy plans, migration calendars, checklists) that any planner can consume.
+**Windsurf or other agents without a programmatic Skill tool:** add this skill's `SKILL.md` to your project rules or system prompt. Load reference files as needed.
 
 ## The problem this solves
 
@@ -84,11 +69,11 @@ The short frontmatter description is tight on purpose, to speed up skill-routing
 - Mode E: "big migration coming up" / "schema change spans weeks"
 
 **Negative triggers (route elsewhere):**
-- Tool selection ("Fly.io vs. Render," "Terraform vs. Pulumi") -> [`stack-ready`](https://github.com/aihxp/stack-ready)
+- Tool selection ("Fly.io vs. Render," "Terraform vs. Pulumi") -> [`stack-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/stack-ready)
 - Observability ("add Datadog," "define an SLO," "write a runbook") -> `observe-ready` (not yet released)
-- Repo hygiene ("set up CI for lint," "CODEOWNERS," "branch protection") -> [`repo-ready`](https://github.com/aihxp/repo-ready)
+- Repo hygiene ("set up CI for lint," "CODEOWNERS," "branch protection") -> [`repo-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/repo-ready)
 - Secrets management ("rotate this key," "set up a vault") -> security territory, not this skill
-- App wiring ("build the users page," "add RBAC") -> [`production-ready`](https://github.com/aihxp/production-ready)
+- App wiring ("build the users page," "add RBAC") -> [`production-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/production-ready)
 - Cost or performance tuning ("this Lambda is expensive") -> cloud-provider docs
 - Launch marketing ("landing page," "SEO") -> `launch-ready` (not yet released)
 

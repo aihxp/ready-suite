@@ -1,8 +1,8 @@
 ---
 name: production-ready
 description: "Build production-grade, end-to-end connected apps across any stack: dashboards, admin panels, internal tools, SaaS back-offices, analytics consoles, ops centers. Triggers on 'dashboard,' 'admin panel,' 'internal tool,' 'back office,' 'control panel,' 'analytics view,' or any multi-page interface with auth, navigation, and CRUD over domain data. Enforces vertical-slice discipline and a no-scaffold-no-placeholder rule: every feature ships wired end-to-end to a real backend, not stubbed with TODO, fake JSON, or 'hook this up later.' Pairs with repo-ready for repo hygiene. Not for single components, marketing sites, or pure repo scaffolding. Full trigger list in README."
-version: 2.5.13
-updated: 2026-05-06
+version: 2.6.8
+updated: 2026-05-09
 changelog: CHANGELOG.md
 suite: ready-suite
 tier: building
@@ -21,7 +21,9 @@ compatible_with:
   - codex
   - cursor
   - windsurf
-  - any-agent-with-skill-loading
+  - pi
+  - openclaw
+  - any-agentskills-compatible-harness
 ---
 
 # Production Ready
@@ -93,7 +95,28 @@ Produce a short note (5 to 15 lines) covering:
 
 ### Step 3. Derive the visual identity
 
-Before any component code, commit to a visual personality derived from the domain, not from component-library defaults. Read `references/ui-design-patterns.md` and work through its "Visual identity" decision framework:
+Before any component code, commit to a visual personality. The two paths in priority order:
+
+#### Sub-step 3a. Detect a project-root `DESIGN.md`
+
+If `DESIGN.md` exists at project root (the [Google Labs DESIGN.md format](https://github.com/google-labs-code/design.md), Apache 2.0; YAML frontmatter holds machine-readable design tokens, the markdown body holds rationale and an Agent Prompt Guide), it IS the source of truth. Skip the archetype + 5-decision derivation below; consume `DESIGN.md` instead.
+
+Three consumption paths, in order of preference:
+
+1. **DTCG export.** Run `npx @google/design.md export --format dtcg DESIGN.md > tokens.json`. The result is a [W3C Design Tokens Community Group](https://www.designtokens.org/) tokens.json that Claude and Codex generate against natively. Wire it into the framework's design system loader (Tailwind v4 `@theme` import, CSS variables generation, or the framework-specific equivalent).
+2. **Tailwind v4 export.** If the project is on Tailwind v4: `npx @google/design.md export --format css-tailwind DESIGN.md > theme.css`, then `@import "./theme.css"` in the global stylesheet. The exported file is a `@theme` block; Tailwind v4 wires the rest.
+3. **Direct YAML read.** If neither export fits the framework, parse the YAML frontmatter and emit the CSS variable block manually. Slower, but always available; keep the variable names matching the frontmatter keys for round-trip consistency.
+
+Once tokens are wired, **lint and validate** before any component code:
+
+- `npx @google/design.md lint DESIGN.md` runs the seven linter rules: token-reference resolution, WCAG AA/AAA contrast on every foreground/background pair, and structural validity. Any failure blocks the slice; fix the design system, not the components.
+- Read the markdown body's **Agent Prompt Guide** section (if present). It is designer-authored guidance about how to apply the tokens (e.g., "use accent color sparingly; reserve it for the primary CTA only"). Treat it as a have-not: if the guide says "no gradients," gradients are forbidden in the slice.
+
+The architecture note records the consumption path chosen, the export command run (if any), and a one-line diff summary if `DESIGN.md` was lint-clean and adopted unchanged. See [`references/design-md-integration.md`](references/design-md-integration.md) for the detailed integration recipe, the linter caveats, the per-framework wiring, and the scaffold-when-absent guidance.
+
+#### Sub-step 3b. Fallback: derive from scratch when no `DESIGN.md` exists
+
+If no `DESIGN.md` is present, derive the identity from the domain. Read `references/ui-design-patterns.md` and work through its "Visual identity" decision framework:
 
 1. Pick an aesthetic archetype from the 10 in that file.
 2. Make 5 decisions: color palette, typography pairing, border radius, density, signature detail.
@@ -101,7 +124,9 @@ Before any component code, commit to a visual personality derived from the domai
 
 Two users asking for "a SaaS dashboard" must get two dashboards that look different. Shipping with unmodified shadcn/Radix/MUI defaults is the visual equivalent of `// TODO`.
 
-**Passes when:** the archetype is chosen, the 5 decisions are recorded in the architecture note, the CSS token block is applied globally, and at least one rendered component visibly inherits from `--color-primary` rather than a library default.
+**Optional but recommended:** before Step 4, scaffold a `DESIGN.md` from the chosen tokens (`npx @google/design.md init` plus manual fill, or hand-author from the architecture note's visual identity section). This gives the project a canonical token file the next agent (any model, any harness) can consult without re-deriving. The community repo [VoltAgent/awesome-design-md](https://github.com/VoltAgent/awesome-design-md) collects 69+ DESIGN.md files reverse-engineered from real brand sites (Stripe, Vercel, Linear, Notion, Anthropic, xAI, etc.) the user can drop in instead of hand-authoring.
+
+**Passes when:** EITHER `DESIGN.md` was detected, lint-validated, and wired (sub-step 3a), OR the archetype is chosen, the 5 decisions are recorded in the architecture note, and the CSS token block is applied globally (sub-step 3b). In both cases, at least one rendered component visibly inherits from `--color-primary` rather than a library default.
 
 ### Step 4. Build the foundation slice
 
@@ -354,7 +379,8 @@ The body above is enough to start. Load each reference *before* implementing tha
 | `information-architecture.md` | **Tier 1.** Shell, nav, layout |
 | `auth-and-rbac.md` | **Tier 1.** Login, sessions, roles, permissions |
 | `data-layer.md` | **Tier 1.** API, queries, mutations, caching |
-| `ui-design-patterns.md` | **Tier 1.** Components, tokens, visual identity decision framework |
+| `design-md-integration.md` | **Tier 1, Step 3 sub-step 3a.** DESIGN.md (Google Labs format) detection, three consumption paths (DTCG, Tailwind v4, direct YAML), linter rules, Agent Prompt Guide consumption, scaffold-when-absent. Loaded when a project-root DESIGN.md is detected. |
+| `ui-design-patterns.md` | **Tier 1, Step 3 sub-step 3b.** Components, tokens, visual identity decision framework. Loaded when no DESIGN.md is present (the scaffold-from-scratch path). |
 | `states-and-feedback.md` | **Tier 2.** Loading, empty, error, toasts |
 | `workflows-and-actions.md` | **Tier 2.** Forms, bulk actions, exports |
 | `settings-and-configuration.md` | **Tier 2.** Settings hierarchy, data model |
@@ -362,6 +388,7 @@ The body above is enough to start. Load each reference *before* implementing tha
 | `system-integration.md` | **Tier 3.** Service layer, event bus, feature flags |
 | `testing-and-quality.md` | **Tier 4.** Test strategy, integration tests |
 | `performance-and-security.md` | **Tier 4.** CSP, CORS, rate limiting, bundle size |
+| `production-antipatterns.md` | **Tier 1+ + Mode C audits.** Named-failure-mode catalog with grep tests, severity, and per-skill guards. Loaded at the Step 5.1 hollow-check and every tier verification. |
 | `security-deep-dive.md` | **Tier 4.** Session hardening, secrets, incident response |
 | `data-visualization.md` | **On demand.** Charts, KPIs, tables |
 | `payments-and-billing.md` | **On demand.** Checkout, subscriptions, PCI |

@@ -10,31 +10,16 @@ None of that is a drawing-tool bug. Draw.io, Lucidchart, Excalidraw, Mermaid, St
 
 ## Install
 
-**Claude Code:**
+This skill ships as part of the [ready-suite](https://github.com/aihxp/ready-suite) monorepo. The hub installer symlinks `SKILL.md` and `references/` for all eleven skills into every detected harness (Claude Code, Codex, Cursor, pi, OpenClaw, any Agent Skills harness):
+
 ```bash
-git clone https://github.com/aihxp/architecture-ready.git ~/.claude/skills/architecture-ready
+git clone https://github.com/aihxp/ready-suite.git ~/Projects/ready-suite
+bash ~/Projects/ready-suite/install.sh
 ```
 
-**Codex:**
-```bash
-git clone https://github.com/aihxp/architecture-ready.git ~/.codex/skills/architecture-ready
-```
+Re-run anytime after `git pull` to pick up updates. To remove all symlinks, run `bash ~/Projects/ready-suite/uninstall.sh`.
 
-**pi, OpenClaw, or any [Agent Skills](https://agentskills.io)-compatible harness:**
-```bash
-git clone https://github.com/aihxp/architecture-ready.git ~/.agents/skills/architecture-ready
-```
-
-**Cursor:**
-```bash
-git clone https://github.com/aihxp/architecture-ready.git ~/.cursor/skills/architecture-ready
-```
-
-**Windsurf or other agents:**
-Add `SKILL.md` to your project rules or system prompt. Load reference files as needed.
-
-**Any agent with a plan-then-execute loop:**
-Upload `SKILL.md` and the relevant reference files to your project context. The skill produces structured output (system shape decisions, component tables, storage-shape maps, integration tables, NFR chains, trust-boundary maps, ADR corpora, C4 diagrams in text format, fitness-function specs, downstream handoff blocks) that any planner can consume.
+**Windsurf or other agents without a programmatic Skill tool:** add this skill's `SKILL.md` to your project rules or system prompt. Load reference files as needed.
 
 ## The problem this solves
 
@@ -87,15 +72,15 @@ The short frontmatter description is tight on purpose, to speed up skill-routing
 - **Mode F (Rescue):** the architecture is misbehaving in production.
 
 **Negative triggers (route elsewhere):**
-- **Product requirements.** That is [`prd-ready`](https://github.com/aihxp/prd-ready).
-- **Specific tools, frameworks, databases, auth providers.** That is [`stack-ready`](https://github.com/aihxp/stack-ready). architecture-ready names storage and compute shapes; stack-ready picks the actual product.
+- **Product requirements.** That is [`prd-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/prd-ready).
+- **Specific tools, frameworks, databases, auth providers.** That is [`stack-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/stack-ready). architecture-ready names storage and compute shapes; stack-ready picks the actual product.
 - **Timeline and sequencing.** That is `roadmap-ready` (not yet released).
-- **Implementation, vertical slices, UI components.** That is [`production-ready`](https://github.com/aihxp/production-ready).
-- **Deployment pipelines, environments, rollbacks.** That is [`deploy-ready`](https://github.com/aihxp/deploy-ready).
-- **Observability dashboards, alerts, SLOs, runbooks.** That is [`observe-ready`](https://github.com/aihxp/observe-ready).
-- **Repo structure, CI, monorepo decisions.** That is [`repo-ready`](https://github.com/aihxp/repo-ready).
+- **Implementation, vertical slices, UI components.** That is [`production-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/production-ready).
+- **Deployment pipelines, environments, rollbacks.** That is [`deploy-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/deploy-ready).
+- **Observability dashboards, alerts, SLOs, runbooks.** That is [`observe-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/observe-ready).
+- **Repo structure, CI, monorepo decisions.** That is [`repo-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/repo-ready).
 - **Adversarial security review, penetration testing.** Future `harden-ready` skill.
-- **Launch copy, marketing.** That is [`launch-ready`](https://github.com/aihxp/launch-ready).
+- **Launch copy, marketing.** That is [`launch-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/launch-ready).
 
 **Pairing:** On Claude Code and other skill-invocation-aware harnesses, architecture-ready hands off to `stack-ready` (the chosen storage and compute shapes become stack-ready's pre-filled constraint map), to `roadmap-ready` (the component dependency graph becomes the sequencing input), and to `production-ready` (the system shape, component boundaries, trust boundaries, and NFR targets become the Step 2 architecture-note inputs wholesale). On other harnesses, it surfaces the handoffs to the user.
 

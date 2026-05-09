@@ -16,26 +16,16 @@ Production Ready is a **skill**, a structured AI instruction set that any coding
 
 ## Install
 
-**Claude Code:**
+This skill ships as part of the [ready-suite](https://github.com/aihxp/ready-suite) monorepo. The hub installer symlinks `SKILL.md` and `references/` for all eleven skills into every detected harness (Claude Code, Codex, Cursor, pi, OpenClaw, any Agent Skills harness):
+
 ```bash
-git clone https://github.com/aihxp/production-ready.git ~/.claude/skills/production-ready
+git clone https://github.com/aihxp/ready-suite.git ~/Projects/ready-suite
+bash ~/Projects/ready-suite/install.sh
 ```
 
-**Codex:**
-```bash
-git clone https://github.com/aihxp/production-ready.git ~/.codex/skills/production-ready
-```
+Re-run anytime after `git pull` to pick up updates. To remove all symlinks, run `bash ~/Projects/ready-suite/uninstall.sh`.
 
-**pi, OpenClaw, or any [Agent Skills](https://agentskills.io)-compatible harness:**
-```bash
-git clone https://github.com/aihxp/production-ready.git ~/.agents/skills/production-ready
-```
-
-**Cursor, Windsurf, or other agents:**
-Add `SKILL.md` to your project rules or system prompt. Load reference files as needed.
-
-**Any agent with a plan-then-execute loop:**
-Upload `SKILL.md` and the relevant reference files to your project context. The skill produces structured output (tables, checklists, gap analyses) that any planner can consume. It's not tied to any specific agent runtime.
+**Windsurf or other agents without a programmatic Skill tool:** add this skill's `SKILL.md` to your project rules or system prompt. Load reference files as needed.
 
 ## When Production Ready should trigger
 
@@ -66,12 +56,12 @@ The short frontmatter description is tight on purpose, to speed up skill-routing
 
 **Negative triggers (route elsewhere):**
 - Single component or single page ("add one chart," "build a landing page"). Skill is for multi-page systems.
-- Repo hygiene (README, LICENSE, CI, CONTRIBUTING, issue templates, release automation). Delegate to [repo-ready](https://github.com/aihxp/repo-ready).
+- Repo hygiene (README, LICENSE, CI, CONTRIBUTING, issue templates, release automation). Delegate to [repo-ready](https://github.com/aihxp/ready-suite/tree/main/skills/repo-ready).
 - Marketing site, blog, documentation site, or any frontend-only content surface.
 - Pure greenfield scaffolding where the user only wants the repo initialized and not app features built. That's `repo-ready`.
 - Data-science notebooks, research scripts, or CLI tools.
 
-**Pairing:** On Claude Code and other skill-invocation-aware harnesses, Production Ready automatically hands off repo-hygiene work to [repo-ready](https://github.com/aihxp/repo-ready) when it hits Step 9 (verification). On other harnesses, it surfaces the handoff to the user instead of inlining the work.
+**Pairing:** On Claude Code and other skill-invocation-aware harnesses, Production Ready automatically hands off repo-hygiene work to [repo-ready](https://github.com/aihxp/ready-suite/tree/main/skills/repo-ready) when it hits Step 9 (verification). On other harnesses, it surfaces the handoff to the user instead of inlining the work.
 
 ## The problem this solves
 

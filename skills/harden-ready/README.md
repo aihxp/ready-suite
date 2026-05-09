@@ -12,31 +12,16 @@ harden-ready is the opposite of the scanner-first posture that produced these ou
 
 ## Install
 
-**Claude Code:**
+This skill ships as part of the [ready-suite](https://github.com/aihxp/ready-suite) monorepo. The hub installer symlinks `SKILL.md` and `references/` for all eleven skills into every detected harness (Claude Code, Codex, Cursor, pi, OpenClaw, any Agent Skills harness):
+
 ```bash
-git clone https://github.com/aihxp/harden-ready.git ~/.claude/skills/harden-ready
+git clone https://github.com/aihxp/ready-suite.git ~/Projects/ready-suite
+bash ~/Projects/ready-suite/install.sh
 ```
 
-**Codex:**
-```bash
-git clone https://github.com/aihxp/harden-ready.git ~/.codex/skills/harden-ready
-```
+Re-run anytime after `git pull` to pick up updates. To remove all symlinks, run `bash ~/Projects/ready-suite/uninstall.sh`.
 
-**pi, OpenClaw, or any [Agent Skills](https://agentskills.io)-compatible harness:**
-```bash
-git clone https://github.com/aihxp/harden-ready.git ~/.agents/skills/harden-ready
-```
-
-**Cursor:**
-```bash
-git clone https://github.com/aihxp/harden-ready.git ~/.cursor/skills/harden-ready
-```
-
-**Windsurf or other agents:**
-Add `SKILL.md` to your project rules or system prompt. Load reference files as needed.
-
-**Any agent with a plan-then-execute loop:**
-Upload `SKILL.md` and the relevant reference files to your project context. The skill produces structured output (attack-surface inventories, OWASP walkthrough tables, findings reports per the F-NN template, compliance control-to-code maps, disclosure-program artifacts, class-fix registries) that any planner can consume.
+**Windsurf or other agents without a programmatic Skill tool:** add this skill's `SKILL.md` to your project rules or system prompt. Load reference files as needed.
 
 ## The problem this solves
 
@@ -84,14 +69,14 @@ The short frontmatter description is tight on purpose. The full trigger surface:
 - Mode E: "Cobalt / HackerOne Pentest / boutique engagement scheduled"
 
 **Negative triggers (route elsewhere):**
-- Building the app or fixing code directly ("wire RBAC," "fix SQL injection in /orders") -> [`production-ready`](https://github.com/aihxp/production-ready)
-- Repo-hygiene security (SBOM generation, secret-scanning CI, SECURITY.md template, branch protection) -> [`repo-ready`](https://github.com/aihxp/repo-ready)
-- Secrets injection at deploy time (vault wiring, per-environment secret rotation) -> [`deploy-ready`](https://github.com/aihxp/deploy-ready)
-- Security event detection and alerting (SIEM rules, PII scrubbing in telemetry, authn anomaly alerts) -> [`observe-ready`](https://github.com/aihxp/observe-ready)
-- Threat modeling during architecture (trust-boundary diagrams, data-flow diagrams) -> [`architecture-ready`](https://github.com/aihxp/architecture-ready)
-- Picking the security tool (Semgrep vs CodeQL, Snyk vs Socket) -> [`stack-ready`](https://github.com/aihxp/stack-ready)
+- Building the app or fixing code directly ("wire RBAC," "fix SQL injection in /orders") -> [`production-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/production-ready)
+- Repo-hygiene security (SBOM generation, secret-scanning CI, SECURITY.md template, branch protection) -> [`repo-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/repo-ready)
+- Secrets injection at deploy time (vault wiring, per-environment secret rotation) -> [`deploy-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/deploy-ready)
+- Security event detection and alerting (SIEM rules, PII scrubbing in telemetry, authn anomaly alerts) -> [`observe-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/observe-ready)
+- Threat modeling during architecture (trust-boundary diagrams, data-flow diagrams) -> [`architecture-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/architecture-ready)
+- Picking the security tool (Semgrep vs CodeQL, Snyk vs Socket) -> [`stack-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/stack-ready)
 - Live incident response (paging, war room, customer comms) -> observe-ready's incident-response reference
-- Public communication of security improvements (launch-time PR) -> [`launch-ready`](https://github.com/aihxp/launch-ready)
+- Public communication of security improvements (launch-time PR) -> [`launch-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/launch-ready)
 - Live pen-test execution -> the vendor (harden-ready prepares scope and retest; it does not run offensive actions)
 - AI safety beyond security-adjacent concerns (content-policy jailbreaks for disallowed content) -> out of scope
 - Business-level risk acceptance, insurance, legal strategy -> business owners

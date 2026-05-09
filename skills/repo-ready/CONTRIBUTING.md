@@ -5,7 +5,7 @@ Thanks for helping improve **repo-ready**. This repository is a Claude Code skil
 ## Issues and Discussions
 
 - **Use issue templates.** Bug reports and feature requests have dedicated YAML forms under `.github/ISSUE_TEMPLATE/`. The form fields exist because they reduce triage time -- please fill them out.
-- **General questions go to [Discussions](https://github.com/aihxp/repo-ready/discussions),** not issues. "How do I use this with X?" or "Does this support stack Y?" belongs there.
+- **General questions go to [Discussions](https://github.com/aihxp/ready-suite/discussions),** not issues. "How do I use this with X?" or "Does this support stack Y?" belongs there.
 - **Security concerns go through GitHub's Security tab** -- see [SECURITY.md](SECURITY.md).
 
 ## Pull Requests
@@ -51,7 +51,7 @@ Meta-mentions of these strings are fine (this file mentions them by design to ex
 Clone the repo, open in any Markdown-aware editor, edit, push. There's no build step, no install, no test runner to configure. A Markdown preview pane helps; [markdownlint](https://github.com/DavidAnson/markdownlint) is recommended once you're committing often.
 
 ```bash
-git clone https://github.com/aihxp/repo-ready.git
+git clone https://github.com/aihxp/ready-suite.git
 cd repo-ready
 # edit files
 git checkout -b your-branch

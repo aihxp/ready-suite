@@ -1,15 +1,17 @@
 ---
 name: stack-ready
 description: "Choose the right stack for a project before building it. Triggers on 'what stack should I use,' 'Next.js vs. Remix,' 'pick a database,' 'Postgres or Mongo,' 'which auth provider,' 'should I use Convex,' 'hosting recommendation,' 'move from Firebase to Supabase,' or any request to evaluate tech choices for a specific job. Outputs a ranked, scored shortlist with tradeoffs, pairing compatibility checks, and bundle recommendations tailored to domain, team size, budget, and time-to-ship. Stops at the recommendation: does not build the app (that's production-ready) or configure the repo (that's repo-ready). Not for purely abstract language debates with no project attached. Full trigger list in README."
-version: 1.1.11
-updated: 2026-05-06
+version: 1.1.21
+updated: 2026-05-09
 changelog: CHANGELOG.md
 compatible_with:
   - claude-code
   - codex
   - cursor
   - windsurf
-  - any-agent-with-skill-loading
+  - pi
+  - openclaw
+  - any-agentskills-compatible-harness
 pairs_with:
   - production-ready
   - repo-ready
@@ -356,6 +358,8 @@ The body above is enough to start. Load each reference *before* the step that us
 | `tradeoff-narratives.md` | **Tier 3.** Step 6; flip points, scale ceilings, switching costs. | ~11K |
 | `migration-paths.md` | **Mode D only.** Step 7; X-to-Y migration sequences. | ~13K |
 | `RESEARCH-2026-04.md` | **On demand.** When the user asks "why this score" or "what's the evidence"; source citations for 1.1.0's refresh. | ~30K |
+| `stack-antipatterns.md` | **Tier 2 + Mode C audits.** Named-failure-mode catalog with grep tests, severity, and per-skill guards. Loaded at every tier-gate check. | ~5K |
+| `EXAMPLE-STACK.md` | **On demand.** A complete worked example stack decision for a fictional B2B SaaS pilot (Pulse, a Customer Success ops platform). Demonstrates a constraint map sourced from upstream PRD and architecture, nine ranked-shortlist categories with scoring rationale per candidate, pairing compatibility checks, an itemized bundle summary against the cost ceiling ($50/mo of a $400/mo cap), and eight stack-level ADRs naming alternatives and migration paths. Passes the skill's grep tests for vibe-stack / resume-driven / premature-scale / decoupled-from-architecture / cost-blind failure modes. Consumes the worked PRD, architecture, and roadmap from their respective sibling repos. | ~14K |
 
 Skill version and change history live in `CHANGELOG.md`. When resuming a project, confirm the skill version your session loaded matches the version recorded in `.stack-ready/STATE.md` if one exists. A skill update between sessions can move scores, add candidates (Convex released a new tier, Cloudflare acquired a vendor, Prisma published a major version), or change anti-pairings. If versions differ, re-run the scoring pass on the shortlisted bundles before continuing.
 

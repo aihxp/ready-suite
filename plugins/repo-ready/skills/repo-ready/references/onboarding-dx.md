@@ -1798,31 +1798,31 @@ This is developer-experience plumbing: the file exists to shorten the feedback l
 
 | File | Agent | Format | Location | Status |
 |---|---|---|---|---|
-| `CLAUDE.md` | Claude Code / Claude Agent SDK | Markdown | Repo root | Official |
-| `AGENTS.md` | OpenAI Codex, Cursor fallback, cross-agent convention | Markdown | Repo root | Emerging |
+| `AGENTS.md` | Codex CLI, GitHub Copilot, Cursor, Windsurf, Aider, Zed, Warp, Roo Code, Jules, Factory, Amp, Devin, others | Markdown | Repo root | Official (Linux Foundation Agentic AI Foundation; cross-tool standard at [agents.md](https://agents.md/)) |
+| `CLAUDE.md` | Claude Code / Claude Agent SDK | Markdown | Repo root | Official (tool-specific; commonly symlinked to `AGENTS.md`) |
 | `.cursorrules` | Cursor (legacy path; still read) | Plain text | Repo root | Official (deprecated in favour of `.cursor/rules/*.mdc`) |
 | `.windsurfrules` | Windsurf (Codeium) | Plain text | Repo root | Official |
 | `.github/copilot-instructions.md` | GitHub Copilot (VS Code, Visual Studio, JetBrains) | Markdown | `.github/` | Official |
 
-Five formats, one job: tell an agent what the repo is, how to build and test it, and what never to do. Differences between files are almost entirely about location and the tool that reads them — the content is 80% the same.
+Five formats, one job: tell an agent what the repo is, how to build and test it, and what never to do. Differences between files are almost entirely about location and the tool that reads them; the content is 80% the same. **Default canonical: `AGENTS.md`.** It is the cross-tool standard read by the broadest set of harnesses and is the file most external contributors' agents will discover first. `CLAUDE.md` is the Claude-Code-specific overlay; mirror it from `AGENTS.md` (or symlink `CLAUDE.md` -> `AGENTS.md`).
 
 ### Per-file treatment
 
-#### `CLAUDE.md`
+#### `AGENTS.md`
 
-- **Purpose:** Claude Code and the Claude Agent SDK read this file at session start. Content becomes the agent's default context for every interaction in this repo.
+- **Purpose:** Cross-tool agent brief governed by the Linux Foundation's Agentic AI Foundation; the open standard at [agents.md](https://agents.md/). Read natively by Codex CLI, GitHub Copilot, Cursor, Windsurf, Aider, Zed, Warp, Roo Code, Jules, Factory, Amp, Devin, and a growing list of newer harnesses. Treat this as the canonical agent brief and mirror it for tools that read tool-specific paths.
 - **Location:** Repo root.
 - **Format:** GitHub-flavoured Markdown. Headings, tables, fenced code blocks, and cross-references all render.
 - **What to include:** One-sentence project description; primary language and framework; the two or three commands a developer runs most (build, test, lint); non-obvious conventions (commit message style, branching model, where not to put files); forbidden actions (don't commit to `main`, don't add deps without discussion, don't regenerate lockfiles casually).
-- **What NOT to include:** Secrets, API keys, or full API documentation (link to the real docs). Redundant content already in `CODE_OF_CONDUCT.md` or `CONTRIBUTING.md` (link, don't duplicate). Generated content. The README.
+- **What NOT to include:** Secrets, API keys, or full API documentation (link to the real docs). Redundant content already in `CODE_OF_CONDUCT.md` or `CONTRIBUTING.md` (link, don't duplicate). Generated content. The README. Vendor-specific instructions ("when running in Claude Code, do X"); those belong in `CLAUDE.md` as an overlay.
 
-#### `AGENTS.md`
+#### `CLAUDE.md`
 
-- **Purpose:** Emerging cross-agent convention (see [agents.md](https://agents.md/)) read by OpenAI Codex, used as a fallback by Cursor when no `.cursorrules` is present, and honoured by several IDE integrations. Treat it as the vendor-neutral mirror of `CLAUDE.md`.
+- **Purpose:** Claude Code and the Claude Agent SDK read this file at session start. With `AGENTS.md` as the cross-tool canonical, `CLAUDE.md` is best treated as either (a) a symlink to `AGENTS.md` (`ln -s AGENTS.md CLAUDE.md`), or (b) a thin overlay that contains only Claude-Code-specific instructions (Skill tool usage, `.claude/settings.json` references, slash-command preferences) on top of an `@AGENTS.md` import.
 - **Location:** Repo root.
-- **Format:** Markdown, same syntax support as `CLAUDE.md`.
-- **What to include:** Same content as `CLAUDE.md`. If you maintain both, keep one canonical and make the other a one-line pointer: `# Agents\n\nSee [CLAUDE.md](./CLAUDE.md).`
-- **What NOT to include:** Vendor-specific instructions ("when running in Claude Code, do X") — put those in `CLAUDE.md` instead. The `AGENTS.md` file is the neutral surface.
+- **Format:** GitHub-flavoured Markdown. Same syntax support as `AGENTS.md`. Claude Code resolves `@<file>` imports up to five levels deep, so `@AGENTS.md` at the top of `CLAUDE.md` reuses the canonical content without duplication.
+- **What to include (overlay shape):** A first line that imports `AGENTS.md` (`@AGENTS.md`), then any Claude-Code-specific notes (Skill tool invocations, harness-specific settings, slash-command preferences). Keep the overlay short; the bulk of the brief belongs in `AGENTS.md`.
+- **What NOT to include:** Content that contradicts `AGENTS.md`. If a rule applies to every agent, it belongs in `AGENTS.md`. The grep test: `diff CLAUDE.md AGENTS.md` (after resolving `@AGENTS.md`) should surface only Claude-Code-specific items.
 
 #### `.cursorrules`
 
@@ -1852,14 +1852,14 @@ Five formats, one job: tell an agent what the repo is, how to build and test it,
 
 Which tier to include which config at depends on who reads the repo and who uses AI tools:
 
-- **Tier 1 (Essentials)** — include the canonical config file **when the user IS an AI coding agent.** The meta case: a repo whose primary audience is an agent (this skill itself, an MCP server, a prompt library, a coding-agent framework). If a human reads the repo at all, they do so to debug the agent-facing contract. For these repos, the config file is load-bearing — it's the primary interface.
-- **Tier 2 (Team project)** — include if at least one team member uses an AI coding agent, which today is nearly every team. Pick one canonical file (usually `CLAUDE.md` or `AGENTS.md` depending on team agent preference) and keep it in sync with onboarding docs.
-- **Tier 3 (Public / mature / AI-discoverable)** — include `AGENTS.md` and/or `CLAUDE.md` at minimum for external contributors whose agents crawl the repo during PR authoring. Open-source repos that omit this end up with PRs that re-learn the conventions the hard way, one reviewer round at a time.
-- **Tier 4 (Hardened / regulated)** — Tier 3 content plus a review process: treat the agent-config file like `CONTRIBUTING.md` — it passes through code review, it's covered by `CODEOWNERS`, and changes to it appear in `CHANGELOG.md` if conventions changed.
+- **Tier 1 (Essentials).** Include `AGENTS.md` as the canonical brief **when the user IS an AI coding agent.** The meta case: a repo whose primary audience is an agent (this skill itself, an MCP server, a prompt library, a coding-agent framework). If a human reads the repo at all, they do so to debug the agent-facing contract. For these repos, `AGENTS.md` is load-bearing; it's the primary interface across every harness the agent might run in.
+- **Tier 2 (Team project).** Include if at least one team member uses an AI coding agent, which today is nearly every team. Default canonical: `AGENTS.md` (cross-tool, broadest reach). Add `CLAUDE.md` as a symlink (`ln -s AGENTS.md CLAUDE.md`) or a thin Claude-Code-specific overlay if any team member uses Claude Code. Keep the canonical in sync with onboarding docs.
+- **Tier 3 (Public / mature / AI-discoverable).** `AGENTS.md` is mandatory; `CLAUDE.md` recommended as an overlay or symlink. External contributors' agents (whichever harness they use) discover `AGENTS.md` first; open-source repos that omit it end up with PRs that re-learn the conventions the hard way, one reviewer round at a time.
+- **Tier 4 (Hardened / regulated).** Tier 3 content plus a review process: treat `AGENTS.md` like `CONTRIBUTING.md`. It passes through code review, it's covered by `CODEOWNERS`, and changes to it appear in `CHANGELOG.md` if conventions changed.
 
 ### Canonical template
 
-Use this as `CLAUDE.md` or `AGENTS.md`; mirror into `.github/copilot-instructions.md` verbatim and into `.cursorrules` / `.windsurfrules` with Markdown headings stripped.
+Use this as `AGENTS.md`; mirror or symlink to `CLAUDE.md` for Claude Code; mirror into `.github/copilot-instructions.md` verbatim; mirror into `.cursorrules` / `.windsurfrules` with Markdown headings stripped.
 
 ```markdown
 # Acme Widget API
@@ -1910,11 +1910,11 @@ Keep the file under ~150 lines. Agents load it every session; long files bleed i
 
 - `.cursorrules` / `.windsurfrules` — same content, Markdown headings stripped. Replace `## Commands` with a blank line + `Commands:` on its own line, then the bullets.
 - `.github/copilot-instructions.md` — identical Markdown content; only the path differs (`.github/copilot-instructions.md` instead of the repo root).
-- `AGENTS.md` when you maintain `CLAUDE.md` as canonical — three-line file pointing at the canonical source: `# Agents\n\nSee [CLAUDE.md](./CLAUDE.md) for project conventions, stack, and forbidden actions.`
+- `CLAUDE.md` when `AGENTS.md` is canonical: symlink (`ln -s AGENTS.md CLAUDE.md`) or a thin overlay starting with `@AGENTS.md` followed by Claude-Code-specific notes (Skill tool invocations, slash-command preferences, `.claude/settings.json` references).
 
 ### Anti-patterns
 
-1. **Duplicating the same rules in five files.** Updates drift, agents read stale content, contributors stop trusting any of them. **Fix:** pick one canonical file (`CLAUDE.md` or `AGENTS.md`); make the other four one-line pointers to it, or regenerate them from the canonical source as a pre-commit step.
+1. **Duplicating the same rules in five files.** Updates drift, agents read stale content, contributors stop trusting any of them. **Fix:** make `AGENTS.md` canonical; symlink `CLAUDE.md -> AGENTS.md` (or use a `@AGENTS.md` overlay for Claude-Code-specific additions); regenerate `.cursorrules` / `.windsurfrules` / `.github/copilot-instructions.md` from the canonical source as a pre-commit step.
 2. **Listing every convention.** Agents re-read the file every session; long configs burn tokens on the obvious. **Fix:** list only non-obvious rules. Link to `CONTRIBUTING.md` for the rest.
 3. **Letting agent-config rules contradict `CODE_OF_CONDUCT.md` or `CONTRIBUTING.md`.** When the `CLAUDE.md` says "always rebase before merging" and `CONTRIBUTING.md` says "use merge commits, never rebase," the agent picks one and the human team fights about the other. **Fix:** the human-facing docs are authoritative. The agent-config file should never contain policy the community docs don't already state.
 4. **Including secrets or full API surfaces.** API keys in `CLAUDE.md` get committed to git history; full generated OpenAPI specs in `.cursorrules` burn tokens on content the agent could fetch on demand. **Fix:** link to secret management (`.env.example`); link to `openapi.yaml` — don't inline either.

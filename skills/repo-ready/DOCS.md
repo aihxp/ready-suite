@@ -15,7 +15,7 @@ Repo Ready enforces the opposite discipline: every generated file uses your proj
 Point your AI agent at `SKILL.md` and ask it to set up your repo. The workflow takes over from there.
 
 ```bash
-git clone https://github.com/aihxp/repo-ready.git
+git clone https://github.com/aihxp/ready-suite.git
 # Tell your agent: "Read SKILL.md and references/, then set up this repository."
 # The skill detects your stack, asks 1-3 questions if needed, and generates
 # the stage-appropriate set of files.

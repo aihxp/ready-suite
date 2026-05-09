@@ -1,8 +1,8 @@
 # Contributing to the ready-suite
 
-Thanks for considering a contribution. The ready-suite is twelve repos under [github.com/aihxp](https://github.com/aihxp): the hub ([`ready-suite`](https://github.com/aihxp/ready-suite)) plus eleven specialist skill repos. This file documents the contribution model and the conventions every PR is held to.
+Thanks for considering a contribution. The ready-suite is one repo at [`aihxp/ready-suite`](https://github.com/aihxp/ready-suite): hub-level files at the root, eleven specialist skills under `skills/<skill-name>/`. This file documents the contribution model and the conventions every PR is held to.
 
-For maintainers (or anyone landing a coordinated cross-repo patch), see [`MAINTAINING.md`](MAINTAINING.md) for the SUITE.md sync ritual, the version-bump rules, and the release procedure.
+For maintainers (or anyone landing a coordinated cross-suite patch), see [`MAINTAINING.md`](MAINTAINING.md) for the SUITE.md sync ritual, the version-bump rules, and the release procedure.
 
 ## What kinds of contributions land
 
@@ -40,13 +40,9 @@ The `unicode-clean` lint check enforces this on `SUITE.md`, the hub `README.md`,
 
 `install.sh`, `uninstall.sh`, and `scripts/lint.sh` must run on macOS default bash 3.2. No associative arrays. No `mapfile` / `readarray`. No `${var,,}` lowercase. No `[[ ]]` (use `[ ]`). Test on a Mac before opening a PR if you touch any of those scripts.
 
-### Tag-release parity
+### SUITE.md byte-identical between hub and skills/<skill>/
 
-Every git tag in every skill repo must have a matching GitHub Release with a body lifted from the CHANGELOG entry. The `tag-release-parity` lint check enforces this. If you cut a release, do both: `git tag` + `git push --tags` + `gh release create`.
-
-### SUITE.md byte-identical across 12 repos
-
-`SUITE.md` is the canonical suite map. It lives byte-identical in the hub plus all eleven skill repos. When any cross-suite content changes (a new compatibility row, a version bump in the known-good-versions table), SUITE.md is updated in the hub and copied verbatim to every sibling in the same patch. The `suite-md-sync` lint check enforces this.
+`SUITE.md` is the canonical suite map. It lives byte-identical at the hub root and inside every `skills/<skill>/` subdirectory. When any cross-suite content changes (a new compatibility row, a version bump in the known-good-versions table), SUITE.md is updated at the hub and copied to every skill subdir in the same commit. The `suite-md-sync` lint check enforces this.
 
 ### Frontmatter version matches CHANGELOG top entry
 
@@ -65,36 +61,36 @@ The `trigger-overlap` lint check surfaces cross-skill substring overlaps in desc
 ```bash
 git clone https://github.com/aihxp/ready-suite.git
 cd ready-suite
-# Make sure all 11 sibling repos exist at ~/Projects/<skill> (or set
-# READY_SUITE_REPOS_DIR to wherever they live).
 bash scripts/lint.sh                   # all checks
 bash scripts/lint.sh --verbose         # show ok lines too
 bash scripts/lint.sh suite-md-sync     # one specific check
 bash scripts/lint.sh --strict-triggers # fail on trigger-overlap warnings
 ```
 
-GitHub Actions runs the same lint on every PR and on a daily schedule (06:00 UTC). PRs that fail the lint do not merge.
+GitHub Actions runs the same lint on every push to `main` and every PR. PRs that fail the lint do not merge.
 
 ## How to land a single-skill change
 
-The simplest contribution shape: change one file in one skill repo, no SUITE.md sync needed.
+The simplest contribution shape: change one file under `skills/<skill>/`, no SUITE.md sync needed.
 
-1. Fork the skill repo on GitHub.
-2. Make the change. Bump the skill's frontmatter `version` and `updated`. Prepend a CHANGELOG entry that names the change, the skill behavior delta (if any), and a "Why a patch, not a minor" line.
+1. Fork the hub repo on GitHub.
+2. Make the change inside `skills/<skill>/`. Bump the skill's frontmatter `version` and `updated` in `skills/<skill>/SKILL.md`. Prepend a CHANGELOG entry to `skills/<skill>/CHANGELOG.md` that names the change, the skill behavior delta (if any), and a "Why a patch, not a minor" line.
 3. Run the lint locally; verify clean (or one trigger-overlap warning if expected).
-4. Open a PR against the skill repo. Reference the issue (if any). Include a one-paragraph problem-and-fix in the PR body.
-5. The maintainer reviews, merges, tags, and creates the release. Tag-release parity is a release-time concern, not a PR-time concern.
+4. Open a PR against the hub. Reference the issue (if any). Include a one-paragraph problem-and-fix in the PR body.
+5. The maintainer reviews and merges.
 
 ## How to land a coordinated cross-suite change
 
-If your change touches `SUITE.md`, `compatible_with`, or anything cross-suite (e.g., a new harness joins the standards list), the patch is multi-repo. See [`MAINTAINING.md`](MAINTAINING.md) for the full procedure. The high-level shape:
+If your change touches `SUITE.md`, `compatible_with`, multiple skills, or anything cross-cutting (e.g., a new harness joins the standards list), the patch touches several files in one PR. See [`MAINTAINING.md`](MAINTAINING.md) §"Ritual 2: coordinated cross-suite patch" for the full procedure. The high-level shape:
 
-1. Open a discussion issue in the hub repo first. Confirm the change scope.
-2. Land the change in a single coordinated patch: one PR per skill repo, all merging together; SUITE.md byte-identical across the 12 final commits.
-3. The hub PR carries the canonical SUITE.md, the README version-table refresh, and any maintainer-facing docs.
-4. Releases get cut for every bumped specialist plus a hub commit-only push (the hub does not track its own version).
+1. Open a discussion issue in the hub repo first if the change affects scope or trigger surface.
+2. Edit the hub-level files first (`SUITE.md`, `ORCHESTRATORS.md`, etc.).
+3. Sync `SUITE.md` to every `skills/<skill>/SUITE.md`.
+4. Bump the affected skills' `version` and `updated` in their `SKILL.md` and prepend CHANGELOG entries.
+5. Run the lint; verify clean.
+6. One PR, one merge.
 
-A coordinated patch is roughly an hour of focused work for a maintainer who has done it before. First-timers should pair with the existing maintainer.
+The single-repo workflow is much simpler than the prior multi-repo discipline. No per-skill tags, no per-skill GitHub Releases.
 
 ## Commit message style
 
@@ -120,7 +116,7 @@ Be civil. The suite is opinionated; disagreements about discipline are welcome; 
 
 ## Where to start
 
-- **Documentation typo or broken link:** open a PR directly against the affected skill repo (or the hub).
+- **Documentation typo or broken link:** open a PR directly with a fix to the affected file under `skills/<skill>/` or the hub root.
 - **Trigger-disambiguation row missing for a real ambiguity you hit:** open a PR against the hub adding a row to `references/TRIGGER-DISAMBIGUATION.md`.
 - **Bug in a skill's named-failure-mode logic:** open an issue describing the failure case (with a reproduction); the maintainer triages.
 - **Standards-tracking update (a new harness, a new format):** open an issue first, then a coordinated patch.

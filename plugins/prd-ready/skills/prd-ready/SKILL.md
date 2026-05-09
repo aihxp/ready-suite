@@ -1,8 +1,8 @@
 ---
 name: prd-ready
 description: "Write a PRD that engineering, design, QA, and downstream planning skills can consume without a clarification meeting. Owns problem framing, target-user specificity, success metrics, functional and non-functional requirements, scope and no-gos, appetite and rabbit holes, open-question log, downstream handoff block, and the iterate-vs-freeze lifecycle. Refuses hollow PRDs (sections filled, no decisions), invisible PRDs (reads the same across any product), feature laundry lists (un-prioritized feature dumps), solution-first PRDs (problem box names the solution), assumption-soup PRDs (we-assume-users-will-love-it claims), and moving-target PRDs (silent edits, engineer whiplash). Triggers on 'write a PRD,' 'product spec,' 'requirements doc,' 'one-pager,' 'product brief,' 'pitch for this feature,' 'problem statement.' Does not design the architecture (architecture-ready), sequence the roadmap (roadmap-ready), pick the stack (stack-ready), build the app (production-ready), or write launch copy (launch-ready). Top of the planning tier; no upstream siblings. Full trigger list in README."
-version: 1.0.6
-updated: 2026-05-06
+version: 1.0.16
+updated: 2026-05-09
 changelog: CHANGELOG.md
 suite: ready-suite
 tier: planning
@@ -21,7 +21,9 @@ compatible_with:
   - codex
   - cursor
   - windsurf
-  - any-agent-with-skill-loading
+  - pi
+  - openclaw
+  - any-agentskills-compatible-harness
 ---
 
 # PRD Ready
@@ -48,12 +50,12 @@ Route elsewhere if the request is:
 
 - **Designing the architecture** ("draw the system diagram," "what components do we need," "how do the services talk to each other," "entity-relationship model"). That is `architecture-ready` (not yet released). prd-ready stops at "these are the entities and flows at a black-box level"; architecture-ready starts at "here is how those entities and flows decompose into services, modules, queues, and storage."
 - **Sequencing a roadmap** ("build a quarterly plan," "milestone schedule," "what ships first," "when does the beta happen"). That is `roadmap-ready` (not yet released). prd-ready defines WHAT; roadmap-ready defines WHEN. prd-ready supplies priority signals (MoSCoW, release-gating criteria, dependencies); roadmap-ready consumes them to produce the calendar.
-- **Picking the stack** ("what framework should I use," "Next.js vs. Remix," "pick an ORM," "should we use Supabase"). That is [`stack-ready`](https://github.com/aihxp/stack-ready). prd-ready's output is a primary input to stack-ready via `.prd-ready/HANDOFF.md`; it is not a substitute. A PRD that recommends a stack has violated the scope fence.
-- **Building the app** ("wire the dashboard," "implement the checkout flow," "add RBAC"). That is [`production-ready`](https://github.com/aihxp/production-ready). prd-ready writes the requirement ("users must be able to cancel their subscription in a single click and receive a confirmation email within 5 minutes"); production-ready builds it and proves it works end-to-end.
-- **Setting up the repo** ("CI config," "CONTRIBUTING.md," "CODEOWNERS"). That is [`repo-ready`](https://github.com/aihxp/repo-ready). prd-ready never touches the repo scaffold.
-- **Deploying the app** ("pipeline," "canary," "rollback plan"). That is [`deploy-ready`](https://github.com/aihxp/deploy-ready). prd-ready may specify deployability requirements ("must deploy without downtime to existing users") but does not design the deployment.
-- **Monitoring the app** ("SLO," "alerts," "runbook"). That is [`observe-ready`](https://github.com/aihxp/observe-ready). prd-ready may specify observability requirements ("billing failures must be visible to support within 60 seconds") but does not design the dashboards.
-- **Writing the launch** ("landing page copy," "Product Hunt post," "OG card"). That is [`launch-ready`](https://github.com/aihxp/launch-ready). prd-ready's language is internal; launch-ready translates for external.
+- **Picking the stack** ("what framework should I use," "Next.js vs. Remix," "pick an ORM," "should we use Supabase"). That is [`stack-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/stack-ready). prd-ready's output is a primary input to stack-ready via `.prd-ready/HANDOFF.md`; it is not a substitute. A PRD that recommends a stack has violated the scope fence.
+- **Building the app** ("wire the dashboard," "implement the checkout flow," "add RBAC"). That is [`production-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/production-ready). prd-ready writes the requirement ("users must be able to cancel their subscription in a single click and receive a confirmation email within 5 minutes"); production-ready builds it and proves it works end-to-end.
+- **Setting up the repo** ("CI config," "CONTRIBUTING.md," "CODEOWNERS"). That is [`repo-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/repo-ready). prd-ready never touches the repo scaffold.
+- **Deploying the app** ("pipeline," "canary," "rollback plan"). That is [`deploy-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/deploy-ready). prd-ready may specify deployability requirements ("must deploy without downtime to existing users") but does not design the deployment.
+- **Monitoring the app** ("SLO," "alerts," "runbook"). That is [`observe-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/observe-ready). prd-ready may specify observability requirements ("billing failures must be visible to support within 60 seconds") but does not design the dashboards.
+- **Writing the launch** ("landing page copy," "Product Hunt post," "OG card"). That is [`launch-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/launch-ready). prd-ready's language is internal; launch-ready translates for external.
 - **Pricing strategy.** ("Should we charge $29 or $49," "freemium vs. paid," "per-seat vs. per-usage"). prd-ready may reference pricing tiers in functional requirements ("free tier is capped at 100 actions/month") but does not decide what to charge. That is a business decision with its own research practice.
 - **Competitive analysis as a discipline.** prd-ready references competitors when framing the problem ("today, users solve this with a Notion page and a Slack channel") and when running the substitution test. It does not run a full competitive review (feature matrix, pricing comparison, market share). That is a separate product-research practice.
 - **Go-to-market planning.** (launch venues, press outreach, positioning). That is `launch-ready`'s territory. prd-ready's positioning is internal ("who this is for and what it replaces"); launch-ready's positioning is external ("the hero sentence on the landing page").
@@ -514,6 +516,7 @@ The body above is enough to start. Load each reference *before* the step that us
 | `stakeholder-alignment.md` | **Tier 3.** Step 10 sign-off protocol. | ~6K |
 | `iterate-vs-freeze.md` | **Tier 3 and Tier 4.** Step 11 lifecycle and change-control. | ~6K |
 | `RESEARCH-2026-04.md` | **On demand.** When the user asks "why this rule" or "what is the evidence"; source citations for v1.0.0. | ~36K |
+| `EXAMPLE-PRD.md` | **On demand.** A complete worked example PRD for a fictional B2B SaaS product (Pulse, a Customer Success ops platform). Demonstrates problem framing, MoSCoW ranking, named no-gos, sign-off block, downstream handoff. Useful when the user asks "what should the output look like" or when the agent needs a concrete template; passes the skill's own grep tests for hollow / invisible / feature-laundry / solution-first / assumption-soup / moving-target failure modes. Cross-references to the worked architecture, roadmap, and stack-decision examples in their respective sibling repos. | ~14K |
 
 Skill version and change history live in `CHANGELOG.md`. When resuming a PRD across sessions, confirm the skill version matches the version recorded in the PRD's front matter if one exists. A skill update between sessions can shift have-nots (banned-phrase list evolves as AI outputs shift), add sections (downstream-skill interfaces tighten), or change tier gates. If versions differ, re-run the Tier audit on any Tier 2+ artifact before continuing.
 

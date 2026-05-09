@@ -12,41 +12,16 @@ This is the eleventh skill in the ready-suite and the only one in the meta-tier.
 
 ## Install
 
-**Claude Code:**
+This skill ships as part of the [ready-suite](https://github.com/aihxp/ready-suite) monorepo. The hub installer symlinks `SKILL.md` and `references/` for all eleven skills into every detected harness (Claude Code, Codex, Cursor, pi, OpenClaw, any Agent Skills harness):
+
 ```bash
-git clone https://github.com/aihxp/kickoff-ready.git ~/.claude/skills/kickoff-ready
+git clone https://github.com/aihxp/ready-suite.git ~/Projects/ready-suite
+bash ~/Projects/ready-suite/install.sh
 ```
 
-**Codex:**
-```bash
-git clone https://github.com/aihxp/kickoff-ready.git ~/.codex/skills/kickoff-ready
-```
+Re-run anytime after `git pull` to pick up updates. To remove all symlinks, run `bash ~/Projects/ready-suite/uninstall.sh`.
 
-**pi, OpenClaw, or any [Agent Skills](https://agentskills.io)-compatible harness:**
-```bash
-git clone https://github.com/aihxp/kickoff-ready.git ~/.agents/skills/kickoff-ready
-```
-
-**Cursor:**
-```bash
-git clone https://github.com/aihxp/kickoff-ready.git ~/.cursor/skills/kickoff-ready
-```
-
-**Windsurf or other agents:**
-Add `SKILL.md` to your project rules or system prompt. Load reference files as needed. kickoff-ready works in degraded guidance-text mode on harnesses without a programmatic Skill tool; see [`references/handoff-protocols.md`](references/handoff-protocols.md).
-
-**Recommended: install the ten siblings too.** kickoff-ready's whole job is invoking the siblings. Without them installed, it can still produce the audit ledger (PROGRESS.md as the kickoff record), but the siblings won't be invocable. Install from:
-
-- [prd-ready](https://github.com/aihxp/prd-ready)
-- [architecture-ready](https://github.com/aihxp/architecture-ready)
-- [roadmap-ready](https://github.com/aihxp/roadmap-ready)
-- [stack-ready](https://github.com/aihxp/stack-ready)
-- [repo-ready](https://github.com/aihxp/repo-ready)
-- [production-ready](https://github.com/aihxp/production-ready)
-- [deploy-ready](https://github.com/aihxp/deploy-ready)
-- [observe-ready](https://github.com/aihxp/observe-ready)
-- [launch-ready](https://github.com/aihxp/launch-ready)
-- [harden-ready](https://github.com/aihxp/harden-ready)
+**Windsurf or other agents without a programmatic Skill tool:** add this skill's `SKILL.md` to your project rules or system prompt. Load reference files as needed.
 
 ## The problem this solves
 
@@ -84,16 +59,16 @@ The short frontmatter description is tight on purpose. The full trigger surface:
 - Import: PROGRESS.md absent but one or more `.{skill}-ready/` directories already exist; the user is bringing prior work into the chain
 
 **Negative triggers (route elsewhere):**
-- Writing the PRD -> [`prd-ready`](https://github.com/aihxp/prd-ready)
-- Designing the architecture -> [`architecture-ready`](https://github.com/aihxp/architecture-ready)
-- Sequencing a roadmap -> [`roadmap-ready`](https://github.com/aihxp/roadmap-ready)
-- Picking a stack -> [`stack-ready`](https://github.com/aihxp/stack-ready)
-- Setting up the repo -> [`repo-ready`](https://github.com/aihxp/repo-ready)
-- Building the app -> [`production-ready`](https://github.com/aihxp/production-ready)
-- Deploying -> [`deploy-ready`](https://github.com/aihxp/deploy-ready)
-- Wiring monitoring -> [`observe-ready`](https://github.com/aihxp/observe-ready)
-- Producing launch materials -> [`launch-ready`](https://github.com/aihxp/launch-ready)
-- Adversarial review -> [`harden-ready`](https://github.com/aihxp/harden-ready)
+- Writing the PRD -> [`prd-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/prd-ready)
+- Designing the architecture -> [`architecture-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/architecture-ready)
+- Sequencing a roadmap -> [`roadmap-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/roadmap-ready)
+- Picking a stack -> [`stack-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/stack-ready)
+- Setting up the repo -> [`repo-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/repo-ready)
+- Building the app -> [`production-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/production-ready)
+- Deploying -> [`deploy-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/deploy-ready)
+- Wiring monitoring -> [`observe-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/observe-ready)
+- Producing launch materials -> [`launch-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/launch-ready)
+- Adversarial review -> [`harden-ready`](https://github.com/aihxp/ready-suite/tree/main/skills/harden-ready)
 - Existing-codebase migration ("we have a half-built thing; help us finish") -> the specific specialist that fills the gap. kickoff-ready is greenfield-only.
 - Ongoing phase / milestone work after the kickoff arc completes -> a phase orchestrator (GSD, BMAD, etc.) per `production-ready/ORCHESTRATORS.md`.
 - Non-suite work (blog posts, debugging, refactoring, hiring, branding) -> surface to the harness for general routing.
@@ -162,7 +137,7 @@ See [`RESEARCH-2026-04.md`](references/RESEARCH-2026-04.md) Section 2 for the fu
 
 kickoff-ready ends when the kickoff arc completes. Ongoing phase / milestone work is a different orchestration pattern. Composing options:
 
-- **GSD** ([get-shit-done](https://github.com/aihxp/gsd) or equivalent). The phase / milestone orchestrator. kickoff-ready hands off PROGRESS.md; GSD picks up at the next phase. Per [production-ready/ORCHESTRATORS.md](https://github.com/aihxp/production-ready/blob/main/ORCHESTRATORS.md).
+- **GSD** ([get-shit-done](https://github.com/aihxp/gsd) or equivalent). The phase / milestone orchestrator. kickoff-ready hands off PROGRESS.md; GSD picks up at the next phase. Per [production-ready/ORCHESTRATORS.md](https://github.com/aihxp/ready-suite/blob/main/skills/production-ready/ORCHESTRATORS.md).
 - **BMAD** ([Breakthrough Method](https://github.com/bmad-code-org/BMAD-METHOD)). Persona-driven. Not recommended in the same project as kickoff-ready, since BMAD has its own kickoff path. If you want both, run kickoff-ready first, then transition cleanly per the BMAD-as-orchestrator pattern documented in production-ready/ORCHESTRATORS.md.
 - **No phase orchestrator.** The user invokes individual siblings as needed (a roadmap revision, a hardening pass, a launch follow-up). PROGRESS.md remains the kickoff record but does not track ongoing work.
 

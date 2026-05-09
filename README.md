@@ -4,7 +4,7 @@
 
 > **Successor available: [`aihxp/arc-ready`](https://github.com/aihxp/arc-ready).** The same eleven-tier discipline, every named failure mode preserved, every grep test preserved, every artifact path unchanged, consolidated into a single skill and a single repo. One install replaces eleven. The eleven-skill suite remains available and supported; arc-ready is the recommended starting point for new projects. See [`arc-ready/MIGRATION.md`](https://github.com/aihxp/arc-ready/blob/main/MIGRATION.md) for the migration matrix.
 
-This is the discovery hub. Every skill lives in its own repo with its own SKILL.md, references library, and CHANGELOG. The byte-identical [`SUITE.md`](SUITE.md) ships in every sibling repo so the suite map is visible from any entry point.
+This is the monorepo. Every skill lives under `skills/<skill-name>/` with its own SKILL.md, references library, and CHANGELOG. The byte-identical [`SUITE.md`](SUITE.md) ships at the hub root and inside every skill subdirectory, so the suite map is visible from any entry point.
 
 ## The eleven skills, four tiers
 
@@ -19,19 +19,19 @@ kickoff-ready  ->        prd-ready           ->    repo-ready      ->    deploy-
 
 ## What each skill owns
 
-| Skill | Tier | One-line purpose | Version | Repo |
+| Skill | Tier | One-line purpose | Version | Path |
 |---|---|---|---|---|
-| **kickoff-ready** | Orchestration | Sequence the ten specialists for a greenfield project from raw user intent. | 1.1.8 | [github.com/aihxp/kickoff-ready](https://github.com/aihxp/kickoff-ready) |
-| **prd-ready** | Planning | Define what we're building and for whom. | 1.0.16 | [github.com/aihxp/prd-ready](https://github.com/aihxp/prd-ready) |
-| **architecture-ready** | Planning | Design how the big pieces fit together. | 1.0.15 | [github.com/aihxp/architecture-ready](https://github.com/aihxp/architecture-ready) |
-| **roadmap-ready** | Planning | Sequence work over time. | 1.0.14 | [github.com/aihxp/roadmap-ready](https://github.com/aihxp/roadmap-ready) |
-| **stack-ready** | Planning | Pick the right tools for the job. | 1.1.21 | [github.com/aihxp/stack-ready](https://github.com/aihxp/stack-ready) |
-| **repo-ready** | Building | Set up the repo with production-grade hygiene. | 1.7.0 | [github.com/aihxp/repo-ready](https://github.com/aihxp/repo-ready) |
-| **production-ready** | Building | Build the app to production grade. | 2.6.8 | [github.com/aihxp/production-ready](https://github.com/aihxp/production-ready) |
-| **deploy-ready** | Shipping | Ship the app to real environments. | 1.0.20 | [github.com/aihxp/deploy-ready](https://github.com/aihxp/deploy-ready) |
-| **observe-ready** | Shipping | Keep the app healthy once it's live. | 1.0.19 | [github.com/aihxp/observe-ready](https://github.com/aihxp/observe-ready) |
-| **launch-ready** | Shipping | Tell the world the product exists. | 1.0.17 | [github.com/aihxp/launch-ready](https://github.com/aihxp/launch-ready) |
-| **harden-ready** | Shipping | Survive adversarial attention; prove it to an auditor. | 1.0.13 | [github.com/aihxp/harden-ready](https://github.com/aihxp/harden-ready) |
+| **kickoff-ready** | Orchestration | Sequence the ten specialists for a greenfield project from raw user intent. | 1.1.8 | [skills/kickoff-ready](skills/kickoff-ready) |
+| **prd-ready** | Planning | Define what we're building and for whom. | 1.0.16 | [skills/prd-ready](skills/prd-ready) |
+| **architecture-ready** | Planning | Design how the big pieces fit together. | 1.0.15 | [skills/architecture-ready](skills/architecture-ready) |
+| **roadmap-ready** | Planning | Sequence work over time. | 1.0.14 | [skills/roadmap-ready](skills/roadmap-ready) |
+| **stack-ready** | Planning | Pick the right tools for the job. | 1.1.21 | [skills/stack-ready](skills/stack-ready) |
+| **repo-ready** | Building | Set up the repo with production-grade hygiene. | 1.7.0 | [skills/repo-ready](skills/repo-ready) |
+| **production-ready** | Building | Build the app to production grade. | 2.6.8 | [skills/production-ready](skills/production-ready) |
+| **deploy-ready** | Shipping | Ship the app to real environments. | 1.0.20 | [skills/deploy-ready](skills/deploy-ready) |
+| **observe-ready** | Shipping | Keep the app healthy once it's live. | 1.0.19 | [skills/observe-ready](skills/observe-ready) |
+| **launch-ready** | Shipping | Tell the world the product exists. | 1.0.17 | [skills/launch-ready](skills/launch-ready) |
+| **harden-ready** | Shipping | Survive adversarial attention; prove it to an auditor. | 1.0.13 | [skills/harden-ready](skills/harden-ready) |
 
 ## See it end-to-end: ready-suite-example
 
@@ -74,38 +74,25 @@ Want only one skill? Install it directly:
 
 The marketplace lives in this hub repo at [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json). Each plugin is vendored under [`plugins/<skill-name>/`](plugins/) with its own manifest. See [`references/PLUGIN-RESEARCH.md`](references/PLUGIN-RESEARCH.md) for the format research that shaped these decisions.
 
-Plugin maintainers refresh the vendored copies via:
-
-```bash
-bash scripts/refresh-plugin-skills.sh
-```
-
-This re-reads version + description from each sibling's `SKILL.md` frontmatter, re-vendors `SKILL.md` + `references/` from `~/Projects/<skill>/`, and rewrites the manifests. Run it whenever a sibling cuts a release, then commit and tag `plugin-v<x.y.z>`.
+Plugin maintainers refresh the vendored copies from the canonical content under `skills/<skill-name>/` whenever a sibling's version bumps, then commit and tag `plugin-v<x.y.z>`.
 
 ## One-command install (Codex, Cursor, pi, OpenClaw, all platforms)
 
 Installs every skill into every detected harness (Claude Code, Codex, Cursor, plus the neutral Agent Skills path read by pi and OpenClaw) with a single shell command. Idempotent. Re-run anytime.
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/aihxp/ready-suite/main/install.sh | bash
-```
-
-Or, if you prefer to read the script first:
-
-```bash
-git clone https://github.com/aihxp/ready-suite.git
-bash ready-suite/install.sh
+git clone https://github.com/aihxp/ready-suite.git ~/Projects/ready-suite
+bash ~/Projects/ready-suite/install.sh
 ```
 
 What it does:
 
 1. Detects which harnesses you have (`~/.claude`, `~/.codex`, `~/.cursor`, `~/.pi`, `~/.openclaw`). Skips ones that aren't installed.
 2. When pi or OpenClaw is detected, also writes to the neutral `~/.agents/skills/` path defined by the [Agent Skills standard](https://agentskills.io). Both harnesses read this path natively, and any future AgentSkills-compatible harness inherits support for free.
-3. For each of the eleven skills, ensures a dev copy at `~/Projects/<skill>/`. Clones from `aihxp/<skill>` if missing; reuses the existing copy if it's a clean git working tree.
-4. Symlinks `SKILL.md` and `references/` from the dev copy into every detected harness's skills directory.
-5. Existing non-symlink installs are backed up to `<target>.backup-<timestamp>/` first.
+3. For each of the eleven skills, symlinks `SKILL.md` and `references/` from `skills/<skill>/` into every detected harness's skills directory.
+4. Existing non-symlink installs are backed up to `<target>.backup-<timestamp>/` first.
 
-Edit a file in `~/Projects/<skill>/` and the change is live in every harness immediately. No re-install needed.
+Edit a file in `skills/<skill>/` (or `git pull` to update) and the change is live in every harness immediately. No re-install needed.
 
 Verbose mode shows every step:
 
@@ -115,29 +102,21 @@ bash install.sh -v
 
 ## Per-skill install (manual)
 
-If you want only one skill or prefer not to clone all eleven:
+The eleven skills live under `skills/<skill-name>/` in this monorepo. To install just one skill into a single harness, copy or symlink that skill's `SKILL.md` and `references/` into the harness's skills directory:
 
 ```bash
-# Claude Code
-git clone https://github.com/aihxp/<skill-name>.git ~/.claude/skills/<skill-name>
-
-# Codex
-git clone https://github.com/aihxp/<skill-name>.git ~/.codex/skills/<skill-name>
-
-# Cursor
-git clone https://github.com/aihxp/<skill-name>.git ~/.cursor/skills/<skill-name>
-
-# pi, OpenClaw, or any Agent Skills-compatible harness (neutral path)
-git clone https://github.com/aihxp/<skill-name>.git ~/.agents/skills/<skill-name>
+# Claude Code (example: just prd-ready)
+ln -s ~/Projects/ready-suite/skills/prd-ready/SKILL.md ~/.claude/skills/prd-ready/SKILL.md
+ln -s ~/Projects/ready-suite/skills/prd-ready/references ~/.claude/skills/prd-ready/references
 ```
 
-**Windsurf or other agents:** point your project rules or system prompt at the skill's `SKILL.md` and load reference files as needed.
+For most users the hub installer (`bash install.sh`) is simpler and idempotent. It already does the symlinking for every detected harness.
 
-**Symlink trick.** If you keep dev copies under `~/Projects/<skill-name>/`, symlink each platform's skills directory at the dev copy. Updates in the dev copy propagate instantly to every harness without re-installing. (`install.sh` does this for you.)
+**Windsurf or other agents:** point your project rules or system prompt at the skill's `SKILL.md` (`skills/<skill-name>/SKILL.md`) and load reference files as needed.
 
 ## Uninstall
 
-Removes the suite's symlinks from every detected harness. Leaves dev copies in `~/Projects/` and any `.backup-*/` directories untouched.
+Removes the suite's symlinks from every detected harness. Leaves the in-tree skills under `skills/` and any `.backup-*/` directories untouched.
 
 ```bash
 bash uninstall.sh
@@ -164,13 +143,13 @@ Skills do not call each other. The harness is the router.
 
 ## Versions
 
-The [SUITE.md](SUITE.md) known-good-versions table is byte-identical across every sibling. To find the latest of any skill, check the table here or in any sibling repo: they always agree.
+The [SUITE.md](SUITE.md) known-good-versions table at the hub root is byte-identical with every `skills/<skill>/SUITE.md`. To find the latest of any skill, check the table from any entry point: they always agree.
 
-When a sibling releases, every sibling's SUITE.md is updated in a coordinated patch pass. Tag-release parity is enforced (every git tag has a matching GitHub Release).
+When any skill version bumps, the hub SUITE.md and every `skills/<skill>/SUITE.md` are updated in the same commit. The lint enforces the byte-identical invariant.
 
 ## Maintenance: ready-suite-lint
 
-The hub ships a meta-linter that mechanically enforces the suite's discipline rules: SUITE.md byte-identical across the 12 repos, frontmatter version matches CHANGELOG top entry, every git tag has a matching GitHub Release, no em-dashes / arrows / box-drawing characters in suite-authored files, and the `compatible_with` frontmatter declares the standards-level values.
+The hub ships a meta-linter that mechanically enforces the suite's discipline rules: SUITE.md byte-identical between the hub and every `skills/<skill>/` subdir, frontmatter version matches CHANGELOG top entry, no em-dashes / arrows / box-drawing characters in suite-authored files, and the `compatible_with` frontmatter declares the standards-level values.
 
 Run locally:
 
@@ -181,22 +160,22 @@ bash scripts/lint.sh suite-md-sync     # one specific check
 bash scripts/lint.sh --help            # see all checks and flags
 ```
 
-Available checks: `suite-md-sync`, `frontmatter-version`, `tag-release-parity`, `unicode-clean`, `compatible-with`, `trigger-overlap`.
+Available checks: `suite-md-sync`, `frontmatter-version`, `unicode-clean`, `compatible-with`, `trigger-overlap`.
 
 The `trigger-overlap` check is advisory by default: it surfaces cross-skill substring overlaps in the eleven skills' description trigger phrases (e.g., "GitHub Actions" appearing in both repo-ready scaffolding triggers and deploy-ready pipeline triggers) and prompts the maintainer to verify a row exists in [`references/TRIGGER-DISAMBIGUATION.md`](references/TRIGGER-DISAMBIGUATION.md). Pass `--strict-triggers` to make overlap warnings fail the lint.
 
-The same lint runs in GitHub Actions on every push to `main`, on pull requests, and daily at 06:00 UTC (`.github/workflows/lint.yml`). The daily schedule catches drift from sibling-repo pushes that don't trigger the hub's own workflow.
+The same lint runs in GitHub Actions on every push to `main` and on pull requests (`.github/workflows/lint.yml`).
 
-The lint is bash 3.2 compatible (macOS default), uses no associative arrays, and degrades gracefully when `gh` is unavailable (skips the tag-release-parity check rather than failing).
+The lint is bash 3.2 compatible (macOS default) and uses no associative arrays.
 
 ## Contributing
 
 PRs welcome. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the contribution model, the unicode rule, the bash-3.2 rule, and how to land a single-skill or coordinated cross-suite change.
 
-For maintainers (or anyone landing a coordinated cross-repo patch), see [`MAINTAINING.md`](MAINTAINING.md): the SUITE.md sync ritual, version-bump rules, tag-release parity, and the five maintenance rituals (single-skill patch, coordinated cross-suite patch, hub-only patch, lint regression recovery, new-specialist release).
+For maintainers (or anyone landing a coordinated cross-suite patch), see [`MAINTAINING.md`](MAINTAINING.md): the SUITE.md sync ritual, version-bump rules, and the three maintenance rituals (single-skill patch, coordinated cross-suite patch, lint regression recovery).
 
 PR review is auto-routed via [`.github/CODEOWNERS`](.github/CODEOWNERS). Path-specific rules name the high-blast-radius surfaces (SUITE.md, install.sh, lint, marketplace manifest); when a second maintainer is added, the CODEOWNERS file is the single place to grant review authority on those paths.
 
 ## License
 
-MIT. Each skill repo carries its own LICENSE file with the same terms.
+MIT. Each skill under `skills/<skill-name>/` carries its own LICENSE file with the same terms.

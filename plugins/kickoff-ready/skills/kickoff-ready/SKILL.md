@@ -1,8 +1,8 @@
 ---
 name: kickoff-ready
 description: "Sequence the ten ready-suite specialists for a greenfield project from raw user intent. Triggers on 'kickoff,' 'new project from scratch,' 'walk me through idea to launch,' 'help me ship it end-to-end,' 'orchestrate the whole arc,' 'I have an idea, what next.' Owns sequence decision, handoff invocation, progress ledger (`.kickoff-ready/PROGRESS.md`), resume protocol, skip-and-import detection. The only meta-tier skill; every other ready-suite sibling is downstream from this one. Refuses scope leak (writing PRD/architecture/roadmap/launch content the specialists own), rubber-stamp orchestration (advancing the ledger without verifying artifact on disk), phantom resume (claiming resume but starting fresh), ghost handoff (invoking a sibling without verifying upstream artifact), and happy-path orchestration (no policy for skip, re-invoke, import, or sibling failure). Does not produce specialist content; routes to prd-ready, architecture-ready, roadmap-ready, stack-ready, repo-ready, production-ready, deploy-ready, observe-ready, launch-ready, harden-ready. Greenfield only; existing-codebase migrations route to the relevant specialist directly. Full trigger list in README."
-version: 1.0.0
-updated: 2026-05-06
+version: 1.1.8
+updated: 2026-05-09
 changelog: CHANGELOG.md
 suite: ready-suite
 tier: orchestration
@@ -25,7 +25,9 @@ compatible_with:
   - cursor
   - windsurf
   - antigravity
-  - any-agent-with-skill-loading
+  - pi
+  - openclaw
+  - any-agentskills-compatible-harness
 ---
 
 # Kickoff Ready
@@ -162,7 +164,21 @@ Produce in PROGRESS.md a `## Kickoff complete` block:
 2. **Open items handed off to ongoing work.** Anything kickoff-ready did not complete (deferred harden-ready findings, post-launch follow-ups, etc.). These are not kickoff-ready's responsibility going forward; they are the project's responsibility.
 3. **Recommended next-step orchestrator.** If the user wants ongoing phase/milestone work, point at GSD or whichever phase orchestrator they prefer. kickoff-ready is one-shot per project; the iteration loop after kickoff is a different orchestration pattern. Reference: production-ready's ORCHESTRATORS.md GSD section.
 
-**Passes when:** the summary table is in PROGRESS.md; deferred items are explicit; the user has the information needed to continue without kickoff-ready in the loop.
+#### Sub-step 6a. Emit project-root `AGENTS.md` if absent
+
+If no `AGENTS.md` exists at project root, kickoff-ready writes a minimal one. This is the only file kickoff-ready writes outside `.kickoff-ready/`, and it is orchestration metadata: it names the suite, points at the artifact map, and tells any harness that reads `AGENTS.md` (Codex CLI, GitHub Copilot, Cursor, Windsurf, Aider, Zed, Warp, Roo Code, Jules, Factory, Amp, Devin) where the kickoff produced its specialist artifacts. Without this file, the suite is invisible to non-Claude harnesses arriving at the project cold.
+
+The emit conditions are strict:
+
+1. **Only if absent.** If `AGENTS.md` already exists (e.g., the user's repo had one, or repo-ready scaffolded one), kickoff-ready leaves it untouched. Do not append, do not overwrite, do not "merge." The existing file is authoritative; kickoff-ready records `AGENTS.md: existing-respected` in PROGRESS.md and moves on.
+2. **Only artifact metadata.** The emitted file lists the ready-suite artifacts the kickoff produced and a one-paragraph pointer to the suite. It does not contain stack, build commands, conventions, forbidden actions, or any specialist content. Those belong to repo-ready's `AGENTS.md` scaffolding (when invoked) or to the user. Mixing the two re-introduces the scope-leak failure mode this skill exists to prevent.
+3. **Skip on out-of-fs harnesses.** On chat-only frontends with no file system, kickoff-ready surfaces the AGENTS.md template as a guidance string for the user to paste, instead of writing.
+
+The emitted template lives at [`references/agents-md-template.md`](references/agents-md-template.md). Variable substitutions: project name (from PROGRESS.md kickoff intent), per-sibling status table (from the Step 6 summary), and a single-line "this project was kicked off via ready-suite" attribution.
+
+Record the emit (or the respected-existing decision) in PROGRESS.md under the `## Kickoff complete` block as `agents_md_emitted: <path | existing-respected | guidance-text>`.
+
+**Passes when:** the summary table is in PROGRESS.md; deferred items are explicit; `AGENTS.md` exists at project root (either user-authored or kickoff-emitted); the emit decision is recorded; the user has the information needed to continue without kickoff-ready in the loop.
 
 ### Step 7. Refuse-and-surface for out-of-scope requests
 
@@ -190,7 +206,7 @@ If any of these appear, the kickoff fails this skill's contract and must be fixe
 - **Out-of-scope request received an inline answer.** Grep target: any conversation turn where the user asked for a PRD / architecture / launch copy / etc., and kickoff-ready produced markdown that fulfills the request rather than refusing and routing.
 - **PROGRESS.md exists but skips are recorded as silence.** Grep target: a sibling that does not appear in PROGRESS.md at all (neither as done nor as skipped). Silence is not a status; record skips explicitly per the Shape Up no-gos discipline.
 
-These have-nots are concrete and grep-testable. The references catalog has the full catalog at [`references/antipatterns.md`](references/antipatterns.md).
+These have-nots are concrete and grep-testable. The references catalog has the full catalog at [`references/kickoff-antipatterns.md`](references/kickoff-antipatterns.md).
 
 ## Reference files: load on demand
 
@@ -201,7 +217,8 @@ These have-nots are concrete and grep-testable. The references catalog has the f
 | [`references/handoff-protocols.md`](references/handoff-protocols.md) | **Step 0, 3, 4, 5.** Per-harness Skill-tool invocation patterns. Guidance-text fallback for harnesses without a Skill tool. |
 | [`references/progress-tracking.md`](references/progress-tracking.md) | **Step 1, 2, 6.** PROGRESS.md schema, status vocabulary, resume protocol, skip-when-artifact-exists logic, audit-ledger view. |
 | [`references/scope-fence.md`](references/scope-fence.md) | **Step 7 always; on demand otherwise.** The boundary catalog. What kickoff-ready refuses, why each refusal is load-bearing, the routing target per refusal. |
-| [`references/antipatterns.md`](references/antipatterns.md) | **On demand during verification.** The named failure modes from the research pass with grep tests, severity, and the kickoff-ready guard for each. |
+| [`references/kickoff-antipatterns.md`](references/kickoff-antipatterns.md) | **On demand during verification.** The named failure modes from the research pass with grep tests, severity, and the kickoff-ready guard for each. |
+| [`references/agents-md-template.md`](references/agents-md-template.md) | **Step 6 sub-step 6a.** The `AGENTS.md` template kickoff-ready emits to project root when no `AGENTS.md` exists. Substitution rules, emit conditions, the kickoff-ready / repo-ready handshake on a shared file. |
 
 ## Suite membership
 
@@ -269,7 +286,7 @@ If the work is adversarial review, delegate to `harden-ready`. Same protocol.
 
 If the work is ongoing phase or milestone management after the kickoff arc completes, delegate to a phase orchestrator (GSD's command tree is one option; BMAD with the boundary translation in production-ready/ORCHESTRATORS.md is another). kickoff-ready is one-shot per project.
 
-**If your harness exposes a skill-invocation tool** (Claude Code's slash command, Codex's dollar-sign form, Antigravity's Agent Skills standard), invoke the sibling directly when the handoff trigger fires. **Otherwise**, surface the handoff to the user as guidance text per [`references/handoff-protocols.md`](references/handoff-protocols.md): "This step needs `prd-ready`. Install it from https://github.com/aihxp/prd-ready, then run it on this project. When `.prd-ready/PRD.md` exists, return to kickoff-ready and we will verify and advance." Do not generate the sibling's output inline from this skill; the handoff is the contract.
+**If your harness exposes a skill-invocation tool** (Claude Code's slash command, Codex's dollar-sign form, Antigravity's Agent Skills standard), invoke the sibling directly when the handoff trigger fires. **Otherwise**, surface the handoff to the user as guidance text per [`references/handoff-protocols.md`](references/handoff-protocols.md): "This step needs `prd-ready`. Install it from https://github.com/aihxp/ready-suite/tree/main/skills/prd-ready, then run it on this project. When `.prd-ready/PRD.md` exists, return to kickoff-ready and we will verify and advance." Do not generate the sibling's output inline from this skill; the handoff is the contract.
 
 ## Session state and resume
 
