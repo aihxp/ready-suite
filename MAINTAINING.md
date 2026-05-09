@@ -129,22 +129,29 @@ Steps (the canonical order):
 
 A coordinated patch is ~45 minutes of focused work after you have done one before. The first one is closer to two hours.
 
-### Ritual 3: hub-only patch (ORCHESTRATORS.md, install.sh, lint, README)
+### Ritual 3: hub-only patch (install.sh, lint, README, MAINTAINING)
 
-Some changes affect only the hub plus production-ready (for ORCHESTRATORS.md) or only the hub (for install.sh, lint, scripts).
+Some changes affect only the hub.
 
-When the change is hub-only:
+When the change is hub-only and does not touch SUITE.md:
 
 - No version bump on any specialist.
 - No SUITE.md sync (SUITE.md is unchanged).
 - Hub commit + push only.
 
-When the change is hub + production-ready (ORCHESTRATORS.md):
+### Ritual 3a: hub + one-specialist patch (ORCHESTRATORS.md, single-skill audit refresh)
 
-- production-ready gets a patch bump (per the v2.5.12 precedent that introduced ORCHESTRATORS.md as a patch).
-- Hub gets a commit + push, no version bump.
-- No other specialists are affected.
-- SUITE.md is NOT bumped in the version table; the table will catch up at the next coordinated patch (this is consistent with the v2.5.12 precedent).
+Some changes affect only the hub plus a single specialist (production-ready for ORCHESTRATORS.md; repo-ready for `AUDIT-REPORT.md` re-audits; etc.).
+
+The discipline:
+
+- The affected specialist gets a patch bump (frontmatter + CHANGELOG entry + tag + release).
+- **The SUITE.md known-good versions table updates and the byte-identical sync runs across all 12 repos.** Every other specialist gets a sync-only patch bump (frontmatter + one-line CHANGELOG entry + tag + release), even if their own SKILL.md is unchanged.
+- Hub commit + push.
+
+**The v2.5.12 precedent has been retired.** That precedent allowed single-specialist patches to skip the full SUITE.md sync, on the rationale that the table would "catch up at the next coordinated patch." In practice this caused the SUITE.md table to drift two-to-four versions behind reality on the affected rows; the hub `scripts/lint.sh` `suite-md-sync` check now catches this drift on the daily workflow, and the cleanup-and-resync overhead exceeds the cost of always-syncing.
+
+The new rule is uniform: **any version bump in any specialist triggers byte-identical SUITE.md sync across all 12 repos and a sync-only patch bump on the other 10 specialists.** This is more commits per patch, but it preserves the lint's invariant and removes the drift class entirely.
 
 ### Ritual 4: standalone hub-CI / lint regression
 

@@ -4,6 +4,22 @@ Curated change history for the [aihxp/ready-suite](https://github.com/aihxp/read
 
 For per-skill changelogs, see each specialist's `CHANGELOG.md` (e.g., [`prd-ready/CHANGELOG.md`](https://github.com/aihxp/prd-ready/blob/main/CHANGELOG.md)). For the audit trail of every coordinated patch and version bump, see the suite's tag-and-release pages.
 
+## 2026-05-09 - Hub CHANGELOG + repo-ready audit refresh + v2.5.12 precedent retired
+
+### Added
+
+- This file (`CHANGELOG.md` at the hub root). Curated narrative layer above `git log` for the hub. Reverse-chronological by ship date, grouped by patch theme. Entries are dated, not numbered (the hub does not version itself; no `version` frontmatter; no `SKILL.md`).
+
+### Changed
+
+- `repo-ready/AUDIT-REPORT.md`: re-audit dated 2026-05-09 (prior 2026-04-22). Confirms 33/35 score unchanged after six patch releases (v1.6.9 through v1.6.14); none of those touched the scaffolding scored in the audit. New `prior_audits` history field. Informational note that hub `scripts/lint.sh` now mechanically enforces several repo-ready disciplines as a suite-meta check. repo-ready bumped to v1.6.15 in lockstep.
+- `MAINTAINING.md`: **the v2.5.12 precedent has been retired.** That precedent allowed single-specialist patches to skip the full SUITE.md sync; the daily `scripts/lint.sh` workflow caught the resulting drift in CI on this very release. The new rule is uniform: any version bump in any specialist triggers byte-identical SUITE.md sync across all 12 repos and a sync-only patch bump on the other 10 specialists. Ritual 3a (hub + one-specialist patch) section in MAINTAINING.md rewritten to reflect this.
+- All 10 non-repo-ready specialists bumped sync-only (kickoff 1.1.5, prd 1.0.13, architecture 1.0.12, roadmap 1.0.11, stack 1.1.18, production 2.6.5, deploy 1.0.17, observe 1.0.16, launch 1.0.14, harden 1.0.10) so the SUITE.md known-good versions table is byte-identical across all 12 repos. SUITE.md table updated.
+
+### Why this was the cleanest move
+
+The CI failure on the first attempt at this patch (lint flagged 10 SUITE.md drift hits) was the discipline working as designed: prose ("the precedent allows single-specialist drift") got contradicted by mechanical enforcement ("the lint demands byte-identical"). Trusting the lint over the precedent retired one and ratified the other. Going forward, every specialist patch ships with full sync.
+
 ## 2026-05-09 - Layout cleanup + maintainer doc
 
 Audited file/folder structure across the 12 repos. Three real findings, all addressed.
