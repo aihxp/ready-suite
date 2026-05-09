@@ -2,7 +2,7 @@
 
 > **End-to-end reference: the [ready-suite](https://github.com/aihxp/ready-suite) applied to a fictional B2B SaaS product (Pulse). All eleven artifacts on disk, with cross-references intact, so you can see what running the suite actually produces.**
 
-This repo is **not a real product**. It is a static reference: the artifacts that the eleven ready-suite skills produce, shown in their canonical `.{skill}-ready/` paths the way a real project running the suite would have them on disk. Use it to:
+This example is **not a real product**. It is a static reference: the artifacts that the eleven ready-suite skills produce, shown in their canonical `.{skill}-ready/` paths the way a real project running the suite would have them on disk. Use it to:
 
 - Understand what the suite outputs end-to-end.
 - See how the artifacts cross-reference each other (PRD references are real; clicking through works).

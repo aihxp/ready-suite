@@ -133,6 +133,6 @@ The suite holds up end-to-end on a fictional B2B SaaS product. Every artifact is
 
 The dogfood does not prove real-world adoption. It proves the artifacts compose; it doesn't prove the artifacts are useful in practice. That proof requires a real project with real users, real schedule pressure, and real failure modes that the fiction can't simulate.
 
-For now: this is the strongest evidence the suite has shipped. A reader can `git clone aihxp/ready-suite-example` and see what running the suite produces. The friction surfaces named above are honest critiques the suite's v1.x roadmap can address.
+For now: this is the strongest evidence the suite has shipped. A reader can `git clone aihxp/ready-suite` and look under `examples/ready-suite-example/` to see what running the suite produces. The friction surfaces named above are honest critiques the suite's v1.x roadmap can address.
 
 The suite is opinionated. So is this reflection.

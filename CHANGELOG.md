@@ -4,6 +4,12 @@ Curated change history for the [aihxp/ready-suite](https://github.com/aihxp/read
 
 For per-skill changelogs, see each skill's `CHANGELOG.md` under [`skills/<skill>/CHANGELOG.md`](skills/) (e.g., [`skills/prd-ready/CHANGELOG.md`](skills/prd-ready/CHANGELOG.md)). For the full audit trail, see `git log` on this hub.
 
+## 2026-05-09 - Example dogfood absorbed into the hub
+
+The standalone `aihxp/ready-suite-example` repo has been merged into this hub at [`examples/ready-suite-example/`](examples/ready-suite-example) via `git subtree add`, preserving its commit history. The standalone GitHub repo has been archived; its content is now part of the hub. README links to the example were rewritten to relative paths; the in-example `DOGFOOD.md` clone instruction was updated to point at the hub.
+
+Rationale: the example is reference content, not an installable artifact, but readers reach it from the hub README and benefit from being one `git clone` away rather than two. The earlier consolidation absorbed the eleven specialist repos for the same reason.
+
 ## 2026-05-09 - Monorepo consolidation
 
 The eleven specialist skills, previously each in their own repo (`aihxp/<skill>-ready`), have consolidated into `skills/<skill>/` subdirectories of this hub. The eleven standalone repos have been deleted; this hub is now the canonical home for everything.

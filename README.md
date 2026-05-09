@@ -35,7 +35,7 @@ kickoff-ready  ->        prd-ready           ->    repo-ready      ->    deploy-
 
 ## See it end-to-end: ready-suite-example
 
-A complete dogfood of the suite applied to a fictional B2B SaaS product (Pulse, a Customer Success ops platform) lives at [aihxp/ready-suite-example](https://github.com/aihxp/ready-suite-example). All eleven artifacts on disk at canonical `.{skill}-ready/` paths, with cross-references intact, plus an `AGENTS.md` (kickoff-ready emit), a `DESIGN.md` (Google Labs format, scaffolded by production-ready), and a [`DOGFOOD.md`](https://github.com/aihxp/ready-suite-example/blob/main/DOGFOOD.md) reflection on what the suite caught, what it missed, and what would change in a v1.x of the suite.
+A complete dogfood of the suite applied to a fictional B2B SaaS product (Pulse, a Customer Success ops platform) lives at [`examples/ready-suite-example/`](examples/ready-suite-example). All eleven artifacts on disk at canonical `.{skill}-ready/` paths, with cross-references intact, plus an `AGENTS.md` (kickoff-ready emit), a `DESIGN.md` (Google Labs format, scaffolded by production-ready), and a [`DOGFOOD.md`](examples/ready-suite-example/DOGFOOD.md) reflection on what the suite caught, what it missed, and what would change in a v1.x of the suite.
 
 The product, the people, and the dates are fictional; the artifacts are rigorous (each passes its own skill's grep tests for named failure modes). Use the dogfood to see what the suite produces end-to-end before installing it on a real project.
 
