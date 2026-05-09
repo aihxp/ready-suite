@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # uninstall.sh: remove ready-suite symlinks from every detected harness.
 #
-# - Removes only symlinks that point into ~/Projects/<skill>/.
-# - Leaves dev copies in ~/Projects/ untouched.
-# - Leaves any *.backup-<timestamp>/ directories alone.
+# - Removes only symlinks that point into the ready-suite hub
+#   (skills/<skill>/) or into the legacy ~/Projects/<skill>/ layout.
+# - Leaves dev copies and any *.backup-<timestamp>/ directories alone.
 # - Covers Claude Code, Codex, Cursor, plus the neutral Agent Skills
 #   path at ~/.agents/skills/ used by pi and OpenClaw.
 # - Bash 3.2 compatible.
@@ -11,7 +11,10 @@
 set -eu
 
 VERBOSE=0
-PROJECTS_DIR="${HOME}/Projects"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+HUB_DIR="$SCRIPT_DIR"
+SKILLS_DIR="$HUB_DIR/skills"
+LEGACY_PROJECTS_DIR="${HOME}/Projects"
 
 SKILLS="kickoff-ready prd-ready architecture-ready roadmap-ready stack-ready repo-ready production-ready deploy-ready observe-ready launch-ready harden-ready"
 PLATFORM_NAMES="Claude_Code Codex Cursor Agent_Skills"
@@ -107,7 +110,7 @@ remove_link() {
   if [ -L "$path" ]; then
     target="$(readlink "$path" 2>/dev/null || true)"
     case "$target" in
-      "$PROJECTS_DIR"/*)
+      "$SKILLS_DIR"/*|"$LEGACY_PROJECTS_DIR"/*)
         rm -f "$path"
         REMOVED=$((REMOVED + 1))
         return 0 ;;
@@ -161,4 +164,4 @@ printf "  %s%d symlinks removed%s, %d skill dirs cleaned\n" "$C_GREEN" "$REMOVED
 if [ "$KEPT" -gt 0 ]; then
   printf "  %s%d items kept%s (foreign symlinks or non-symlinks)\n" "$C_YELLOW" "$KEPT" "$C_RESET"
 fi
-printf "\nDev copies in %s and any *.backup-*/ dirs are untouched.\n\n" "$PROJECTS_DIR"
+printf "\nIn-tree skills under %s and any *.backup-*/ dirs are untouched.\n\n" "$SKILLS_DIR"

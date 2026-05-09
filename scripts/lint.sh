@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-# scripts/lint.sh: meta-linter for the ready-suite.
+# scripts/lint.sh: meta-linter for the ready-suite (monorepo layout).
 #
 # Mechanically enforces the suite's discipline rules. Replaces "the rule
 # says X" with "CI fails if X is violated."
 #
 # Checks (run with --all, default):
 #
-#   suite-md-sync          SUITE.md byte-identical across all 12 repos
+#   suite-md-sync          SUITE.md byte-identical between hub and each
+#                          skills/<skill>/ subdir
 #   frontmatter-version    SKILL.md version matches CHANGELOG top entry
-#   tag-release-parity     every git tag has a matching GitHub Release
 #   unicode-clean          no em-dashes / arrows / box drawing in
 #                          suite-authored files (SUITE.md whole-file,
 #                          README.md whole-file, top CHANGELOG entry,
@@ -22,16 +22,13 @@
 # Usage:
 #   bash scripts/lint.sh [check-name | --all] [--verbose] [--fail-fast]
 #
-# Env:
-#   READY_SUITE_REPOS_DIR   where sibling repos live (default ~/Projects)
-#
 # Bash 3.2 compatible (macOS default). No associative arrays, no mapfile.
 
 set -eu
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 HUB_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-REPOS_DIR="${READY_SUITE_REPOS_DIR:-${HOME}/Projects}"
+SKILLS_DIR="$HUB_DIR/skills"
 
 SKILLS="kickoff-ready prd-ready architecture-ready roadmap-ready stack-ready repo-ready production-ready deploy-ready observe-ready launch-ready harden-ready"
 ALL_REPOS="$SKILLS ready-suite"
@@ -69,16 +66,16 @@ fi
 
 usage() {
   cat <<EOF
-ready-suite-lint: meta-linter for the ready-suite
+ready-suite-lint: meta-linter for the ready-suite (monorepo)
 
 Usage: bash scripts/lint.sh [check | --all] [--verbose] [--fail-fast]
 
 Checks:
-  suite-md-sync         SUITE.md byte-identical across 12 repos
+  suite-md-sync         SUITE.md byte-identical hub vs skills/<skill>/
   frontmatter-version   SKILL.md version matches CHANGELOG top entry
-  tag-release-parity    every git tag has a matching GitHub Release
   unicode-clean         no em-dashes / arrows / box drawing in suite-authored files
   compatible-with       compatible_with frontmatter standards-level values
+  trigger-overlap       cross-skill trigger-phrase substring overlaps (advisory)
 
 Flags:
   --all                run every check (default)
@@ -87,9 +84,6 @@ Flags:
   --strict-triggers    fail (non-zero exit) on trigger-overlap warnings
                        (default: advisory only)
   -h, --help           this help
-
-Env:
-  READY_SUITE_REPOS_DIR    where sibling repos live (default ~/Projects)
 EOF
 }
 
@@ -105,7 +99,7 @@ while [ $# -gt 0 ]; do
     --fail-fast) FAIL_FAST=1 ;;
     --strict-triggers) STRICT_TRIGGERS=1 ;;
     --all) SELECTED="--all" ;;
-    suite-md-sync|frontmatter-version|tag-release-parity|unicode-clean|compatible-with|trigger-overlap) SELECTED="$1" ;;
+    suite-md-sync|frontmatter-version|unicode-clean|compatible-with|trigger-overlap) SELECTED="$1" ;;
   esac
   shift
 done
@@ -122,7 +116,7 @@ repo_dir_for() {
   if [ "$skill" = "ready-suite" ]; then
     printf "%s" "$HUB_DIR"
   else
-    printf "%s/%s" "$REPOS_DIR" "$skill"
+    printf "%s/%s" "$SKILLS_DIR" "$skill"
   fi
 }
 
@@ -216,41 +210,6 @@ check_frontmatter_version() {
     else
       err "$skill: frontmatter v$ver != CHANGELOG v$cl_ver"
       fail=$((fail + 1))
-    fi
-  done
-  return "$fail"
-}
-
-# -----------------------------------------------------------------------
-# Check: tag-release-parity
-# -----------------------------------------------------------------------
-check_tag_release_parity() {
-  section "tag-release-parity"
-  local skill s_dir releases tag fail
-  if ! command -v gh >/dev/null 2>&1; then
-    warn "gh CLI not available; skipping tag-release-parity"
-    return 0
-  fi
-  if ! gh auth status >/dev/null 2>&1; then
-    warn "gh CLI not authenticated; skipping tag-release-parity"
-    return 0
-  fi
-  fail=0
-  for skill in $SKILLS; do
-    s_dir="$(repo_dir_for "$skill")"
-    if [ ! -d "$s_dir/.git" ]; then
-      vok "$skill: not a git repo, skipping"
-      continue
-    fi
-    releases="$(gh release list --repo "aihxp/$skill" --limit 200 --json tagName -q '.[].tagName' 2>/dev/null || true)"
-    for tag in $(cd "$s_dir" && git tag -l); do
-      if ! echo "$releases" | grep -qx "$tag"; then
-        err "$skill: tag $tag has no GitHub Release"
-        fail=$((fail + 1))
-      fi
-    done
-    if [ "$fail" = "0" ] || [ "$VERBOSE" = "1" ]; then
-      vok "$skill: every tag has a release"
     fi
   done
   return "$fail"
@@ -458,7 +417,6 @@ run_check() {
   case "$name" in
     suite-md-sync)        check_suite_md_sync;        result=$? ;;
     frontmatter-version)  check_frontmatter_version;  result=$? ;;
-    tag-release-parity)   check_tag_release_parity;   result=$? ;;
     unicode-clean)        check_unicode_clean;        result=$? ;;
     compatible-with)      check_compatible_with;      result=$? ;;
     trigger-overlap)      check_trigger_overlap;      result=$? ;;
@@ -471,11 +429,11 @@ run_check() {
   fi
 }
 
-ALL_CHECKS="suite-md-sync frontmatter-version tag-release-parity unicode-clean compatible-with trigger-overlap"
+ALL_CHECKS="suite-md-sync frontmatter-version unicode-clean compatible-with trigger-overlap"
 
 printf "\n%sready-suite-lint%s\n" "$C_BOLD" "$C_RESET"
-info "  hub:   $HUB_DIR"
-info "  repos: $REPOS_DIR"
+info "  hub:    $HUB_DIR"
+info "  skills: $SKILLS_DIR"
 
 OVERALL_FAIL=0
 TOTAL_CHECKS=0

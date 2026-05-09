@@ -46,7 +46,7 @@ Skills consume artifacts from upstream siblings and produce artifacts for downst
 
 ## Install locations
 
-Every skill installs the same way on every platform. On a machine where the dev copy lives at `~/Projects/<skill-name>/`, symlinking is recommended so updates in the dev copy propagate instantly.
+Every skill installs the same way on every platform. The hub installer (`bash install.sh` from a clone of `aihxp/ready-suite`) symlinks `SKILL.md` and `references/` from `skills/<skill-name>/` into each detected harness, so updates from `git pull` propagate instantly.
 
 | Platform | Install path |
 |---|---|
@@ -86,18 +86,20 @@ AI-generated apps fail in predictable ways: hollow buttons, placeholder READMEs,
 
 ## Known-good versions
 
-| Skill | Current version | Repo |
-|---|---|---|
-| **kickoff-ready** | 1.1.8 | https://github.com/aihxp/kickoff-ready |
-| **production-ready** | 2.6.8 | https://github.com/aihxp/production-ready |
-| **repo-ready** | 1.7.0 | https://github.com/aihxp/repo-ready |
-| **stack-ready** | 1.1.21 | https://github.com/aihxp/stack-ready |
-| **deploy-ready** | 1.0.20 | https://github.com/aihxp/deploy-ready |
-| **observe-ready** | 1.0.19 | https://github.com/aihxp/observe-ready |
-| **launch-ready** | 1.0.17 | https://github.com/aihxp/launch-ready |
-| **prd-ready** | 1.0.16 | https://github.com/aihxp/prd-ready |
-| **architecture-ready** | 1.0.15 | https://github.com/aihxp/architecture-ready |
-| **roadmap-ready** | 1.0.14 | https://github.com/aihxp/roadmap-ready |
-| **harden-ready** | 1.0.13 | https://github.com/aihxp/harden-ready |
+All eleven skills live in the [aihxp/ready-suite](https://github.com/aihxp/ready-suite) monorepo under `skills/<skill>/`. The earlier per-skill repos have been consolidated; their content moved verbatim into this layout.
 
-The suite is additive. A skill not yet released does not block any other skill from functioning. When a skill reaches v1.0.0, update this table and ship the change across all installed siblings. With kickoff-ready v1.0.0 the suite is eleven skills across orchestration (one), planning (four), building (two), and shipping (four).
+| Skill | Current version | Path |
+|---|---|---|
+| **kickoff-ready** | 1.1.8 | [skills/kickoff-ready](https://github.com/aihxp/ready-suite/tree/main/skills/kickoff-ready) |
+| **production-ready** | 2.6.8 | [skills/production-ready](https://github.com/aihxp/ready-suite/tree/main/skills/production-ready) |
+| **repo-ready** | 1.7.0 | [skills/repo-ready](https://github.com/aihxp/ready-suite/tree/main/skills/repo-ready) |
+| **stack-ready** | 1.1.21 | [skills/stack-ready](https://github.com/aihxp/ready-suite/tree/main/skills/stack-ready) |
+| **deploy-ready** | 1.0.20 | [skills/deploy-ready](https://github.com/aihxp/ready-suite/tree/main/skills/deploy-ready) |
+| **observe-ready** | 1.0.19 | [skills/observe-ready](https://github.com/aihxp/ready-suite/tree/main/skills/observe-ready) |
+| **launch-ready** | 1.0.17 | [skills/launch-ready](https://github.com/aihxp/ready-suite/tree/main/skills/launch-ready) |
+| **prd-ready** | 1.0.16 | [skills/prd-ready](https://github.com/aihxp/ready-suite/tree/main/skills/prd-ready) |
+| **architecture-ready** | 1.0.15 | [skills/architecture-ready](https://github.com/aihxp/ready-suite/tree/main/skills/architecture-ready) |
+| **roadmap-ready** | 1.0.14 | [skills/roadmap-ready](https://github.com/aihxp/ready-suite/tree/main/skills/roadmap-ready) |
+| **harden-ready** | 1.0.13 | [skills/harden-ready](https://github.com/aihxp/ready-suite/tree/main/skills/harden-ready) |
+
+The suite is additive. A skill not yet released does not block any other skill from functioning. With the consolidated layout the eleven skills span orchestration (one), planning (four), building (two), and shipping (four).

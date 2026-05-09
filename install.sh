@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # install.sh: install the ready-suite into every detected harness.
 #
+# - Reads skills from this repo's skills/<skill>/ directory (in-tree;
+#   no per-skill clone needed).
 # - Detects native-skill harnesses by their config directories:
 #     Claude Code  -> ~/.claude        -> writes ~/.claude/skills/<skill>/
 #     Codex        -> ~/.codex         -> writes ~/.codex/skills/<skill>/
@@ -10,19 +12,15 @@
 # - When pi or OpenClaw is detected, writes to the neutral
 #   ~/.agents/skills/<skill>/ path. Both harnesses read this path
 #   natively per the Agent Skills standard at agentskills.io. Future
-#   AgentSkills-compatible harnesses inherit support for free. We
-#   deliberately do NOT write to ~/.pi/agent/skills/ or
-#   ~/.openclaw/skills/ in addition: those are redundant given the
-#   neutral path and only add maintenance surface.
-# - For each of the eleven skills, ensures a dev copy at
-#   ~/Projects/<skill>/, then symlinks SKILL.md and references/
-#   into every detected harness.
+#   AgentSkills-compatible harnesses inherit support for free.
+# - For each of the eleven skills, symlinks SKILL.md and references/
+#   from skills/<skill>/ into every detected harness.
 # - Idempotent. Re-run anytime.
 # - Bash 3.2 compatible (macOS default). No associative arrays.
 #
 # Usage:
-#   curl -sSL https://raw.githubusercontent.com/aihxp/ready-suite/main/install.sh | bash
-#   or: git clone https://github.com/aihxp/ready-suite && bash ready-suite/install.sh
+#   git clone https://github.com/aihxp/ready-suite && bash ready-suite/install.sh
+#   or run from inside an existing clone: bash install.sh
 #
 # Flags:
 #   -v   verbose (show skipped-because-correct steps)
@@ -31,8 +29,9 @@
 set -eu
 
 VERBOSE=0
-GH_ORG="aihxp"
-PROJECTS_DIR="${HOME}/Projects"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+HUB_DIR="$SCRIPT_DIR"
+SKILLS_DIR="$HUB_DIR/skills"
 TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
 
 # Eleven skills, in suite-tier order.
@@ -68,8 +67,8 @@ Usage: install.sh [-v] [-h]
 
 Detects Claude Code, Codex, Cursor, pi, and OpenClaw; installs the
 eleven ready-suite skills into every detected harness via file-level
-symlinks from ~/Projects/<skill>/. pi and OpenClaw are served via
-the neutral Agent Skills path at ~/.agents/skills/.
+symlinks from this repo's skills/<skill>/ directory. pi and OpenClaw
+are served via the neutral Agent Skills path at ~/.agents/skills/.
 EOF
 }
 
@@ -111,9 +110,7 @@ platform_dir_for() {
   return 1
 }
 
-# Human label for a platform name. Agent_Skills shows the markers
-# that triggered detection so the user sees why ~/.agents/skills/ is
-# in the install set.
+# Human label for a platform name.
 platform_label_for() {
   local name markers
   name="$1"
@@ -136,8 +133,7 @@ platform_label_for() {
   esac
 }
 
-# Detection: parent-dir presence for first three; pi or OpenClaw
-# marker for the neutral Agent Skills path.
+# Detection.
 DETECTED_PLATFORMS=""
 for name in $PLATFORM_NAMES; do
   dir="$(platform_dir_for "$name")"
@@ -162,10 +158,16 @@ if [ -z "$DETECTED_PLATFORMS" ]; then
   exit 1
 fi
 
+if [ ! -d "$SKILLS_DIR" ]; then
+  printf "%sskills/ directory not found at %s%s\n" "$C_RED" "$SKILLS_DIR" "$C_RESET" >&2
+  printf "Run install.sh from inside a ready-suite clone.\n" >&2
+  exit 1
+fi
+
 log ""
 printf "%sready-suite installer%s\n" "$C_BOLD" "$C_RESET"
 log ""
-info "projects dir : $PROJECTS_DIR"
+info "skills dir   : $SKILLS_DIR"
 detected_label=""
 for n in $DETECTED_PLATFORMS; do
   detected_label="$detected_label, $(platform_label_for "$n")"
@@ -174,43 +176,11 @@ detected_label="${detected_label#, }"
 info "platforms    : $detected_label"
 log ""
 
-mkdir -p "$PROJECTS_DIR"
-
 INSTALLED_COUNT=0
 SKIPPED_COUNT=0
 PLATFORM_LINK_COUNT=0
 
-# Ensure a dev copy at ~/Projects/<skill>/. Echoes "ok|skip|fail" + reason.
-# Returns 0 on ok or skip-but-usable, 1 on fail.
-ensure_dev_copy() {
-  local skill dir
-  skill="$1"
-  dir="$PROJECTS_DIR/$skill"
-  if [ -d "$dir/.git" ]; then
-    # Existing repo. Refuse to touch if dirty; otherwise reuse.
-    if (cd "$dir" && git diff --quiet --ignore-submodules 2>/dev/null && git diff --cached --quiet --ignore-submodules 2>/dev/null); then
-      vstep "dev copy clean: $dir"
-      return 0
-    else
-      warn "dev copy has uncommitted changes; skipping clone (using as-is): $dir"
-      return 0
-    fi
-  elif [ -e "$dir" ]; then
-    err "$dir exists but is not a git repo; refusing to overwrite"
-    return 1
-  fi
-  step "cloning $skill"
-  if git clone --depth 1 --quiet "https://github.com/$GH_ORG/$skill.git" "$dir" 2>/dev/null; then
-    ok "cloned $GH_ORG/$skill"
-    return 0
-  else
-    err "clone failed: $GH_ORG/$skill"
-    return 1
-  fi
-}
-
-# Symlink one item (SKILL.md or references) from src to dst, backing up
-# any non-symlink target. Echoes ok/skip/fail.
+# Symlink one item from src to dst, backing up any non-symlink target.
 link_item() {
   local src dst label current backup
   src="$1"
@@ -242,12 +212,12 @@ install_skill_into_platform() {
   skill="$1"
   platform_name="$2"
   platform_dir="$3"
-  src_skill_md="$PROJECTS_DIR/$skill/SKILL.md"
-  src_refs="$PROJECTS_DIR/$skill/references"
+  src_skill_md="$SKILLS_DIR/$skill/SKILL.md"
+  src_refs="$SKILLS_DIR/$skill/references"
   dst_dir="$platform_dir/$skill"
 
   if [ ! -f "$src_skill_md" ]; then
-    err "$skill: SKILL.md missing in $PROJECTS_DIR/$skill"
+    err "$skill: SKILL.md missing at $src_skill_md"
     return 1
   fi
 
@@ -267,7 +237,8 @@ install_skill_into_platform() {
 for skill in $SKILLS; do
   log ""
   printf "%s%s%s\n" "$C_BOLD" "$skill" "$C_RESET"
-  if ! ensure_dev_copy "$skill"; then
+  if [ ! -d "$SKILLS_DIR/$skill" ]; then
+    err "$skill: missing at $SKILLS_DIR/$skill"
     SKIPPED_COUNT=$((SKIPPED_COUNT + 1))
     continue
   fi
