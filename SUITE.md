@@ -88,16 +88,16 @@ AI-generated apps fail in predictable ways: hollow buttons, placeholder READMEs,
 
 | Skill | Current version | Repo |
 |---|---|---|
-| **kickoff-ready** | 1.1.1 | https://github.com/aihxp/kickoff-ready |
+| **kickoff-ready** | 1.1.2 | https://github.com/aihxp/kickoff-ready |
 | **production-ready** | 2.6.0 | https://github.com/aihxp/production-ready |
 | **repo-ready** | 1.6.11 | https://github.com/aihxp/repo-ready |
-| **stack-ready** | 1.1.14 | https://github.com/aihxp/stack-ready |
-| **deploy-ready** | 1.0.13 | https://github.com/aihxp/deploy-ready |
-| **observe-ready** | 1.0.12 | https://github.com/aihxp/observe-ready |
-| **launch-ready** | 1.0.10 | https://github.com/aihxp/launch-ready |
-| **prd-ready** | 1.0.9 | https://github.com/aihxp/prd-ready |
-| **architecture-ready** | 1.0.8 | https://github.com/aihxp/architecture-ready |
-| **roadmap-ready** | 1.0.7 | https://github.com/aihxp/roadmap-ready |
-| **harden-ready** | 1.0.6 | https://github.com/aihxp/harden-ready |
+| **stack-ready** | 1.1.15 | https://github.com/aihxp/stack-ready |
+| **deploy-ready** | 1.0.14 | https://github.com/aihxp/deploy-ready |
+| **observe-ready** | 1.0.13 | https://github.com/aihxp/observe-ready |
+| **launch-ready** | 1.0.11 | https://github.com/aihxp/launch-ready |
+| **prd-ready** | 1.0.10 | https://github.com/aihxp/prd-ready |
+| **architecture-ready** | 1.0.9 | https://github.com/aihxp/architecture-ready |
+| **roadmap-ready** | 1.0.8 | https://github.com/aihxp/roadmap-ready |
+| **harden-ready** | 1.0.7 | https://github.com/aihxp/harden-ready |
 
 The suite is additive. A skill not yet released does not block any other skill from functioning. When a skill reaches v1.0.0, update this table and ship the change across all installed siblings. With kickoff-ready v1.0.0 the suite is eleven skills across orchestration (one), planning (four), building (two), and shipping (four).
