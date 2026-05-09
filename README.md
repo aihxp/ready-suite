@@ -159,6 +159,25 @@ The [SUITE.md](SUITE.md) known-good-versions table is byte-identical across ever
 
 When a sibling releases, every sibling's SUITE.md is updated in a coordinated patch pass. Tag-release parity is enforced (every git tag has a matching GitHub Release).
 
+## Maintenance: ready-suite-lint
+
+The hub ships a meta-linter that mechanically enforces the suite's discipline rules: SUITE.md byte-identical across the 12 repos, frontmatter version matches CHANGELOG top entry, every git tag has a matching GitHub Release, no em-dashes / arrows / box-drawing characters in suite-authored files, and the `compatible_with` frontmatter declares the standards-level values.
+
+Run locally:
+
+```bash
+bash scripts/lint.sh                   # all checks
+bash scripts/lint.sh --verbose         # show ok lines
+bash scripts/lint.sh suite-md-sync     # one specific check
+bash scripts/lint.sh --help            # see all checks and flags
+```
+
+Available checks: `suite-md-sync`, `frontmatter-version`, `tag-release-parity`, `unicode-clean`, `compatible-with`.
+
+The same lint runs in GitHub Actions on every push to `main`, on pull requests, and daily at 06:00 UTC (`.github/workflows/lint.yml`). The daily schedule catches drift from sibling-repo pushes that don't trigger the hub's own workflow.
+
+The lint is bash 3.2 compatible (macOS default), uses no associative arrays, and degrades gracefully when `gh` is unavailable (skips the tag-release-parity check rather than failing).
+
 ## License
 
 MIT. Each skill repo carries its own LICENSE file with the same terms.
