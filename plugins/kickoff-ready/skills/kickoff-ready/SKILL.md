@@ -1,8 +1,8 @@
 ---
 name: kickoff-ready
 description: "Sequence the ten ready-suite specialists for a greenfield project from raw user intent. Triggers on 'kickoff,' 'new project from scratch,' 'walk me through idea to launch,' 'help me ship it end-to-end,' 'orchestrate the whole arc,' 'I have an idea, what next.' Owns sequence decision, handoff invocation, progress ledger (`.kickoff-ready/PROGRESS.md`), resume protocol, skip-and-import detection. The only meta-tier skill; every other ready-suite sibling is downstream from this one. Refuses scope leak (writing PRD/architecture/roadmap/launch content the specialists own), rubber-stamp orchestration (advancing the ledger without verifying artifact on disk), phantom resume (claiming resume but starting fresh), ghost handoff (invoking a sibling without verifying upstream artifact), and happy-path orchestration (no policy for skip, re-invoke, import, or sibling failure). Does not produce specialist content; routes to prd-ready, architecture-ready, roadmap-ready, stack-ready, repo-ready, production-ready, deploy-ready, observe-ready, launch-ready, harden-ready. Greenfield only; existing-codebase migrations route to the relevant specialist directly. Full trigger list in README."
-version: 1.1.8
-updated: 2026-05-09
+version: 3.0.0
+updated: 2026-05-14
 changelog: CHANGELOG.md
 suite: ready-suite
 tier: orchestration

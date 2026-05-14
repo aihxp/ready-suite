@@ -1,8 +1,8 @@
 ---
 name: deploy-ready
-description: "Ship an app from a known-green build into real user-facing environments safely, repeatably, and reversibly. Triggers on 'deploy this,' 'CI/CD pipeline,' 'promote to staging,' 'zero-downtime migration,' 'expand-contract,' 'rollback,' 'canary,' 'blue/green,' 'progressive rollout,' 'first deploy,' 'environment parity,' 'GitHub Actions pipeline,' 'GitOps,' 'promote the same artifact,' or any request to move code from pre-prod to prod. Enforces same-artifact promotion, expand/contract as a multi-deploy calendar, code-vs-data rollback asymmetry, and paper-canary detection. Does not pick IaC tools (stack-ready), wire observability (observe-ready), or manage secrets vaults (security). Pairs with observe-ready. Full trigger list in README."
-version: 1.0.20
-updated: 2026-05-09
+description: "Ship an app from a known-green build into real user-facing environments safely, repeatably, and reversibly. Triggers on 'deploy this,' 'CI/CD pipeline,' 'promote to staging,' 'zero-downtime migration,' 'expand-contract,' 'rollback,' 'canary,' 'blue/green,' 'progressive rollout,' 'first deploy,' 'environment parity,' 'promote through Actions,' 'GitOps,' 'promote the same artifact,' or any request to move code from pre-prod to prod. Enforces same-artifact promotion, expand/contract as a multi-deploy calendar, code-vs-data rollback asymmetry, and paper-canary detection. Does not pick IaC tools (stack-ready), wire observability (observe-ready), or manage secrets vaults (security). Pairs with observe-ready. Full trigger list in README."
+version: 3.0.0
+updated: 2026-05-14
 changelog: CHANGELOG.md
 suite: ready-suite
 tier: shipping
@@ -452,7 +452,7 @@ Maintain `.deploy-ready/STATE.md` at every deploy boundary. Read it first on res
 # Deploy-Ready State
 
 ## Skill version
-Built under deploy-ready 1.0.0, 2026-04-22. If the agent loads a newer version on resume, re-read the changed sections before the next ship.
+Built under deploy-ready [current skill version], [frontmatter updated date]. If the agent loads a newer version on resume, re-read the changed sections before the next ship.
 
 ## Environments in play
 | Env | Purpose | Last ship | Current version | Health |

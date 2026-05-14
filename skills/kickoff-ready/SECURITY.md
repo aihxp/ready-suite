@@ -17,7 +17,7 @@ This skill is **markdown-only content** (a `SKILL.md` file plus references). The
 
 ## Supported versions
 
-The skill follows semantic versioning. Security fixes land on the latest minor release; older minors do not receive backports. Users are encouraged to track the latest release via the `aihxp/kickoff-ready/releases` feed.
+The skill follows semantic versioning. Security fixes land on the latest minor release; older minors do not receive backports. Users are encouraged to track releases in the ready-suite changelog and the skill's CHANGELOG.md.
 
 ## Known non-issues
 
@@ -25,5 +25,5 @@ The skill is documentation; it does not execute code, store secrets, or process 
 
 ## Cross-references
 
-- Cross-suite security policy: [aihxp/ready-suite/SECURITY.md](https://github.com/aihxp/ready-suite/blob/main/SECURITY.md) (when present)
+- Cross-suite security policy: [aihxp/ready-suite/SECURITY.md](https://github.com/aihxp/ready-suite/blob/main/SECURITY.md)
 - Skill-suite hub: [aihxp/ready-suite](https://github.com/aihxp/ready-suite)

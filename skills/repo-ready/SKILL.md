@@ -1,8 +1,8 @@
 ---
 name: repo-ready
 description: "Set up production-grade repository structure, documentation, CI/CD, quality tooling, and platform configuration -- across any stack (Node/Python/Go/Rust/Java/Ruby/Swift/C#/PHP/Elixir/C++/Dart) and any platform (GitHub/GitLab/Bitbucket). Use this skill whenever the user asks to 'set up a repo,' 'initialize a project,' 'add documentation,' 'set up CI,' 'configure linting,' 'add a README,' 'set up GitHub Actions,' 'make my repo professional,' 'add contributing guidelines,' 'set up release automation,' or describes wanting a clean, well-structured repository. Triggers also include requests to add a LICENSE, CHANGELOG, SECURITY.md, CODE_OF_CONDUCT, issue templates, PR templates, branch protection, dependency scanning, badges, .gitignore, .editorconfig, Makefile, devcontainer, or any 'repo hygiene' task. This skill enforces a no-placeholder rule -- every generated file must contain actionable content tailored to the project's stack, type, and stage, not generic TODO markers or lorem ipsum."
-version: 1.7.0
-updated: 2026-05-09
+version: 3.0.0
+updated: 2026-05-14
 changelog: CHANGELOG.md
 suite: ready-suite
 tier: building
@@ -121,6 +121,28 @@ project-root/
 - Secrets (never committed)
 
 In enhancement mode, don't reorganize existing structure. Document what exists; only add missing directories.
+
+### 2a. Detect and preserve agent-context standards
+
+Before writing `AGENTS.md`, `CLAUDE.md`, or any agent-facing instructions, detect whether the project already uses Pillars:
+
+- `AGENTS.md` references the Pillars standard or describes an `agents/` loading protocol.
+- An `agents/` directory exists with markdown files whose frontmatter includes `pillar:`.
+- The user explicitly asks to "adopt Pillars," "add agents pillars," or "standardize project context with Pillars."
+
+If Pillars is present, preserve it. Do not overwrite the root `AGENTS.md`; update only by adding missing ready-suite or repo-ready guidance in a clearly separated section when the user asked for that edit. Do not collapse `agents/*.md` content back into AGENTS.md. Pillars keeps task-routed context in the pillar files.
+
+If the user asks to adopt Pillars and it is absent, scaffold the minimum compatible shape:
+
+```
+project-root/
+  AGENTS.md
+  agents/
+    context.md
+    repo.md
+```
+
+`AGENTS.md` contains the Pillars loading protocol and an empty `excluded:` block. `agents/context.md` and `agents/repo.md` are always-loaded stubs with frontmatter, Scope, Context, Decisions, Rules, Workflows, Watchouts, Touchpoints, and Gaps sections. Fill only facts that are already discoverable from the repo or explicitly provided by the user. Mark unknown decisions under Gaps instead of inventing them.
 
 ### 3. Generate documentation files (mandatory)
 

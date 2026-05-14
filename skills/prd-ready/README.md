@@ -1,8 +1,16 @@
 # PRD Ready
 
+[![ready-suite](https://img.shields.io/badge/ready--suite-v3.0.0-blue)](../../README.md)
+[![skill](https://img.shields.io/badge/skill-prd--ready-2f6fed)](SKILL.md)
+[![agent skills](https://img.shields.io/badge/Agent%20Skills-compatible-2f6fed)](SKILL.md)
+[![aihxp/pillars](https://img.shields.io/badge/aihxp%2Fpillars-standard-0f766e)](https://github.com/aihxp/pillars)
+[![license](https://img.shields.io/badge/license-MIT-yellow)](LICENSE)
+
 > **Write a PRD that engineering, design, QA, and downstream planning skills can consume without a clarification meeting. Refuses hollow PRDs, invisible PRDs, feature laundry lists, solution-first PRDs, assumption-soup PRDs, and moving-target PRDs.**
 
 > **Part of the [ready-suite](SUITE.md)**, a composable set of AI skills covering the full arc from idea to launch (planning, building, shipping). See [`SUITE.md`](SUITE.md) for the full map and the live sibling skills.
+
+> **Current version:** 3.0.0 (ready-suite release train).
 
 A founder or PM opens a new Notion page, types "Write a PRD for X" into ChatGPT, Claude, ChatPRD, or Gemini, and pastes the output back. What ships has an Executive Summary, a Problem Statement, five Personas, a Functional Requirements list, a Success Metrics table, a Risks table, and a Timeline. Every section is filled. The target user is "users who need productivity tools." The success metric is "increased engagement and retention." The problem statement reads "users currently struggle with inefficient workflows." The functional requirements are twelve bullets of the form "the system must allow users to..." and the non-functional requirements include "the system must be fast" and "the system must be secure." The out-of-scope section says "features beyond v1 scope." The risks table lists "adoption risk" with mitigation "strong go-to-market." The PRD is twelve pages long. The engineer reads it, asks the PM eight questions, and does not start building.
 

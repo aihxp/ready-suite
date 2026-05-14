@@ -1,7 +1,7 @@
 {
   "name": "production-ready",
   "description": "Build production-grade, end-to-end connected apps across any stack: dashboards, admin panels, internal tools, SaaS back-offices, analytics consoles, ops centers. Triggers on 'dashboard,' 'admin panel,' 'internal tool,' 'back office,' 'control panel,' 'analytics view,' or any multi-page interface with auth, navigation, and CRUD over domain data. Enforces vertical-slice discipline and a no-scaffold-no-placeholder rule: every feature ships wired end-to-end to a real backend, not stubbed with TODO, fake JSON, or 'hook this up later.' Pairs with repo-ready for repo hygiene. Not for single components, marketing sites, or pure repo scaffolding. Full trigger list in README.",
-  "version": "2.6.8",
+  "version": "3.0.0",
   "author": { "name": "aihxp", "url": "https://github.com/aihxp" },
   "homepage": "https://github.com/aihxp/ready-suite/tree/main/skills/production-ready",
   "repository": "https://github.com/aihxp/ready-suite/tree/main/skills/production-ready",

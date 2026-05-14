@@ -1,8 +1,8 @@
 ---
 name: observe-ready
 description: "Keep a deployed app healthy once real users are on it. Refuses paper SLOs (numbers with no error-budget policy), blind dashboards (charts bound to no SLO), and paper runbooks (written once, never executed). Triggers on 'add monitoring,' 'define an SLO,' 'alerts when X,' 'add Datadog / Honeycomb / Sentry / Grafana,' 'write a runbook,' 'on-call setup,' 'post-mortem,' 'structured logging,' 'OpenTelemetry,' 'distributed tracing,' 'error budget policy,' or any request to wire operational signals for a live service. Does not pick the tool (stack-ready), deploy the app (deploy-ready), build the app (production-ready), or manage secrets (security). Pairs with deploy-ready. Full trigger list in README."
-version: 1.0.19
-updated: 2026-05-09
+version: 3.0.0
+updated: 2026-05-14
 changelog: CHANGELOG.md
 suite: ready-suite
 tier: shipping
@@ -213,7 +213,7 @@ Enforce:
 
 ### Step 10. Observability surface independence
 
-Read `references/dependency-graph.md` (included within `vendor-landscape.md` for v1.0.0).
+Read `references/dependency-graph.md` (included within `vendor-landscape.md`).
 
 Apply the dependency test to every observability artifact:
 
@@ -381,7 +381,7 @@ If an upstream artifact *contradicts* the running system (dashboards exist that 
 
 ## Produces for downstream
 
-observe-ready's output is consumed primarily by humans (on-call, incident responders, engineering leadership). There is no suite skill strictly downstream of observe-ready in v1.0.0. launch-ready pairs with it; it does not consume it.
+observe-ready's output is consumed primarily by humans (on-call, incident responders, engineering leadership). There is no suite skill strictly downstream of observe-ready. launch-ready pairs with it; it does not consume it.
 
 observe-ready emits artifacts so the next session can resume without rediscovery:
 
@@ -417,7 +417,7 @@ Maintain `.observe-ready/STATE.md` at every tier boundary. Read it first on resu
 # Observe-Ready State
 
 ## Skill version
-Built under observe-ready 1.0.0, 2026-04-22. If the agent loads a newer version on resume, re-read the changed sections before the next pass.
+Built under observe-ready [current skill version], [frontmatter updated date]. If the agent loads a newer version on resume, re-read the changed sections before the next pass.
 
 ## Tier reached
 Tier 3 (Traceable). Target next: Tier 4 (Rehearsed).

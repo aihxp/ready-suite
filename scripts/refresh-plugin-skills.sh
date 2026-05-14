@@ -1,20 +1,21 @@
 #!/usr/bin/env bash
-# refresh-plugin-skills.sh: re-vendor the eleven sibling skills into
+# refresh-plugin-skills.sh: re-vendor the eleven suite skills into
 # the Claude Code plugin tree. Regenerates each specialist plugin's
-# manifest from upstream SKILL.md frontmatter, then re-copies SKILL.md
+# manifest from canonical SKILL.md frontmatter, then re-copies SKILL.md
 # and references/ into plugins/<skill>/skills/<skill>/.
 #
-# Run from the hub repo root. Reads dev copies from ~/Projects/<skill>/.
-# After running, commit the changes and bump plugins/ready-suite/.claude-plugin/plugin.json
-# manually if the meta plugin needs a new version.
+# Run from the hub repo root. Reads canonical copies from skills/<skill>/.
+# The ready-suite meta plugin and marketplace metadata use the root VERSION
+# release-train value.
 #
 # Bash 3.2 compatible.
 
 set -eu
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-PROJECTS_DIR="${HOME}/Projects"
+SKILLS_DIR="$REPO_ROOT/skills"
 PLUGINS_DIR="$REPO_ROOT/plugins"
+VERSION_FILE="$REPO_ROOT/VERSION"
 
 SKILLS="kickoff-ready prd-ready architecture-ready roadmap-ready stack-ready repo-ready production-ready deploy-ready observe-ready launch-ready harden-ready"
 
@@ -76,8 +77,8 @@ write_specialist_manifest() {
   "description": "$desc_escaped",
   "version": "$version",
   "author": { "name": "aihxp", "url": "https://github.com/aihxp" },
-  "homepage": "https://github.com/aihxp/$skill",
-  "repository": "https://github.com/aihxp/$skill",
+  "homepage": "https://github.com/aihxp/ready-suite/tree/main/skills/$skill",
+  "repository": "https://github.com/aihxp/ready-suite/tree/main/skills/$skill",
   "license": "MIT",
   "keywords": ["ready-suite", "ai-skill"]
 }
@@ -87,7 +88,7 @@ EOF
 vendor_skill_files() {
   local skill src dst
   skill="$1"
-  src="$PROJECTS_DIR/$skill"
+  src="$SKILLS_DIR/$skill"
   dst="$PLUGINS_DIR/$skill/skills/$skill"
   if [ ! -f "$src/SKILL.md" ]; then
     err "$skill: missing $src/SKILL.md"
@@ -104,6 +105,7 @@ vendor_skill_files() {
 
 write_meta_marketplace() {
   local out entries first plugin desc desc_raw version skill
+  version="$(suite_version)"
   out="$REPO_ROOT/.claude-plugin/marketplace.json"
   mkdir -p "$REPO_ROOT/.claude-plugin"
   {
@@ -112,7 +114,7 @@ write_meta_marketplace() {
     printf '  "description": "Eleven AI skills covering the full arc from idea to launch, plus a meta plugin that bundles them all.",\n'
     printf '  "owner": { "name": "aihxp", "url": "https://github.com/aihxp" },\n'
     printf '  "metadata": {\n'
-    printf '    "version": "1.0.0",\n'
+    printf '    "version": "%s",\n' "$version"
     printf '    "homepage": "https://github.com/aihxp/ready-suite"\n'
     printf '  },\n'
     printf '  "plugins": [\n'
@@ -127,7 +129,7 @@ write_meta_marketplace() {
 MARK
     # Specialist plugins after.
     for skill in $SKILLS; do
-      desc_raw="$(read_frontmatter "$PROJECTS_DIR/$skill/SKILL.md" description)"
+      desc_raw="$(read_frontmatter "$SKILLS_DIR/$skill/SKILL.md" description)"
       desc="$(json_escape "$desc_raw")"
       printf ',\n    {\n'
       printf '      "name": "%s",\n' "$skill"
@@ -141,14 +143,15 @@ MARK
 }
 
 write_meta_plugin() {
-  local out deps_block skill first
+  local out deps_block skill first version
+  version="$(suite_version)"
   out="$REPO_ROOT/plugins/ready-suite/.claude-plugin/plugin.json"
   mkdir -p "$(dirname "$out")"
   {
     printf '{\n'
     printf '  "name": "ready-suite",\n'
     printf '  "description": "Bundle of all eleven ready-suite specialist skills. Installing this plugin pulls every specialist via dependencies; install one of the specialists directly if you want only that skill.",\n'
-    printf '  "version": "1.0.0",\n'
+    printf '  "version": "%s",\n' "$version"
     printf '  "author": { "name": "aihxp", "url": "https://github.com/aihxp" },\n'
     printf '  "homepage": "https://github.com/aihxp/ready-suite",\n'
     printf '  "repository": "https://github.com/aihxp/ready-suite",\n'
@@ -169,15 +172,23 @@ write_meta_plugin() {
   } >"$out"
 }
 
+suite_version() {
+  if [ -f "$VERSION_FILE" ]; then
+    sed -n '1p' "$VERSION_FILE" | tr -d '[:space:]'
+  else
+    printf "0.0.0"
+  fi
+}
+
 printf "\n%sready-suite plugin refresh%s\n\n" "$C_BOLD" "$C_RESET"
 printf "  hub repo : %s\n" "$REPO_ROOT"
-printf "  sources  : %s/<skill>\n\n" "$PROJECTS_DIR"
+printf "  sources  : %s/<skill>\n\n" "$SKILLS_DIR"
 
 for skill in $SKILLS; do
   printf "%s%s%s\n" "$C_BOLD" "$skill" "$C_RESET"
-  src_skill_md="$PROJECTS_DIR/$skill/SKILL.md"
+  src_skill_md="$SKILLS_DIR/$skill/SKILL.md"
   if [ ! -f "$src_skill_md" ]; then
-    err "missing dev copy at $PROJECTS_DIR/$skill"
+    err "missing canonical copy at $SKILLS_DIR/$skill"
     continue
   fi
   version="$(read_frontmatter "$src_skill_md" version)"
@@ -205,4 +216,4 @@ ok "wrote .claude-plugin/marketplace.json"
 
 printf "\n%sdone%s\n" "$C_GREEN" "$C_RESET"
 printf "Review with: git status; git diff --stat\n"
-printf "If the bundle composition changed, bump plugins/ready-suite/.claude-plugin/plugin.json version.\n\n"
+printf "Meta plugin version comes from root VERSION.\n\n"

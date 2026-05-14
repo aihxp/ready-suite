@@ -1,8 +1,16 @@
 # Architecture Ready
 
+[![ready-suite](https://img.shields.io/badge/ready--suite-v3.0.0-blue)](../../README.md)
+[![skill](https://img.shields.io/badge/skill-architecture--ready-2f6fed)](SKILL.md)
+[![agent skills](https://img.shields.io/badge/Agent%20Skills-compatible-2f6fed)](SKILL.md)
+[![aihxp/pillars](https://img.shields.io/badge/aihxp%2Fpillars-standard-0f766e)](https://github.com/aihxp/pillars)
+[![license](https://img.shields.io/badge/license-MIT-yellow)](LICENSE)
+
 > **Given a PRD, produce an architecture that says what system shape to build and why, before any code is written or any tool is chosen. Refuses architecture theater, paper-tiger architecture, cargo-cult cloud-native, stackitecture, resume-driven architecture, horoscope architecture, ghost architecture, and "scalable" as a claim with no numbers.**
 
 > **Part of the [ready-suite](SUITE.md)**, a composable set of AI skills covering the full arc from idea to launch (planning, building, shipping). See [`SUITE.md`](SUITE.md) for the full map and the live sibling skills.
+
+> **Current version:** 3.0.0 (ready-suite release train).
 
 A founder, tech lead, or staff engineer asks Claude or ChatGPT or Gemini to "design the architecture" and gets back a seven-page document with a C4 context diagram, a container diagram, a microservices breakdown, a Kafka event bus, a Redis cache, a Kubernetes deployment topology, an API gateway, and a "scalable, resilient, observable" summary. The document looks professional. It names twelve components. It cites "industry best practices." It decides nothing. Every decision is either the default a senior engineer would never write down (use HTTPS, log errors, back up the database) or the impressive-looking option that matches no constraint in the PRD (event sourcing for a CRUD app, a service mesh for a team of three, eventual consistency for an accounting ledger). The team starts building. In month three the architecture is quietly abandoned and the real architecture, the one the code actually shipped, is something else entirely, undocumented, and unexamined.
 
@@ -134,7 +142,7 @@ Load on demand. The SKILL.md body maps each step to a reference file.
 | [diagrams.md](references/diagrams.md) | C4 as default, arc42 and 4+1 alternatives, diagram-as-code. Load at Step 9. |
 | [evolutionary-architecture.md](references/evolutionary-architecture.md) | Fitness functions, ArchUnit/dependency-cruiser/Packwerk. Load at Step 10. |
 | [architecture-antipatterns.md](references/architecture-antipatterns.md) | Catalog of named failure modes. Load for Mode C audits and tier-gate checks. |
-| [RESEARCH-2026-04.md](references/RESEARCH-2026-04.md) | Full research dossier with citations for v1.0.0. Load on demand. |
+| [RESEARCH-2026-04.md](references/RESEARCH-2026-04.md) | Full research dossier with citations for the initial release. Load on demand. |
 
 ## Contributing
 

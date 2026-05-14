@@ -1,8 +1,8 @@
 ---
 name: harden-ready
 description: "Verify a deployed app survives adversarial attention and prove it to an auditor. Owns post-deploy adversarial review, OWASP Top 10 systematic walkthroughs (Web / API / LLM), compliance mapping (SOC 2 CC, HIPAA 164.312, PCI-DSS 4.0, GDPR Article 32) with control-to-code evidence, pen-test preparation and retest discipline, responsible-disclosure program design beyond SECURITY.md, and class-not-instance post-incident hardening. Refuses scanner-first security (the Snyk-passed-but-front-door-exploitable pattern), paper trust boundaries (declared in docs, absent in code), hardening-as-ritual (annual pen test, nothing between), compliance-without-security (checklist green, app still vulnerable), shallow-audit traps (only finds what tools surface), and CVE-of-the-week patching. Triggers on 'adversarial review,' 'pen-test prep,' 'OWASP walkthrough,' 'SOC 2 / HIPAA / PCI-DSS / GDPR gap check,' 'responsible disclosure,' 'bug bounty,' 'post-incident hardening,' 'security review before launch.' Does not build the app (production-ready), deploy it (deploy-ready), monitor it (observe-ready), pick the tool (stack-ready), or own repo-hygiene security (repo-ready). Pairs with deploy-ready, observe-ready, launch-ready. Full trigger list in README."
-version: 1.0.13
-updated: 2026-05-09
+version: 3.0.0
+updated: 2026-05-14
 changelog: CHANGELOG.md
 suite: ready-suite
 tier: shipping
@@ -534,7 +534,7 @@ Maintain `.harden-ready/STATE.md` at every tier boundary. Read it first on resum
 # Harden-Ready State
 
 ## Skill version
-Built under harden-ready 1.0.0, 2026-04-23. If the agent loads a newer version on resume, re-read the changed sections before continuing.
+Built under harden-ready [current skill version], [frontmatter updated date]. If the agent loads a newer version on resume, re-read the changed sections before continuing.
 
 ## Mode
 Mode B (pre-audit hardening). Target audit: SOC 2 Type I readiness, observation period starting 2026-06-01.

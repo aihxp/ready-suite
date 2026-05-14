@@ -1,16 +1,10 @@
 # Security Policy
 
-**repo-ready** is a Markdown-only Claude Code skill -- there is no runtime, no user input parsing, and no network surface. The vast majority of "security" concerns for this repository are about the *content* the skill generates: template strings that might instruct downstream projects to do something unsafe, copy-pasted config snippets with wrong defaults, or reference files that leak placeholder credentials. We treat those as security issues.
+**repo-ready** is an Agent Skills-compatible Markdown skill -- there is no runtime, no user input parsing, and no network surface. The vast majority of "security" concerns for this repository are about the *content* the skill generates: template strings that might instruct downstream projects to do something unsafe, copy-pasted config snippets with wrong defaults, or reference files that leak placeholder credentials. We treat those as security issues.
 
 ## Supported Versions
 
-| Version | Supported              |
-| ------- | ---------------------- |
-| 1.4.x   | Fully supported        |
-| 1.3.x   | Best-effort fixes      |
-| < 1.3   | Unsupported            |
-
-When a new minor version ships (e.g., v1.5), the previous minor drops to best-effort and anything two minors back becomes unsupported.
+The skill follows semantic versioning. Security fixes land on the latest minor release; older minors do not receive backports. Users are encouraged to track releases in the ready-suite changelog and this skill's CHANGELOG.md.
 
 ## Reporting a Vulnerability
 
@@ -69,4 +63,5 @@ The following are **not** security issues and should be filed as regular bugs or
 
 - [CONTRIBUTING.md](CONTRIBUTING.md) -- the general contribution workflow
 - [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) -- community behavior standards
+- [ready-suite SECURITY.md](../../SECURITY.md) -- cross-suite reporting policy
 - [`references/security-setup.md`](references/security-setup.md) -- the guidance this SECURITY.md itself follows

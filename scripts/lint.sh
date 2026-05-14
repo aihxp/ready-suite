@@ -9,12 +9,15 @@
 #   suite-md-sync          SUITE.md byte-identical between hub and each
 #                          skills/<skill>/ subdir
 #   frontmatter-version    SKILL.md version matches CHANGELOG top entry
+#   suite-release          root VERSION matches every skill and meta plugin
 #   unicode-clean          no em-dashes / arrows / box drawing in
 #                          suite-authored files (SUITE.md whole-file,
-#                          README.md whole-file, top CHANGELOG entry,
-#                          hub install/uninstall/ORCHESTRATORS)
+#                          hub policy docs, top CHANGELOG entry,
+#                          hub scripts, install/uninstall/ORCHESTRATORS)
 #   compatible-with        compatible_with frontmatter contains the
 #                          expected standards-level values
+#   plugin-sync            plugin manifests and vendored skill files match
+#                          the canonical skills/<skill>/ sources
 #   trigger-overlap        cross-skill substring overlaps in description
 #                          trigger phrases (advisory; warns but does
 #                          not fail unless --strict-triggers)
@@ -29,6 +32,7 @@ set -eu
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 HUB_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 SKILLS_DIR="$HUB_DIR/skills"
+PLUGINS_DIR="$HUB_DIR/plugins"
 
 SKILLS="kickoff-ready prd-ready architecture-ready roadmap-ready stack-ready repo-ready production-ready deploy-ready observe-ready launch-ready harden-ready"
 ALL_REPOS="$SKILLS ready-suite"
@@ -38,8 +42,9 @@ ALL_REPOS="$SKILLS ready-suite"
 EXPECTED_COMPAT="claude-code codex cursor windsurf pi openclaw any-agentskills-compatible-harness"
 
 # Forbidden unicode in suite-authored files.
-# Em-dash, en-dash, horizontal-bar, hyphen, figure-dash, minus, arrows.
-FORBIDDEN_PATTERN='—|–|―|‐|‒|−|→|←|↑|↓'
+# Byte escapes cover U+2014, U+2013, U+2015, U+2010, U+2012,
+# U+2212, U+2192, U+2190, U+2191, and U+2193.
+FORBIDDEN_PATTERN="$(printf '\342\200\224|\342\200\223|\342\200\225|\342\200\220|\342\200\222|\342\210\222|\342\206\222|\342\206\220|\342\206\221|\342\206\223')"
 
 VERBOSE=0
 FAIL_FAST=0
@@ -73,8 +78,10 @@ Usage: bash scripts/lint.sh [check | --all] [--verbose] [--fail-fast]
 Checks:
   suite-md-sync         SUITE.md byte-identical hub vs skills/<skill>/
   frontmatter-version   SKILL.md version matches CHANGELOG top entry
+  suite-release         root VERSION matches every skill and meta plugin
   unicode-clean         no em-dashes / arrows / box drawing in suite-authored files
   compatible-with       compatible_with frontmatter standards-level values
+  plugin-sync           plugin manifests and vendored skill files match canonical sources
   trigger-overlap       cross-skill trigger-phrase substring overlaps (advisory)
 
 Flags:
@@ -99,7 +106,7 @@ while [ $# -gt 0 ]; do
     --fail-fast) FAIL_FAST=1 ;;
     --strict-triggers) STRICT_TRIGGERS=1 ;;
     --all) SELECTED="--all" ;;
-    suite-md-sync|frontmatter-version|unicode-clean|compatible-with|trigger-overlap) SELECTED="$1" ;;
+    suite-md-sync|frontmatter-version|suite-release|unicode-clean|compatible-with|plugin-sync|trigger-overlap) SELECTED="$1" ;;
   esac
   shift
 done
@@ -138,6 +145,18 @@ compatible_with_values() {
     flag && /^---$/ {flag=0}
     flag && /^  - / {sub(/^  - /, ""); print}
   ' "$1/SKILL.md"
+}
+
+# Extract one JSON string value from a simple manifest file.
+json_string_value() {
+  awk -v k="$2" -F'"' '$2 == k {print $4; exit}' "$1"
+}
+
+# Extract the suite release-train version from root VERSION.
+suite_version() {
+  if [ -f "$HUB_DIR/VERSION" ]; then
+    sed -n '1p' "$HUB_DIR/VERSION" | tr -d '[:space:]'
+  fi
 }
 
 # Top CHANGELOG entry as text (first "## v" block, exclusive of next).
@@ -216,11 +235,70 @@ check_frontmatter_version() {
 }
 
 # -----------------------------------------------------------------------
+# Check: suite-release
+# -----------------------------------------------------------------------
+check_suite_release() {
+  section "suite-release"
+  local version skill s_dir meta_plugin marketplace meta_version market_version fail
+  fail=0
+  version="$(suite_version)"
+  if [ -z "$version" ]; then
+    err "VERSION missing or empty"
+    return 1
+  fi
+  if ! printf "%s" "$version" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+    err "VERSION is not semver: $version"
+    return 1
+  fi
+
+  for skill in $SKILLS; do
+    s_dir="$(repo_dir_for "$skill")"
+    if [ "$(skill_version "$s_dir")" != "$version" ]; then
+      err "$skill: SKILL.md version does not match suite VERSION $version"
+      fail=$((fail + 1))
+    elif [ "$(changelog_top_version "$s_dir")" != "$version" ]; then
+      err "$skill: CHANGELOG.md top entry does not match suite VERSION $version"
+      fail=$((fail + 1))
+    else
+      vok "$skill: release-train v$version"
+    fi
+  done
+
+  meta_plugin="$PLUGINS_DIR/ready-suite/.claude-plugin/plugin.json"
+  marketplace="$HUB_DIR/.claude-plugin/marketplace.json"
+  if [ ! -f "$meta_plugin" ]; then
+    err "ready-suite meta plugin manifest missing"
+    fail=$((fail + 1))
+  else
+    meta_version="$(json_string_value "$meta_plugin" version)"
+    if [ "$meta_version" != "$version" ]; then
+      err "ready-suite meta plugin v$meta_version != suite VERSION $version"
+      fail=$((fail + 1))
+    else
+      vok "ready-suite meta plugin v$version"
+    fi
+  fi
+  if [ ! -f "$marketplace" ]; then
+    err "marketplace manifest missing"
+    fail=$((fail + 1))
+  else
+    market_version="$(json_string_value "$marketplace" version)"
+    if [ "$market_version" != "$version" ]; then
+      err "marketplace metadata v$market_version != suite VERSION $version"
+      fail=$((fail + 1))
+    else
+      vok "marketplace metadata v$version"
+    fi
+  fi
+  return "$fail"
+}
+
+# -----------------------------------------------------------------------
 # Check: unicode-clean
 # -----------------------------------------------------------------------
 # SUITE.md whole-file: byte-identical across 12 repos; must stay clean.
-# README.md whole-file: hub canonical; sibling READMEs are out of scope
-#   (legacy em-dashes pre-date the rule).
+# Hub policy docs whole-file: hub canonical; sibling READMEs are out of
+#   scope (legacy em-dashes pre-date the rule).
 # Top CHANGELOG entry only: legacy entries below the top may have
 #   pre-existing em-dashes from before the rule landed.
 # Hub-only files: install.sh, uninstall.sh, ORCHESTRATORS.md.
@@ -244,17 +322,8 @@ check_unicode_clean() {
       fi
     fi
   done
-  # Hub README.md whole file.
-  bad="$(grep -nE "$FORBIDDEN_PATTERN" "$HUB_DIR/README.md" 2>/dev/null || true)"
-  if [ -n "$bad" ]; then
-    err "ready-suite: README.md has forbidden unicode"
-    echo "$bad" | head -3 | sed 's/^/        /'
-    fail=$((fail + 1))
-  else
-    vok "ready-suite: README.md clean"
-  fi
-  # Hub install.sh, uninstall.sh, ORCHESTRATORS.md.
-  for f in install.sh uninstall.sh ORCHESTRATORS.md; do
+  # Hub policy docs and high-blast-radius files.
+  for f in README.md MAINTAINING.md CONTRIBUTING.md AGENTS.md SECURITY.md RELEASE-CHECKLIST.md VERSION install.sh uninstall.sh ORCHESTRATORS.md scripts/lint.sh scripts/refresh-plugin-skills.sh scripts/bump-suite-version.sh; do
     if [ -f "$HUB_DIR/$f" ]; then
       bad="$(grep -nE "$FORBIDDEN_PATTERN" "$HUB_DIR/$f" 2>/dev/null || true)"
       if [ -n "$bad" ]; then
@@ -310,6 +379,115 @@ check_compatible_with() {
       vok "$skill: all standards-level values present"
     fi
   done
+  return "$fail"
+}
+
+# -----------------------------------------------------------------------
+# Check: plugin-sync
+# -----------------------------------------------------------------------
+check_plugin_sync() {
+  section "plugin-sync"
+  local skill s_dir p_dir manifest vendored version plugin_version fail
+  local homepage repository expected_url skill_fail
+  local meta_plugin marketplace
+  fail=0
+  for skill in $SKILLS; do
+    s_dir="$(repo_dir_for "$skill")"
+    p_dir="$PLUGINS_DIR/$skill"
+    manifest="$p_dir/.claude-plugin/plugin.json"
+    vendored="$p_dir/skills/$skill"
+    skill_fail=0
+
+    if [ ! -f "$manifest" ]; then
+      err "$skill: plugin manifest missing"
+      fail=$((fail + 1))
+      continue
+    fi
+    if [ ! -f "$vendored/SKILL.md" ]; then
+      err "$skill: vendored SKILL.md missing"
+      fail=$((fail + 1))
+      continue
+    fi
+
+    version="$(skill_version "$s_dir")"
+    plugin_version="$(json_string_value "$manifest" version)"
+    if [ "$version" != "$plugin_version" ]; then
+      err "$skill: plugin manifest v$plugin_version != SKILL.md v$version"
+      fail=$((fail + 1))
+      skill_fail=1
+    fi
+
+    expected_url="https://github.com/aihxp/ready-suite/tree/main/skills/$skill"
+    homepage="$(json_string_value "$manifest" homepage)"
+    repository="$(json_string_value "$manifest" repository)"
+    if [ "$homepage" != "$expected_url" ]; then
+      err "$skill: plugin homepage does not point at monorepo skill path"
+      fail=$((fail + 1))
+      skill_fail=1
+    fi
+    if [ "$repository" != "$expected_url" ]; then
+      err "$skill: plugin repository does not point at monorepo skill path"
+      fail=$((fail + 1))
+      skill_fail=1
+    fi
+
+    if ! cmp -s "$s_dir/SKILL.md" "$vendored/SKILL.md"; then
+      err "$skill: vendored SKILL.md differs from canonical SKILL.md"
+      fail=$((fail + 1))
+      skill_fail=1
+    fi
+
+    if [ -d "$s_dir/references" ]; then
+      if [ ! -d "$vendored/references" ]; then
+        err "$skill: vendored references/ missing"
+        fail=$((fail + 1))
+        skill_fail=1
+      elif ! diff -qr "$s_dir/references" "$vendored/references" >/dev/null; then
+        err "$skill: vendored references/ differs from canonical references/"
+        fail=$((fail + 1))
+        skill_fail=1
+      fi
+    elif [ -e "$vendored/references" ]; then
+      err "$skill: vendored references/ exists but canonical references/ is absent"
+      fail=$((fail + 1))
+      skill_fail=1
+    fi
+
+    if [ "$skill_fail" = "0" ]; then
+      vok "$skill: manifest and vendored files match"
+    fi
+  done
+
+  meta_plugin="$PLUGINS_DIR/ready-suite/.claude-plugin/plugin.json"
+  marketplace="$HUB_DIR/.claude-plugin/marketplace.json"
+  if [ ! -f "$meta_plugin" ]; then
+    err "ready-suite: meta plugin manifest missing"
+    fail=$((fail + 1))
+  else
+    for skill in $SKILLS; do
+      if ! grep -q "\"$skill\"" "$meta_plugin"; then
+        err "ready-suite: meta plugin dependency missing $skill"
+        fail=$((fail + 1))
+      fi
+    done
+    vok "ready-suite: meta plugin dependencies present"
+  fi
+  if [ ! -f "$marketplace" ]; then
+    err "ready-suite: marketplace manifest missing"
+    fail=$((fail + 1))
+  else
+    if ! grep -q '"source": "./plugins/ready-suite"' "$marketplace"; then
+      err "ready-suite: marketplace missing meta plugin source"
+      fail=$((fail + 1))
+    fi
+    for skill in $SKILLS; do
+      if ! grep -q "\"source\": \"./plugins/$skill\"" "$marketplace"; then
+        err "ready-suite: marketplace source missing $skill"
+        fail=$((fail + 1))
+      fi
+    done
+    vok "ready-suite: marketplace sources present"
+  fi
   return "$fail"
 }
 
@@ -417,8 +595,10 @@ run_check() {
   case "$name" in
     suite-md-sync)        check_suite_md_sync;        result=$? ;;
     frontmatter-version)  check_frontmatter_version;  result=$? ;;
+    suite-release)        check_suite_release;        result=$? ;;
     unicode-clean)        check_unicode_clean;        result=$? ;;
     compatible-with)      check_compatible_with;      result=$? ;;
+    plugin-sync)          check_plugin_sync;          result=$? ;;
     trigger-overlap)      check_trigger_overlap;      result=$? ;;
     *) err "unknown check: $name"; return 1 ;;
   esac
@@ -429,7 +609,7 @@ run_check() {
   fi
 }
 
-ALL_CHECKS="suite-md-sync frontmatter-version unicode-clean compatible-with trigger-overlap"
+ALL_CHECKS="suite-md-sync frontmatter-version suite-release unicode-clean compatible-with plugin-sync trigger-overlap"
 
 printf "\n%sready-suite-lint%s\n" "$C_BOLD" "$C_RESET"
 info "  hub:    $HUB_DIR"

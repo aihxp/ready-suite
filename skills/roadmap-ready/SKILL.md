@@ -1,8 +1,8 @@
 ---
 name: roadmap-ready
 description: "Sequence software work over time with discipline. Ingests the PRD (from prd-ready) and the architecture dependency graph (from architecture-ready); requires a team-capacity input; produces a Markdown `ROADMAP.md` with Now-Next-Later horizons, named milestones with completion gates, topologically-sorted slice queues for production-ready, cutover cadence for deploy-ready, KPI handoffs for observe-ready, and explicit launch-milestone gate dates for launch-ready. Refuses fictional precision (Gantt-to-the-day with no capacity input), fictional parallelism (more concurrent tracks than engineers), quarter-stuffing (all four quarters equally full), speculative features (items absent from the PRD or architecture), feature-factory output (rows that are bare feature names with no outcome or commitment), shelf roadmaps (written once, never consulted), and roadmap theater (Gantt aesthetics with no commitments). Triggers on 'build a roadmap,' 'milestone plan,' 'quarterly plan,' 'sequence the work,' 'Now-Next-Later,' 'Shape Up cycle,' 'PI planning,' 'what ships first,' 'when does the beta happen,' 'roadmap for this quarter.' Does not redefine the product (prd-ready), design the architecture (architecture-ready), pick the stack (stack-ready), build the app (production-ready), scaffold the repo (repo-ready), deploy (deploy-ready), monitor (observe-ready), or launch (launch-ready). Planning tier; consumes `.prd-ready/PRD.md` and `.architecture-ready/ARCH.md`; produces `.roadmap-ready/ROADMAP.md` and `HANDOFF.md`. Full trigger list in README."
-version: 1.0.14
-updated: 2026-05-09
+version: 3.0.0
+updated: 2026-05-14
 changelog: CHANGELOG.md
 suite: ready-suite
 tier: planning
@@ -340,8 +340,8 @@ A single file serving both audiences is the leak failure mode; a public file tha
 Roadmap-building practices shift meaningfully. At the end of every run, print:
 
 ```
-Skill version: roadmap-ready 1.0.0
-Last updated: 2026-04-23
+Skill version: roadmap-ready [current skill version]
+Last updated: [frontmatter updated date]
 Current date: [today]
 ```
 
@@ -459,7 +459,7 @@ The body above is enough to start. Load each reference *before* the step that us
 | `launch-sequencing.md` | **Tier 3 (if launch in scope).** Step 7 launch milestone. Launch modes, readiness gates, D-calendar, slip protocol, external commitments. | ~7K |
 | `review-cadence.md` | **Tier 2 and Tier 3.** Step 9. Review frequency, authority map, re-plan triggers, freeze conditions, freshness indicators, archive rule. | ~6K |
 | `roadmap-antipatterns.md` | **On demand.** Mode B audits and tier-gate checks against the have-nots. Named-failure-mode catalog with shapes, examples, fixes. | ~8K |
-| `RESEARCH-2026-04.md` | **On demand.** When the user asks "why this rule" or "what is the evidence." Source citations for v1.0.0; 267 URLs, 10 sections. | ~36K |
+| `RESEARCH-2026-04.md` | **On demand.** When the user asks "why this rule" or "what is the evidence." Source citations for the initial release; 267 URLs, 10 sections. | ~36K |
 | `EXAMPLE-ROADMAP.md` | **On demand.** A complete worked example roadmap for a fictional B2B SaaS pilot (Pulse, a Customer Success ops platform). Demonstrates a 14-week appetite with named capacity input (140 eng-days, 42 design-days, 14 AE-days), Now-Next-Later horizons, three milestones with binary completion gates, a topologically-sorted slice queue feeding production-ready, a cutover cadence feeding deploy-ready, a KPI handoff feeding observe-ready, and a risk register with named owners. Passes the skill's grep tests for fictional-precision / fictional-parallelism / quarter-stuffing / speculative-features / feature-factory / shelf-roadmap / roadmap-theater failure modes. Consumes the worked PRD and the worked architecture; feeds the worked stack-decision example in its sibling repo. | ~16K |
 
 Skill version and change history live in `CHANGELOG.md`. When resuming a roadmap across sessions, confirm the skill version matches the version recorded in `.roadmap-ready/STATE.md`. A skill update between sessions can shift have-nots (AI-slop tells evolve), downstream-skill interfaces (if deploy-ready or launch-ready changed their handoff contract, HANDOFF.md may need re-templating), and cadence-tool landscape (Productboard AI, Aha! AI, Jira Rovo feature sets shift quarterly). If versions differ, re-run the Tier audit on any Tier 2+ artifact before continuing.
@@ -474,7 +474,7 @@ Roadmaps span sessions; maintain `.roadmap-ready/STATE.md` when the work is ongo
 # Roadmap-Ready State
 
 ## Skill version
-roadmap-ready 1.0.0, 2026-04-23.
+roadmap-ready [current skill version], [frontmatter updated date].
 
 ## Current tier
 Working toward Tier [N]. Last completed tier: [N-1].

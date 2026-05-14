@@ -16,3 +16,6 @@ jobs:
 
       - name: Run ready-suite-lint
         run: bash scripts/lint.sh --verbose
+
+      - name: Run strict trigger lint
+        run: bash scripts/lint.sh --strict-triggers --verbose

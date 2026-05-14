@@ -26,7 +26,7 @@ The suite refuses (politely):
 
 ### No em-dashes, en-dashes, arrows, or box-drawing characters
 
-The suite is unicode-disciplined. Forbidden characters in any suite-authored file: `—` (em-dash), `–` (en-dash), `―` (horizontal bar), `‐` (hyphen), `‒` (figure dash), `−` (minus sign), `→ ← ↑ ↓` (arrows). Use these alternatives:
+The suite is unicode-disciplined. Forbidden characters in any suite-authored file: em dash (U+2014), en dash (U+2013), horizontal bar (U+2015), unicode hyphen (U+2010), figure dash (U+2012), minus sign (U+2212), and decorative arrows (U+2190 through U+2193). Use these alternatives:
 
 - Comma, colon, or semicolon for a pause or aside.
 - Parentheses for a parenthetical.
@@ -34,7 +34,7 @@ The suite is unicode-disciplined. Forbidden characters in any suite-authored fil
 - ASCII hyphen `-` for compound words and number ranges.
 - ASCII `->` for an arrow.
 
-The `unicode-clean` lint check enforces this on `SUITE.md`, the hub `README.md`, hub `install.sh` / `uninstall.sh` / `ORCHESTRATORS.md`, and the top CHANGELOG entry of every skill. Pre-existing characters in older content are tolerated; no new ones may be introduced.
+The `unicode-clean` lint check enforces this on `SUITE.md`, hub policy docs (`README.md`, `MAINTAINING.md`, `CONTRIBUTING.md`, `AGENTS.md`, `SECURITY.md`), `RELEASE-CHECKLIST.md`, hub scripts, hub `install.sh` / `uninstall.sh` / `ORCHESTRATORS.md`, and the top CHANGELOG entry of every skill. Pre-existing characters in older content are tolerated; no new ones may be introduced.
 
 ### Bash 3.2 compatibility (install / uninstall / lint)
 
@@ -48,6 +48,14 @@ The `unicode-clean` lint check enforces this on `SUITE.md`, the hub `README.md`,
 
 Every skill's `SKILL.md` frontmatter `version: X.Y.Z` must match the top `## v<X.Y.Z>` entry in its `CHANGELOG.md`. The `frontmatter-version` lint check enforces this. Bump both in the same commit.
 
+### Release train version matches every skill
+
+The root `VERSION` file names the current ready-suite release train. Every skill, the ready-suite meta plugin, and the marketplace metadata must match it. The `suite-release` lint check enforces this. For coordinated releases, use:
+
+```bash
+bash scripts/bump-suite-version.sh <x.y.z> <YYYY-MM-DD>
+```
+
 ### `compatible_with` standards-level values
 
 Every skill's `compatible_with` frontmatter must include: `claude-code`, `codex`, `cursor`, `windsurf`, `pi`, `openclaw`, `any-agentskills-compatible-harness`. Additional values are fine (kickoff-ready also lists `antigravity`). The `compatible-with` lint check enforces this.
@@ -55,6 +63,14 @@ Every skill's `compatible_with` frontmatter must include: `claude-code`, `codex`
 ### Trigger overlap is advisory
 
 The `trigger-overlap` lint check surfaces cross-skill substring overlaps in description trigger phrases. Overlaps are warnings, not failures. When you add a trigger phrase to a skill that overlaps another's, add a row to [`references/TRIGGER-DISAMBIGUATION.md`](references/TRIGGER-DISAMBIGUATION.md) in the same PR.
+
+### Plugin packaging matches canonical skills
+
+The `plugin-sync` lint check verifies that each specialist plugin manifest matches the canonical skill version, vendored plugin skill files match `skills/<skill>/`, and the ready-suite meta plugin plus marketplace list every specialist. When you change canonical skill content that ships through the Claude plugin marketplace, run:
+
+```bash
+bash scripts/refresh-plugin-skills.sh
+```
 
 ## Running the lint locally
 

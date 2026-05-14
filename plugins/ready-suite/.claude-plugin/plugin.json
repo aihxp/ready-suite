@@ -1,7 +1,7 @@
 {
   "name": "ready-suite",
   "description": "Bundle of all eleven ready-suite specialist skills. Installing this plugin pulls every specialist via dependencies; install one of the specialists directly if you want only that skill.",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "author": { "name": "aihxp", "url": "https://github.com/aihxp" },
   "homepage": "https://github.com/aihxp/ready-suite",
   "repository": "https://github.com/aihxp/ready-suite",

@@ -1,8 +1,16 @@
 # The Ready Suite
 
+[![lint](https://github.com/aihxp/ready-suite/actions/workflows/lint.yml/badge.svg)](https://github.com/aihxp/ready-suite/actions/workflows/lint.yml)
+[![release](https://img.shields.io/badge/release-v3.0.0-blue)](https://github.com/aihxp/ready-suite/releases/tag/v3.0.0)
+[![version](https://img.shields.io/badge/version-3.0.0-blue)](VERSION)
+[![agent skills](https://img.shields.io/badge/Agent%20Skills-compatible-2f6fed)](SUITE.md)
+[![aihxp/pillars](https://img.shields.io/badge/aihxp%2Fpillars-standard-0f766e)](https://github.com/aihxp/pillars)
+[![arc-ready](https://img.shields.io/badge/arc--ready-child-7c3aed)](https://github.com/aihxp/arc-ready)
+[![license](https://img.shields.io/github/license/aihxp/ready-suite)](LICENSE)
+
 > Eleven composable AI skills covering the full arc from idea to launch. Implements the [Agent Skills standard](https://agentskills.io). Plug them into Claude Code, Codex, Cursor, Windsurf, pi, OpenClaw, or any harness that parses `SKILL.md` frontmatter natively. Each skill stands alone. They compose by reading and writing well-known artifact paths, never by calling each other.
 
-> **Successor available: [`aihxp/arc-ready`](https://github.com/aihxp/arc-ready).** The same eleven-tier discipline, every named failure mode preserved, every grep test preserved, every artifact path unchanged, consolidated into a single skill and a single repo. One install replaces eleven. The eleven-skill suite remains available and supported; arc-ready is the recommended starting point for new projects. See [`arc-ready/MIGRATION.md`](https://github.com/aihxp/arc-ready/blob/main/MIGRATION.md) for the migration matrix.
+> **Child project available: [`aihxp/arc-ready`](https://github.com/aihxp/arc-ready).** arc-ready is the child born from ready-suite: the same eleven-tier discipline, every named failure mode preserved, every grep test preserved, every artifact path unchanged, consolidated into a single skill and a single repo. One install replaces eleven. The eleven-skill suite remains available and supported; arc-ready is the recommended starting point for new projects. See [`arc-ready/MIGRATION.md`](https://github.com/aihxp/arc-ready/blob/main/MIGRATION.md) for the migration matrix.
 
 This is the monorepo. Every skill lives under `skills/<skill-name>/` with its own SKILL.md, references library, and CHANGELOG. The byte-identical [`SUITE.md`](SUITE.md) ships at the hub root and inside every skill subdirectory, so the suite map is visible from any entry point.
 
@@ -21,21 +29,21 @@ kickoff-ready  ->        prd-ready           ->    repo-ready      ->    deploy-
 
 | Skill | Tier | One-line purpose | Version | Path |
 |---|---|---|---|---|
-| **kickoff-ready** | Orchestration | Sequence the ten specialists for a greenfield project from raw user intent. | 1.1.8 | [skills/kickoff-ready](skills/kickoff-ready) |
-| **prd-ready** | Planning | Define what we're building and for whom. | 1.0.16 | [skills/prd-ready](skills/prd-ready) |
-| **architecture-ready** | Planning | Design how the big pieces fit together. | 1.0.15 | [skills/architecture-ready](skills/architecture-ready) |
-| **roadmap-ready** | Planning | Sequence work over time. | 1.0.14 | [skills/roadmap-ready](skills/roadmap-ready) |
-| **stack-ready** | Planning | Pick the right tools for the job. | 1.1.21 | [skills/stack-ready](skills/stack-ready) |
-| **repo-ready** | Building | Set up the repo with production-grade hygiene. | 1.7.0 | [skills/repo-ready](skills/repo-ready) |
-| **production-ready** | Building | Build the app to production grade. | 2.6.8 | [skills/production-ready](skills/production-ready) |
-| **deploy-ready** | Shipping | Ship the app to real environments. | 1.0.20 | [skills/deploy-ready](skills/deploy-ready) |
-| **observe-ready** | Shipping | Keep the app healthy once it's live. | 1.0.19 | [skills/observe-ready](skills/observe-ready) |
-| **launch-ready** | Shipping | Tell the world the product exists. | 1.0.17 | [skills/launch-ready](skills/launch-ready) |
-| **harden-ready** | Shipping | Survive adversarial attention; prove it to an auditor. | 1.0.13 | [skills/harden-ready](skills/harden-ready) |
+| **kickoff-ready** | Orchestration | Sequence the ten specialists for a greenfield project from raw user intent. | 3.0.0 | [skills/kickoff-ready](skills/kickoff-ready) |
+| **prd-ready** | Planning | Define what we're building and for whom. | 3.0.0 | [skills/prd-ready](skills/prd-ready) |
+| **architecture-ready** | Planning | Design how the big pieces fit together. | 3.0.0 | [skills/architecture-ready](skills/architecture-ready) |
+| **roadmap-ready** | Planning | Sequence work over time. | 3.0.0 | [skills/roadmap-ready](skills/roadmap-ready) |
+| **stack-ready** | Planning | Pick the right tools for the job. | 3.0.0 | [skills/stack-ready](skills/stack-ready) |
+| **repo-ready** | Building | Set up the repo with production-grade hygiene. | 3.0.0 | [skills/repo-ready](skills/repo-ready) |
+| **production-ready** | Building | Build the app to production grade. | 3.0.0 | [skills/production-ready](skills/production-ready) |
+| **deploy-ready** | Shipping | Ship the app to real environments. | 3.0.0 | [skills/deploy-ready](skills/deploy-ready) |
+| **observe-ready** | Shipping | Keep the app healthy once it's live. | 3.0.0 | [skills/observe-ready](skills/observe-ready) |
+| **launch-ready** | Shipping | Tell the world the product exists. | 3.0.0 | [skills/launch-ready](skills/launch-ready) |
+| **harden-ready** | Shipping | Survive adversarial attention; prove it to an auditor. | 3.0.0 | [skills/harden-ready](skills/harden-ready) |
 
 ## See it end-to-end: ready-suite-example
 
-A complete dogfood of the suite applied to a fictional B2B SaaS product (Pulse, a Customer Success ops platform) lives at [`examples/ready-suite-example/`](examples/ready-suite-example). All eleven artifacts on disk at canonical `.{skill}-ready/` paths, with cross-references intact, plus an `AGENTS.md` (kickoff-ready emit), a `DESIGN.md` (Google Labs format, scaffolded by production-ready), and a [`DOGFOOD.md`](examples/ready-suite-example/DOGFOOD.md) reflection on what the suite caught, what it missed, and what would change in a v1.x of the suite.
+A complete dogfood of the suite applied to a fictional B2B SaaS product (Pulse, a Customer Success ops platform) lives at [`examples/ready-suite-example/`](examples/ready-suite-example). All eleven artifacts on disk at canonical `.{skill}-ready/` paths, with cross-references intact, plus an `AGENTS.md` (kickoff-ready emit), a `DESIGN.md` (Google Labs format, scaffolded by production-ready), and a [`DOGFOOD.md`](examples/ready-suite-example/DOGFOOD.md) reflection on what the suite caught, what it missed, and what should change in future release trains.
 
 The product, the people, and the dates are fictional; the artifacts are rigorous (each passes its own skill's grep tests for named failure modes). Use the dogfood to see what the suite produces end-to-end before installing it on a real project.
 
@@ -52,6 +60,10 @@ A single mega-skill cannot do any of these things at the same time without becom
 Ready-suite skills implement the [Agent Skills standard](https://agentskills.io). The contract is plain: a `SKILL.md` with YAML frontmatter and an optional `references/` directory the harness loads on demand. Any harness that parses this format runs every skill first-class. Verified harnesses today: Claude Code, Codex, Cursor, Windsurf, [pi](https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent), [OpenClaw](https://github.com/openclaw/openclaw). pi and OpenClaw both load skills from the neutral `~/.agents/skills/` path defined by the standard, so future AgentSkills-compatible harnesses inherit support with no per-tool integration work.
 
 The suite also meets the [`AGENTS.md`](https://agents.md/) cross-tool agent-brief standard (governed by the Linux Foundation's Agentic AI Foundation), the project-root brief read natively by Codex CLI, GitHub Copilot, Cursor, Windsurf, Aider, Zed, Warp, Roo Code, Jules, Factory, Amp, Devin, and others. **kickoff-ready** emits a project-root `AGENTS.md` mapping the suite's artifact paths when none exists (Step 6 sub-step 6a); **repo-ready** scaffolds `AGENTS.md` as the canonical agent brief with `CLAUDE.md` as a thin overlay or symlink. Both respect any user-authored `AGENTS.md` already on disk.
+
+The suite supports the [Pillars](https://github.com/aihxp/pillars) project-context standard as an optional context layer under `AGENTS.md`. Pillars keeps durable project facts, decisions, constraints, and gaps in task-routed `agents/*.md` files. **repo-ready** preserves existing Pillars projects and can scaffold the always-loaded `agents/context.md` and `agents/repo.md` when the user asks for Pillars adoption; **production-ready** loads task-relevant pillars before architecture and implementation work so app slices follow project-specific conventions instead of re-deriving them.
+
+Together, ready-suite, arc-ready, and Pillars form the current ready family: ready-suite is the modular parent, arc-ready is the single-skill child born from that parent, and Pillars is the project memory layer both can respect.
 
 The suite consumes the [Google Labs `DESIGN.md`](https://github.com/google-labs-code/design.md) format (Apache 2.0; YAML frontmatter holds machine-readable design tokens, the markdown body holds rationale plus an Agent Prompt Guide). **production-ready** detects a project-root `DESIGN.md` in Step 3 sub-step 3a and consumes it via DTCG export, Tailwind v4 export, or direct YAML read; the linter (`npx @google/design.md lint`) runs before component code so WCAG and token-resolution failures block the slice deterministically. When no `DESIGN.md` is present, production-ready falls back to its archetype + 5-decision derivation and optionally scaffolds a `DESIGN.md` from the chosen tokens.
 
@@ -74,7 +86,7 @@ Want only one skill? Install it directly:
 
 The marketplace lives in this hub repo at [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json). Each plugin is vendored under [`plugins/<skill-name>/`](plugins/) with its own manifest. See [`references/PLUGIN-RESEARCH.md`](references/PLUGIN-RESEARCH.md) for the format research that shaped these decisions.
 
-Plugin maintainers refresh the vendored copies from the canonical content under `skills/<skill-name>/` whenever a sibling's version bumps, then commit and tag `plugin-v<x.y.z>`.
+Plugin maintainers refresh the vendored copies from the canonical content under `skills/<skill-name>/` whenever a release train bumps, then commit and tag `v<x.y.z>`.
 
 ## One-command install (Codex, Cursor, pi, OpenClaw, all platforms)
 
@@ -143,13 +155,15 @@ Skills do not call each other. The harness is the router.
 
 ## Versions
 
+The root [`VERSION`](VERSION) file names the current ready-suite release train. Starting with 3.0.0, every skill, the ready-suite meta plugin, and the marketplace metadata carry the same release-train version.
+
 The [SUITE.md](SUITE.md) known-good-versions table at the hub root is byte-identical with every `skills/<skill>/SUITE.md`. To find the latest of any skill, check the table from any entry point: they always agree.
 
-When any skill version bumps, the hub SUITE.md and every `skills/<skill>/SUITE.md` are updated in the same commit. The lint enforces the byte-identical invariant.
+Use `bash scripts/bump-suite-version.sh <x.y.z> <YYYY-MM-DD>` for coordinated releases. The script updates root `VERSION`, all skill frontmatter and changelogs, README and SUITE version tables, vendored plugin packaging, the meta plugin, and marketplace metadata.
 
 ## Maintenance: ready-suite-lint
 
-The hub ships a meta-linter that mechanically enforces the suite's discipline rules: SUITE.md byte-identical between the hub and every `skills/<skill>/` subdir, frontmatter version matches CHANGELOG top entry, no em-dashes / arrows / box-drawing characters in suite-authored files, and the `compatible_with` frontmatter declares the standards-level values.
+The hub ships a meta-linter that mechanically enforces the suite's discipline rules: SUITE.md byte-identical between the hub and every `skills/<skill>/` subdir, frontmatter version matches CHANGELOG top entry, root VERSION matches the release train, no em-dashes / arrows / box-drawing characters in suite-authored files, the `compatible_with` frontmatter declares the standards-level values, and Claude plugin packaging stays synced to canonical skill files.
 
 Run locally:
 
@@ -160,9 +174,11 @@ bash scripts/lint.sh suite-md-sync     # one specific check
 bash scripts/lint.sh --help            # see all checks and flags
 ```
 
-Available checks: `suite-md-sync`, `frontmatter-version`, `unicode-clean`, `compatible-with`, `trigger-overlap`.
+Available checks: `suite-md-sync`, `frontmatter-version`, `suite-release`, `unicode-clean`, `compatible-with`, `plugin-sync`, `trigger-overlap`.
 
-The `trigger-overlap` check is advisory by default: it surfaces cross-skill substring overlaps in the eleven skills' description trigger phrases (e.g., "GitHub Actions" appearing in both repo-ready scaffolding triggers and deploy-ready pipeline triggers) and prompts the maintainer to verify a row exists in [`references/TRIGGER-DISAMBIGUATION.md`](references/TRIGGER-DISAMBIGUATION.md). Pass `--strict-triggers` to make overlap warnings fail the lint.
+`suite-release` verifies that root `VERSION` matches every skill and the ready-suite plugin metadata. `unicode-clean` covers SUITE.md copies, hub policy docs, the release checklist, hub scripts, and top changelog entries. `plugin-sync` verifies that every Claude plugin manifest version matches the canonical `skills/<skill>/SKILL.md` version, points at the monorepo skill path, vendors byte-identical `SKILL.md` and `references/` content, and keeps the meta plugin dependencies plus marketplace sources complete.
+
+The `trigger-overlap` check is advisory by default: it surfaces cross-skill substring overlaps in the eleven skills' description trigger phrases and prompts the maintainer to verify a row exists in [`references/TRIGGER-DISAMBIGUATION.md`](references/TRIGGER-DISAMBIGUATION.md) or tighten the trigger phrase. Pass `--strict-triggers` to make overlap warnings fail the lint.
 
 The same lint runs in GitHub Actions on every push to `main` and on pull requests (`.github/workflows/lint.yml`).
 
@@ -172,7 +188,7 @@ The lint is bash 3.2 compatible (macOS default) and uses no associative arrays.
 
 PRs welcome. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the contribution model, the unicode rule, the bash-3.2 rule, and how to land a single-skill or coordinated cross-suite change.
 
-For maintainers (or anyone landing a coordinated cross-suite patch), see [`MAINTAINING.md`](MAINTAINING.md): the SUITE.md sync ritual, version-bump rules, and the three maintenance rituals (single-skill patch, coordinated cross-suite patch, lint regression recovery).
+For maintainers (or anyone landing a coordinated cross-suite patch), see [`MAINTAINING.md`](MAINTAINING.md): the SUITE.md sync ritual, version-bump rules, and the four maintenance rituals (single-skill patch, coordinated cross-suite patch, suite release train, lint regression recovery).
 
 PR review is auto-routed via [`.github/CODEOWNERS`](.github/CODEOWNERS). Path-specific rules name the high-blast-radius surfaces (SUITE.md, install.sh, lint, marketplace manifest); when a second maintainer is added, the CODEOWNERS file is the single place to grant review authority on those paths.
 

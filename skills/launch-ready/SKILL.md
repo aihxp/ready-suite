@@ -1,8 +1,8 @@
 ---
 name: launch-ready
 description: "Put a deployed, healthy app in front of real users without shipping AI-slop. Owns landing page, positioning, launch-day SEO, Open Graph cards, waitlist and email funnel, launch channels (Product Hunt, Show HN, Reddit, X, IH, dev.to, LinkedIn), press outreach, launch-day telemetry, and the D-7 to D+7 runbook. Refuses AI-slop landings, hero-fatigue copy, spec-sheet positioning, paper waitlists, unrendered OG cards, and silent launches (launch-day signups with no source attribution). Triggers on 'launch my product,' 'build a landing page,' 'Product Hunt,' 'Show HN,' 'waitlist,' 'OG card,' 'launch-day SEO,' 'press kit,' 'launch week plan.' Does not build the app (production-ready), deploy it (deploy-ready), monitor it (observe-ready), pick tools (stack-ready), or own ongoing marketing. Pairs with deploy-ready and observe-ready. Full trigger list in README."
-version: 1.0.17
-updated: 2026-05-09
+version: 3.0.0
+updated: 2026-05-14
 changelog: CHANGELOG.md
 suite: ready-suite
 tier: shipping
@@ -59,7 +59,7 @@ Route elsewhere if the request is:
 - **Brand identity in the deep sense** (logo design, full design system, typography scale). launch-ready assumes `production-ready`'s visual-identity framework has produced the palette and typography tokens. It uses them; it does not redecide them.
 - **Customer support tooling** (Zendesk, Intercom, Plain setup). Out of scope.
 - **Legal copy** (privacy policy, terms of service, GDPR consent banner text). launch-ready flags the requirement and points at a legal review; it does not draft the text.
-- **App Store / Play Store listings.** Mobile app launches share some discipline (screenshot discipline, description specificity) but have venue-specific rules (keyword optimization, subtitle limits, promotional text) that are out of scope for v1.0.0. launch-ready focuses on web-app launches.
+- **App Store / Play Store listings.** Mobile app launches share some discipline (screenshot discipline, description specificity) but have venue-specific rules (keyword optimization, subtitle limits, promotional text) that are out of scope. launch-ready focuses on web-app launches.
 
 This section is the scope fence. Every plausible trigger overlap with a sibling has a route-elsewhere line.
 
@@ -122,7 +122,7 @@ Anti-patterns to reject in this step (each covered in `landing-page-anatomy.md`)
 
 Read `references/positioning-and-copy.md` section 4.
 
-Run the banned-word audit against every word on the landing page. The v1.0.0 list of banned-or-flagged words (the AI-slop signature set):
+Run the banned-word audit against every word on the landing page. The banned-or-flagged words below are the AI-slop signature set:
 
 | Banned | Replace with |
 |---|---|
@@ -155,7 +155,7 @@ Additional copy rules:
 
 ### Step 4. Visual identity and the aesthetic test
 
-Read `references/visual-identity.md` (packaged inline within `landing-page-anatomy.md` for v1.0.0).
+Read `references/visual-identity.md` (packaged inline within `landing-page-anatomy.md`).
 
 launch-ready does not redecide brand; it consumes `.production-ready/visual-identity.md` if present. If absent, launch-ready produces a minimum viable visual identity:
 
@@ -581,7 +581,7 @@ Maintain `.launch-ready/STATE.md` at every tier boundary. Read it first on resum
 # Launch-Ready State
 
 ## Skill version
-Built under launch-ready 1.0.0, 2026-04-23. If the agent loads a newer version on resume, re-read the changed sections before continuing.
+Built under launch-ready [current skill version], [frontmatter updated date]. If the agent loads a newer version on resume, re-read the changed sections before continuing.
 
 ## Tier reached
 Tier 2 (Landed). Target next: Tier 3 (Captured).

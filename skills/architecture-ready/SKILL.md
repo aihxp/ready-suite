@@ -1,8 +1,8 @@
 ---
 name: architecture-ready
 description: "Given a PRD, produce an architecture that says what system shape to build and why, before any code is written or any tool is chosen. Triggers on 'design the architecture,' 'system diagram,' 'monolith or microservices,' 'integration shape,' 'service boundaries,' 'data architecture,' 'how do the pieces fit,' 'ADR,' 'trust boundaries,' 'C4 diagram,' 'arc42,' 'non-functional requirements map to architecture.' Refuses architecture theater (diagrams with no load-bearing decisions), paper-tiger architecture (looks robust until first real load), cargo-cult cloud-native (Kubernetes and Kafka for a ten-user CRUD), stackitecture (stack picked and called architecture), resume-driven architecture, and 'scalable' as a claim with no numbers. Planning tier; consumes .prd-ready/PRD.md; produces .architecture-ready/ARCH.md for stack-ready, roadmap-ready, and production-ready. Does not pick tools (stack-ready), sequence milestones (roadmap-ready), or build the app (production-ready). Full trigger list in README."
-version: 1.0.15
-updated: 2026-05-09
+version: 3.0.0
+updated: 2026-05-14
 changelog: CHANGELOG.md
 suite: ready-suite
 tier: planning
@@ -498,8 +498,8 @@ Broadcast discipline: every change in Living or Soft-frozen state is announced. 
 At the end of every run, print:
 
 ```
-Skill version: architecture-ready 1.0.0
-Last updated: 2026-04-23
+Skill version: architecture-ready [current skill version]
+Last updated: [frontmatter updated date]
 Current date: [today]
 ```
 
@@ -613,7 +613,7 @@ The body above is enough to start. Load each reference *before* the step that us
 | `diagrams.md` | **Tier 1 (context) and Tier 2 (container, component).** Step 9. | ~8K |
 | `evolutionary-architecture.md` | **Tier 3.** Step 10 fitness functions. | ~7K |
 | `architecture-antipatterns.md` | **On demand.** Mode C audits and tier-gate checks. | ~10K |
-| `RESEARCH-2026-04.md` | **On demand.** When the user asks "why this rule"; source citations for v1.0.0. | ~35K |
+| `RESEARCH-2026-04.md` | **On demand.** When the user asks "why this rule"; source citations for the initial release. | ~35K |
 | `EXAMPLE-ARCH.md` | **On demand.** A complete worked example architecture for a fictional B2B SaaS product (Pulse, a Customer Success ops platform). Demonstrates C4 context + container diagrams in ASCII, component breakdown, multi-tenant data architecture, named trust boundaries each carrying a code path, NFR-to-mechanism mapping, three ADRs with named alternatives. Passes the skill's grep tests for architecture-theater / paper-tiger / cargo-cult / stackitecture / scalable-without-numbers failure modes. Consumes the worked PRD; feeds the worked roadmap and stack-decision examples in their respective sibling repos. | ~17K |
 
 Skill version and change history live in `CHANGELOG.md`. When resuming an architecture across sessions, confirm the skill version matches the version recorded in the ARCH.md's front matter if one exists. A skill update between sessions can shift have-nots (the banned-phrase list evolves as AI outputs shift), add sections (downstream-skill interfaces tighten), or change tier gates.
@@ -628,7 +628,7 @@ Architectures span sessions; maintain `.architecture-ready/STATE.md` when the wo
 # Architecture-Ready State
 
 ## Skill version
-architecture-ready 1.0.0, 2026-04-23.
+architecture-ready [current skill version], [frontmatter updated date].
 
 ## Current tier
 Working toward Tier [N]. Last completed tier: [N-1].

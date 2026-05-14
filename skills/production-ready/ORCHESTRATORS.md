@@ -54,6 +54,18 @@ Mixing both Shape A and Shape B inside a single project (running prd-ready and S
 
 `constitution.md` itself is consumed by every ready-suite skill incidentally: the skills read project-root context files (`AGENTS.md`, `CLAUDE.md`) and `constitution.md` when present, treating its content as standing have-nots. A `constitution.md` that says "no PII in logs" surfaces in observe-ready's logging defaults and harden-ready's review checklist; a `constitution.md` that says "every public API is versioned" surfaces in production-ready's API design step. The interaction is pull-only: ready-suite skills read `constitution.md`, never write to it.
 
+## Pattern: Pillars as project context
+
+[Pillars](https://github.com/aihxp/pillars) is a project-context standard: root `AGENTS.md` describes the loading protocol, and task-routed `agents/*.md` files carry durable facts, decisions, constraints, workflows, watchouts, and gaps. It is not an orchestrator and not a lifecycle artifact generator. It sits below ready-suite as operating memory the specialists consume.
+
+The default integration shape:
+
+- **repo-ready** owns adoption mechanics. It preserves existing Pillars projects, avoids overwriting a Pillars `AGENTS.md`, and can scaffold the always-loaded `agents/context.md` and `agents/repo.md` when the user asks to adopt Pillars.
+- **production-ready** consumes Pillars before architecture and implementation. It loads always-loaded pillars and task-relevant pillars such as `ui`, `data`, `auth`, `api`, `quality`, `deploy`, and `observe` when their triggers match the requested slice.
+- **planning and shipping skills** treat loaded Pillars content as project-local context. A Pillars `arch.md` can inform architecture-ready; `deploy.md` can inform deploy-ready; `observe.md` can inform observe-ready. The suite still writes its own `.{skill}-ready/*.md` artifacts.
+
+Precedence is simple: explicit user instruction wins, then ready-suite artifact contracts, then Pillars project context, then inferred codebase conventions. Pillars can constrain how a skill implements work, but it does not replace the PRD, architecture, roadmap, deploy plan, observability plan, launch plan, or hardening report.
+
 ## Pattern: Superpowers (working-style skills) alongside ready-suite
 
 Superpowers and similar plugin families ship working-style skills like `/think-harder`, `/brainstorm`, `/tdd`, `/research`. These operate at a different layer than ready-suite: they shape how the agent reasons within a session, not what artifacts the session produces.

@@ -1,8 +1,16 @@
 # Launch Ready
 
+[![ready-suite](https://img.shields.io/badge/ready--suite-v3.0.0-blue)](../../README.md)
+[![skill](https://img.shields.io/badge/skill-launch--ready-2f6fed)](SKILL.md)
+[![agent skills](https://img.shields.io/badge/Agent%20Skills-compatible-2f6fed)](SKILL.md)
+[![aihxp/pillars](https://img.shields.io/badge/aihxp%2Fpillars-standard-0f766e)](https://github.com/aihxp/pillars)
+[![license](https://img.shields.io/badge/license-MIT-yellow)](LICENSE)
+
 > **Put a deployed, healthy app in front of real users without shipping AI-slop. Refuses hero-fatigue copy, spec-sheet positioning, paper waitlists, unrendered OG cards, and silent launches.**
 
 > **Part of the [ready-suite](SUITE.md)**, a composable set of AI skills covering the full arc from idea to launch (planning, building, shipping). See [`SUITE.md`](SUITE.md) for the full map and the live sibling skills.
+
+> **Current version:** 3.0.0 (ready-suite release train).
 
 The app is deployed. The monitoring is green. The founder has eight weeks of runway and one shot at getting people to notice. What ships is a gradient-hero landing page whose hero sentence ("Empower your team with AI-powered productivity") describes Notion, Asana, Linear, and every other SaaS in the category. Six shadcn cards use the words "seamless" and "powerful" three times each. The OG image renders correctly on a developer laptop and at 600x315 thumbnail on LinkedIn shows a title the preview rendered as one unreadable line. The Show HN post gets flagged in seven minutes because the title starts with "Launch HN." The Product Hunt submission goes out at 9am Eastern because nobody mentioned 12:01 AM Pacific. The launch tweet has no UTM parameters; the founder cannot tell which of the five venues drove the four signups. The waitlist captured 143 emails; there is no email sequence scheduled. Two weeks later, activity is back to baseline.
 
@@ -84,7 +92,7 @@ The short frontmatter description is tight on purpose, to speed up skill-routing
 - Pricing strategy (what to charge) -> business decision, not a skill
 - Brand identity in the deep sense (logo, full type scale) -> upstream of launch-ready; consumes production-ready's tokens
 - Legal copy (privacy, ToS) -> legal review; skill only flags the requirement
-- App Store / Play Store listings -> out of scope for v1.0.0
+- App Store / Play Store listings -> out of scope
 
 **Pairing:** `deploy-ready` and `observe-ready` (same shipping tier). The three compose at the launch boundary: deploy-ready owns the pipeline, observe-ready owns the health surface, launch-ready owns the user-facing surface. A launch that does not read `.deploy-ready/STATE.md` risks shipping on top of an in-progress migration; a launch that does not read `.observe-ready/SLOs.md` risks a traffic spike burning the budget. See [SKILL.md](SKILL.md) "Handoff" section.
 

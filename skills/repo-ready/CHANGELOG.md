@@ -1,4 +1,32 @@
+## v3.0.0 (2026-05-14)
+
+Suite-wide release train alignment. This major release stabilizes the monorepo distribution model, synchronized Claude plugin packaging, strict trigger routing, Pillars project-context integration, and release hygiene for the eleven-skill suite.
+
+### Changed
+- Aligns this skill with the ready-suite 3.0.0 release train.
+- Keeps the skill's existing artifact paths and trigger ownership intact while publishing the shared major version.
+
+### Why a major
+This is a coordinated suite release: all eleven skills, the ready-suite meta plugin, and the marketplace metadata now move together for the 3.0.0 train.
+
+---
+
 # Changelog
+
+## v1.8.0 (2026-05-14)
+
+Minor release. Adds first-class Pillars adoption and preservation to repo-ready. Pillars is treated as an optional project-context standard under `AGENTS.md`: repo-ready detects existing `agents/*.md` pillar files, preserves their loading protocol, and can scaffold the minimal `AGENTS.md` plus `agents/context.md` and `agents/repo.md` shape when the user explicitly asks to adopt Pillars.
+
+### Added
+
+- **SKILL.md Step 2a**: detects Pillars via root `AGENTS.md`, `agents/` frontmatter, or explicit user request.
+- **Pillars scaffold rule**: creates only the always-loaded stubs (`context.md`, `repo.md`) and records unknowns as Gaps instead of inventing decisions.
+
+### Why a minor, not a patch
+
+The workflow gains observable behavior for a new project-context standard. The change is backward-compatible but not documentation-only.
+
+---
 
 ## v1.7.0 (2026-05-09)
 

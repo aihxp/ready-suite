@@ -1,4 +1,31 @@
+## v3.0.0 (2026-05-14)
+
+Suite-wide release train alignment. This major release stabilizes the monorepo distribution model, synchronized Claude plugin packaging, strict trigger routing, Pillars project-context integration, and release hygiene for the eleven-skill suite.
+
+### Changed
+- Aligns this skill with the ready-suite 3.0.0 release train.
+- Keeps the skill's existing artifact paths and trigger ownership intact while publishing the shared major version.
+
+### Why a major
+This is a coordinated suite release: all eleven skills, the ready-suite meta plugin, and the marketplace metadata now move together for the 3.0.0 train.
+
+---
+
 # Changelog
+
+## v1.0.21 (2026-05-14)
+
+Patch release. Tightens the deploy-ready trigger wording that overlapped repo-ready's GitHub Actions scaffolding trigger. Deploy-ready now uses the promotion-specific phrase `promote through Actions`, while repo-ready keeps ownership of "set up GitHub Actions" as repo hygiene.
+
+### Changed
+
+- **SKILL.md description**: replaced `GitHub Actions pipeline` with `promote through Actions` to make `trigger-overlap --strict-triggers` pass without changing deploy-ready's ownership of promotion pipelines.
+
+### Why a patch, not a minor
+
+Trigger disambiguation cleanup only; behavior and artifact contract are unchanged.
+
+---
 
 ## v1.0.20 (2026-05-09)
 

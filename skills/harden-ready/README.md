@@ -1,8 +1,16 @@
 # Harden Ready
 
+[![ready-suite](https://img.shields.io/badge/ready--suite-v3.0.0-blue)](../../README.md)
+[![skill](https://img.shields.io/badge/skill-harden--ready-2f6fed)](SKILL.md)
+[![agent skills](https://img.shields.io/badge/Agent%20Skills-compatible-2f6fed)](SKILL.md)
+[![aihxp/pillars](https://img.shields.io/badge/aihxp%2Fpillars-standard-0f766e)](https://github.com/aihxp/pillars)
+[![license](https://img.shields.io/badge/license-MIT-yellow)](LICENSE)
+
 > **Verify a deployed app survives adversarial attention and prove it to an auditor. Refuses scanner-first security, paper trust boundaries, hardening-as-ritual, compliance-without-security, and shallow-audit traps.**
 
 > **Part of the [ready-suite](SUITE.md)**, a composable set of AI skills covering the full arc from idea to launch (planning, building, shipping). harden-ready is the tenth and final core-suite skill and completes the shipping tier. See [`SUITE.md`](SUITE.md) for the full map and the live sibling skills.
+
+> **Current version:** 3.0.0 (ready-suite release train).
 
 An AI-generated web application is deployed, monitored, and green on observe-ready. The SAST vendor's dashboard shows zero criticals. The SCA scan is clean. The repo has a SECURITY.md with a contact email. The founder is preparing a SOC 2 Type I report for an enterprise prospect. The front page leaks every other tenant's records through an object ID that increments by one. The Supabase anon key in the JavaScript bundle lets a curl request read and write arbitrary tables because the generator emitted RLS-capable schemas without RLS policies. The OAuth callback accepts any state parameter. The JWT verification code has `alg: none` as a permitted value. The system prompt is in the browser's network tab. None of this fires an alarm anywhere in the stack. The app passes every automated check and fails the adversary on the first touch.
 

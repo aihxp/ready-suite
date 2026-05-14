@@ -1,5 +1,11 @@
 # Stack Ready
 
+[![ready-suite](https://img.shields.io/badge/ready--suite-v3.0.0-blue)](../../README.md)
+[![skill](https://img.shields.io/badge/skill-stack--ready-2f6fed)](SKILL.md)
+[![agent skills](https://img.shields.io/badge/Agent%20Skills-compatible-2f6fed)](SKILL.md)
+[![aihxp/pillars](https://img.shields.io/badge/aihxp%2Fpillars-standard-0f766e)](https://github.com/aihxp/pillars)
+[![license](https://img.shields.io/badge/license-MIT-yellow)](LICENSE)
+
 > **An AI skill for any coding agent: Claude Code, Codex, Cursor, Windsurf, Copilot, or your own.**
 
 Stop picking stacks that collapse in month three.
@@ -8,13 +14,15 @@ AI stack recommendations have a specific failure mode. They *sound* authoritativ
 
 Stack Ready is a **skill**, a structured AI instruction set that any coding agent can consume. It produces stack recommendations that name the weighting assumptions, the failure mode that would flip the choice, the scale ceiling, and the switching cost, for 12 domains across 12 scoring dimensions.
 
-> **Part of the [ready-suite](SUITE.md)**, a composable set of ten AI skills covering the full arc from idea to launch (planning, building, shipping). Stack Ready is one of the four planning-tier skills. See [`SUITE.md`](SUITE.md) for the full map.
+> **Part of the [ready-suite](SUITE.md)**, a composable set of eleven AI skills covering the full arc from idea to launch (orchestration, planning, building, shipping). Stack Ready is one of the four planning-tier skills. See [`SUITE.md`](SUITE.md) for the full map.
+
+> **Current version:** 3.0.0 (ready-suite release train).
 
 <p align="center">
 <strong>12 domains</strong> &nbsp;·&nbsp; <strong>12 scoring dimensions</strong> &nbsp;·&nbsp; <strong>41 compatibility-checked bundles</strong> &nbsp;·&nbsp; <strong>4 decision tiers</strong> &nbsp;·&nbsp; <strong>~150 verified sources</strong>
 </p>
 
-> **v1.1.0 (2026-04-22)** refreshed every scoring decision against primary sources: State of JS 2024, Stack Overflow Dev Survey 2024-2025, JavaScript Rising Stars 2024/2025, DB-Engines trends, ThoughtWorks Tech Radar Vol 31/34, State of Django 2025, State of Laravel 2025, 37signals cloud-exit public numbers, and ~150 more. Evidence captured in [`references/RESEARCH-2026-04.md`](references/RESEARCH-2026-04.md). See [CHANGELOG](CHANGELOG.md) for the full shift list.
+> **Research refresh:** The 2026-04 research pass refreshed every scoring decision against primary sources: State of JS 2024, Stack Overflow Dev Survey 2024-2025, JavaScript Rising Stars 2024/2025, DB-Engines trends, ThoughtWorks Tech Radar Vol 31/34, State of Django 2025, State of Laravel 2025, 37signals cloud-exit public numbers, and ~150 more. Evidence captured in [`references/RESEARCH-2026-04.md`](references/RESEARCH-2026-04.md). See [CHANGELOG](CHANGELOG.md) for the full shift list.
 
 ## Install
 
@@ -195,7 +203,7 @@ Every domain profile scores candidates across the same 12 dimensions. Scores are
 
 ## 41 compatibility-checked bundles
 
-Each of the 12 domains ships with three pre-combined bundles (Safe Default / Fast-to-Ship / Enterprise), for 36 in total. v1.1.0 added 5 cross-domain named bundles covering the non-React-default world.
+Each of the 12 domains ships with three pre-combined bundles (Safe Default / Fast-to-Ship / Enterprise), for 36 in total. The cross-domain named bundles add 5 more covering the non-React-default world.
 
 ### Per-domain archetypes
 
@@ -205,7 +213,7 @@ Each of the 12 domains ships with three pre-combined bundles (Safe Default / Fas
 | **Fast-to-Ship** | Solo or very small team, wants BaaS leverage, minimal ops surface, willing to trade scale ceiling for velocity. The MVP pick. |
 | **Enterprise** | 10+ engineers, compliance in scope, self-host or portability matters, ops maturity, scale ceiling is higher than any single bundle can absorb. The "will survive" pick. |
 
-### Cross-domain named bundles (new in v1.1.0)
+### Cross-domain named bundles
 
 | Bundle | Fit |
 |---|---|
@@ -273,7 +281,7 @@ Managed-data-layer alternatives (Convex, Supabase, Firebase, Appwrite, PocketBas
 | **Mode D only** | | |
 | `migration-paths.md` | X-to-Y sequences: Firebase to Postgres, Auth0 to Clerk, Vercel to self-host, Auth.js to Better Auth, etc. | ~13K |
 | **Evidence base (on demand)** | | |
-| `RESEARCH-2026-04.md` | Consolidated research dossier behind v1.1.0 scoring. ~150 verified primary-source URLs across Stack Overflow Dev Survey 2024-2025, State of JS 2024, Rising Stars 2024/2025, DB-Engines, ThoughtWorks Tech Radar, 37signals cloud-exit, migration postmortems. Every scoring shift traceable here. | ~30K |
+| `RESEARCH-2026-04.md` | Consolidated research dossier behind the scoring model. ~150 verified primary-source URLs across Stack Overflow Dev Survey 2024-2025, State of JS 2024, Rising Stars 2024/2025, DB-Engines, ThoughtWorks Tech Radar, 37signals cloud-exit, migration postmortems. Every scoring shift traceable here. | ~30K |
 
 </details>
 

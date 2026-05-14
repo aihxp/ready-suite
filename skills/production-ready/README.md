@@ -1,5 +1,11 @@
 # Production Ready
 
+[![ready-suite](https://img.shields.io/badge/ready--suite-v3.0.0-blue)](../../README.md)
+[![skill](https://img.shields.io/badge/skill-production--ready-2f6fed)](SKILL.md)
+[![agent skills](https://img.shields.io/badge/Agent%20Skills-compatible-2f6fed)](SKILL.md)
+[![aihxp/pillars](https://img.shields.io/badge/aihxp%2Fpillars-standard-0f766e)](https://github.com/aihxp/pillars)
+[![license](https://img.shields.io/badge/license-MIT-yellow)](LICENSE)
+
 > **An AI skill for any coding agent: Claude Code, Codex, Cursor, Windsurf, Copilot, or your own.**
 
 Stop shipping apps that fall apart on first click.
@@ -8,7 +14,9 @@ AI-generated apps (dashboards, admin panels, internal tools, SaaS back-offices, 
 
 Production Ready is a **skill**, a structured AI instruction set that any coding agent can consume. It ensures every feature ships wired end-to-end: real auth, real data, real permissions, real states, real feedback, across any stack and any industry.
 
-> **Part of the [ready-suite](SUITE.md)**, a composable set of ten AI skills covering the full arc from idea to launch (planning, building, shipping). Production Ready is the building-tier core. See [`SUITE.md`](SUITE.md) for the full map and [`ORCHESTRATORS.md`](ORCHESTRATORS.md) for how the suite composes with GSD, BMAD, Superpowers, and plain harnesses.
+> **Part of the [ready-suite](SUITE.md)**, a composable set of eleven AI skills covering the full arc from idea to launch (orchestration, planning, building, shipping). Production Ready is the building-tier core. See [`SUITE.md`](SUITE.md) for the full map and [`ORCHESTRATORS.md`](ORCHESTRATORS.md) for how the suite composes with GSD, BMAD, Superpowers, and plain harnesses.
+
+> **Current version:** 3.0.0 (ready-suite release train).
 
 <p align="center">
 <strong>37 reference files</strong> &nbsp;·&nbsp; <strong>33 industry verticals</strong> &nbsp;·&nbsp; <strong>24 production requirements</strong> &nbsp;·&nbsp; <strong>4 shippable tiers</strong>

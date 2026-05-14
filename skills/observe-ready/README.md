@@ -1,8 +1,16 @@
 # Observe Ready
 
+[![ready-suite](https://img.shields.io/badge/ready--suite-v3.0.0-blue)](../../README.md)
+[![skill](https://img.shields.io/badge/skill-observe--ready-2f6fed)](SKILL.md)
+[![agent skills](https://img.shields.io/badge/Agent%20Skills-compatible-2f6fed)](SKILL.md)
+[![aihxp/pillars](https://img.shields.io/badge/aihxp%2Fpillars-standard-0f766e)](https://github.com/aihxp/pillars)
+[![license](https://img.shields.io/badge/license-MIT-yellow)](LICENSE)
+
 > **Keep a deployed app healthy once real users are on it. Refuse paper SLOs, blind dashboards, and paper runbooks.**
 
 > **Part of the [ready-suite](SUITE.md)**, a composable set of AI skills covering the full arc from idea to launch (planning, building, shipping). See [`SUITE.md`](SUITE.md) for the full map and the live sibling skills.
+
+> **Current version:** 3.0.0 (ready-suite release train).
 
 The deploy is green. The pager is quiet. Three dashboards exist, one of which has been viewed in the last 90 days. The SLO page on Confluence says "99.9% availability" and no alert is wired to it. The runbook for "api down" has a `grep` command referencing a log field renamed six months ago. Then something breaks in a shape nobody instrumented for, the on-call opens the dashboard, and the chart they actually need either does not exist, is measuring the wrong thing, or is hosted on the same cluster that just went down. The alert that did fire has no runbook link. The runbook that is linked 404s because the wiki SSO went with the app.
 

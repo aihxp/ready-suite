@@ -1,8 +1,16 @@
 # Roadmap Ready
 
+[![ready-suite](https://img.shields.io/badge/ready--suite-v3.0.0-blue)](../../README.md)
+[![skill](https://img.shields.io/badge/skill-roadmap--ready-2f6fed)](SKILL.md)
+[![agent skills](https://img.shields.io/badge/Agent%20Skills-compatible-2f6fed)](SKILL.md)
+[![aihxp/pillars](https://img.shields.io/badge/aihxp%2Fpillars-standard-0f766e)](https://github.com/aihxp/pillars)
+[![license](https://img.shields.io/badge/license-MIT-yellow)](LICENSE)
+
 > **Sequence software work over time. Every item on the roadmap is a grounded commitment, an outcome-framed direction, or a named open question. Nothing else. No invented dates. No fictional parallelism. No features absent from the PRD.**
 
 > **Part of the [ready-suite](SUITE.md)**, a composable set of AI skills covering the full arc from idea to launch (planning, building, shipping). See [`SUITE.md`](SUITE.md) for the full map and the live sibling skills.
+
+> **Current version:** 3.0.0 (ready-suite release train).
 
 A founder, PM, or engineering lead opens a new Notion doc, types "build a roadmap for the next 6 months" into ChatGPT, Claude, or Productboard AI, and pastes the output. What ships is a grid with four columns labeled Q1, Q2, Q3, Q4, each stuffed with feature titles, each with a date to the day, half of which name features not in the PRD and the other half lack any outcome framing. Three parallel tracks are assumed for a team of two engineers. Dependencies between features are visible in the architecture doc but encoded nowhere in the roadmap. The launch milestone has no observability-live date, no rollback-tested date, no runbook-reviewed date underneath it. The document is printed, signed off, filed. Six weeks later it is stale. Engineering works from the sprint backlog. The roadmap becomes an artifact for investor decks.
 

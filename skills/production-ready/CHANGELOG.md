@@ -1,4 +1,33 @@
+## v3.0.0 (2026-05-14)
+
+Suite-wide release train alignment. This major release stabilizes the monorepo distribution model, synchronized Claude plugin packaging, strict trigger routing, Pillars project-context integration, and release hygiene for the eleven-skill suite.
+
+### Changed
+- Aligns this skill with the ready-suite 3.0.0 release train.
+- Keeps the skill's existing artifact paths and trigger ownership intact while publishing the shared major version.
+
+### Why a major
+This is a coordinated suite release: all eleven skills, the ready-suite meta plugin, and the marketplace metadata now move together for the 3.0.0 train.
+
+---
+
 # Changelog
+
+## v2.7.0 (2026-05-14)
+
+Minor release. Adds Pillars project-context consumption before production-ready starts pre-flight, architecture, or implementation. When a project has a Pillars `AGENTS.md` protocol or `agents/*.md` files, production-ready now loads always-loaded pillars and task-relevant pillars such as `ui`, `data`, `auth`, `api`, `quality`, `config`, `security`, `analytics`, `deploy`, and `observe`.
+
+### Added
+
+- **SKILL.md Step 0a**: detects Pillars, `AGENTS.md` / `CLAUDE.md`, and `constitution.md` as project context inputs.
+- **Research output requirement**: records whether Pillars, AGENTS.md, and Spec Kit governance were loaded or absent before implementation.
+- **Precedence guard**: Pillars can constrain project-specific conventions, but cannot weaken production-ready's no-placeholder, persistence, auth, CTA tracking, or security gates.
+
+### Why a minor, not a patch
+
+The workflow gains a new context-loading step that changes how implementation work is constrained on Pillars-compatible projects.
+
+---
 
 ## v2.6.8 (2026-05-09)
 

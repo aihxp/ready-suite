@@ -1,8 +1,16 @@
 # Kickoff Ready
 
+[![ready-suite](https://img.shields.io/badge/ready--suite-v3.0.0-blue)](../../README.md)
+[![skill](https://img.shields.io/badge/skill-kickoff--ready-2f6fed)](SKILL.md)
+[![agent skills](https://img.shields.io/badge/Agent%20Skills-compatible-2f6fed)](SKILL.md)
+[![aihxp/pillars](https://img.shields.io/badge/aihxp%2Fpillars-standard-0f766e)](https://github.com/aihxp/pillars)
+[![license](https://img.shields.io/badge/license-MIT-yellow)](LICENSE)
+
 > **Sequence the ten ready-suite specialists for a greenfield project. Refuses scope leak, rubber-stamp orchestration, phantom resume, ghost handoff, and happy-path orchestration.**
 
 > **Part of the [ready-suite](SUITE.md)**, a composable set of AI skills covering the full arc from idea to launch. kickoff-ready is the eleventh skill and the only one in the orchestration tier. See [`SUITE.md`](SUITE.md) for the full map.
+
+> **Current version:** 3.0.0 (ready-suite release train).
 
 A user types "I have an idea for a SaaS, help me ship it." A general-purpose agent, faced with a blank page and ten installed specialist skills, does the easiest thing an LLM can do: it fills the blank page. It writes a PRD inline. It sketches an architecture in the same response. It dashes off a roadmap as a bulleted list. It picks a stack from training-data familiarity. It gestures at a launch plan. None of the ten specialist skills (prd-ready, architecture-ready, roadmap-ready, stack-ready, repo-ready, production-ready, deploy-ready, observe-ready, launch-ready, harden-ready) ever fires. The user gets a one-message project-in-miniature that fails every specialist's have-nots simultaneously.
 

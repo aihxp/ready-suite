@@ -1,8 +1,8 @@
 ---
 name: prd-ready
 description: "Write a PRD that engineering, design, QA, and downstream planning skills can consume without a clarification meeting. Owns problem framing, target-user specificity, success metrics, functional and non-functional requirements, scope and no-gos, appetite and rabbit holes, open-question log, downstream handoff block, and the iterate-vs-freeze lifecycle. Refuses hollow PRDs (sections filled, no decisions), invisible PRDs (reads the same across any product), feature laundry lists (un-prioritized feature dumps), solution-first PRDs (problem box names the solution), assumption-soup PRDs (we-assume-users-will-love-it claims), and moving-target PRDs (silent edits, engineer whiplash). Triggers on 'write a PRD,' 'product spec,' 'requirements doc,' 'one-pager,' 'product brief,' 'pitch for this feature,' 'problem statement.' Does not design the architecture (architecture-ready), sequence the roadmap (roadmap-ready), pick the stack (stack-ready), build the app (production-ready), or write launch copy (launch-ready). Top of the planning tier; no upstream siblings. Full trigger list in README."
-version: 1.0.16
-updated: 2026-05-09
+version: 3.0.0
+updated: 2026-05-14
 changelog: CHANGELOG.md
 suite: ready-suite
 tier: planning
@@ -393,8 +393,8 @@ Broadcast discipline:
 PRD practices shift slowly but measurably. At the end of every run, print:
 
 ```
-Skill version: prd-ready 1.0.0
-Last updated: 2026-04-23
+Skill version: prd-ready [current skill version]
+Last updated: [frontmatter updated date]
 Current date: [today]
 ```
 
@@ -515,7 +515,7 @@ The body above is enough to start. Load each reference *before* the step that us
 | `prd-antipatterns.md` | **On demand.** Mode C audits and tier-gate checks against the have-nots. | ~8K |
 | `stakeholder-alignment.md` | **Tier 3.** Step 10 sign-off protocol. | ~6K |
 | `iterate-vs-freeze.md` | **Tier 3 and Tier 4.** Step 11 lifecycle and change-control. | ~6K |
-| `RESEARCH-2026-04.md` | **On demand.** When the user asks "why this rule" or "what is the evidence"; source citations for v1.0.0. | ~36K |
+| `RESEARCH-2026-04.md` | **On demand.** When the user asks "why this rule" or "what is the evidence"; source citations for the initial release. | ~36K |
 | `EXAMPLE-PRD.md` | **On demand.** A complete worked example PRD for a fictional B2B SaaS product (Pulse, a Customer Success ops platform). Demonstrates problem framing, MoSCoW ranking, named no-gos, sign-off block, downstream handoff. Useful when the user asks "what should the output look like" or when the agent needs a concrete template; passes the skill's own grep tests for hollow / invisible / feature-laundry / solution-first / assumption-soup / moving-target failure modes. Cross-references to the worked architecture, roadmap, and stack-decision examples in their respective sibling repos. | ~14K |
 
 Skill version and change history live in `CHANGELOG.md`. When resuming a PRD across sessions, confirm the skill version matches the version recorded in the PRD's front matter if one exists. A skill update between sessions can shift have-nots (banned-phrase list evolves as AI outputs shift), add sections (downstream-skill interfaces tighten), or change tier gates. If versions differ, re-run the Tier audit on any Tier 2+ artifact before continuing.
@@ -530,7 +530,7 @@ PRDs span sessions; maintain `.prd-ready/STATE.md` when the work is ongoing.
 # PRD-Ready State
 
 ## Skill version
-prd-ready 1.0.0, 2026-04-23.
+prd-ready [current skill version], [frontmatter updated date].
 
 ## Current tier
 Working toward Tier [N]. Last completed tier: [N-1].

@@ -1,8 +1,8 @@
 ---
 name: production-ready
 description: "Build production-grade, end-to-end connected apps across any stack: dashboards, admin panels, internal tools, SaaS back-offices, analytics consoles, ops centers. Triggers on 'dashboard,' 'admin panel,' 'internal tool,' 'back office,' 'control panel,' 'analytics view,' or any multi-page interface with auth, navigation, and CRUD over domain data. Enforces vertical-slice discipline and a no-scaffold-no-placeholder rule: every feature ships wired end-to-end to a real backend, not stubbed with TODO, fake JSON, or 'hook this up later.' Pairs with repo-ready for repo hygiene. Not for single components, marketing sites, or pure repo scaffolding. Full trigger list in README."
-version: 2.6.8
-updated: 2026-05-09
+version: 3.0.0
+updated: 2026-05-14
 changelog: CHANGELOG.md
 suite: ready-suite
 tier: building
@@ -66,6 +66,18 @@ Read `references/codebase-research.md` and run the mode detection protocol.
 - **Inheriting a half-built project or an off-the-shelf template** (Retool export, Appsmith, shadcn admin kit, another agent's unfinished work, a Vue-to-React migration, a WordPress-to-Rails port) routes to Mode D (Migration). Treat the existing code as scaffolding measured against the tier requirements, not as ground truth. Inventory three buckets: what to keep (meets the tier bar), what to rewrite (hollow or mis-patterned), what to discard (dead paths). Preserve only what earns its place.
 
 **Passes when:** a mode is declared, and the corresponding research output is produced (the block specified in `codebase-research.md` for that mode).
+
+### Step 0a. Load project context standards
+
+Before Step 1, detect project-root context standards that constrain implementation:
+
+- **Pillars.** If `AGENTS.md` references the Pillars standard or `agents/*.md` contains `pillar:` frontmatter, follow the Pillars loading protocol. Load every pillar with `always_load: true`, then scan remaining pillar frontmatter for triggers that match the requested slice. Add each primary pillar's direct `must_read_with` entries. Load the resulting bodies before architecture and implementation. Common production-ready matches include `ui`, `data`, `auth`, `api`, `quality`, `config`, `security`, `analytics`, `deploy`, and `observe`.
+- **AGENTS.md / CLAUDE.md.** Read project-level agent instructions and treat them as repo conventions unless they conflict with explicit user instruction or a ready-suite artifact contract.
+- **constitution.md.** If Spec Kit governance exists, treat it as standing project principles.
+
+Loaded project context can constrain file placement, naming, APIs, test style, UI conventions, and deployment assumptions. It cannot weaken production-ready's have-nots: no placeholders, no hardcoded demo data, no in-memory persistence for production features, no client-only auth checks, no fake buttons, and no disabled-without-tracking CTAs.
+
+**Passes when:** the state of project context is recorded in the research output: `pillars: loaded | absent | stub-gap`, `agents_md: loaded | absent`, and `constitution: loaded | absent`, with the loaded pillar names listed when Pillars is present.
 
 ### Step 1. Pre-flight
 
