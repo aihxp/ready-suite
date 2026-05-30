@@ -147,15 +147,18 @@ The hub's CHANGELOG.md remains a dated narrative. The release-train version live
 
 ## Discipline rules the lint enforces
 
-The seven mechanical checks in `scripts/lint.sh`:
+The ten mechanical checks in `scripts/lint.sh`:
 
 1. **suite-md-sync**: hub `SUITE.md` is byte-identical with every `skills/<skill>/SUITE.md`. CI fails on drift.
 2. **frontmatter-version**: every skill's `SKILL.md` `version:` value matches the top entry in its `CHANGELOG.md`. CI fails on mismatch.
-3. **suite-release**: root `VERSION` matches every skill frontmatter version, every skill top changelog entry, the ready-suite meta plugin, and marketplace metadata. CI fails on mismatch.
-4. **unicode-clean**: no em-dashes, en-dashes, arrows, or box-drawing characters in `SUITE.md` (any copy), hub policy docs (`README.md`, `MAINTAINING.md`, `CONTRIBUTING.md`, `AGENTS.md`, `SECURITY.md`), `RELEASE-CHECKLIST.md`, hub scripts, hub `install.sh` / `uninstall.sh` / `ORCHESTRATORS.md`, or any skill's top CHANGELOG entry. CI fails on any forbidden codepoint.
-5. **compatible-with**: every `SKILL.md` declares `claude-code`, `codex`, `cursor`, `windsurf`, `pi`, `openclaw`, `any-agentskills-compatible-harness` under `compatible_with:`. CI fails on missing values.
-6. **plugin-sync**: every specialist plugin manifest version matches `skills/<skill>/SKILL.md`, manifest URLs point at the monorepo skill path, vendored plugin skill files match canonical skill files, and the ready-suite meta plugin plus marketplace list every specialist. CI fails on drift.
-7. **trigger-overlap**: cross-skill substring overlaps in description trigger phrases are flagged advisory. Each new overlap should either get a row in `references/TRIGGER-DISAMBIGUATION.md` or a tightened trigger phrase.
+3. **frontmatter-schema**: every skill's `SKILL.md` frontmatter declares the required keys (`name`, `version`, `updated`, `suite`, `tier`, `upstream`, `downstream`, `pairs_with`, `compatible_with`). CI fails on a missing key.
+4. **suite-release**: root `VERSION` matches every skill frontmatter version, every skill top changelog entry, the ready-suite meta plugin, and marketplace metadata. CI fails on mismatch.
+5. **doc-version-tables**: the per-skill version tables in `README.md` and `SUITE.md` match root `VERSION`. CI fails on a stale table cell.
+6. **unicode-clean**: no em-dashes, en-dashes, arrows, or box-drawing characters in `SUITE.md` (any copy), hub policy docs (`README.md`, `MAINTAINING.md`, `CONTRIBUTING.md`, `AGENTS.md`, `SECURITY.md`), `RELEASE-CHECKLIST.md`, hub scripts, hub `install.sh` / `uninstall.sh` / `ORCHESTRATORS.md`, or any skill's top CHANGELOG entry. CI fails on any forbidden codepoint.
+7. **compatible-with**: every `SKILL.md` declares `claude-code`, `codex`, `cursor`, `windsurf`, `pi`, `openclaw`, `any-agentskills-compatible-harness` under `compatible_with:`. CI fails on missing values.
+8. **references-indexed**: every `references/*.md` file is named in its skill's `SKILL.md` load-on-demand table, so no shipped reference is unreachable at runtime. CI fails on an unindexed reference.
+9. **plugin-sync**: every specialist plugin manifest version matches `skills/<skill>/SKILL.md`, manifest URLs point at the monorepo skill path, vendored plugin skill files match canonical skill files, and the ready-suite meta plugin plus marketplace list every specialist. CI fails on drift.
+10. **trigger-overlap**: cross-skill substring overlaps in description trigger phrases are flagged advisory. Each new overlap should either get a row in `references/TRIGGER-DISAMBIGUATION.md` or a tightened trigger phrase.
 
 The lint is bash-3.2-compatible (macOS default), uses no associative arrays, and runs in under a second locally.
 

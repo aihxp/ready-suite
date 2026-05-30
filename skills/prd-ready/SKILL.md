@@ -1,8 +1,8 @@
 ---
 name: prd-ready
 description: "Write a PRD that engineering, design, QA, and downstream planning skills can consume without a clarification meeting. Owns problem framing, target-user specificity, success metrics, functional and non-functional requirements, scope and no-gos, appetite and rabbit holes, open-question log, downstream handoff block, and the iterate-vs-freeze lifecycle. Refuses hollow PRDs (sections filled, no decisions), invisible PRDs (reads the same across any product), feature laundry lists (un-prioritized feature dumps), solution-first PRDs (problem box names the solution), assumption-soup PRDs (we-assume-users-will-love-it claims), and moving-target PRDs (silent edits, engineer whiplash). Triggers on 'write a PRD,' 'product spec,' 'requirements doc,' 'one-pager,' 'product brief,' 'pitch for this feature,' 'problem statement.' Does not design the architecture (architecture-ready), sequence the roadmap (roadmap-ready), pick the stack (stack-ready), build the app (production-ready), or write launch copy (launch-ready). Top of the planning tier; no upstream siblings. Full trigger list in README."
-version: 3.0.0
-updated: 2026-05-14
+version: 3.0.1
+updated: 2026-05-30
 changelog: CHANGELOG.md
 suite: ready-suite
 tier: planning
@@ -575,7 +575,7 @@ This skill is part of the **ready-suite**. See [`SUITE.md`](SUITE.md) for the fu
 
 - **Planning tier:** `prd-ready` (what, this skill), `architecture-ready` (how), `roadmap-ready` (when), `stack-ready` (with what tools).
 - **Building tier:** `production-ready` (the app), `repo-ready` (the repo scaffolding).
-- **Shipping tier:** `deploy-ready` (ship it), `observe-ready` (keep it healthy), `launch-ready` (tell the world).
+- **Shipping tier:** `deploy-ready` (ship it), `observe-ready` (keep it healthy), `launch-ready` (tell the world), `harden-ready` (survive adversarial attention).
 
 prd-ready sits at the top of the planning tier. Nothing upstream feeds into it; four downstream siblings consume its output. The harness is the router; this skill tells the user which sibling to invoke next and why.
 

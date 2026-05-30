@@ -24,7 +24,7 @@ None of this is real. The product, the company, the people, the metrics, and the
 .prd-ready/PRD.md                    - product requirements (frozen v1.0)
 .architecture-ready/ARCH.md          - system architecture + ADRs
 .roadmap-ready/ROADMAP.md            - 14-week pilot roadmap with capacity
-.stack-ready/STACK.md                - 9-category ranked stack with ADRs
+.stack-ready/DECISION.md                - 9-category ranked stack with ADRs
 .repo-ready/SCAFFOLD.md              - what repo-ready set up at week 1
 .production-ready/STATE.md           - mid-build slice tracker (week 9 of 14)
 .deploy-ready/DEPLOY.md              - cutover plan + runbook
@@ -47,7 +47,7 @@ For a first read, start with the planning tier in dependency order, then walk do
 2. [`.prd-ready/PRD.md`](.prd-ready/PRD.md) - what is being built, for whom, with what success criteria
 3. [`.architecture-ready/ARCH.md`](.architecture-ready/ARCH.md) - the system shape, trust boundaries, ADRs
 4. [`.roadmap-ready/ROADMAP.md`](.roadmap-ready/ROADMAP.md) - the 14-week sequence with capacity input
-5. [`.stack-ready/STACK.md`](.stack-ready/STACK.md) - the technology picks
+5. [`.stack-ready/DECISION.md`](.stack-ready/DECISION.md) - the technology picks
 6. [`.repo-ready/SCAFFOLD.md`](.repo-ready/SCAFFOLD.md) - the repo scaffolding
 7. [`.production-ready/STATE.md`](.production-ready/STATE.md) - the mid-build slice tracker
 8. [`.deploy-ready/DEPLOY.md`](.deploy-ready/DEPLOY.md) - the cutover plan

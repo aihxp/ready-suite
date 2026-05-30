@@ -1,8 +1,8 @@
 ---
 name: deploy-ready
 description: "Ship an app from a known-green build into real user-facing environments safely, repeatably, and reversibly. Triggers on 'deploy this,' 'CI/CD pipeline,' 'promote to staging,' 'zero-downtime migration,' 'expand-contract,' 'rollback,' 'canary,' 'blue/green,' 'progressive rollout,' 'first deploy,' 'environment parity,' 'promote through Actions,' 'GitOps,' 'promote the same artifact,' or any request to move code from pre-prod to prod. Enforces same-artifact promotion, expand/contract as a multi-deploy calendar, code-vs-data rollback asymmetry, and paper-canary detection. Does not pick IaC tools (stack-ready), wire observability (observe-ready), or manage secrets vaults (security). Pairs with observe-ready. Full trigger list in README."
-version: 3.0.0
-updated: 2026-05-14
+version: 3.0.1
+updated: 2026-05-30
 changelog: CHANGELOG.md
 suite: ready-suite
 tier: shipping
@@ -398,7 +398,7 @@ deploy-ready is the shipping-tier skill that owns the pre-prod-to-prod handoff. 
 
 - **Planning tier:** `prd-ready` (what), `architecture-ready` (how), `roadmap-ready` (when), `stack-ready` (with what tools).
 - **Building tier:** `production-ready` (the app), `repo-ready` (the repo scaffolding).
-- **Shipping tier:** `deploy-ready` (this skill, ship it), `observe-ready` (keep it healthy), `launch-ready` (tell the world).
+- **Shipping tier:** `deploy-ready` (this skill, ship it), `observe-ready` (keep it healthy), `launch-ready` (tell the world), `harden-ready` (survive adversarial attention).
 
 Skills are loosely coupled: each stands alone, each composes with the others via well-defined artifacts. No skill routes through another; the harness is the router. Install what you need.
 

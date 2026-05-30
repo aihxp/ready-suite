@@ -5,7 +5,7 @@
 | Tier | Tier 2 (matches PRD tier) |
 | Status | v1.0 (2026-05-13) |
 | Owner | Devon Park (eng lead) |
-| Consumed STACK | `.stack-ready/STACK.md` v1.0 |
+| Consumed STACK | `.stack-ready/DECISION.md` v1.0 |
 
 ## What repo-ready scaffolded for Pulse
 
@@ -119,7 +119,7 @@ docs/
 repo-ready produced an `AGENTS.md` at project root with:
 
 - One-sentence project description (mirrors `.prd-ready/PRD.md` summary).
-- Stack section (mirrors `.stack-ready/STACK.md` §5 Bundle summary).
+- Stack section (mirrors `.stack-ready/DECISION.md` §5 Bundle summary).
 - Conventions section (commit messages, branching model, where not to put files).
 - Forbidden actions section (no commit to main, no edit pnpm-lock by hand, no force-push, no run db:reset against anything except local).
 - A pointer to `CONTRIBUTING.md` for the full contributor guide.
@@ -137,7 +137,7 @@ repo-ready produced an `AGENTS.md` at project root with:
 ## Downstream handoff
 
 - **production-ready** consumes this scaffold to start the foundation slice (Step 4). The Next.js app is bootstrapped, the DB connection works, magic-link auth is wired, the worker process exists with one no-op cron job. Slices begin from there.
-- **deploy-ready** consumes the `.github/workflows/release.yml` workflow plus the platform configs in `.stack-ready/STACK.md` §3.8.
+- **deploy-ready** consumes the `.github/workflows/release.yml` workflow plus the platform configs in `.stack-ready/DECISION.md` §3.8.
 - **observe-ready** consumes the structured-logging discipline in `CLAUDE.md` plus the SLO definitions in `.roadmap-ready/ROADMAP.md` §KPI handoff.
 - **harden-ready** at week 12 consumes the trust-boundary code paths declared in `.architecture-ready/ARCH.md` §6.
 

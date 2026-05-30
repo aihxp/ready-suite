@@ -5,7 +5,7 @@
 | Tier | Tier 2 (matches PRD tier) |
 | Status | v1.0 (2026-05-09); SLO measurement starts at week 13 (first prod cutover) |
 | Owner | Devon Park (primary on-call); Generalist (secondary) |
-| Consumed STACK | `.stack-ready/STACK.md` v1.0 (Axiom for logs; Vercel + Railway for runtime) |
+| Consumed STACK | `.stack-ready/DECISION.md` v1.0 (Axiom for logs; Vercel + Railway for runtime) |
 | Consumed ROADMAP | `.roadmap-ready/ROADMAP.md` §KPI handoff |
 | Consumed DEPLOY | `.deploy-ready/DEPLOY.md` v1.0 |
 

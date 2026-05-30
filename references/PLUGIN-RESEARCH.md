@@ -115,6 +115,8 @@ Each plugin directory contains a vendored copy of the skill's `SKILL.md` and `re
 
 ### Versioning cadence
 
+> **Update (3.0.0 release train):** the suite moved to a unified release train. Every specialist plugin, the meta plugin, and the marketplace metadata now carry the same version as root `VERSION`, enforced by the `suite-release` lint check and updated together by `scripts/bump-suite-version.sh`. The monorepo is tagged once per train (`v<x.y.z>`); there are no per-plugin tags or per-plugin GitHub Releases. The original per-plugin cadence below is retained as the format research that informed the initial decision.
+
 Each specialist plugin's `version` matches the upstream skill's current SUITE.md version. The meta plugin starts at 1.0.0 and bumps independently when the bundle composition changes.
 
 Tag-Release parity is preserved across the suite: each plugin release gets a matching tag (`<plugin-name>--v<version>`) plus a GitHub Release with the body lifted from the plugin's CHANGELOG (or the relevant section of the suite changelog).

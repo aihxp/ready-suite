@@ -5,7 +5,7 @@
 | Tier | Tier 2 (matches PRD tier) |
 | Status | v1.0 (2026-05-09); first prod cutover scheduled week 13 (2026-08-04) |
 | Owner | Devon Park (eng lead, primary on-call); Generalist (secondary on-call) |
-| Consumed STACK | `.stack-ready/STACK.md` v1.0 (Vercel + Railway + Neon) |
+| Consumed STACK | `.stack-ready/DECISION.md` v1.0 (Vercel + Railway + Neon) |
 | Consumed ROADMAP | `.roadmap-ready/ROADMAP.md` §Cutover cadence |
 
 ## Environments

@@ -1,8 +1,8 @@
 # The Ready Suite
 
 [![lint](https://github.com/aihxp/ready-suite/actions/workflows/lint.yml/badge.svg)](https://github.com/aihxp/ready-suite/actions/workflows/lint.yml)
-[![release](https://img.shields.io/badge/release-v3.0.0-blue)](https://github.com/aihxp/ready-suite/releases/tag/v3.0.0)
-[![version](https://img.shields.io/badge/version-3.0.0-blue)](VERSION)
+[![release](https://img.shields.io/badge/release-v3.0.1-blue)](https://github.com/aihxp/ready-suite/releases/tag/v3.0.1)
+[![version](https://img.shields.io/badge/version-3.0.1-blue)](VERSION)
 [![agent skills](https://img.shields.io/badge/Agent%20Skills-compatible-2f6fed)](SUITE.md)
 [![aihxp/pillars](https://img.shields.io/badge/aihxp%2Fpillars-standard-0f766e)](https://github.com/aihxp/pillars)
 [![arc-ready](https://img.shields.io/badge/arc--ready-child-7c3aed)](https://github.com/aihxp/arc-ready)
@@ -29,17 +29,17 @@ kickoff-ready  ->        prd-ready           ->    repo-ready      ->    deploy-
 
 | Skill | Tier | One-line purpose | Version | Path |
 |---|---|---|---|---|
-| **kickoff-ready** | Orchestration | Sequence the ten specialists for a greenfield project from raw user intent. | 3.0.0 | [skills/kickoff-ready](skills/kickoff-ready) |
-| **prd-ready** | Planning | Define what we're building and for whom. | 3.0.0 | [skills/prd-ready](skills/prd-ready) |
-| **architecture-ready** | Planning | Design how the big pieces fit together. | 3.0.0 | [skills/architecture-ready](skills/architecture-ready) |
-| **roadmap-ready** | Planning | Sequence work over time. | 3.0.0 | [skills/roadmap-ready](skills/roadmap-ready) |
-| **stack-ready** | Planning | Pick the right tools for the job. | 3.0.0 | [skills/stack-ready](skills/stack-ready) |
-| **repo-ready** | Building | Set up the repo with production-grade hygiene. | 3.0.0 | [skills/repo-ready](skills/repo-ready) |
-| **production-ready** | Building | Build the app to production grade. | 3.0.0 | [skills/production-ready](skills/production-ready) |
-| **deploy-ready** | Shipping | Ship the app to real environments. | 3.0.0 | [skills/deploy-ready](skills/deploy-ready) |
-| **observe-ready** | Shipping | Keep the app healthy once it's live. | 3.0.0 | [skills/observe-ready](skills/observe-ready) |
-| **launch-ready** | Shipping | Tell the world the product exists. | 3.0.0 | [skills/launch-ready](skills/launch-ready) |
-| **harden-ready** | Shipping | Survive adversarial attention; prove it to an auditor. | 3.0.0 | [skills/harden-ready](skills/harden-ready) |
+| **kickoff-ready** | Orchestration | Sequence the ten specialists for a greenfield project from raw user intent. | 3.0.1 | [skills/kickoff-ready](skills/kickoff-ready) |
+| **prd-ready** | Planning | Define what we're building and for whom. | 3.0.1 | [skills/prd-ready](skills/prd-ready) |
+| **architecture-ready** | Planning | Design how the big pieces fit together. | 3.0.1 | [skills/architecture-ready](skills/architecture-ready) |
+| **roadmap-ready** | Planning | Sequence work over time. | 3.0.1 | [skills/roadmap-ready](skills/roadmap-ready) |
+| **stack-ready** | Planning | Pick the right tools for the job. | 3.0.1 | [skills/stack-ready](skills/stack-ready) |
+| **repo-ready** | Building | Set up the repo with production-grade hygiene. | 3.0.1 | [skills/repo-ready](skills/repo-ready) |
+| **production-ready** | Building | Build the app to production grade. | 3.0.1 | [skills/production-ready](skills/production-ready) |
+| **deploy-ready** | Shipping | Ship the app to real environments. | 3.0.1 | [skills/deploy-ready](skills/deploy-ready) |
+| **observe-ready** | Shipping | Keep the app healthy once it's live. | 3.0.1 | [skills/observe-ready](skills/observe-ready) |
+| **launch-ready** | Shipping | Tell the world the product exists. | 3.0.1 | [skills/launch-ready](skills/launch-ready) |
+| **harden-ready** | Shipping | Survive adversarial attention; prove it to an auditor. | 3.0.1 | [skills/harden-ready](skills/harden-ready) |
 
 ## See it end-to-end: ready-suite-example
 
@@ -88,7 +88,7 @@ The marketplace lives in this hub repo at [`.claude-plugin/marketplace.json`](.c
 
 Plugin maintainers refresh the vendored copies from the canonical content under `skills/<skill-name>/` whenever a release train bumps, then commit and tag `v<x.y.z>`.
 
-## One-command install (Codex, Cursor, pi, OpenClaw, all platforms)
+## One-command install (Claude Code, Codex, Cursor, pi, OpenClaw)
 
 Installs every skill into every detected harness (Claude Code, Codex, Cursor, plus the neutral Agent Skills path read by pi and OpenClaw) with a single shell command. Idempotent. Re-run anytime.
 
@@ -105,6 +105,8 @@ What it does:
 4. Existing non-symlink installs are backed up to `<target>.backup-<timestamp>/` first.
 
 Edit a file in `skills/<skill>/` (or `git pull` to update) and the change is live in every harness immediately. No re-install needed.
+
+Windsurf and other agents without a native skills directory are not symlinked by the installer; point their project rules at `skills/<skill>/SKILL.md` directly (see [Per-skill install](#per-skill-install-manual) below).
 
 Verbose mode shows every step:
 
@@ -163,7 +165,7 @@ Use `bash scripts/bump-suite-version.sh <x.y.z> <YYYY-MM-DD>` for coordinated re
 
 ## Maintenance: ready-suite-lint
 
-The hub ships a meta-linter that mechanically enforces the suite's discipline rules: SUITE.md byte-identical between the hub and every `skills/<skill>/` subdir, frontmatter version matches CHANGELOG top entry, root VERSION matches the release train, no em-dashes / arrows / box-drawing characters in suite-authored files, the `compatible_with` frontmatter declares the standards-level values, and Claude plugin packaging stays synced to canonical skill files.
+The hub ships a meta-linter that mechanically enforces the suite's discipline rules: SUITE.md byte-identical between the hub and every `skills/<skill>/` subdir, frontmatter version matches CHANGELOG top entry, root VERSION matches the release train (including the README and SUITE version tables), every skill declares the required frontmatter keys, no em-dashes / arrows / box-drawing characters in the high-blast-radius suite-authored files (SUITE.md copies, hub policy docs, hub scripts, top changelog entries), the `compatible_with` frontmatter declares the standards-level values, every reference file is indexed in its `SKILL.md`, and Claude plugin packaging stays synced to canonical skill files.
 
 Run locally:
 
@@ -174,7 +176,7 @@ bash scripts/lint.sh suite-md-sync     # one specific check
 bash scripts/lint.sh --help            # see all checks and flags
 ```
 
-Available checks: `suite-md-sync`, `frontmatter-version`, `suite-release`, `unicode-clean`, `compatible-with`, `plugin-sync`, `trigger-overlap`.
+Available checks: `suite-md-sync`, `frontmatter-version`, `frontmatter-schema`, `suite-release`, `doc-version-tables`, `unicode-clean`, `compatible-with`, `references-indexed`, `plugin-sync`, `trigger-overlap`.
 
 `suite-release` verifies that root `VERSION` matches every skill and the ready-suite plugin metadata. `unicode-clean` covers SUITE.md copies, hub policy docs, the release checklist, hub scripts, and top changelog entries. `plugin-sync` verifies that every Claude plugin manifest version matches the canonical `skills/<skill>/SKILL.md` version, points at the monorepo skill path, vendors byte-identical `SKILL.md` and `references/` content, and keeps the meta plugin dependencies plus marketplace sources complete.
 

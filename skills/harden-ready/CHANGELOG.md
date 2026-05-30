@@ -1,3 +1,16 @@
+## v3.0.1 (2026-05-30)
+
+Suite-wide release train alignment. This patch release moves every skill, the ready-suite meta plugin, and the marketplace metadata to the 3.0.1 train together, keeping each skill's artifact paths and trigger ownership intact.
+
+### Changed
+- Aligns this skill with the ready-suite 3.0.1 release train.
+- Keeps the skill's existing artifact paths and trigger ownership intact while publishing the shared version.
+
+### Why a patch
+This is a coordinated suite release: all eleven skills, the ready-suite meta plugin, and the marketplace metadata move together for the 3.0.1 train.
+
+---
+
 ## v3.0.0 (2026-05-14)
 
 Suite-wide release train alignment. This major release stabilizes the monorepo distribution model, synchronized Claude plugin packaging, strict trigger routing, Pillars project-context integration, and release hygiene for the eleven-skill suite.

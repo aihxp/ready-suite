@@ -1,8 +1,8 @@
 ---
 name: launch-ready
 description: "Put a deployed, healthy app in front of real users without shipping AI-slop. Owns landing page, positioning, launch-day SEO, Open Graph cards, waitlist and email funnel, launch channels (Product Hunt, Show HN, Reddit, X, IH, dev.to, LinkedIn), press outreach, launch-day telemetry, and the D-7 to D+7 runbook. Refuses AI-slop landings, hero-fatigue copy, spec-sheet positioning, paper waitlists, unrendered OG cards, and silent launches (launch-day signups with no source attribution). Triggers on 'launch my product,' 'build a landing page,' 'Product Hunt,' 'Show HN,' 'waitlist,' 'OG card,' 'launch-day SEO,' 'press kit,' 'launch week plan.' Does not build the app (production-ready), deploy it (deploy-ready), monitor it (observe-ready), pick tools (stack-ready), or own ongoing marketing. Pairs with deploy-ready and observe-ready. Full trigger list in README."
-version: 3.0.0
-updated: 2026-05-14
+version: 3.0.1
+updated: 2026-05-30
 changelog: CHANGELOG.md
 suite: ready-suite
 tier: shipping
@@ -520,7 +520,7 @@ launch-ready is the shipping-tier skill that owns "tell the world the product ex
 
 - **Planning tier:** `prd-ready` (what), `architecture-ready` (how), `roadmap-ready` (when), `stack-ready` (with what tools).
 - **Building tier:** `production-ready` (the app), `repo-ready` (the repo scaffolding).
-- **Shipping tier:** `deploy-ready` (ship it), `observe-ready` (keep it healthy), `launch-ready` (this skill, tell the world).
+- **Shipping tier:** `deploy-ready` (ship it), `observe-ready` (keep it healthy), `launch-ready` (this skill, tell the world), `harden-ready` (survive adversarial attention).
 
 Skills are loosely coupled: each stands alone, each composes with the others via well-defined artifacts. No skill routes through another; the harness is the router. Install what you need.
 

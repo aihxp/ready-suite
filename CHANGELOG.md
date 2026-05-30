@@ -4,6 +4,32 @@ Curated change history for the [aihxp/ready-suite](https://github.com/aihxp/read
 
 For per-skill changelogs, see each skill's `CHANGELOG.md` under [`skills/<skill>/CHANGELOG.md`](skills/) (e.g., [`skills/prd-ready/CHANGELOG.md`](skills/prd-ready/CHANGELOG.md)). For the full audit trail, see `git log` on this hub.
 
+## 2026-05-30 - 3.0.1 release train: drift fixes and three new lint checks
+
+Patch release across all eleven skills, the meta plugin, and marketplace metadata. A whole-suite markdown drift audit, the fixes it surfaced, and three new lint checks that make previously-unenforced invariants mechanical.
+
+### Fixed
+
+- **stack-ready frontmatter** restored the `suite`, `tier`, `upstream`, and `downstream` keys it was missing, so all eleven skills now satisfy the documented frontmatter contract (README composition principle 4).
+- **Stack-decision artifact name** canonicalized to `.stack-ready/DECISION.md` everywhere. production-ready and roadmap-ready had referenced a non-existent `.stack-ready/STACK.md`; the worked example used `STACK.md` on disk. All now match the producer (stack-ready). The `EXAMPLE-STACK.md` reference file is unrelated and untouched.
+- **harden-ready** added to the shipping-tier list in the seven specialist skills whose "Suite membership" section had omitted it.
+- **production-ready reference table** now indexes all 39 reference files. Fourteen deep-dives (SEO, scalability, realtime, file uploads, social, email templates, and more) shipped but were unreachable from the load-on-demand table.
+- **README** now describes the linter's actual `unicode-clean` scope instead of overstating it, lists all ten checks, and stops implying `install.sh` covers Windsurf (Windsurf is manual-install).
+- **MAINTAINING.md** and **references/PLUGIN-RESEARCH.md** updated for the unified release train (ten checks, four rituals; the meta plugin now tracks the train rather than versioning independently).
+- **bump-suite-version.sh** changelog template is now bump-type-aware (patch / minor / major) instead of hardcoding "major release," and updates the README status badges.
+
+### Added (lint)
+
+The linter now runs **ten** checks (was seven). The three new ones each prevent a class of drift fixed above:
+
+- **frontmatter-schema**: every skill declares the required frontmatter keys. Catches the stack-ready drift.
+- **doc-version-tables**: the README and SUITE per-skill version tables must match root `VERSION`.
+- **references-indexed**: every `references/*.md` is named in its `SKILL.md`, so no shipped reference is unreachable at runtime. Catches the production-ready table drift.
+
+The maintenance rituals remain four. Two stale local git worktrees were pruned.
+
+---
+
 ## 2026-05-09 - Example dogfood absorbed into the hub
 
 The standalone `aihxp/ready-suite-example` repo has been merged into this hub at [`examples/ready-suite-example/`](examples/ready-suite-example) via `git subtree add`, preserving its commit history. The standalone GitHub repo has been archived; its content is now part of the hub. README links to the example were rewritten to relative paths; the in-example `DOGFOOD.md` clone instruction was updated to point at the hub.

@@ -1,8 +1,8 @@
 ---
 name: roadmap-ready
 description: "Sequence software work over time with discipline. Ingests the PRD (from prd-ready) and the architecture dependency graph (from architecture-ready); requires a team-capacity input; produces a Markdown `ROADMAP.md` with Now-Next-Later horizons, named milestones with completion gates, topologically-sorted slice queues for production-ready, cutover cadence for deploy-ready, KPI handoffs for observe-ready, and explicit launch-milestone gate dates for launch-ready. Refuses fictional precision (Gantt-to-the-day with no capacity input), fictional parallelism (more concurrent tracks than engineers), quarter-stuffing (all four quarters equally full), speculative features (items absent from the PRD or architecture), feature-factory output (rows that are bare feature names with no outcome or commitment), shelf roadmaps (written once, never consulted), and roadmap theater (Gantt aesthetics with no commitments). Triggers on 'build a roadmap,' 'milestone plan,' 'quarterly plan,' 'sequence the work,' 'Now-Next-Later,' 'Shape Up cycle,' 'PI planning,' 'what ships first,' 'when does the beta happen,' 'roadmap for this quarter.' Does not redefine the product (prd-ready), design the architecture (architecture-ready), pick the stack (stack-ready), build the app (production-ready), scaffold the repo (repo-ready), deploy (deploy-ready), monitor (observe-ready), or launch (launch-ready). Planning tier; consumes `.prd-ready/PRD.md` and `.architecture-ready/ARCH.md`; produces `.roadmap-ready/ROADMAP.md` and `HANDOFF.md`. Full trigger list in README."
-version: 3.0.0
-updated: 2026-05-14
+version: 3.0.1
+updated: 2026-05-30
 changelog: CHANGELOG.md
 suite: ready-suite
 tier: planning
@@ -536,7 +536,7 @@ This skill is part of the **ready-suite**. See [`SUITE.md`](SUITE.md) for the fu
 
 - **Planning tier:** `prd-ready` (what), `architecture-ready` (how), `roadmap-ready` (when, this skill), `stack-ready` (with what tools).
 - **Building tier:** `production-ready` (the app), `repo-ready` (the repo scaffolding).
-- **Shipping tier:** `deploy-ready` (ship it), `observe-ready` (keep it healthy), `launch-ready` (tell the world).
+- **Shipping tier:** `deploy-ready` (ship it), `observe-ready` (keep it healthy), `launch-ready` (tell the world), `harden-ready` (survive adversarial attention).
 
 roadmap-ready sits in the planning tier alongside prd-ready, architecture-ready, and stack-ready. Upstream of roadmap-ready: prd-ready (WHAT) and architecture-ready (HOW). Downstream: stack-ready, production-ready, deploy-ready, observe-ready, launch-ready. The skill's output is the bridge between planning and execution: engineering reads the slice queue, deploy reads the cutover cadence, observe reads the KPIs, launch reads the milestone. The harness is the router; this skill tells the user which sibling to invoke next and why.
 
@@ -550,7 +550,7 @@ When the agent starts, it checks for upstream artifacts and pre-fills from them 
 | `.prd-ready/HANDOFF.md` | Step 3 | Pre-filled "Roadmap-ready inputs" sub-section: priority ordering, release-gating criteria, dependencies, must-haves vs. nice-to-haves, rabbit holes, dates or ranges. |
 | `.architecture-ready/ARCH.md` | Step 3 (component DAG extraction); Step 4 (topological sequencing); Step 5 (milestone architecture references); Step 7 (launch-milestone architecture impact) | System shape (monolith vs. services), component breakdown, dependency graph edges, integration architecture, trust boundaries, non-functional targets that shape milestone scope. |
 | `.architecture-ready/HANDOFF.md` | Step 3; Step 4 | Pre-filled "Roadmap-ready inputs" sub-section: component dependency graph, load-bearing-first ordering, risk-ordered architecture items, evolution plan (if Mode E). |
-| `.stack-ready/STACK.md` or `.stack-ready/DECISION.md` | Step 2 (cadence alignment); Step 5 (stack-level milestone content) | Any stack decisions whose implementation lands in a particular milestone (migration from one DB to another; framework upgrade). Stack decisions are not re-made here; they are sequenced. |
+| `.stack-ready/DECISION.md` | Step 2 (cadence alignment); Step 5 (stack-level milestone content) | Any stack decisions whose implementation lands in a particular milestone (migration from one DB to another; framework upgrade). Stack decisions are not re-made here; they are sequenced. |
 
 If `.prd-ready/` is absent entirely, the skill emits a Tier 1 Sketch at most, flags that the roadmap is effectively a feature wishlist until a PRD lands, and pauses dated commitments. If `.architecture-ready/` is absent, the skill emits at most Tier 2 Plan, flags that sequencing risks missing dependencies, and re-runs Step 4 against ARCH when it arrives. Upstream absence is handled gracefully; upstream falsehood is not (if `.prd-ready/PRD.md` contradicts the running code, trust the code and route back to prd-ready for reconciliation before building on top of a stale PRD).
 

@@ -9,7 +9,7 @@ This project was kicked off via the [ready-suite](https://github.com/aihxp/ready
 | prd-ready | done | `.prd-ready/PRD.md` |
 | architecture-ready | done | `.architecture-ready/ARCH.md` |
 | roadmap-ready | done | `.roadmap-ready/ROADMAP.md` |
-| stack-ready | done | `.stack-ready/STACK.md` |
+| stack-ready | done | `.stack-ready/DECISION.md` |
 | repo-ready | done | `.repo-ready/SCAFFOLD.md` |
 | production-ready | active (week 9 of 14) | `.production-ready/STATE.md` |
 | deploy-ready | planned (week 13 cutover) | `.deploy-ready/DEPLOY.md` |
@@ -24,7 +24,7 @@ The kickoff audit ledger lives at `.kickoff-ready/PROGRESS.md`. It records every
 
 This file is the cross-tool agent brief; project conventions (stack, build/test commands, forbidden actions, contribution policy) live in `CONTRIBUTING.md` and the per-tool overlay files (`CLAUDE.md` is a symlink to this `AGENTS.md`; `.cursorrules` and `.windsurfrules` mirror the conventions section).
 
-### Stack (mirrors `.stack-ready/STACK.md` §5)
+### Stack (mirrors `.stack-ready/DECISION.md` §5)
 
 - Runtime: Node.js 22 LTS (pinned in `.nvmrc`)
 - Language: TypeScript 5.x, strict mode

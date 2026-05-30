@@ -82,7 +82,7 @@ Looking across the eleven artifacts:
 - **prd-ready/PRD.md** (~200 lines): tight. Could be longer; in real projects PRDs run 2-5x this length.
 - **architecture-ready/ARCH.md** (~230 lines): tight. ADRs are concise; could go deeper on each.
 - **roadmap-ready/ROADMAP.md** (~180 lines): about right.
-- **stack-ready/STACK.md** (~290 lines): meaty. Nine categories + ADRs.
+- **stack-ready/DECISION.md** (~290 lines): meaty. Nine categories + ADRs.
 - **repo-ready/SCAFFOLD.md** (~95 lines): on the lighter side, but this is appropriate; repo-ready's output is the scaffold itself, not a description of it.
 
 The PRD and ARCH could go deeper. In a real project, the PRD would have user-research evidence, prior-art research, persona interview transcripts, competitive analysis. The ARCH would have more ADRs (10-15 vs. the 3 here), data-flow diagrams, capacity-planning math. The fictional version is rigorous but compressed.

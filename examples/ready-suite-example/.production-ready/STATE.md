@@ -82,7 +82,7 @@ Tier-2 hollow-check scheduled for end of week 11 (before pen-test week). Will ru
 
 When a future engineer reads this STATE.md to resume:
 
-1. `Read .prd-ready/PRD.md`, `.architecture-ready/ARCH.md`, `.roadmap-ready/ROADMAP.md`, `.stack-ready/STACK.md` if cold-starting.
+1. `Read .prd-ready/PRD.md`, `.architecture-ready/ARCH.md`, `.roadmap-ready/ROADMAP.md`, `.stack-ready/DECISION.md` if cold-starting.
 2. `Read .production-ready/STATE.md` (this file).
 3. `git log --oneline -20` to see recent commits.
 4. Run `pnpm dev`, sign in as Lin, verify the foundation works.

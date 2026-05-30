@@ -1,8 +1,8 @@
 ---
 name: production-ready
 description: "Build production-grade, end-to-end connected apps across any stack: dashboards, admin panels, internal tools, SaaS back-offices, analytics consoles, ops centers. Triggers on 'dashboard,' 'admin panel,' 'internal tool,' 'back office,' 'control panel,' 'analytics view,' or any multi-page interface with auth, navigation, and CRUD over domain data. Enforces vertical-slice discipline and a no-scaffold-no-placeholder rule: every feature ships wired end-to-end to a real backend, not stubbed with TODO, fake JSON, or 'hook this up later.' Pairs with repo-ready for repo hygiene. Not for single components, marketing sites, or pure repo scaffolding. Full trigger list in README."
-version: 3.0.0
-updated: 2026-05-14
+version: 3.0.1
+updated: 2026-05-30
 changelog: CHANGELOG.md
 suite: ready-suite
 tier: building
@@ -409,6 +409,20 @@ The body above is enough to start. Load each reference *before* implementing tha
 | `reporting.md` | **On demand.** Report generation, PDF and Excel |
 | `api-and-integrations.md` | **On demand.** External APIs, webhooks |
 | `ai-product-patterns.md` | **On demand.** AI and LLM features |
+| `headers-and-navigation.md` | **Tier 1.** App header, nav patterns, command bar, breadcrumbs. Extends `information-architecture.md` |
+| `login-and-auth-pages.md` | **Tier 1.** Sign-in, sign-up, password-reset, verification page UX. Extends `auth-and-rbac.md` |
+| `error-pages-and-offline.md` | **Tier 2.** 404 and 500 pages, offline states, error boundaries. Extends `states-and-feedback.md` |
+| `accessibility-deep-dive.md` | **Tier 1+ and Tier 4 verification.** WCAG, keyboard nav, ARIA, focus management, screen-reader testing |
+| `animation-and-motion.md` | **On demand.** Transitions, micro-interactions, reduced-motion. Extends `ui-design-patterns.md` |
+| `dark-mode-deep-dive.md` | **On demand.** Theming, color tokens, system preference, persistence |
+| `seo-and-web-standards.md` | **On demand.** Metadata, sitemaps, robots, structured data, canonical URLs |
+| `file-management-and-uploads.md` | **On demand.** Uploads, storage, signed URLs, scanning, previews |
+| `realtime-and-collaboration.md` | **On demand.** WebSockets, presence, live cursors, optimistic concurrency |
+| `social-media-features.md` | **On demand.** Feeds, follows, mentions, sharing, moderation |
+| `marketing-and-landing-pages.md` | **On demand.** Landing pages, pricing, conversion sections. Extends `headers-and-navigation.md` |
+| `email-template-design.md` | **On demand.** Transactional and marketing email layout, client compatibility. Extends `notifications-and-email.md` |
+| `migration-and-data-import.md` | **On demand.** CSV and bulk import, schema migration, backfills. Extends `file-management-and-uploads.md` |
+| `expansion-and-scalability.md` | **On demand and Tier 4.** Sharding, queues, caching tiers, capacity planning for growth |
 
 Skill version and change history live in `CHANGELOG.md`. When resuming a project, confirm the skill version your session loaded matches the version recorded in `.production-ready/STATE.md`. A skill update between sessions may change hollow-check patterns, add tier requirements, or shift items between tiers (especially for regulated domains). If the versions differ, re-run the hollow check and re-read the changed sections before continuing.
 
@@ -486,7 +500,7 @@ production-ready is the building-tier core of the **ready-suite**, a composable 
 
 - **Planning tier:** `prd-ready` (what), `architecture-ready` (how), `roadmap-ready` (when), `stack-ready` (with what tools).
 - **Building tier:** `production-ready` (this skill, the app), `repo-ready` (the repo scaffolding).
-- **Shipping tier:** `deploy-ready` (ship it), `observe-ready` (keep it healthy), `launch-ready` (tell the world).
+- **Shipping tier:** `deploy-ready` (ship it), `observe-ready` (keep it healthy), `launch-ready` (tell the world), `harden-ready` (survive adversarial attention).
 
 Skills are loosely coupled: each stands alone, each composes with the others via well-defined artifacts. No skill routes through another; the harness is the router. Install what you need.
 
@@ -499,7 +513,7 @@ When the agent starts, it checks for upstream artifacts and pre-fills the pre-fl
 | `.prd-ready/PRD.md` | Step 1 (pre-flight) | Question 1 (who uses this, for what job), question 2 (domain entities), success criteria. |
 | `.architecture-ready/ARCH.md` | Step 2 (architecture note) | System-level architecture decisions (monolith vs. services, sync vs. async, data-layer shape) adopted wholesale; local architecture note becomes a delta, not a redecision. |
 | `.roadmap-ready/ROADMAP.md` | Step 1 and Step 5 (slice ordering) | Slice order aligned to milestone plan; CTAs whose chain falls outside the current milestone go directly to the deferred-cta.md list. |
-| `.stack-ready/STACK.md` | Step 2 (architecture note) | Stack bullet is not re-decided; it quotes STACK.md. Pre-flight question 3 (what's the stack) already has the answer. |
+| `.stack-ready/DECISION.md` | Step 2 (architecture note) | Stack bullet is not re-decided; it quotes DECISION.md. Pre-flight question 3 (what's the stack) already has the answer. |
 
 If an upstream artifact *contradicts* what is in the existing code (Mode B/D), trust the code and note the drift. Upstream artifacts are historical records, not current-state overrides.
 

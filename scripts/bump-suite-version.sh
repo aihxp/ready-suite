@@ -31,23 +31,38 @@ if ! printf "%s" "$release_date" | grep -Eq '^[0-9]{4}-[0-9]{2}-[0-9]{2}$'; then
   exit 2
 fi
 
+# Classify a bump as major|minor|patch by comparing old to new semver.
+# Falls back to "coordinated" when the prior version is unknown.
+bump_type() {
+  local old="$1" new="$2" o1 o2 o3 n1 n2 n3
+  if [ -z "$old" ]; then printf "coordinated"; return; fi
+  o1="${old%%.*}"; o3="${old##*.}"; o2="${old#*.}"; o2="${o2%.*}"
+  n1="${new%%.*}"; n3="${new##*.}"; n2="${new#*.}"; n2="${n2%.*}"
+  if [ "$n1" != "$o1" ]; then printf "major"
+  elif [ "$n2" != "$o2" ]; then printf "minor"
+  elif [ "$n3" != "$o3" ]; then printf "patch"
+  else printf "coordinated"; fi
+}
+
 prepend_changelog() {
-  local skill changelog top tmp
+  local skill changelog top tmp btype heading
   skill="$1"
   changelog="$REPO_ROOT/skills/$skill/CHANGELOG.md"
   top="$(awk '/^## v/ {sub(/^## v/, ""); sub(/ .*/, ""); print; exit}' "$changelog")"
   if [ "$top" = "$version" ]; then
     return 0
   fi
+  btype="$(bump_type "$top" "$version")"
+  if [ "$btype" = "coordinated" ]; then heading="Why this release"; else heading="Why a $btype"; fi
   tmp="$(mktemp)"
   {
     printf "## v%s (%s)\n\n" "$version" "$release_date"
-    printf "Suite-wide release train alignment. This major release stabilizes the monorepo distribution model, synchronized Claude plugin packaging, strict trigger routing, Pillars project-context integration, and release hygiene for the eleven-skill suite.\n\n"
+    printf "Suite-wide release train alignment. This %s release moves every skill, the ready-suite meta plugin, and the marketplace metadata to the %s train together, keeping each skill's artifact paths and trigger ownership intact.\n\n" "$btype" "$version"
     printf "### Changed\n"
     printf -- "- Aligns this skill with the ready-suite %s release train.\n" "$version"
-    printf -- "- Keeps the skill's existing artifact paths and trigger ownership intact while publishing the shared major version.\n\n"
-    printf "### Why a major\n"
-    printf "This is a coordinated suite release: all eleven skills, the ready-suite meta plugin, and the marketplace metadata now move together for the %s train.\n\n" "$version"
+    printf -- "- Keeps the skill's existing artifact paths and trigger ownership intact while publishing the shared version.\n\n"
+    printf "### %s\n" "$heading"
+    printf "This is a coordinated suite release: all eleven skills, the ready-suite meta plugin, and the marketplace metadata move together for the %s train.\n\n" "$version"
     printf -- "---\n\n"
     cat "$changelog"
   } > "$tmp"
@@ -87,6 +102,15 @@ sync_suite_md() {
   done
 }
 
+# Update the README status badges (release-tag link + version shields).
+update_readme_badges() {
+  VERSION_VALUE="$version" perl -0pi -e '
+    s{badge/release-v[0-9]+\.[0-9]+\.[0-9]+-blue}{badge/release-v$ENV{VERSION_VALUE}-blue}g;
+    s{releases/tag/v[0-9]+\.[0-9]+\.[0-9]+}{releases/tag/v$ENV{VERSION_VALUE}}g;
+    s{badge/version-[0-9]+\.[0-9]+\.[0-9]+-blue}{badge/version-$ENV{VERSION_VALUE}-blue}g;
+  ' "$REPO_ROOT/README.md"
+}
+
 printf "%s\n" "$version" > "$REPO_ROOT/VERSION"
 
 for skill in $SKILLS; do
@@ -95,6 +119,7 @@ for skill in $SKILLS; do
 done
 
 update_version_tables
+update_readme_badges
 sync_suite_md
 bash "$REPO_ROOT/scripts/refresh-plugin-skills.sh"
 

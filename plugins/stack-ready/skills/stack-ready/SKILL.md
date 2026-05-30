@@ -1,9 +1,18 @@
 ---
 name: stack-ready
 description: "Choose the right stack for a project before building it. Triggers on 'what stack should I use,' 'Next.js vs. Remix,' 'pick a database,' 'Postgres or Mongo,' 'which auth provider,' 'should I use Convex,' 'hosting recommendation,' 'move from Firebase to Supabase,' or any request to evaluate tech choices for a specific job. Outputs a ranked, scored shortlist with tradeoffs, pairing compatibility checks, and bundle recommendations tailored to domain, team size, budget, and time-to-ship. Stops at the recommendation: does not build the app (that's production-ready) or configure the repo (that's repo-ready). Not for purely abstract language debates with no project attached. Full trigger list in README."
-version: 3.0.0
-updated: 2026-05-14
+version: 3.0.1
+updated: 2026-05-30
 changelog: CHANGELOG.md
+suite: ready-suite
+tier: planning
+upstream: []
+downstream:
+  - repo-ready
+  - production-ready
+pairs_with:
+  - production-ready
+  - repo-ready
 compatible_with:
   - claude-code
   - codex
@@ -12,9 +21,6 @@ compatible_with:
   - pi
   - openclaw
   - any-agentskills-compatible-harness
-pairs_with:
-  - production-ready
-  - repo-ready
 ---
 
 # Stack Ready

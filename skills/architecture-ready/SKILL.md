@@ -1,8 +1,8 @@
 ---
 name: architecture-ready
 description: "Given a PRD, produce an architecture that says what system shape to build and why, before any code is written or any tool is chosen. Triggers on 'design the architecture,' 'system diagram,' 'monolith or microservices,' 'integration shape,' 'service boundaries,' 'data architecture,' 'how do the pieces fit,' 'ADR,' 'trust boundaries,' 'C4 diagram,' 'arc42,' 'non-functional requirements map to architecture.' Refuses architecture theater (diagrams with no load-bearing decisions), paper-tiger architecture (looks robust until first real load), cargo-cult cloud-native (Kubernetes and Kafka for a ten-user CRUD), stackitecture (stack picked and called architecture), resume-driven architecture, and 'scalable' as a claim with no numbers. Planning tier; consumes .prd-ready/PRD.md; produces .architecture-ready/ARCH.md for stack-ready, roadmap-ready, and production-ready. Does not pick tools (stack-ready), sequence milestones (roadmap-ready), or build the app (production-ready). Full trigger list in README."
-version: 3.0.0
-updated: 2026-05-14
+version: 3.0.1
+updated: 2026-05-30
 changelog: CHANGELOG.md
 suite: ready-suite
 tier: planning
@@ -682,7 +682,7 @@ This skill is part of the **ready-suite**. See [`SUITE.md`](SUITE.md) for the fu
 
 - **Planning tier:** `prd-ready` (what), `architecture-ready` (how, this skill), `roadmap-ready` (when), `stack-ready` (with what tools).
 - **Building tier:** `production-ready` (the app), `repo-ready` (the repo scaffolding).
-- **Shipping tier:** `deploy-ready` (ship it), `observe-ready` (keep it healthy), `launch-ready` (tell the world).
+- **Shipping tier:** `deploy-ready` (ship it), `observe-ready` (keep it healthy), `launch-ready` (tell the world), `harden-ready` (survive adversarial attention).
 
 architecture-ready sits in the planning tier, between prd-ready upstream and three downstream consumers. The harness is the router; this skill tells the user which sibling to invoke next and why.
 

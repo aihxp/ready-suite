@@ -1,8 +1,8 @@
 ---
 name: observe-ready
 description: "Keep a deployed app healthy once real users are on it. Refuses paper SLOs (numbers with no error-budget policy), blind dashboards (charts bound to no SLO), and paper runbooks (written once, never executed). Triggers on 'add monitoring,' 'define an SLO,' 'alerts when X,' 'add Datadog / Honeycomb / Sentry / Grafana,' 'write a runbook,' 'on-call setup,' 'post-mortem,' 'structured logging,' 'OpenTelemetry,' 'distributed tracing,' 'error budget policy,' or any request to wire operational signals for a live service. Does not pick the tool (stack-ready), deploy the app (deploy-ready), build the app (production-ready), or manage secrets (security). Pairs with deploy-ready. Full trigger list in README."
-version: 3.0.0
-updated: 2026-05-14
+version: 3.0.1
+updated: 2026-05-30
 changelog: CHANGELOG.md
 suite: ready-suite
 tier: shipping
@@ -359,7 +359,7 @@ observe-ready is the shipping-tier skill that owns "keep it healthy once it is l
 
 - **Planning tier:** `prd-ready` (what), `architecture-ready` (how), `roadmap-ready` (when), `stack-ready` (with what tools).
 - **Building tier:** `production-ready` (the app), `repo-ready` (the repo scaffolding).
-- **Shipping tier:** `deploy-ready` (ship it), `observe-ready` (this skill, keep it healthy), `launch-ready` (tell the world).
+- **Shipping tier:** `deploy-ready` (ship it), `observe-ready` (this skill, keep it healthy), `launch-ready` (tell the world), `harden-ready` (survive adversarial attention).
 
 Skills are loosely coupled: each stands alone, each composes with the others via well-defined artifacts. No skill routes through another; the harness is the router. Install what you need.
 

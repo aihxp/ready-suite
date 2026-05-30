@@ -9,7 +9,14 @@
 #   suite-md-sync          SUITE.md byte-identical between hub and each
 #                          skills/<skill>/ subdir
 #   frontmatter-version    SKILL.md version matches CHANGELOG top entry
+#   frontmatter-schema     SKILL.md carries the required frontmatter keys
+#                          (suite, tier, upstream, downstream, pairs_with,
+#                          compatible_with, plus name/version/updated)
 #   suite-release          root VERSION matches every skill and meta plugin
+#   doc-version-tables     README and SUITE per-skill version tables match
+#                          root VERSION
+#   references-indexed     every references/*.md is named in its SKILL.md
+#                          load-on-demand table (no unreachable references)
 #   unicode-clean          no em-dashes / arrows / box drawing in
 #                          suite-authored files (SUITE.md whole-file,
 #                          hub policy docs, top CHANGELOG entry,
@@ -78,9 +85,12 @@ Usage: bash scripts/lint.sh [check | --all] [--verbose] [--fail-fast]
 Checks:
   suite-md-sync         SUITE.md byte-identical hub vs skills/<skill>/
   frontmatter-version   SKILL.md version matches CHANGELOG top entry
+  frontmatter-schema    SKILL.md carries the required frontmatter keys
   suite-release         root VERSION matches every skill and meta plugin
+  doc-version-tables    README and SUITE version tables match root VERSION
   unicode-clean         no em-dashes / arrows / box drawing in suite-authored files
   compatible-with       compatible_with frontmatter standards-level values
+  references-indexed    every references/*.md is named in its SKILL.md
   plugin-sync           plugin manifests and vendored skill files match canonical sources
   trigger-overlap       cross-skill trigger-phrase substring overlaps (advisory)
 
@@ -106,7 +116,7 @@ while [ $# -gt 0 ]; do
     --fail-fast) FAIL_FAST=1 ;;
     --strict-triggers) STRICT_TRIGGERS=1 ;;
     --all) SELECTED="--all" ;;
-    suite-md-sync|frontmatter-version|suite-release|unicode-clean|compatible-with|plugin-sync|trigger-overlap) SELECTED="$1" ;;
+    suite-md-sync|frontmatter-version|frontmatter-schema|suite-release|doc-version-tables|unicode-clean|compatible-with|references-indexed|plugin-sync|trigger-overlap) SELECTED="$1" ;;
   esac
   shift
 done
@@ -587,6 +597,111 @@ check_trigger_overlap() {
 }
 
 # -----------------------------------------------------------------------
+# Check: frontmatter-schema
+# -----------------------------------------------------------------------
+# Every skill SKILL.md must declare the suite's documented frontmatter
+# contract. README composition principle 4 and the monorepo CHANGELOG both
+# state every skill carries these keys; this check makes that mechanical so
+# a skill cannot silently drop suite / tier / upstream / downstream again.
+REQUIRED_FRONTMATTER_KEYS="name version updated changelog suite tier upstream downstream pairs_with compatible_with"
+check_frontmatter_schema() {
+  section "frontmatter-schema"
+  local skill s_dir key fm fail skill_fail
+  fail=0
+  for skill in $SKILLS; do
+    s_dir="$(repo_dir_for "$skill")"
+    if [ ! -f "$s_dir/SKILL.md" ]; then
+      err "$skill: SKILL.md missing"
+      fail=$((fail + 1))
+      continue
+    fi
+    # Frontmatter is the block between the first two --- lines.
+    fm="$(awk '/^---$/{c++; next} c==1{print} c==2{exit}' "$s_dir/SKILL.md")"
+    skill_fail=0
+    for key in $REQUIRED_FRONTMATTER_KEYS; do
+      if ! printf "%s\n" "$fm" | grep -qE "^$key:"; then
+        err "$skill: frontmatter missing required key '$key'"
+        fail=$((fail + 1))
+        skill_fail=1
+      fi
+    done
+    if [ "$skill_fail" = "0" ]; then
+      vok "$skill: all required frontmatter keys present"
+    fi
+  done
+  return "$fail"
+}
+
+# -----------------------------------------------------------------------
+# Check: references-indexed
+# -----------------------------------------------------------------------
+# Every references/<file>.md must be named in the skill's SKILL.md (its
+# load-on-demand table), so shipped reference content is discoverable at
+# runtime instead of dead weight the agent never loads.
+check_references_indexed() {
+  section "references-indexed"
+  local skill s_dir ref base fail skill_fail
+  fail=0
+  for skill in $SKILLS; do
+    s_dir="$(repo_dir_for "$skill")"
+    if [ ! -d "$s_dir/references" ]; then
+      vok "$skill: no references/ dir"
+      continue
+    fi
+    skill_fail=0
+    for ref in "$s_dir"/references/*.md; do
+      [ -e "$ref" ] || continue
+      base="$(basename "$ref")"
+      if ! grep -q "$base" "$s_dir/SKILL.md"; then
+        err "$skill: references/$base not named in SKILL.md (unreachable at runtime)"
+        fail=$((fail + 1))
+        skill_fail=1
+      fi
+    done
+    if [ "$skill_fail" = "0" ]; then
+      vok "$skill: every reference indexed in SKILL.md"
+    fi
+  done
+  return "$fail"
+}
+
+# -----------------------------------------------------------------------
+# Check: doc-version-tables
+# -----------------------------------------------------------------------
+# README.md and SUITE.md each carry a per-skill version table maintained by
+# bump-suite-version.sh. Nothing else verifies them against root VERSION; a
+# reformatted table or a missed substitution would drift silently. The row
+# is anchored by the [skills/<skill>] link so prose mentions are ignored.
+check_doc_version_tables() {
+  section "doc-version-tables"
+  local version skill readme suite row v_readme v_suite fail
+  fail=0
+  version="$(suite_version)"
+  if [ -z "$version" ]; then
+    err "VERSION missing or empty"
+    return 1
+  fi
+  readme="$HUB_DIR/README.md"
+  suite="$HUB_DIR/SUITE.md"
+  for skill in $SKILLS; do
+    row="$(grep -E "^\| \*\*$skill\*\* \|" "$readme" 2>/dev/null | grep "\[skills/$skill\]" | head -1)"
+    v_readme="$(printf '%s' "$row" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)"
+    row="$(grep -E "^\| \*\*$skill\*\* \|" "$suite" 2>/dev/null | grep "\[skills/$skill\]" | head -1)"
+    v_suite="$(printf '%s' "$row" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1)"
+    if [ "$v_readme" != "$version" ]; then
+      err "$skill: README version table shows '${v_readme:-none}' != VERSION $version"
+      fail=$((fail + 1))
+    elif [ "$v_suite" != "$version" ]; then
+      err "$skill: SUITE.md version table shows '${v_suite:-none}' != VERSION $version"
+      fail=$((fail + 1))
+    else
+      vok "$skill: README and SUITE tables v$version"
+    fi
+  done
+  return "$fail"
+}
+
+# -----------------------------------------------------------------------
 # Runner
 # -----------------------------------------------------------------------
 run_check() {
@@ -599,6 +714,9 @@ run_check() {
     unicode-clean)        check_unicode_clean;        result=$? ;;
     compatible-with)      check_compatible_with;      result=$? ;;
     plugin-sync)          check_plugin_sync;          result=$? ;;
+    frontmatter-schema)   check_frontmatter_schema;   result=$? ;;
+    references-indexed)   check_references_indexed;   result=$? ;;
+    doc-version-tables)   check_doc_version_tables;   result=$? ;;
     trigger-overlap)      check_trigger_overlap;      result=$? ;;
     *) err "unknown check: $name"; return 1 ;;
   esac
@@ -609,7 +727,7 @@ run_check() {
   fi
 }
 
-ALL_CHECKS="suite-md-sync frontmatter-version suite-release unicode-clean compatible-with plugin-sync trigger-overlap"
+ALL_CHECKS="suite-md-sync frontmatter-version frontmatter-schema suite-release doc-version-tables unicode-clean compatible-with references-indexed plugin-sync trigger-overlap"
 
 printf "\n%sready-suite-lint%s\n" "$C_BOLD" "$C_RESET"
 info "  hub:    $HUB_DIR"
