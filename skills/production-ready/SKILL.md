@@ -1,7 +1,7 @@
 ---
 name: production-ready
 description: "Build production-grade, end-to-end connected apps across any stack: dashboards, admin panels, internal tools, SaaS back-offices, analytics consoles, ops centers. Triggers on 'dashboard,' 'admin panel,' 'internal tool,' 'back office,' 'control panel,' 'analytics view,' or any multi-page interface with auth, navigation, and CRUD over domain data. Enforces vertical-slice discipline and a no-scaffold-no-placeholder rule: every feature ships wired end-to-end to a real backend, not stubbed with TODO, fake JSON, or 'hook this up later.' Pairs with repo-ready for repo hygiene. Not for single components, marketing sites, or pure repo scaffolding. Full trigger list in README."
-version: 3.0.1
+version: 3.0.2
 updated: 2026-05-30
 changelog: CHANGELOG.md
 suite: ready-suite
@@ -21,6 +21,7 @@ compatible_with:
   - codex
   - cursor
   - windsurf
+  - antigravity
   - pi
   - openclaw
   - any-agentskills-compatible-harness
@@ -365,7 +366,7 @@ The deferred-CTA escape hatch from Step 5 item 9 exists so slices can ship when 
 | **Target slice or milestone** | The named slice or Tier boundary where this is expected to ship. "Billing slice, Tier 2" or "After Stripe provisioning, before Tier 3 boundary." |
 | **Status** | One of `deferred` (not started), `in-progress` (active work in the current slice), `resolved` (the chain shipped, close the entry), `dropped` (decided not to build, with a one-line reason). |
 
-**Tier-boundary review.** At every tier boundary (Tier 1 → 2, 2 → 3, 3 → 4), walk `deferred-cta.md` entry by entry before declaring the new tier complete:
+**Tier-boundary review.** At every tier boundary (Tier 1 -> 2, 2 -> 3, 3 -> 4), walk `deferred-cta.md` entry by entry before declaring the new tier complete:
 - If the blocker is resolved, ship the CTA *in the current tier cycle*. It rides into whatever slice its chain belongs to, not as a separate slice.
 - If the blocker is still real, leave the entry in place and append a check date. An entry that has sat `deferred` across two tier boundaries with no progress is a scope signal: either the feature is real and deserves a slice, or it was never needed and should be `dropped`.
 - If the CTA was a mistake (scope creep that never deserved a button), mark it `dropped` with a one-line reason. Dropped entries stay in the file for audit history.

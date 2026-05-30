@@ -1,21 +1,21 @@
 # Settings & Configuration
 
-This file covers how to architect the settings layer of a dashboard — the hierarchy of user, org, and system settings, how to store them, how to build the UI, and how to handle the configuration lifecycle. The skill already says "a settings page that actually saves" is required. This file covers how to make it real.
+This file covers how to architect the settings layer of a dashboard, the hierarchy of user, org, and system settings, how to store them, how to build the UI, and how to handle the configuration lifecycle. The skill already says "a settings page that actually saves" is required. This file covers how to make it real.
 
 ## Quick decision: settings architecture
 
 **Default: use the hybrid approach.** Typed columns for security-critical settings, JSONB for display preferences.
 
 ```
-What kind of setting?               → Storage         → Save pattern
+What kind of setting?               -> Storage         -> Save pattern
 ─────────────────────────────────────────────────────────────────────
-Queried in middleware/auth           → Typed column    → Explicit save
-Security policy (MFA, password)      → Typed column    → Explicit save
-Display preference (theme, density)  → JSONB column    → Auto-save on change
-Notification toggle                  → JSONB column    → Auto-save on change
-Profile fields (name, email, avatar) → Typed columns   → Explicit save
-Org branding (logo, colors)          → JSONB column    → Explicit save
-System-wide (rate limits, flags)     → Key-value table → Explicit save (admin only)
+Queried in middleware/auth           -> Typed column    -> Explicit save
+Security policy (MFA, password)      -> Typed column    -> Explicit save
+Display preference (theme, density)  -> JSONB column    -> Auto-save on change
+Notification toggle                  -> JSONB column    -> Auto-save on change
+Profile fields (name, email, avatar) -> Typed columns   -> Explicit save
+Org branding (logo, colors)          -> JSONB column    -> Explicit save
+System-wide (rate limits, flags)     -> Key-value table -> Explicit save (admin only)
 ```
 
 **Auto-save vs. explicit save rule:** If the effect is instantly visible and easily reversible (theme toggle, density), auto-save. If it involves text input, affects other users, or has side effects (profile info, security policies), require a Save button. Never mix both patterns in the same form section.
@@ -72,7 +72,7 @@ Org settings:     visible to org admins + super admins
 User settings:    visible to the user + org admins (for audit)
 ```
 
-Org admins don't edit individual user settings directly — they set org-level locks that cascade.
+Org admins don't edit individual user settings directly, they set org-level locks that cascade.
 
 ---
 
@@ -126,7 +126,7 @@ Hardcoded app default (in code, always present)
   > User override (from user preferences)
 ```
 
-Define all defaults in a single constants file. The application never reads raw database values — it goes through a resolver that handles missing values.
+Define all defaults in a single constants file. The application never reads raw database values, it goes through a resolver that handles missing values.
 
 ### "Write on first change" pattern
 
@@ -225,7 +225,7 @@ When a user has modified an explicit-save section and tries to navigate away, sh
 - **Default session timeout** and maximum
 - **File upload limits** (size, types)
 - **Feature flag controls** (toggle per org, per plan, globally)
-- **System health indicators** (DB status, queue health, storage usage, external service circuit breaker states) — read-only, not settings
+- **System health indicators** (DB status, queue health, storage usage, external service circuit breaker states), read-only, not settings
 
 ### Feature flags from the UI
 
@@ -329,10 +329,10 @@ Show the setting, don't hide it (discovery drives upgrades). Gray out controls. 
 
 ```
 Custom branding                              PRO
-  Logo:        [Upload]  ← grayed out
+  Logo:        [Upload]  <- grayed out
   ┌─────────────────────────────────────────┐
   │ Upgrade to Pro to customize branding    │
-  │                         [Upgrade now →] │
+  │                         [Upgrade now -> ] │
   └─────────────────────────────────────────┘
 ```
 

@@ -13,23 +13,23 @@ This file covers connecting the dashboard to external services and offering your
 Every external API call goes through a dedicated adapter module. Never call third-party APIs directly from route handlers or service functions.
 
 ```typescript
-// interfaces/email.ts — the contract your codebase uses
+// interfaces/email.ts, the contract your codebase uses
 interface EmailProvider {
   send(params: { to: string; subject: string; html: string }): Promise<{ id: string }>;
 }
 
-// adapters/email/sendgrid.ts — one implementation
+// adapters/email/sendgrid.ts, one implementation
 export class SendGridAdapter implements EmailProvider {
   constructor(private apiKey: string) {}
   async send(params) { /* SendGrid SDK calls */ }
 }
 
-// adapters/email/resend.ts — swap by changing one line
+// adapters/email/resend.ts, swap by changing one line
 export class ResendAdapter implements EmailProvider {
   async send(params) { /* Resend SDK calls */ }
 }
 
-// adapters/email/index.ts — factory
+// adapters/email/index.ts, factory
 export function createEmailProvider(): EmailProvider {
   switch (config.email.provider) {
     case 'sendgrid': return new SendGridAdapter(config.email.apiKey);
@@ -39,19 +39,19 @@ export function createEmailProvider(): EmailProvider {
 ```
 
 Why adapters matter:
-- **Swappability** — switching SendGrid to Resend means changing one file. The 47 places that send emails stay untouched.
-- **Testability** — inject a fake adapter in tests. No HTTP mocking needed.
-- **Normalization** — each provider returns errors and data differently. The adapter normalizes into your internal format.
-- **Observability** — the adapter is the single place for latency tracking, error counting, and circuit breaker logic.
-- **Credential isolation** — the adapter owns its credentials. No route handler knows API keys.
+- **Swappability**, switching SendGrid to Resend means changing one file. The 47 places that send emails stay untouched.
+- **Testability**, inject a fake adapter in tests. No HTTP mocking needed.
+- **Normalization**, each provider returns errors and data differently. The adapter normalizes into your internal format.
+- **Observability**, the adapter is the single place for latency tracking, error counting, and circuit breaker logic.
+- **Credential isolation**, the adapter owns its credentials. No route handler knows API keys.
 
 Name the interface after its role (`EmailProvider`, `FileStorage`), not the vendor. Name the implementation after the vendor (`SendGridAdapter`).
 
 ### Credential management
 
-**Single-tenant:** store API keys in environment variables or secrets manager. Design for rotation — credentials are read from config, never hardcoded.
+**Single-tenant:** store API keys in environment variables or secrets manager. Design for rotation, credentials are read from config, never hardcoded.
 
-**Multi-tenant (each org connects their own):** store per-tenant credentials in the database, encrypted with envelope encryption (per-org key derived from a master key in KMS). Never return raw credentials to the frontend — show masked versions (`sk_...abc`). Audit every credential read, write, and rotation.
+**Multi-tenant (each org connects their own):** store per-tenant credentials in the database, encrypted with envelope encryption (per-org key derived from a master key in KMS). Never return raw credentials to the frontend, show masked versions (`sk_...abc`). Audit every credential read, write, and rotation.
 
 ### Configuration-driven integrations
 
@@ -99,7 +99,7 @@ Track per-integration: latency (p50/p95/p99), error rate (rolling 1min/5min/1hr)
 
 ### Token refresh
 
-Refresh proactively before expiry (5-minute buffer), not after a 401. Handle revoked tokens gracefully — mark connection as revoked, show "Please reconnect" in UI. If provider issues new refresh token during refresh (rotation), store the new one.
+Refresh proactively before expiry (5-minute buffer), not after a 401. Handle revoked tokens gracefully, mark connection as revoked, show "Please reconnect" in UI. If provider issues new refresh token during refresh (rotation), store the new one.
 
 ### Scopes
 
@@ -212,7 +212,7 @@ Consistent JSON envelope:
 
 ```
 1. Receive POST to /api/webhooks/:provider
-2. Read RAW body (don't parse JSON — signature needs raw bytes)
+2. Read RAW body (don't parse JSON, signature needs raw bytes)
 3. Verify signature (provider-specific)
 4. Check idempotency (skip if already processed)
 5. Store raw event in webhook_events table
@@ -411,7 +411,7 @@ Core principle: a third-party outage never breaks the user's primary action.
 | Slack | Creates an order | Order succeeds. Notification queued. "Delivery delayed." |
 | SendGrid | Invites teammate | Invitation created. Email queued. "Email may be delayed." |
 | Salesforce | Views contacts | Show cached data with "Last synced 15 min ago." |
-| S3 | Uploads file | Show error — no fallback for storage. But clear message, not crash. |
+| S3 | Uploads file | Show error, no fallback for storage. But clear message, not crash. |
 
 ### Error mapping
 
@@ -452,7 +452,7 @@ Capture real API responses during development, store as fixtures, replay in test
 
 ### Email (SendGrid, Resend, Postmark, SES)
 
-Transactional (user-triggered) vs marketing (bulk) — often separate providers or at least separate sending domains to protect deliverability. Track bounce rate, complaint rate, delivery rate via provider webhooks.
+Transactional (user-triggered) vs marketing (bulk), often separate providers or at least separate sending domains to protect deliverability. Track bounce rate, complaint rate, delivery rate via provider webhooks.
 
 ### File storage (S3, R2, GCS)
 

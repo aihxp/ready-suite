@@ -6,7 +6,7 @@ A dashboard that works but loads in 8 seconds or leaks data across tenants isn't
 
 ---
 
-## Part 1 — Performance
+## Part 1, Performance
 
 Dashboard performance is about two things: **how fast the page loads** and **how fast it responds to interaction**. Both matter. A dashboard that takes 5 seconds to load trains users to dread opening it. A dashboard that lags 400ms on every click trains users to distrust it.
 
@@ -24,7 +24,7 @@ Set explicit targets before optimizing. Without targets, "make it faster" is end
 | JavaScript bundle (initial) | < 200KB gzipped | The #1 controllable factor |
 | API response (p95) | < 500ms | Server isn't the bottleneck |
 
-Measure with Lighthouse (lab), `web-vitals` library (field), and your RUM tool (real users). Lab scores don't match field scores — measure both.
+Measure with Lighthouse (lab), `web-vitals` library (field), and your RUM tool (real users). Lab scores don't match field scores, measure both.
 
 ### Bundle size
 
@@ -34,10 +34,10 @@ The single biggest lever. Dashboards love to ship 2MB of JavaScript because they
 
 Every route should be a separate chunk. The user loading `/customers` should not download the code for `/settings/billing`.
 
-- **Next.js** — automatic per-page splitting. `next/dynamic` for component-level.
-- **Remix** — automatic per-route splitting.
-- **Vite + React/Vue/Svelte** — `React.lazy()` / dynamic `import()` / `defineAsyncComponent()` with the router.
-- **SvelteKit** — automatic per-route splitting.
+- **Next.js**, automatic per-page splitting. `next/dynamic` for component-level.
+- **Remix**, automatic per-route splitting.
+- **Vite + React/Vue/Svelte**, `React.lazy()` / dynamic `import()` / `defineAsyncComponent()` with the router.
+- **SvelteKit**, automatic per-route splitting.
 
 ```tsx
 // React Router with lazy loading
@@ -51,11 +51,11 @@ const Billing = lazy(() => import('./pages/Settings/Billing'));
 Import only what you use. The difference between `import { format } from 'date-fns'` and `import * as dateFns from 'date-fns'` is 200KB.
 
 Common offenders in dashboards:
-- **Icon libraries** — import individual icons (`import { Home } from 'lucide-react'`), not the whole set
-- **Chart libraries** — import specific chart types, not the kitchen sink
-- **Lodash** — use `lodash-es` or individual imports (`import debounce from 'lodash/debounce'`)
-- **Date libraries** — `date-fns` tree-shakes well; `moment` doesn't (don't use moment)
-- **UI libraries** — most modern ones (shadcn, Radix, Headless UI) tree-shake. Older ones (Ant Design, Material UI full import) may not — check the docs.
+- **Icon libraries**, import individual icons (`import { Home } from 'lucide-react'`), not the whole set
+- **Chart libraries**, import specific chart types, not the kitchen sink
+- **Lodash**, use `lodash-es` or individual imports (`import debounce from 'lodash/debounce'`)
+- **Date libraries**, `date-fns` tree-shakes well; `moment` doesn't (don't use moment)
+- **UI libraries**, most modern ones (shadcn, Radix, Headless UI) tree-shake. Older ones (Ant Design, Material UI full import) may not, check the docs.
 
 #### Analyze the bundle
 
@@ -89,7 +89,7 @@ function DashboardHome() {
 
 ### Server-side rendering (SSR) and static generation
 
-For dashboards behind auth, SSR has a specific benefit: the initial page load shows real content instead of a loading skeleton. The server fetches data, renders HTML, sends it — the user sees content before JavaScript hydrates.
+For dashboards behind auth, SSR has a specific benefit: the initial page load shows real content instead of a loading skeleton. The server fetches data, renders HTML, sends it, the user sees content before JavaScript hydrates.
 
 - **Use SSR for the shell and landing page.** The sidebar, header, and KPI cards render server-side. The user sees the dashboard shape immediately.
 - **Use client-side fetching for interactive content.** Tables with sort/filter/paginate are better as client-side queries (with SSR-prefetched initial data).
@@ -111,7 +111,7 @@ Dashboards display avatars, logos, product images, and chart exports.
 - **Subset the font** to the characters you actually use. Latin-only dashboards don't need CJK glyphs.
 - **Self-host the font** instead of loading from Google Fonts. One fewer DNS lookup, better privacy, no third-party dependency.
 - **Preload the primary font** in the `<head>` with `<link rel="preload" as="font" type="font/woff2" crossorigin>`.
-- **Limit to 2 font families** — one for headings, one for body (or one for both). Each additional font is a network request and a rendering delay.
+- **Limit to 2 font families**, one for headings, one for body (or one for both). Each additional font is a network request and a rendering delay.
 
 ### Database query performance
 
@@ -127,11 +127,11 @@ Slow dashboards are usually slow databases, not slow JavaScript.
 
 ### Virtualization
 
-Tables with hundreds of rows and charts with thousands of points need virtualization — rendering only the visible portion.
+Tables with hundreds of rows and charts with thousands of points need virtualization, rendering only the visible portion.
 
-- **Tables** — TanStack Virtual, react-window, react-virtuoso, vue-virtual-scroller, svelte-virtual-list. Virtualize when rows exceed ~100.
-- **Charts** — downsample data before rendering. A 10,000-point line chart is visually indistinguishable from a 1,000-point chart. Libraries like uPlot and ECharts (canvas mode) handle large datasets natively.
-- **Long lists** — any scrollable list (notifications, activity feeds, audit logs) with potentially hundreds of items should virtualize.
+- **Tables**, TanStack Virtual, react-window, react-virtuoso, vue-virtual-scroller, svelte-virtual-list. Virtualize when rows exceed ~100.
+- **Charts**, downsample data before rendering. A 10,000-point line chart is visually indistinguishable from a 1,000-point chart. Libraries like uPlot and ECharts (canvas mode) handle large datasets natively.
+- **Long lists**, any scrollable list (notifications, activity feeds, audit logs) with potentially hundreds of items should virtualize.
 
 ### Caching strategy
 
@@ -143,9 +143,9 @@ Tables with hundreds of rows and charts with thousands of points need virtualiza
 | Database | Materialized views, query cache | Pre-computed stats, denormalized counts |
 
 Set `staleTime` per query based on how fast the data changes:
-- KPIs on the landing page: 60–300s (poll for freshness)
-- List pages: 30–60s
-- Detail pages: 10–30s
+- KPIs on the landing page: 60-300s (poll for freshness)
+- List pages: 30-60s
+- Detail pages: 10-30s
 - Settings: 300s+ (rarely changes)
 
 ### Memory leaks
@@ -158,11 +158,11 @@ SPAs that stay open for hours (operational dashboards, internal tools) are prone
 - **Stale closures holding references** to large objects.
 - **Growing caches** without eviction. Set `gcTime` on your query library; set max size on custom caches.
 
-Profile with Chrome DevTools → Memory → Heap snapshot before and after navigating away from a page. If memory doesn't drop, something is leaking.
+Profile with Chrome DevTools -> Memory -> Heap snapshot before and after navigating away from a page. If memory doesn't drop, something is leaking.
 
 ---
 
-## Part 2 — Security hardening
+## Part 2, Security hardening
 
 Auth and RBAC are in `auth-and-rbac.md`. This section covers everything else: the HTTP headers, input handling, dependency management, and infrastructure-level protections that complete the security picture.
 
@@ -186,7 +186,7 @@ CSP is the strongest defense against XSS. It tells the browser which sources are
 - **Start with `default-src 'self'`** and add only what's needed. Every additional source is an attack surface.
 - **Avoid `'unsafe-inline'` for scripts.** Use nonces or hashes instead. `'unsafe-inline'` for styles is usually acceptable (many UI libraries need it).
 - **Avoid `'unsafe-eval'`.** If a dependency requires it, that dependency has a problem.
-- **Use `report-uri` or `report-to`** to collect CSP violation reports. They tell you when something is blocked — or when an attacker is probing.
+- **Use `report-uri` or `report-to`** to collect CSP violation reports. They tell you when something is blocked, or when an attacker is probing.
 - **Test in `Content-Security-Policy-Report-Only`** mode first so you don't break the app while tightening the policy.
 
 #### HSTS
@@ -197,9 +197,9 @@ CSP is the strongest defense against XSS. It tells the browser which sources are
 
 CSRF attacks trick a logged-in user's browser into making requests to your dashboard. Defenses:
 
-- **SameSite cookies** — `SameSite=Lax` (the default in modern browsers) blocks most CSRF. `SameSite=Strict` is stronger but breaks legitimate cross-site navigation (e.g., links from email).
-- **CSRF tokens** — for traditional form submissions, include a unique token in a hidden field and verify on the server. Most frameworks handle this (Django's `{% csrf_token %}`, Rails' `authenticity_token`, Laravel's `@csrf`).
-- **For SPA dashboards with JSON APIs** — `SameSite=Lax` cookies + checking the `Origin` or `Referer` header on mutations is sufficient. CSRF tokens are harder to implement in SPAs and add less value when cookies are `SameSite`.
+- **SameSite cookies**, `SameSite=Lax` (the default in modern browsers) blocks most CSRF. `SameSite=Strict` is stronger but breaks legitimate cross-site navigation (e.g., links from email).
+- **CSRF tokens**, for traditional form submissions, include a unique token in a hidden field and verify on the server. Most frameworks handle this (Django's `{% csrf_token %}`, Rails' `authenticity_token`, Laravel's `@csrf`).
+- **For SPA dashboards with JSON APIs**, `SameSite=Lax` cookies + checking the `Origin` or `Referer` header on mutations is sufficient. CSRF tokens are harder to implement in SPAs and add less value when cookies are `SameSite`.
 - **Never use GET for mutations.** GET requests are the easiest to forge (an `<img src>` tag is enough).
 
 ### Cross-Origin Resource Sharing (CORS)
@@ -218,18 +218,18 @@ app.use(cors({
 
 Rules:
 - **Never use `origin: '*'` with `credentials: true`.** The browser blocks it, and if you work around it, you've created a security hole.
-- **Whitelist specific origins.** Don't reflect the `Origin` header back as `Access-Control-Allow-Origin` — that's equivalent to `*`.
+- **Whitelist specific origins.** Don't reflect the `Origin` header back as `Access-Control-Allow-Origin`, that's equivalent to `*`.
 - **Restrict methods and headers** to what the dashboard actually uses.
 
 ### Input sanitization and XSS prevention
 
 XSS is the most common web vulnerability. Dashboards are particularly vulnerable because they display user-generated content (names, descriptions, comments).
 
-- **Use framework-native rendering.** React's JSX, Vue's templates, Svelte's `{variable}` — all auto-escape HTML by default. Don't bypass with `dangerouslySetInnerHTML`, `v-html`, or `{@html}` unless you've sanitized.
+- **Use framework-native rendering.** React's JSX, Vue's templates, Svelte's `{variable}`, all auto-escape HTML by default. Don't bypass with `dangerouslySetInnerHTML`, `v-html`, or `{@html}` unless you've sanitized.
 - **When you must render user HTML** (rich text editors, markdown), sanitize with DOMPurify (client-side) or `sanitize-html` (server-side). Never render raw HTML from the database.
 - **Sanitize on output, not (only) on input.** Input sanitization strips legitimate content and can be bypassed. Output escaping is the primary defense.
 - **Validate and reject unexpected characters** in structured fields (emails, URLs, phone numbers). Use your schema validation library (Zod, etc.).
-- **Encode data in the right context.** HTML context → HTML-encode. URL context → URL-encode. JavaScript context → JSON-encode. CSS context → CSS-encode. Getting the context wrong is how XSS happens.
+- **Encode data in the right context.** HTML context -> HTML-encode. URL context -> URL-encode. JavaScript context -> JSON-encode. CSS context -> CSS-encode. Getting the context wrong is how XSS happens.
 
 ### SQL injection
 
@@ -243,18 +243,18 @@ ORMs (Prisma, Drizzle, ActiveRecord, Django ORM, Eloquent) prevent SQL injection
 
 Auth rate limiting is covered in `auth-and-rbac.md`. But every public-facing endpoint should have rate limiting:
 
-- **Login** — 5 attempts per email per 15 minutes (already in auth-and-rbac.md)
-- **API endpoints** — 100–1000 requests per minute per user, depending on the endpoint. More for reads, fewer for writes.
-- **File uploads** — 10 uploads per minute per user
-- **Exports** — 5 per minute per user (exports are expensive)
-- **Password reset** — 3 per hour per email
+- **Login**, 5 attempts per email per 15 minutes (already in auth-and-rbac.md)
+- **API endpoints**, 100-1000 requests per minute per user, depending on the endpoint. More for reads, fewer for writes.
+- **File uploads**, 10 uploads per minute per user
+- **Exports**, 5 per minute per user (exports are expensive)
+- **Password reset**, 3 per hour per email
 
 Use a rate limiter middleware:
-- **Node.js** — `express-rate-limit`, `@fastify/rate-limit`, `rate-limiter-flexible`
-- **Django** — `django-ratelimit`, DRF throttling
-- **Rails** — `rack-attack`
-- **Laravel** — built-in `throttle` middleware
-- **Go** — `golang.org/x/time/rate`, `limiter`
+- **Node.js**, `express-rate-limit`, `@fastify/rate-limit`, `rate-limiter-flexible`
+- **Django**, `django-ratelimit`, DRF throttling
+- **Rails**, `rack-attack`
+- **Laravel**, built-in `throttle` middleware
+- **Go**, `golang.org/x/time/rate`, `limiter`
 
 Return `429 Too Many Requests` with a `Retry-After` header. Show the user a friendly message, not a raw error.
 
@@ -281,7 +281,7 @@ Dashboards that accept file uploads (avatars, imports, attachments) need these p
 
 - **Validate file type on the server** by inspecting the file's magic bytes, not just the extension or MIME type from the client. The client can lie.
 - **Limit file size** on both client and server. Set the limit as low as the use case allows.
-- **Rename uploaded files** with a random UUID. Never use the user-supplied filename in the storage path — it can contain path traversal (`../../etc/passwd`).
+- **Rename uploaded files** with a random UUID. Never use the user-supplied filename in the storage path, it can contain path traversal (`../../etc/passwd`).
 - **Store uploads outside the web root** or in object storage (S3, R2, GCS). Never serve uploaded files from the same domain as the app without a CDN or transform layer.
 - **Scan for malware** on sensitive uploads. ClamAV is free and self-hostable.
 - **Set `Content-Disposition: attachment`** when serving uploaded files so the browser downloads them instead of rendering (prevents stored XSS via HTML/SVG uploads).
@@ -290,12 +290,12 @@ Dashboards that accept file uploads (avatars, imports, attachments) need these p
 
 Beyond the audit log (which is for users), maintain operational security logs:
 
-- **Log authentication events** — successful logins, failed logins, password resets, MFA challenges. These are the first thing you check in a breach investigation.
-- **Log authorization failures** — 403 responses, permission denials. A spike in 403s from one user may indicate account probing.
-- **Log rate-limit hits** — a spike indicates abuse or an attack.
-- **Don't log sensitive data** — passwords, tokens, session IDs, PII. Log enough to investigate, not enough to compromise.
-- **Centralize logs** — send to a log aggregator (Datadog, Grafana Loki, ELK, Axiom). Logs only on the server are logs you can't search.
-- **Set up alerts** — alert on: failed login spikes, new admin user creation, permission escalation, unusual export patterns, rate-limit bursts.
+- **Log authentication events**, successful logins, failed logins, password resets, MFA challenges. These are the first thing you check in a breach investigation.
+- **Log authorization failures**, 403 responses, permission denials. A spike in 403s from one user may indicate account probing.
+- **Log rate-limit hits**, a spike indicates abuse or an attack.
+- **Don't log sensitive data**, passwords, tokens, session IDs, PII. Log enough to investigate, not enough to compromise.
+- **Centralize logs**, send to a log aggregator (Datadog, Grafana Loki, ELK, Axiom). Logs only on the server are logs you can't search.
+- **Set up alerts**, alert on: failed login spikes, new admin user creation, permission escalation, unusual export patterns, rate-limit bursts.
 
 ### The security checklist
 

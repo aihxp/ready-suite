@@ -1,8 +1,8 @@
 # The Ready Suite
 
 [![lint](https://github.com/aihxp/ready-suite/actions/workflows/lint.yml/badge.svg)](https://github.com/aihxp/ready-suite/actions/workflows/lint.yml)
-[![release](https://img.shields.io/badge/release-v3.0.1-blue)](https://github.com/aihxp/ready-suite/releases/tag/v3.0.1)
-[![version](https://img.shields.io/badge/version-3.0.1-blue)](VERSION)
+[![release](https://img.shields.io/badge/release-v3.0.2-blue)](https://github.com/aihxp/ready-suite/releases/tag/v3.0.2)
+[![version](https://img.shields.io/badge/version-3.0.2-blue)](VERSION)
 [![agent skills](https://img.shields.io/badge/Agent%20Skills-compatible-2f6fed)](SUITE.md)
 [![aihxp/pillars](https://img.shields.io/badge/aihxp%2Fpillars-standard-0f766e)](https://github.com/aihxp/pillars)
 [![arc-ready](https://img.shields.io/badge/arc--ready-child-7c3aed)](https://github.com/aihxp/arc-ready)
@@ -29,17 +29,17 @@ kickoff-ready  ->        prd-ready           ->    repo-ready      ->    deploy-
 
 | Skill | Tier | One-line purpose | Version | Path |
 |---|---|---|---|---|
-| **kickoff-ready** | Orchestration | Sequence the ten specialists for a greenfield project from raw user intent. | 3.0.1 | [skills/kickoff-ready](skills/kickoff-ready) |
-| **prd-ready** | Planning | Define what we're building and for whom. | 3.0.1 | [skills/prd-ready](skills/prd-ready) |
-| **architecture-ready** | Planning | Design how the big pieces fit together. | 3.0.1 | [skills/architecture-ready](skills/architecture-ready) |
-| **roadmap-ready** | Planning | Sequence work over time. | 3.0.1 | [skills/roadmap-ready](skills/roadmap-ready) |
-| **stack-ready** | Planning | Pick the right tools for the job. | 3.0.1 | [skills/stack-ready](skills/stack-ready) |
-| **repo-ready** | Building | Set up the repo with production-grade hygiene. | 3.0.1 | [skills/repo-ready](skills/repo-ready) |
-| **production-ready** | Building | Build the app to production grade. | 3.0.1 | [skills/production-ready](skills/production-ready) |
-| **deploy-ready** | Shipping | Ship the app to real environments. | 3.0.1 | [skills/deploy-ready](skills/deploy-ready) |
-| **observe-ready** | Shipping | Keep the app healthy once it's live. | 3.0.1 | [skills/observe-ready](skills/observe-ready) |
-| **launch-ready** | Shipping | Tell the world the product exists. | 3.0.1 | [skills/launch-ready](skills/launch-ready) |
-| **harden-ready** | Shipping | Survive adversarial attention; prove it to an auditor. | 3.0.1 | [skills/harden-ready](skills/harden-ready) |
+| **kickoff-ready** | Orchestration | Sequence the ten specialists for a greenfield project from raw user intent. | 3.0.2 | [skills/kickoff-ready](skills/kickoff-ready) |
+| **prd-ready** | Planning | Define what we're building and for whom. | 3.0.2 | [skills/prd-ready](skills/prd-ready) |
+| **architecture-ready** | Planning | Design how the big pieces fit together. | 3.0.2 | [skills/architecture-ready](skills/architecture-ready) |
+| **roadmap-ready** | Planning | Sequence work over time. | 3.0.2 | [skills/roadmap-ready](skills/roadmap-ready) |
+| **stack-ready** | Planning | Pick the right tools for the job. | 3.0.2 | [skills/stack-ready](skills/stack-ready) |
+| **repo-ready** | Building | Set up the repo with production-grade hygiene. | 3.0.2 | [skills/repo-ready](skills/repo-ready) |
+| **production-ready** | Building | Build the app to production grade. | 3.0.2 | [skills/production-ready](skills/production-ready) |
+| **deploy-ready** | Shipping | Ship the app to real environments. | 3.0.2 | [skills/deploy-ready](skills/deploy-ready) |
+| **observe-ready** | Shipping | Keep the app healthy once it's live. | 3.0.2 | [skills/observe-ready](skills/observe-ready) |
+| **launch-ready** | Shipping | Tell the world the product exists. | 3.0.2 | [skills/launch-ready](skills/launch-ready) |
+| **harden-ready** | Shipping | Survive adversarial attention; prove it to an auditor. | 3.0.2 | [skills/harden-ready](skills/harden-ready) |
 
 ## See it end-to-end: ready-suite-example
 

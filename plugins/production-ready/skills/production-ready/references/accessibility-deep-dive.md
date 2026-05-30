@@ -1,8 +1,8 @@
 # Accessibility Deep Dive
 
-This file goes beyond WCAG basics. The fundamentals — contrast ratios, focus rings, touch targets, aria-labels — are covered in `ui-design-patterns.md` and `states-and-feedback.md`. This document covers everything else: screen reader behavior, ARIA authoring patterns, keyboard navigation for SPAs, visual accessibility beyond contrast, form accessibility, data table patterns, dashboard-specific challenges, automated testing, legal compliance, and cognitive accessibility.
+This file goes beyond WCAG basics. The fundamentals, contrast ratios, focus rings, touch targets, aria-labels, are covered in `ui-design-patterns.md` and `states-and-feedback.md`. This document covers everything else: screen reader behavior, ARIA authoring patterns, keyboard navigation for SPAs, visual accessibility beyond contrast, form accessibility, data table patterns, dashboard-specific challenges, automated testing, legal compliance, and cognitive accessibility.
 
-The standard is WCAG 2.2 AA. Not 2.1, not 2.0. WCAG 2.2 became ISO/IEC 40500:2025 in October 2025 and is backward-compatible — meeting 2.2 satisfies 2.1 and 2.0 automatically. The European Accessibility Act enforces EN 301 549 (which maps to WCAG 2.1 AA) since June 2025. The U.S. ADA Title II rule requires WCAG 2.1 AA by April 2026. Build to 2.2 AA and you cover both.
+The standard is WCAG 2.2 AA. Not 2.1, not 2.0. WCAG 2.2 became ISO/IEC 40500:2025 in October 2025 and is backward-compatible, meeting 2.2 satisfies 2.1 and 2.0 automatically. The European Accessibility Act enforces EN 301 549 (which maps to WCAG 2.1 AA) since June 2025. The U.S. ADA Title II rule requires WCAG 2.1 AA by April 2026. Build to 2.2 AA and you cover both.
 
 ---
 
@@ -19,55 +19,55 @@ Test with at least two. The minimum viable matrix:
 | **JAWS** | Windows | Chrome / Edge | Enterprise standard. ~40% of desktop screen reader users. Test if you sell to enterprise. |
 | **TalkBack** | Android | Chrome | Required for Android mobile coverage. |
 
-**Start with NVDA + Firefox.** This single combination catches the vast majority of accessibility issues because NVDA reads the accessibility tree strictly — if your markup is wrong, NVDA exposes it. Add VoiceOver + Safari second. Add JAWS only for enterprise products or when your user research shows JAWS usage.
+**Start with NVDA + Firefox.** This single combination catches the vast majority of accessibility issues because NVDA reads the accessibility tree strictly, if your markup is wrong, NVDA exposes it. Add VoiceOver + Safari second. Add JAWS only for enterprise products or when your user research shows JAWS usage.
 
 ### Essential testing commands
 
 **NVDA (Windows):**
 ```
-NVDA + Space         → Toggle browse mode / focus mode
-H                    → Next heading
-D                    → Next landmark
-T                    → Next table
-K                    → Next link
-F                    → Next form field
-NVDA + F7            → Elements list (headings, links, landmarks, form fields)
-Ctrl                 → Stop speaking
-NVDA + S             → Toggle speech mode (speech / beeps / off)
-Insert + F5          → List all form fields on page
+NVDA + Space         -> Toggle browse mode / focus mode
+H                    -> Next heading
+D                    -> Next landmark
+T                    -> Next table
+K                    -> Next link
+F                    -> Next form field
+NVDA + F7            -> Elements list (headings, links, landmarks, form fields)
+Ctrl                 -> Stop speaking
+NVDA + S             -> Toggle speech mode (speech / beeps / off)
+Insert + F5          -> List all form fields on page
 ```
 
 **VoiceOver (macOS):**
 ```
-Cmd + F5             → Toggle VoiceOver on/off
-VO + Right/Left      → Navigate next/previous element (VO = Ctrl + Option)
-VO + Cmd + H         → Next heading
-VO + U               → Open rotor (headings, links, landmarks, tables)
-VO + Space           → Activate element
-VO + Shift + Down    → Enter web content / group
-VO + Shift + Up      → Exit group
+Cmd + F5             -> Toggle VoiceOver on/off
+VO + Right/Left      -> Navigate next/previous element (VO = Ctrl + Option)
+VO + Cmd + H         -> Next heading
+VO + U               -> Open rotor (headings, links, landmarks, tables)
+VO + Space           -> Activate element
+VO + Shift + Down    -> Enter web content / group
+VO + Shift + Up      -> Exit group
 ```
 
 **VoiceOver (iOS):**
 ```
-Swipe right/left     → Next/previous element
-Double tap           → Activate
-Rotor (twist)        → Switch navigation mode (headings, links, form fields)
-Swipe up/down        → Move within rotor category
-Three-finger swipe   → Scroll
+Swipe right/left     -> Next/previous element
+Double tap           -> Activate
+Rotor (twist)        -> Switch navigation mode (headings, links, form fields)
+Swipe up/down        -> Move within rotor category
+Three-finger swipe   -> Scroll
 ```
 
 ### Screen reader behaviors developers don't expect
 
-**Browse mode vs. focus mode.** Screen readers on Windows (NVDA, JAWS) operate in two modes. Browse mode intercepts all keystrokes for navigation — pressing "H" jumps to next heading, not typing "h". Focus mode passes keystrokes to the page — for form inputs, custom widgets. NVDA auto-switches when focus enters an input. If your custom widget doesn't trigger this switch, keyboard users can't type in it. Set `role="application"` only on widgets that truly handle all keyboard interaction themselves — misuse breaks browse mode navigation for the entire subtree.
+**Browse mode vs. focus mode.** Screen readers on Windows (NVDA, JAWS) operate in two modes. Browse mode intercepts all keystrokes for navigation, pressing "H" jumps to next heading, not typing "h". Focus mode passes keystrokes to the page, for form inputs, custom widgets. NVDA auto-switches when focus enters an input. If your custom widget doesn't trigger this switch, keyboard users can't type in it. Set `role="application"` only on widgets that truly handle all keyboard interaction themselves, misuse breaks browse mode navigation for the entire subtree.
 
-**Virtual buffer.** NVDA and JAWS build a linearized "virtual buffer" of the page content. They don't read the visual layout — they read the DOM order. If your CSS grid visually reorders content but the DOM order is different, screen reader users get a different reading order than sighted users. Always keep DOM order logical.
+**Virtual buffer.** NVDA and JAWS build a linearized "virtual buffer" of the page content. They don't read the visual layout, they read the DOM order. If your CSS grid visually reorders content but the DOM order is different, screen reader users get a different reading order than sighted users. Always keep DOM order logical.
 
 **Repetitive announcements.** Screen readers announce the role, name, and state of every element on focus. If you have `aria-label="Close"` on a button that contains the text "Close", users hear "Close, Close, button." Don't duplicate.
 
 **Live region timing.** `aria-live` regions must exist in the DOM before content is injected. If you dynamically create the region and inject content simultaneously, screen readers miss the announcement. Render the live region empty on page load, then populate it.
 
-### Live regions — aria-live
+### Live regions, aria-live
 
 Use live regions to announce dynamic content changes that happen outside the user's current focus: toast notifications, form validation errors, table sort confirmations, real-time data updates.
 
@@ -104,12 +104,12 @@ Use live regions to announce dynamic content changes that happen outside the use
 **Announcement helper pattern:**
 
 ```js
-// Reusable announcer — one per app, rendered once at root
+// Reusable announcer, one per app, rendered once at root
 const announcer = document.getElementById('announcer');
 
 function announce(message, priority = 'polite') {
   announcer.setAttribute('aria-live', priority);
-  // Clear then set — forces re-announcement of identical messages
+  // Clear then set, forces re-announcement of identical messages
   announcer.textContent = '';
   requestAnimationFrame(() => {
     announcer.textContent = message;
@@ -148,29 +148,29 @@ announce('Form has 3 errors. First error: email is required.', 'assertive');
 1. **Don't use ARIA if native HTML does the job.** A `<button>` is always better than `<div role="button" tabindex="0">`. Native elements have built-in keyboard handling, focus management, and screen reader semantics.
 2. **Don't change native semantics.** Don't put `role="heading"` on a `<button>`. Use the right element.
 3. **All interactive ARIA controls must be keyboard operable.** `role="button"` does not add keyboard handling. You must add `tabindex="0"`, Enter/Space handlers, and focus styles yourself.
-4. **Don't use `role="presentation"` or `aria-hidden="true"` on focusable elements.** This hides the element from screen readers while keeping it keyboard-focusable — users can focus an element that doesn't exist to them.
-5. **All interactive elements must have an accessible name.** Every button, link, input, and widget needs a name — via visible text, `aria-label`, or `aria-labelledby`.
+4. **Don't use `role="presentation"` or `aria-hidden="true"` on focusable elements.** This hides the element from screen readers while keeping it keyboard-focusable, users can focus an element that doesn't exist to them.
+5. **All interactive elements must have an accessible name.** Every button, link, input, and widget needs a name, via visible text, `aria-label`, or `aria-labelledby`.
 
 ### Common ARIA mistakes
 
 **Redundant roles:**
 ```html
-<!-- BAD — <button> already has role="button" -->
+<!-- BAD, <button> already has role="button" -->
 <button role="button">Save</button>
 
-<!-- BAD — <a href> already has role="link" -->
+<!-- BAD, <a href> already has role="link" -->
 <a href="/settings" role="link">Settings</a>
 
-<!-- BAD — <nav> already has role="navigation" -->
+<!-- BAD, <nav> already has role="navigation" -->
 <nav role="navigation">...</nav>
 ```
 
 **aria-label on non-interactive elements:**
 ```html
-<!-- BAD — aria-label is ignored on <div>, <span>, <p> by most screen readers -->
+<!-- BAD, aria-label is ignored on <div>, <span>, <p> by most screen readers -->
 <div aria-label="Important notice">This is a notice.</div>
 
-<!-- GOOD — use aria-labelledby or just rely on text content -->
+<!-- GOOD, use aria-labelledby or just rely on text content -->
 <div role="region" aria-labelledby="notice-heading">
   <h3 id="notice-heading">Important notice</h3>
   <p>This is a notice.</p>
@@ -179,11 +179,11 @@ announce('Form has 3 errors. First error: email is required.', 'assertive');
 
 **aria-label overriding visible text:**
 ```html
-<!-- BAD — screen reader says "Dismiss notification" but sighted users see "X" -->
+<!-- BAD, screen reader says "Dismiss notification" but sighted users see "X" -->
 <!-- Sighted users and SR users get different info -->
 <button aria-label="Dismiss notification">X</button>
 
-<!-- GOOD — visible label matches accessible name (WCAG 2.5.3 Label in Name) -->
+<!-- GOOD, visible label matches accessible name (WCAG 2.5.3 Label in Name) -->
 <button aria-label="Close notification">
   <span aria-hidden="true">&times;</span>
   <span class="sr-only">Close notification</span>
@@ -192,17 +192,17 @@ announce('Form has 3 errors. First error: email is required.', 'assertive');
 
 **Missing keyboard support on ARIA widgets:**
 ```html
-<!-- BAD — role="tab" but no keyboard handling -->
+<!-- BAD, role="tab" but no keyboard handling -->
 <div role="tab" aria-selected="true">Tab 1</div>
 
-<!-- GOOD — full keyboard support -->
+<!-- GOOD, full keyboard support -->
 <button role="tab" aria-selected="true" aria-controls="panel-1"
         tabindex="0" id="tab-1">Tab 1</button>
 ```
 
 ### Widget patterns reference
 
-Every pattern below follows the W3C ARIA Authoring Practices Guide (APG). Implement these exactly — screen reader users have muscle memory for these keyboard conventions.
+Every pattern below follows the W3C ARIA Authoring Practices Guide (APG). Implement these exactly, screen reader users have muscle memory for these keyboard conventions.
 
 **Tabs:**
 ```html
@@ -319,7 +319,7 @@ Keyboard: Arrow Up/Down move between visible items. Arrow Right expands a collap
 
 **Grid (interactive data grid, not a display table):**
 
-Use `role="grid"` only when cells are individually interactive (editable cells, cell-level actions). For display-only data tables, use `<table>` — do not use grid role.
+Use `role="grid"` only when cells are individually interactive (editable cells, cell-level actions). For display-only data tables, use `<table>`, do not use grid role.
 
 ```html
 <table role="grid" aria-label="User permissions">
@@ -348,7 +348,7 @@ Keyboard: Arrow keys move between cells. Tab moves out of the grid. Enter/Space 
 
 ### Focus management for SPAs
 
-When a SPA navigates between routes, the browser doesn't reload — so it doesn't move focus or announce a new page. You must handle this manually.
+When a SPA navigates between routes, the browser doesn't reload, so it doesn't move focus or announce a new page. You must handle this manually.
 
 **Route change pattern:**
 
@@ -477,7 +477,7 @@ function rovingTabindex(container, itemSelector, orientation = 'horizontal') {
 
 ### Skip links
 
-Provide a "Skip to main content" link as the first focusable element on every page. It's the first thing keyboard users Tab to — lets them bypass repetitive navigation.
+Provide a "Skip to main content" link as the first focusable element on every page. It's the first thing keyboard users Tab to, lets them bypass repetitive navigation.
 
 ```html
 <body>
@@ -515,7 +515,7 @@ For dashboards with complex layouts, consider multiple skip links: "Skip to main
 
 **Problem:** Screen readers intercept single-key shortcuts in browse mode. Pressing "G" in NVDA browse mode might navigate to the next graphic, not trigger your app's "go to" shortcut.
 
-**WCAG 2.1 SC 1.3.6 (Character Key Shortcuts):** If you implement single-character shortcuts, provide a way to remap or disable them. This isn't optional — it's a Level A requirement.
+**WCAG 2.1 SC 1.3.6 (Character Key Shortcuts):** If you implement single-character shortcuts, provide a way to remap or disable them. This isn't optional, it's a Level A requirement.
 
 **Rules:**
 - Always use modifier keys for shortcuts (Ctrl+K, Cmd+Shift+F). Single-letter shortcuts will conflict.
@@ -542,7 +542,7 @@ Contrast ratios (4.5:1 for text, 3:1 for large text and UI components) are the f
 
 ### Color blindness safe palettes
 
-8% of men and 0.5% of women have color vision deficiency. The most common types — protanopia and deuteranopia — make red and green look nearly identical. Tritanopia (blue-yellow) is rarer.
+8% of men and 0.5% of women have color vision deficiency. The most common types, protanopia and deuteranopia, make red and green look nearly identical. Tritanopia (blue-yellow) is rarer.
 
 **Rules:**
 - Never use color as the only means of conveying information. Pair color with text labels, icons, or patterns. Always.
@@ -564,9 +564,9 @@ Contrast ratios (4.5:1 for text, 3:1 for large text and UI components) are the f
 }
 ```
 
-**Sequential data (heatmaps, continuous values):** Use `viridis` (purple-blue-green-yellow) or `cividis` (optimized specifically for deuteranopia/protanopia). Both are perceptually uniform — equal data steps produce equal perceived color steps.
+**Sequential data (heatmaps, continuous values):** Use `viridis` (purple-blue-green-yellow) or `cividis` (optimized specifically for deuteranopia/protanopia). Both are perceptually uniform, equal data steps produce equal perceived color steps.
 
-**Testing:** Use a CVD simulator on every chart and color-coded UI. Chrome DevTools has one built in: DevTools → Rendering → Emulate vision deficiencies. Test protanopia, deuteranopia, and tritanopia.
+**Testing:** Use a CVD simulator on every chart and color-coded UI. Chrome DevTools has one built in: DevTools -> Rendering -> Emulate vision deficiencies. Test protanopia, deuteranopia, and tritanopia.
 
 ### Windows High Contrast Mode and forced-colors
 
@@ -579,7 +579,7 @@ Windows High Contrast Mode (WHCM) overrides all author colors with a user-chosen
   /* The browser replaces most colors. Use system color keywords. */
 
   .badge {
-    /* Ensure badges are visible — add borders since background colors are overridden */
+    /* Ensure badges are visible, add borders since background colors are overridden */
     border: 1px solid ButtonText;
   }
 
@@ -604,10 +604,10 @@ Windows High Contrast Mode (WHCM) overrides all author colors with a user-chosen
 **System color keywords available in forced-colors mode:** `Canvas`, `CanvasText`, `LinkText`, `VisitedText`, `ActiveText`, `ButtonFace`, `ButtonText`, `ButtonBorder`, `Field`, `FieldText`, `Highlight`, `HighlightText`, `SelectedItem`, `SelectedItemText`, `Mark`, `MarkText`, `GrayText`.
 
 **Rules for forced-colors:**
-- Never put essential information in background color alone — it gets overridden.
+- Never put essential information in background color alone, it gets overridden.
 - Add visible borders to elements that rely on background color for distinction (badges, status dots, chart swatches).
 - Use `currentColor` for SVG icons so they adapt.
-- Test in Windows High Contrast Mode (Settings → Accessibility → Contrast themes).
+- Test in Windows High Contrast Mode (Settings -> Accessibility -> Contrast themes).
 
 ### prefers-reduced-motion
 
@@ -633,11 +633,11 @@ Some users enable reduced motion because of vestibular disorders, motion sensiti
 Don't set `animation: none`. Some animations serve a functional purpose (progress spinners, loading indicators). Instead, shorten durations to near-zero so the state change still happens instantly without visual motion.
 
 **What to reduce:**
-- Slide-in/slide-out transitions → instant appear/disappear.
-- Parallax scrolling → remove entirely.
-- Auto-playing carousels → stop. Provide manual controls.
-- Chart animation (bars growing, lines drawing) → show final state immediately.
-- Skeleton loading shimmer → static skeleton or simple opacity fade.
+- Slide-in/slide-out transitions -> instant appear/disappear.
+- Parallax scrolling -> remove entirely.
+- Auto-playing carousels -> stop. Provide manual controls.
+- Chart animation (bars growing, lines drawing) -> show final state immediately.
+- Skeleton loading shimmer -> static skeleton or simple opacity fade.
 
 **What to keep (functionally necessary):**
 - Loading spinners (but prefer a static "Loading..." message as alternative).
@@ -661,7 +661,7 @@ Don't set `animation: none`. Some animations serve a functional purpose (progres
 }
 
 @media (prefers-contrast: less) {
-  /* Rare — for users who find high contrast uncomfortable (photosensitivity) */
+  /* Rare, for users who find high contrast uncomfortable (photosensitivity) */
   :root {
     --text-default: #555;
     --border-default: 1px solid #ddd;
@@ -711,9 +711,9 @@ function clearFieldError(inputEl, errorEl) {
      tabindex="-1" hidden>
   <h2 id="error-summary-heading">There are 3 errors in this form</h2>
   <ul>
-    <li><a href="#email">Email address — enter a valid email</a></li>
-    <li><a href="#password">Password — must be at least 8 characters</a></li>
-    <li><a href="#terms">Terms — you must accept the terms</a></li>
+    <li><a href="#email">Email address, enter a valid email</a></li>
+    <li><a href="#password">Password, must be at least 8 characters</a></li>
+    <li><a href="#terms">Terms, you must accept the terms</a></li>
   </ul>
 </div>
 ```
@@ -739,7 +739,7 @@ Why both `required` and `aria-required="true"`? The HTML `required` attribute tr
 
 ### Fieldset and legend for groups
 
-Group related fields. Screen readers announce the legend when a user focuses any field in the group — providing context.
+Group related fields. Screen readers announce the legend when a user focuses any field in the group, providing context.
 
 ```html
 <fieldset>
@@ -791,15 +791,15 @@ Use `autocomplete` on fields that accept personal data. This enables browsers an
 
 The hardest form control to get right. Two W3C-endorsed patterns:
 
-**Pattern 1: Combobox date picker** — Text input for typing + calendar popup for picking.
+**Pattern 1: Combobox date picker**, Text input for typing + calendar popup for picking.
 - Users can type the date directly (not everyone can use a calendar grid).
-- Describe the expected format: `aria-describedby="date-format"` → "Format: MM/DD/YYYY."
+- Describe the expected format: `aria-describedby="date-format"` -> "Format: MM/DD/YYYY."
 - Calendar grid opens with Down Arrow or a "Choose date" button.
 - Calendar grid is a `role="grid"` inside a `role="dialog"`.
 - Arrow keys navigate days. Page Up/Down change months. Escape closes.
 - Calendar heading (month/year) is a live region so screen readers announce month changes.
 
-**Pattern 2: Native `<input type="date">`** — simpler, decent screen reader support in modern browsers, but limited styling control. Acceptable for admin tools and internal dashboards where pixel-perfect design is less important.
+**Pattern 2: Native `<input type="date">`**, simpler, decent screen reader support in modern browsers, but limited styling control. Acceptable for admin tools and internal dashboards where pixel-perfect design is less important.
 
 **Rule:** Always allow manual text entry alongside any calendar widget. Users with motor impairments, screen reader users, and power users all prefer typing dates.
 
@@ -860,7 +860,7 @@ The hardest form control to get right. Two W3C-endorsed patterns:
 - Set `aria-sort="ascending"`, `"descending"`, or `"none"` on the `<th>`.
 - Only one column should have `aria-sort` set to ascending/descending at a time. Others get `"none"`.
 - After sort: update `aria-sort` values and announce via live region: "Table sorted by Name, ascending."
-- Don't use `aria-sort="other"` — it's meaningless to screen reader users.
+- Don't use `aria-sort="other"`, it's meaningless to screen reader users.
 
 ### Filterable tables
 
@@ -910,7 +910,7 @@ Use `aria-controls` on the filter to establish a relationship with the table. No
   </tbody>
 </table>
 
-<!-- Bulk action bar — appears when rows are selected -->
+<!-- Bulk action bar, appears when rows are selected -->
 <div role="toolbar" aria-label="Bulk actions" id="bulk-actions" hidden>
   <span>3 users selected</span>
   <button>Export selected</button>
@@ -923,7 +923,7 @@ Use `aria-controls` on the filter to establish a relationship with the table. No
 
 On selection change: `announce('3 users selected. Bulk actions available.')`.
 
-When the bulk action bar appears, don't auto-focus it — the user may be selecting more rows. Let them Tab to it.
+When the bulk action bar appears, don't auto-focus it, the user may be selecting more rows. Let them Tab to it.
 
 ### Expandable rows
 
@@ -998,8 +998,8 @@ Virtual scrolling renders only visible rows to the DOM. This breaks screen reade
 ```
 
 **Required attributes for virtual scroll:**
-- `aria-rowcount` on the table — total number of rows (or -1 if unknown).
-- `aria-rowindex` on every `<tr>` — the row's position in the full dataset (1-indexed).
+- `aria-rowcount` on the table, total number of rows (or -1 if unknown).
+- `aria-rowindex` on every `<tr>`, the row's position in the full dataset (1-indexed).
 
 **Warning:** Inconsistent or missing `aria-rowindex` values will cause screen reader table navigation to skip rows or break completely. Every rendered row must have it, and values must be sequential for the current window.
 
@@ -1015,9 +1015,9 @@ Charts are the biggest accessibility gap in dashboards. An SVG line chart is inv
 
 **Strategy: layered accessibility.**
 
-1. **Alt text on the chart container** — a brief summary of the insight.
-2. **Structured data table** — the same data in an accessible `<table>`, toggleable or always visible.
-3. **Sonification** — optional, for users who want auditory data exploration.
+1. **Alt text on the chart container**, a brief summary of the insight.
+2. **Structured data table**, the same data in an accessible `<table>`, toggleable or always visible.
+3. **Sonification**, optional, for users who want auditory data exploration.
 
 ```html
 <figure>
@@ -1054,7 +1054,7 @@ Charts are the biggest accessibility gap in dashboards. An SVG line chart is inv
 - For pie/donut: state the top 2-3 segments and their percentages.
 - Keep it under 150 words. Link to the full data table for details.
 
-**Sonification:** Libraries like Highcharts include built-in sonification — data points are mapped to audio tones. Higher values = higher pitch. Users can navigate data points with arrow keys and hear the trend. This is cutting-edge (Highcharts demonstrated AI-enhanced sonification at CSUN 2026) but worth implementing for data-heavy dashboards.
+**Sonification:** Libraries like Highcharts include built-in sonification, data points are mapped to audio tones. Higher values = higher pitch. Users can navigate data points with arrow keys and hear the trend. This is cutting-edge (Highcharts demonstrated AI-enhanced sonification at CSUN 2026) but worth implementing for data-heavy dashboards.
 
 ### KPI cards for screen readers
 
@@ -1071,7 +1071,7 @@ Charts are the biggest accessibility gap in dashboards. An SVG line chart is inv
 ```
 
 **Problems with the naive approach:**
-- "$342.5K" is read as "three hundred forty-two point five K" — meaningless. Use `aria-label` with the full value.
+- "$342.5K" is read as "three hundred forty-two point five K", meaningless. Use `aria-label` with the full value.
 - The up-arrow icon is decorative but may be read as a Unicode character. Mark it `aria-hidden="true"`.
 - "12.3%" without context is meaningless. Include direction and comparison period in the `aria-label`.
 
@@ -1232,7 +1232,7 @@ jobs:
 }
 ```
 
-**Use both axe-core and pa11y together.** They use different rule engines and each catches things the other misses. Combined, they detect roughly 35% of known issues — more than either alone.
+**Use both axe-core and pa11y together.** They use different rule engines and each catches things the other misses. Combined, they detect roughly 35% of known issues, more than either alone.
 
 ### Lighthouse CI
 
@@ -1262,7 +1262,7 @@ Set the threshold at 0.95, not 1.0. Lighthouse accessibility scores fluctuate sl
 Run this checklist before every release. Automated tools cannot cover these items.
 
 **Keyboard:**
-- [ ] Tab through the entire page — is the order logical?
+- [ ] Tab through the entire page, is the order logical?
 - [ ] Can you reach and operate every interactive element with keyboard alone?
 - [ ] Do modals trap focus correctly?
 - [ ] Does focus return to the trigger when modals/drawers close?
@@ -1271,8 +1271,8 @@ Run this checklist before every release. Automated tools cannot cover these item
 - [ ] Do custom widgets follow APG keyboard patterns?
 
 **Screen reader:**
-- [ ] Navigate by headings — is the hierarchy logical (h1 → h2 → h3, no skips)?
-- [ ] Navigate by landmarks — are main, nav, banner, contentinfo present?
+- [ ] Navigate by headings, is the hierarchy logical (h1 -> h2 -> h3, no skips)?
+- [ ] Navigate by landmarks, are main, nav, banner, contentinfo present?
 - [ ] Do all images have meaningful alt text (or empty alt for decorative)?
 - [ ] Do form fields have visible labels AND programmatic labels?
 - [ ] Are error messages announced?
@@ -1280,22 +1280,22 @@ Run this checklist before every release. Automated tools cannot cover these item
 - [ ] Do charts have text alternatives?
 
 **Visual:**
-- [ ] Zoom to 200% — does the layout still work?
-- [ ] Zoom to 400% — is content still accessible (WCAG 1.4.10 Reflow)?
-- [ ] Enable High Contrast Mode — is everything still visible?
-- [ ] Enable reduced motion — are animations removed?
-- [ ] Simulate color blindness — is information conveyed without color alone?
+- [ ] Zoom to 200%, does the layout still work?
+- [ ] Zoom to 400%, is content still accessible (WCAG 1.4.10 Reflow)?
+- [ ] Enable High Contrast Mode, is everything still visible?
+- [ ] Enable reduced motion, are animations removed?
+- [ ] Simulate color blindness, is information conveyed without color alone?
 
 ---
 
 ## 9. Legal compliance
 
-### WCAG 2.2 AA — the new success criteria
+### WCAG 2.2 AA, the new success criteria
 
 WCAG 2.2 adds 9 criteria over 2.1. The ones most relevant to dashboards:
 
-**Focus Not Obscured (Minimum) — 2.4.11 (Level AA):**
-When a UI component receives keyboard focus, it must not be entirely hidden by sticky headers, fixed footers, or overlapping content. This is a common dashboard failure — sticky table headers or fixed nav bars cover the focused element as the user tabs down.
+**Focus Not Obscured (Minimum), 2.4.11 (Level AA):**
+When a UI component receives keyboard focus, it must not be entirely hidden by sticky headers, fixed footers, or overlapping content. This is a common dashboard failure, sticky table headers or fixed nav bars cover the focused element as the user tabs down.
 
 Fix: ensure scroll-padding or scroll-margin accounts for sticky element heights.
 ```css
@@ -1304,19 +1304,19 @@ html {
 }
 ```
 
-**Dragging Movements — 2.5.7 (Level AA):**
+**Dragging Movements, 2.5.7 (Level AA):**
 Any functionality that requires dragging must have a non-dragging alternative. Dashboards love drag-and-drop (kanban boards, dashboard widget rearrangement, drag-to-reorder). Every drag action needs an alternative: arrow buttons, "Move to" menu, or keyboard arrow key controls.
 
-**Target Size (Minimum) — 2.5.8 (Level AA):**
+**Target Size (Minimum), 2.5.8 (Level AA):**
 Interactive targets must be at least 24x24 CSS pixels, with exceptions for inline text links and targets where size is determined by the user agent. This means table action icons, small chart interactors, and toolbar buttons must meet the minimum.
 
-**Accessible Authentication (Minimum) — 3.3.8 (Level AA):**
+**Accessible Authentication (Minimum), 3.3.8 (Level AA):**
 Authentication must not require a cognitive function test (memorization, transcription, puzzle solving) unless an alternative is provided. CAPTCHAs fail this unless they offer an audio or logic-based alternative. Copy-paste of passwords must be allowed (don't block paste in password fields). Support password managers via correct `autocomplete` attributes.
 
-**Redundant Entry — 3.3.7 (Level A):**
+**Redundant Entry, 3.3.7 (Level A):**
 If the user has already entered information in a process, don't make them enter it again. Auto-populate from previous steps. This applies to multi-step forms, checkout flows, and settings wizards.
 
-**Consistent Help — 3.2.6 (Level A):**
+**Consistent Help, 3.2.6 (Level A):**
 If help mechanisms (contact info, help chat, FAQ link) exist on multiple pages, they must appear in the same relative position on each page. Dashboard help buttons should be in a consistent location (e.g., always in the top-right header or always in the sidebar footer).
 
 ### ADA and Section 508 (United States)
@@ -1344,7 +1344,7 @@ If help mechanisms (contact info, help chat, FAQ link) exist on multiple pages, 
 
 ### What this means for SaaS products
 
-If your SaaS product has users in the U.S., EU, Canada, or UK, you're subject to accessibility law in at least one jurisdiction. The practical compliance target is WCAG 2.2 AA — it satisfies all current legal standards.
+If your SaaS product has users in the U.S., EU, Canada, or UK, you're subject to accessibility law in at least one jurisdiction. The practical compliance target is WCAG 2.2 AA, it satisfies all current legal standards.
 
 **Minimum actions:**
 1. Build to WCAG 2.2 AA.
@@ -1352,7 +1352,7 @@ If your SaaS product has users in the U.S., EU, Canada, or UK, you're subject to
 3. Provide a feedback mechanism for accessibility issues.
 4. Include accessibility in your CI pipeline (axe-core + pa11y).
 5. Manual audit annually or with major redesigns.
-6. Maintain a VPAT (Voluntary Product Accessibility Template) if selling to enterprises — procurement teams require it.
+6. Maintain a VPAT (Voluntary Product Accessibility Template) if selling to enterprises, procurement teams require it.
 
 ---
 
@@ -1360,7 +1360,7 @@ If your SaaS product has users in the U.S., EU, Canada, or UK, you're subject to
 
 ### Plain language
 
-Write UI text at a lower-secondary reading level (grade 7-8). This isn't about dumbing down — it's about being clear. Technical content can be precise while using short sentences and common words.
+Write UI text at a lower-secondary reading level (grade 7-8). This isn't about dumbing down, it's about being clear. Technical content can be precise while using short sentences and common words.
 
 **Rules:**
 - Sentences under 25 words.
@@ -1398,7 +1398,7 @@ For actions that are destructive, legal, financial, or submit user data:
 
 **Rules:**
 - Destructive actions require confirmation. Always.
-- State what will be lost in the confirmation dialog. "Delete project" is not enough — "Delete project, 47 reports, and all associated data" is.
+- State what will be lost in the confirmation dialog. "Delete project" is not enough, "Delete project, 47 reports, and all associated data" is.
 - Provide undo for reversible actions (archive instead of delete, soft-delete with 30-day recovery).
 - For form submissions: provide a review step before final submit.
 - For financial transactions: show a summary and require explicit confirmation.
@@ -1408,7 +1408,7 @@ For actions that are destructive, legal, financial, or submit user data:
 Undo transforms a "careful decision" into a "try and see" action. It reduces cognitive load dramatically.
 
 **Patterns:**
-- **Toast with undo:** "3 items archived. [Undo]" — 8+ second auto-dismiss, user can undo before it disappears.
+- **Toast with undo:** "3 items archived. [Undo]", 8+ second auto-dismiss, user can undo before it disappears.
 - **Soft delete:** Items move to a trash/archive, recoverable for 30 days.
 - **Version history:** For edited content, keep previous versions accessible.
 - **Draft auto-save:** For forms, auto-save drafts so the user never loses work.
@@ -1422,12 +1422,12 @@ Undo transforms a "careful decision" into a "try and see" action. It reduces cog
 
 ### Reading level considerations for dashboards
 
-Dashboards are data-dense by nature. Cognitive accessibility doesn't mean removing density — it means organizing it:
+Dashboards are data-dense by nature. Cognitive accessibility doesn't mean removing density, it means organizing it:
 
-- **KPI cards at the top** — the most important numbers, large, with clear labels. Users with cognitive disabilities can get the headline without processing a full data table.
-- **Filters before data** — let users reduce the dataset before presenting it.
-- **Empty states with guidance** — "No results found" isn't helpful. "No users match your filter. Try removing the 'Admin' filter or search by name." gives a next action.
-- **Tooltips for abbreviations** — don't assume everyone knows MRR, ARR, DAU, MAU, CLTV. Define on hover and on first use.
+- **KPI cards at the top**, the most important numbers, large, with clear labels. Users with cognitive disabilities can get the headline without processing a full data table.
+- **Filters before data**, let users reduce the dataset before presenting it.
+- **Empty states with guidance**, "No results found" isn't helpful. "No users match your filter. Try removing the 'Admin' filter or search by name." gives a next action.
+- **Tooltips for abbreviations**, don't assume everyone knows MRR, ARR, DAU, MAU, CLTV. Define on hover and on first use.
 
 ---
 

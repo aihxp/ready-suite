@@ -102,7 +102,7 @@ A trust-based model where developers choose the review level for each change.
 
 ```
 main  ──●──●──●──●──●──●──●──●──●──
-         │     ↑     │        ↑
+         │     ^     │        ^
          │    Ship    │       Show
          │  (direct)  │    (merge, then
          │            │     review async)
@@ -132,7 +132,7 @@ External contributors fork the repo, work in their fork, and submit PRs back to 
 
 ```
 upstream/main  ──●──────────●──────────●──
-                              ↑
+                              ^
                               │  PR
                               │
 fork/main      ──●──●──●──●──●
@@ -292,7 +292,7 @@ jobs:
 
 ```yaml
 # .github/labeler.yml
-# Label definitions — map file globs to labels
+# Label definitions, map file globs to labels
 
 area: frontend:
   - changed-files:
@@ -515,7 +515,7 @@ jobs:
             ci
             chore
             revert
-          # Require a scope in parentheses (optional — set to true if you want)
+          # Require a scope in parentheses (optional, set to true if you want)
           requireScope: false
           # Allowed scopes (leave empty to allow any scope)
           scopes: |
@@ -807,12 +807,12 @@ docker-compose*.yml         @myorg/infra-team
 /docs/                      @myorg/docs-team
 *.md                        @myorg/docs-team
 
-# Security-sensitive files — require security team review
+# Security-sensitive files, require security team review
 /src/auth/                  @myorg/security-team
 /src/crypto/                @myorg/security-team
 SECURITY.md                 @myorg/security-team
 
-# Config files — require senior review
+# Config files, require senior review
 package.json                @myorg/core-team
 tsconfig.json               @myorg/core-team
 pyproject.toml              @myorg/core-team
@@ -902,7 +902,7 @@ A complete label system. Every label has a name, hex color, and description. App
 
 | Label | Color | Hex | Description |
 |---|---|---|---|
-| `priority: critical` | Dark red | `#b60205` | Must fix immediately — system down or data loss |
+| `priority: critical` | Dark red | `#b60205` | Must fix immediately, system down or data loss |
 | `priority: high` | Red-orange | `#d93f0b` | Fix in current sprint/cycle |
 | `priority: medium` | Yellow | `#fbca04` | Fix soon but not urgent |
 | `priority: low` | Green | `#0e8a16` | Nice to have, fix when convenient |
@@ -964,7 +964,7 @@ Run this with the GitHub CLI to create all labels at once. Delete default labels
 
 ```bash
 #!/usr/bin/env bash
-# setup-labels.sh — Create a complete label taxonomy for a GitHub repository.
+# setup-labels.sh, Create a complete label taxonomy for a GitHub repository.
 # Usage: ./setup-labels.sh owner/repo
 
 set -euo pipefail
@@ -1030,7 +1030,7 @@ gh label create "size: M"             --color "7f7203" --description "51-200 lin
 gh label create "size: L"             --color "a14c05" --description "201-500 lines changed" --repo "$REPO" --force
 gh label create "size: XL"            --color "c32607" --description "500+ lines changed" --repo "$REPO" --force
 
-# Community labels (GitHub special labels — use exact names)
+# Community labels (GitHub special labels, use exact names)
 gh label create "good first issue"    --color "7057ff" --description "Good for newcomers" --repo "$REPO" --force
 gh label create "help wanted"         --color "008672" --description "Contributions welcome" --repo "$REPO" --force
 
@@ -1049,7 +1049,7 @@ All commits in the PR become a single commit on `main`. The PR title becomes the
 
 ```
 Feature branch:     ●──●──●──●  (4 messy commits: "wip", "fix", "oops", "done")
-                          ↓ squash merge
+                          v squash merge
 main:               ──●──●──    (1 clean commit: "feat: add user search")
 ```
 
@@ -1096,7 +1096,7 @@ Replays the branch's commits on top of `main`, creating a linear history without
 
 ```
 Feature branch:     ●──●──●
-                          ↓ rebase
+                          v rebase
 main:               ──●──●'──●'──●'──  (commits replayed, new SHAs)
 ```
 
@@ -1128,8 +1128,8 @@ Settings > General > Pull Requests:
   [x] Allow squash merging
       Default commit message: Pull request title
 
-  [ ] Allow merge commits        ← uncheck for squash-only projects
-  [ ] Allow rebase merging       ← uncheck for squash-only projects
+  [ ] Allow merge commits        <- uncheck for squash-only projects
+  [ ] Allow rebase merging       <- uncheck for squash-only projects
 
   [x] Automatically delete head branches
   [x] Always suggest updating pull request branches
@@ -1145,7 +1145,7 @@ Git is designed for text files. Binary files (images, videos, ML models, compile
 
 | File Type | Examples | Use LFS? |
 |---|---|---|
-| Source code | `.js`, `.py`, `.go`, `.rs` | No — Git handles text well |
+| Source code | `.js`, `.py`, `.go`, `.rs` | No, Git handles text well |
 | Config files | `.json`, `.yaml`, `.toml` | No |
 | Documentation | `.md`, `.txt`, `.rst` | No |
 | Images | `.png`, `.jpg`, `.gif`, `.svg`, `.ico` | Yes (except `.svg` which is text) |
@@ -1163,7 +1163,7 @@ Git is designed for text files. Binary files (images, videos, ML models, compile
 ### .gitattributes Configuration for LFS
 
 ```gitattributes
-# .gitattributes — Git LFS tracking patterns
+# .gitattributes, Git LFS tracking patterns
 
 # Images
 *.png filter=lfs diff=lfs merge=lfs -text
@@ -1244,7 +1244,7 @@ Data packs (purchased per repository or organization):
 
 ### Alternatives to Git LFS
 
-#### DVC (Data Version Control) — for ML and Data Projects
+#### DVC (Data Version Control), for ML and Data Projects
 
 DVC is purpose-built for versioning datasets and ML models. It uses Git for metadata and stores large files on cloud storage (S3, GCS, Azure Blob).
 
@@ -1281,7 +1281,7 @@ dvc push
 | Project Type | Commit Lock File? | Rationale |
 |---|---|---|
 | **Application** (web app, API, CLI) | **Yes, always** | Guarantees deterministic builds. Every deploy uses the exact same versions. |
-| **Library** (npm package, PyPI package) | **Debated — lean toward no** | The consumer's lock file determines final versions. Committing a library lock file tests against pinned versions but may mask compatibility issues. |
+| **Library** (npm package, PyPI package) | **Debated, lean toward no** | The consumer's lock file determines final versions. Committing a library lock file tests against pinned versions but may mask compatibility issues. |
 | **Monorepo** | **Yes** | Contains applications and shared packages that need reproducible installs. |
 | **Docker image** | **Yes** | The lock file ensures the image build is reproducible. |
 
@@ -1455,13 +1455,13 @@ updates:
     }
   ],
 
-  // Lock file maintenance — weekly PR to update all transitive deps
+  // Lock file maintenance, weekly PR to update all transitive deps
   "lockFileMaintenance": {
     "enabled": true,
     "schedule": ["before 5am on monday"]
   },
 
-  // Dependency Dashboard — tracking issue for all pending updates
+  // Dependency Dashboard, tracking issue for all pending updates
   "dependencyDashboard": true,
   "dependencyDashboardTitle": "Dependency Dashboard"
 }
@@ -1497,9 +1497,9 @@ Auto-merging dependency updates reduces maintenance burden. But only do it for u
 
 ---
 
-## 7. Atomic commits — splitting by concern
+## 7. Atomic commits, splitting by concern
 
-AI coding agents default to one giant end-of-session commit — a review problem and a security problem. Snyk's 2025 report counts **28.65M secrets leaked to public GitHub**, with AI-assisted commits leaking at ~2× the baseline rate: larger diffs slip past human reviewers (<https://snyk.io/articles/state-of-secrets/>). raine.dev's atomic-commits-for-AI-agents analysis makes the same case from reviewability (<http://raine.dev/blog/atomic-commits-for-ai-agents/>). Atomic commits and pre-commit secret scanning (`references/quality-tooling.md` §8 "Secret scanning (pre-commit)") are complements: smaller diffs let reviewers see what gitleaks might miss.
+AI coding agents default to one giant end-of-session commit, a review problem and a security problem. Snyk's 2025 report counts **28.65M secrets leaked to public GitHub**, with AI-assisted commits leaking at ~2× the baseline rate: larger diffs slip past human reviewers (<https://snyk.io/articles/state-of-secrets/>). raine.dev's atomic-commits-for-AI-agents analysis makes the same case from reviewability (<http://raine.dev/blog/atomic-commits-for-ai-agents/>). Atomic commits and pre-commit secret scanning (`references/quality-tooling.md` §8 "Secret scanning (pre-commit)") are complements: smaller diffs let reviewers see what gitleaks might miss.
 
 ### The five-step protocol
 
@@ -1509,7 +1509,7 @@ AI coding agents default to one giant end-of-session commit — a review problem
 
 3. **Use `git add -p` to stage by hunk** when changes span concerns. Walk each hunk interactively, stage only what belongs in the current commit, leave the rest for the next. Example below.
 
-4. **`git commit --fixup=<sha>` + `git rebase -i --autosquash`** to fix an earlier commit on a PR branch. Don't add a new `fix typo` commit — mark the fixup, squash into its target before pushing.
+4. **`git commit --fixup=<sha>` + `git rebase -i --autosquash`** to fix an earlier commit on a PR branch. Don't add a new `fix typo` commit, mark the fixup, squash into its target before pushing.
 
 5. **Pre-push log check.** Run `git log --oneline origin/main..HEAD` before every push. If any message doesn't describe a clear single concern, squash or split it. Anything pushed becomes permanent.
 
@@ -1534,7 +1534,7 @@ Prompt-key legend: `y` stage, `n` skip, `s` split hunk into smaller hunks, `q` s
 
 ### Anti-patterns
 
-- **One giant commit at the end of the session.** AI agents' default behavior, per raine.dev. Reviewers can't audit a 2000-line, ten-file diff — and that's exactly the diff shape in which secrets hide.
+- **One giant commit at the end of the session.** AI agents' default behavior, per raine.dev. Reviewers can't audit a 2000-line, ten-file diff, and that's exactly the diff shape in which secrets hide.
 - **Bonus changes.** Drive-bys bundled into a feature commit. Reviewers approve the primary change and inherit everything else unreviewed. Split them out.
 - **`fix typo`, `WIP`, `oops` commits on a PR branch.** Use `git commit --fixup=<sha>` + `git rebase -i --autosquash` instead. Final history should read as intentional changes, not a debugging session.
 - **Squash-everything-at-merge as a substitute for atomic discipline.** Squash-on-merge is a repo-level policy knob, not a license to be careless on the branch. Squashing hides evidence of mixed concerns; it doesn't remove them.

@@ -13,19 +13,19 @@ Social features range from trivial (footer icons) to complex (multi-platform pos
 | Position | When to use | Notes |
 |---|---|---|
 | **Footer** | Default for every site | Standard location users expect. Place in a row, after copyright/legal links. |
-| **Header** | Media companies, content-heavy sites | Only if social is core to the business. Competes with primary nav — use sparingly. |
+| **Header** | Media companies, content-heavy sites | Only if social is core to the business. Competes with primary nav, use sparingly. |
 | **Floating sidebar** | Blog posts, long-form content | Fixed position, left or right edge, vertically stacked. Hide on mobile or collapse to bottom bar. |
 | **Inline (post footer)** | Blog posts, articles, case studies | Share buttons at the end of content. "Share this post" with platform icons. |
 
-**Footer is the default.** Put social icons in the footer unless you have a specific reason for another placement. Users scroll down to find social links — it is a learned behavior.
+**Footer is the default.** Put social icons in the footer unless you have a specific reason for another placement. Users scroll down to find social links, it is a learned behavior.
 
 ### Icon libraries and sizing
 
 **Recommended libraries:**
-- **Lucide** — clean, consistent line icons. Missing brand icons (no Twitter, LinkedIn logos). Use for generic share/link icons.
-- **Simple Icons** (`simple-icons` npm package) — 3000+ brand icons, SVG, always current. This is the go-to for platform logos.
-- **react-icons** — aggregator wrapping Font Awesome, Simple Icons, and others. Convenient but larger bundle if not tree-shaken.
-- **Brand assets directly** — each platform publishes official SVGs. Use these if brand guidelines require exact logos.
+- **Lucide**, clean, consistent line icons. Missing brand icons (no Twitter, LinkedIn logos). Use for generic share/link icons.
+- **Simple Icons** (`simple-icons` npm package), 3000+ brand icons, SVG, always current. This is the go-to for platform logos.
+- **react-icons**, aggregator wrapping Font Awesome, Simple Icons, and others. Convenient but larger bundle if not tree-shaken.
+- **Brand assets directly**, each platform publishes official SVGs. Use these if brand guidelines require exact logos.
 
 **Sizing spec:**
 
@@ -51,9 +51,9 @@ Container padding: 8-12px around the icon
 ```
 
 **Rules:**
-- Always include `aria-label` — icons without visible text are invisible to screen readers.
+- Always include `aria-label`, icons without visible text are invisible to screen readers.
 - Always use `target="_blank"` with `rel="noopener noreferrer"` for external social links.
-- Use monochrome icons by default (foreground color). Color-on-hover is acceptable. Avoid full-color brand icons in footers — they clash with your design system.
+- Use monochrome icons by default (foreground color). Color-on-hover is acceptable. Avoid full-color brand icons in footers, they clash with your design system.
 - Limit to 4-6 platforms maximum. More than that creates decision paralysis and looks cluttered.
 
 ### Platform ordering by audience type
@@ -96,7 +96,7 @@ Rotation: optional auto-rotate carousel (pause on hover, 5s interval)
 Layout: horizontal row, grayscale logos, uniform height (24-32px)
 Opacity: 60% at rest, 100% on hover (subtle life)
 Count: 5-8 logos. If more, use horizontal scroll or two rows.
-Heading: "Trusted by" or "Used by teams at" — keep it short.
+Heading: "Trusted by" or "Used by teams at", keep it short.
 Position: below hero, above features. Or above CTA at page bottom.
 ```
 
@@ -115,7 +115,7 @@ Star icons: 16-20px, filled gold for full, half-filled, outline for empty
 
 For blog posts and content pages, place share buttons at the end of the article (primary) and optionally as a floating sidebar (secondary).
 
-**Implementation approach — use the Web Share API with fallback:**
+**Implementation approach, use the Web Share API with fallback:**
 
 ```tsx
 async function handleShare(data: { title: string; url: string; text?: string }) {
@@ -148,7 +148,7 @@ Every page that might be shared needs Open Graph meta tags. Without them, shared
 **Required meta tags:**
 
 ```html
-<meta property="og:title" content="Page Title — Brand" />
+<meta property="og:title" content="Page Title, Brand" />
 <meta property="og:description" content="Concise description, 60-160 chars" />
 <meta property="og:image" content="https://yoursite.com/og/page-slug.png" />
 <meta property="og:image:width" content="1200" />
@@ -170,15 +170,15 @@ Safe zone: keep text within center 1080 x 530 area (platforms crop edges)
 ```
 
 **What to include on the OG image:**
-- Page/post title (large, readable at thumbnail size — minimum 40px equivalent)
+- Page/post title (large, readable at thumbnail size, minimum 40px equivalent)
 - Brand logo or wordmark (corner, subtle)
 - Brand colors as background or accent
 - Optional: author avatar, category label, illustration
 
 **Dynamic OG image generation** (for blog posts, dashboards, shared reports):
-- **Vercel OG** (`@vercel/og`) — generates images at the edge using React components + Satori. Fast, serverless.
-- **Cloudinary** — URL-based text overlays on template images.
-- **Puppeteer/Playwright** — screenshot an HTML template. Slower, more flexible. Run as a background job, cache the result.
+- **Vercel OG** (`@vercel/og`), generates images at the edge using React components + Satori. Fast, serverless.
+- **Cloudinary**, URL-based text overlays on template images.
+- **Puppeteer/Playwright**, screenshot an HTML template. Slower, more flexible. Run as a background job, cache the result.
 
 Template approach: design a 1200x630 template in brand colors with placeholder zones for title and subtitle. Generate per-page images by filling in the text.
 
@@ -188,7 +188,7 @@ Template approach: design a 1200x630 template in brand colors with placeholder z
 
 ## 2. Social sharing from within a dashboard
 
-This covers sharing dashboard content — reports, charts, views, links — with people inside and outside the product.
+This covers sharing dashboard content, reports, charts, views, links, with people inside and outside the product.
 
 ### Share button placement
 
@@ -253,7 +253,7 @@ When the user clicks Share, open a modal with these sections:
 
 ### Link preview generation for shared content
 
-When someone shares a dashboard link on Slack, email, or social media, it should render a rich preview — not a bare URL.
+When someone shares a dashboard link on Slack, email, or social media, it should render a rich preview, not a bare URL.
 
 **Implementation:**
 
@@ -285,7 +285,7 @@ For public or org-wide shared content, offer an embed snippet:
 
 **Embed route requirements:**
 - Strip all app chrome (nav, sidebar, header). Show only the content.
-- Respect the access level — if the embed is public, serve without auth. If org-only, show a login prompt or "Request access" message.
+- Respect the access level, if the embed is public, serve without auth. If org-only, show a login prompt or "Request access" message.
 - Add a subtle "Powered by YourProduct" footer with a link back. This is free marketing.
 - Support URL parameters for customization: `?theme=dark`, `?hide-title=true`, `?refresh=60` (auto-refresh interval in seconds).
 
@@ -294,8 +294,8 @@ For public or org-wide shared content, offer an embed snippet:
 Allow users to export charts and dashboards as images for sharing in presentations, emails, and social media.
 
 **Implementation options:**
-- **html-to-image** / **html2canvas** — client-side. Captures the DOM as PNG/JPEG. Fast, but limited by browser rendering quirks.
-- **Puppeteer / Playwright** — server-side. Screenshot a headless browser rendering the content. More reliable, supports custom viewports.
+- **html-to-image** / **html2canvas**, client-side. Captures the DOM as PNG/JPEG. Fast, but limited by browser rendering quirks.
+- **Puppeteer / Playwright**, server-side. Screenshot a headless browser rendering the content. More reliable, supports custom viewports.
 
 **Export button placement:** in the chart/report toolbar, grouped with Download (CSV, PDF) and Print.
 
@@ -326,7 +326,7 @@ Show view counts and viewer list in the share modal: "Viewed 47 times by 12 peop
 
 ## 3. Social media management features
 
-This section is for products that manage social media publishing — scheduling, composing, and analyzing posts across platforms. Think Hootsuite, Buffer, Sprout Social, Postiz (open-source).
+This section is for products that manage social media publishing, scheduling, composing, and analyzing posts across platforms. Think Hootsuite, Buffer, Sprout Social, Postiz (open-source).
 
 ### Post composer
 
@@ -434,9 +434,9 @@ Build auto-resizing into your media upload flow. Accept one image, generate plat
 |---|---|---|---|
 | **Instagram** | 1080x1080 (1:1), 1080x1350 (4:5), 1080x566 (1.91:1) | 1080x1920 (9:16) | 320x320 |
 | **Facebook** | 1080x1350 (4:5), 1080x1080 (1:1) | 1080x1920 (9:16) | 170x170 |
-| **X (Twitter)** | 1200x675 (16:9), 1080x1080 (1:1) | — | 400x400 |
-| **LinkedIn** | 1200x1200 (1:1), 1200x627 (1.91:1) | — | 400x400 |
-| **TikTok** | — | 1080x1920 (9:16) | 200x200 |
+| **X (Twitter)** | 1200x675 (16:9), 1080x1080 (1:1) |, | 400x400 |
+| **LinkedIn** | 1200x1200 (1:1), 1200x627 (1.91:1) |, | 400x400 |
+| **TikTok** |, | 1080x1920 (9:16) | 200x200 |
 | **YouTube** | 1280x720 (16:9, thumbnail) | 1080x1920 (9:16, Shorts) | 800x800 |
 | **Pinterest** | 1000x1500 (2:3) | 1080x1920 (9:16, Idea Pins) | 165x165 |
 
@@ -449,10 +449,10 @@ Build auto-resizing into your media upload flow. Accept one image, generate plat
 The calendar is the second most important feature after the composer.
 
 **Views:**
-- **Month view** — grid of days, each cell shows post count and color-coded dots per platform. Click a day to see posts.
-- **Week view** — time slots, posts displayed as blocks. Drag-and-drop to reschedule.
-- **Day view** — timeline with detailed post cards.
-- **List view** — table/list of all scheduled posts with sort and filter.
+- **Month view**, grid of days, each cell shows post count and color-coded dots per platform. Click a day to see posts.
+- **Week view**, time slots, posts displayed as blocks. Drag-and-drop to reschedule.
+- **Day view**, timeline with detailed post cards.
+- **List view**, table/list of all scheduled posts with sort and filter.
 
 **Post cards on calendar:**
 
@@ -511,9 +511,9 @@ User clicks "Connect X account"
 - Encrypt tokens at rest. Never log tokens. Never expose tokens to the client.
 
 **Unified API services (alternative to direct integration):**
-- **Ayrshare** — unified REST API for major platforms.
-- **Upload-Post** — white-label social API.
-- **Late (getlate.dev)** — unified social media API.
+- **Ayrshare**, unified REST API for major platforms.
+- **Upload-Post**, white-label social API.
+- **Late (getlate.dev)**, unified social media API.
 
 These handle OAuth flows, token storage, and platform quirks. Trade-off: cost and dependency vs. months of integration work.
 
@@ -550,10 +550,10 @@ Drafter creates post (status: Draft)
 ```
 
 **Roles:**
-- **Drafter** — can create and edit drafts, submit for review.
-- **Reviewer/Approver** — can approve, reject, or edit pending posts.
-- **Publisher** — can publish directly without review.
-- **Admin** — can manage connected accounts, team members, and settings.
+- **Drafter**, can create and edit drafts, submit for review.
+- **Reviewer/Approver**, can approve, reject, or edit pending posts.
+- **Publisher**, can publish directly without review.
+- **Admin**, can manage connected accounts, team members, and settings.
 
 ### Media library
 
@@ -631,8 +631,8 @@ Auto-generate social posts from RSS feed items.
 
 **Rules:**
 - Use official brand colors and logos for social buttons. Google's brand guidelines require specific button styling.
-- Label format: "Continue with {Provider}" (not "Sign in with" — "continue" works for both signup and login).
-- Social buttons go above the email/password form. They are the faster path — put them first.
+- Label format: "Continue with {Provider}" (not "Sign in with", "continue" works for both signup and login).
+- Social buttons go above the email/password form. They are the faster path, put them first.
 - Show a divider ("or") between social and email options.
 
 **What to auto-populate from social profile:**
@@ -702,7 +702,7 @@ Or a grid of profile cards (3-4 columns) for a more visual layout.
 
 ### Social activity feeds
 
-Show social activity within the dashboard — useful for community platforms, social apps, or team collaboration tools.
+Show social activity within the dashboard, useful for community platforms, social apps, or team collaboration tools.
 
 **Feed item anatomy:**
 
@@ -788,23 +788,23 @@ function YouTubeFacade({ videoId, title }: Props) {
 This saves ~750KB per YouTube embed until the user actually wants to watch.
 
 **Facade libraries:**
-- **lite-youtube-embed** — web component, 100x faster than default YouTube embed.
-- **lite-vimeo-embed** — same pattern for Vimeo.
+- **lite-youtube-embed**, web component, 100x faster than default YouTube embed.
+- **lite-vimeo-embed**, same pattern for Vimeo.
 - Build custom facades for Twitter/X: render a styled blockquote with the tweet text and a "Load tweet" button.
 
 **Lazy loading strategy:**
 1. Use `loading="lazy"` on iframes.
 2. Use Intersection Observer to load embeds when they enter the viewport.
-3. For heavy pages (10+ embeds), use virtual scrolling — only render embeds in/near the viewport.
+3. For heavy pages (10+ embeds), use virtual scrolling, only render embeds in/near the viewport.
 
 ### Social feed widgets
 
 Show a live feed from a social platform within your site.
 
 **Options:**
-- **Platform widgets** (Twitter timeline widget, Facebook Page Plugin) — easy but add third-party JS and limited customization.
-- **API-powered custom feeds** — fetch posts via platform API, render with your own components. Full control, but requires API access and token management.
-- **Aggregator services** (Curator.io, Juicer, Tagembed) — pull from multiple platforms, provide embeddable widgets. Good for marketing pages.
+- **Platform widgets** (Twitter timeline widget, Facebook Page Plugin), easy but add third-party JS and limited customization.
+- **API-powered custom feeds**, fetch posts via platform API, render with your own components. Full control, but requires API access and token management.
+- **Aggregator services** (Curator.io, Juicer, Tagembed), pull from multiple platforms, provide embeddable widgets. Good for marketing pages.
 
 Prefer API-powered custom feeds for dashboard features and aggregator services for marketing pages.
 
@@ -863,12 +863,12 @@ When a user types `@` in the composer, show an autocomplete dropdown.
 
 ### Emoji picker
 
-Use a library — don't build this from scratch.
+Use a library, don't build this from scratch.
 
 **Recommended:**
-- **emoji-mart** (`@emoji-mart/react`) — Slack-style picker. Full categorization, search, skin tone support, frequently used tracking. The most complete option.
-- **emoji-picker-react** — lighter alternative, good React hooks integration.
-- **Frimousse** — minimal, from Liveblocks. Good for chat-style UIs.
+- **emoji-mart** (`@emoji-mart/react`), Slack-style picker. Full categorization, search, skin tone support, frequently used tracking. The most complete option.
+- **emoji-picker-react**, lighter alternative, good React hooks integration.
+- **Frimousse**, minimal, from Liveblocks. Good for chat-style UIs.
 
 **Integration:**
 
@@ -946,11 +946,11 @@ https://yoursite.com/feature?
 
 For most dashboards, build in this order:
 
-1. **OG meta tags and social icons** — near-zero effort, high ROI for any site.
-2. **Share modal with copy link** — basic sharing for dashboard content.
-3. **Social login** — reduces signup friction, most auth libraries support this out of the box.
-4. **Embed codes** — if customers need to embed your content.
-5. **Social proof widgets** — for marketing/landing pages.
-6. **Social media management** — only if your product is a social media tool.
+1. **OG meta tags and social icons**, near-zero effort, high ROI for any site.
+2. **Share modal with copy link**, basic sharing for dashboard content.
+3. **Social login**, reduces signup friction, most auth libraries support this out of the box.
+4. **Embed codes**, if customers need to embed your content.
+5. **Social proof widgets**, for marketing/landing pages.
+6. **Social media management**, only if your product is a social media tool.
 
 Build the simple things first. Social login with Google takes an afternoon. A full post composer with multi-platform preview takes months.

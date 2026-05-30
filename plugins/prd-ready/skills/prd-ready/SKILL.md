@@ -1,7 +1,7 @@
 ---
 name: prd-ready
 description: "Write a PRD that engineering, design, QA, and downstream planning skills can consume without a clarification meeting. Owns problem framing, target-user specificity, success metrics, functional and non-functional requirements, scope and no-gos, appetite and rabbit holes, open-question log, downstream handoff block, and the iterate-vs-freeze lifecycle. Refuses hollow PRDs (sections filled, no decisions), invisible PRDs (reads the same across any product), feature laundry lists (un-prioritized feature dumps), solution-first PRDs (problem box names the solution), assumption-soup PRDs (we-assume-users-will-love-it claims), and moving-target PRDs (silent edits, engineer whiplash). Triggers on 'write a PRD,' 'product spec,' 'requirements doc,' 'one-pager,' 'product brief,' 'pitch for this feature,' 'problem statement.' Does not design the architecture (architecture-ready), sequence the roadmap (roadmap-ready), pick the stack (stack-ready), build the app (production-ready), or write launch copy (launch-ready). Top of the planning tier; no upstream siblings. Full trigger list in README."
-version: 3.0.1
+version: 3.0.2
 updated: 2026-05-30
 changelog: CHANGELOG.md
 suite: ready-suite
@@ -21,6 +21,7 @@ compatible_with:
   - codex
   - cursor
   - windsurf
+  - antigravity
   - pi
   - openclaw
   - any-agentskills-compatible-harness

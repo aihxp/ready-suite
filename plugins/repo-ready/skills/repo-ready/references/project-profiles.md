@@ -729,11 +729,11 @@ For each major stack, the recommended tool for each quality job. Pick ONE tool p
 
 ### Zig
 
-Zig is a systems-programming language positioned as a modern alternative to Rust and C — explicit memory management, no hidden control flow, single toolchain. Best fit: CLI tools, libraries (single-binary / FFI-friendly), systems tooling, and embedded / freestanding targets.
+Zig is a systems-programming language positioned as a modern alternative to Rust and C, explicit memory management, no hidden control flow, single toolchain. Best fit: CLI tools, libraries (single-binary / FFI-friendly), systems tooling, and embedded / freestanding targets.
 
 | Job | Recommended (2026) | Alternative | Notes |
 |---|---|---|---|
-| Lint | (none — `zig build`) | - | Compiler performs semantic + safety checks; no separate linter |
+| Lint | (none, `zig build`) | - | Compiler performs semantic + safety checks; no separate linter |
 | Format | `zig fmt` | - | Built-in, zero-config |
 | Type check | (built-in) | - | Part of `zig build` / `zig build test` |
 | Test | `zig build test` | - | Inline `test "name" { ... }` blocks; Zig 0.13.0 pinned |
@@ -749,7 +749,7 @@ Gleam is a statically-typed functional language on the BEAM (Erlang VM), with fi
 
 | Job | Recommended (2026) | Alternative | Notes |
 |---|---|---|---|
-| Lint | `gleam check` | - | Type system acts as the linter — no separate tool |
+| Lint | `gleam check` | - | Type system acts as the linter, no separate tool |
 | Format | `gleam format` | - | Built-in, zero-config |
 | Type check | `gleam check` | - | Static, sound, inferred |
 | Test | `gleam test` (gleeunit) | - | Tests in `test/<pkg>_test.gleam` |
@@ -781,7 +781,7 @@ Bun 1.1+ is a Node-compatible runtime, package manager, and test runner in a sin
 
 | Job | Recommended (2026) | Alternative | Notes |
 |---|---|---|---|
-| Lint | Biome | ESLint v9 | Bun ships no linter — match JS/TS recommendation |
+| Lint | Biome | ESLint v9 | Bun ships no linter, match JS/TS recommendation |
 | Format | Biome | Prettier | Bun ships no formatter |
 | Type check | `tsc --noEmit` | - | Bun executes TS at runtime but doesn't type-check |
 | Test | `bun test` | Vitest, Jest | Built-in, Jest-compatible API |

@@ -1,7 +1,7 @@
 ---
 name: repo-ready
 description: "Set up production-grade repository structure, documentation, CI/CD, quality tooling, and platform configuration -- across any stack (Node/Python/Go/Rust/Java/Ruby/Swift/C#/PHP/Elixir/C++/Dart) and any platform (GitHub/GitLab/Bitbucket). Use this skill whenever the user asks to 'set up a repo,' 'initialize a project,' 'add documentation,' 'set up CI,' 'configure linting,' 'add a README,' 'set up GitHub Actions,' 'make my repo professional,' 'add contributing guidelines,' 'set up release automation,' or describes wanting a clean, well-structured repository. Triggers also include requests to add a LICENSE, CHANGELOG, SECURITY.md, CODE_OF_CONDUCT, issue templates, PR templates, branch protection, dependency scanning, badges, .gitignore, .editorconfig, Makefile, devcontainer, or any 'repo hygiene' task. This skill enforces a no-placeholder rule -- every generated file must contain actionable content tailored to the project's stack, type, and stage, not generic TODO markers or lorem ipsum."
-version: 3.0.1
+version: 3.0.2
 updated: 2026-05-30
 changelog: CHANGELOG.md
 suite: ready-suite
@@ -14,6 +14,7 @@ compatible_with:
   - codex
   - cursor
   - windsurf
+  - antigravity
   - pi
   - openclaw
   - any-agentskills-compatible-harness
@@ -344,15 +345,15 @@ START
 │        │
 │        ├- Has README + LICENSE + .gitignore?
 │        │   NO  -> Tier 1 incomplete. Add essentials first.
-│        │   YES ↓
+│        │   YES v
 │        │
 │        ├- Has CONTRIBUTING + CI + quality tooling?
 │        │   NO  -> Tier 2 incomplete. Add team infrastructure.
-│        │   YES ↓
+│        │   YES v
 │        │
 │        ├- Has security policy + release automation + community standards?
 │        │   NO  -> Tier 3 incomplete. Add maturity layer.
-│        │   YES ↓
+│        │   YES v
 │        │
 │        └- Has signed commits + SBOM + full audit green?
 │            NO  -> Tier 4 incomplete. Harden.
@@ -700,6 +701,41 @@ Generated files reference other files (README -> CONTRIBUTING, CONTRIBUTING -> C
 | GOVERNANCE.md | CONTRIBUTING.md, CODE_OF_CONDUCT.md |
 
 **Rule:** before referencing another file, check it was generated at the current or a lower tier. Otherwise omit or mark "add when [file] is created."
+
+## Suite membership
+
+repo-ready is the building-tier skill that owns repository scaffolding and hygiene. See `SUITE.md` at the repo root for the full map. The relevant siblings at a glance:
+
+- **Planning tier:** `prd-ready` (what), `architecture-ready` (how), `roadmap-ready` (when), `stack-ready` (with what tools).
+- **Building tier:** `repo-ready` (this skill, the repo scaffolding), `production-ready` (the app).
+- **Shipping tier:** `deploy-ready` (ship it), `observe-ready` (keep it healthy), `launch-ready` (tell the world), `harden-ready` (survive adversarial attention).
+
+Skills are loosely coupled: each stands alone, each composes with the others via well-defined artifacts. No skill routes through another; the harness is the router. repo-ready pairs with production-ready: repo-ready owns the repo scaffolding, production-ready owns the app wiring.
+
+## Consumes from upstream
+
+When the agent starts, it checks for upstream artifacts and pre-fills from them rather than asking the user to repeat decisions already made. Absence is fine; the skill runs standalone and detects the stack from the code.
+
+| If present | repo-ready reads it during | To pre-fill |
+|---|---|---|
+| `.stack-ready/DECISION.md` | Stack detection | The chosen language, runtime, package manager, and platform, so the CI matrix, linter, and formatter match the stack instead of being guessed from files on disk. |
+| `.prd-ready/PRD.md` | Project-type detection | Project archetype, audience, and licensing posture, so the README, CONTRIBUTING, and SECURITY.md describe the real project rather than a generic template. |
+| `.architecture-ready/ARCH.md` | Repo-structure decisions | Monorepo-vs-polyrepo shape and module boundaries that inform the directory layout and any workspace configuration. |
+
+If none is present, repo-ready detects the stack from the code (see "Stack detection") and proceeds. If an upstream artifact contradicts the code, trust the code and note the drift.
+
+## Produces for downstream
+
+repo-ready scaffolds the repository surface. It does not emit a single state file; the produced files themselves are the contract.
+
+| Artifact | Path | Consumed by |
+|---|---|---|
+| **Repository scaffolding** | `README.md`, `CONTRIBUTING.md`, `LICENSE`, `.editorconfig`, `.gitignore`, and the linter and formatter config | `production-ready` builds app slices inside the scaffolded repo, inheriting its lint, format, and test conventions instead of re-deriving them. |
+| **CI/CD workflows** | `.github/workflows/*` (or the platform equivalent) | `deploy-ready` reads the build, lint, test, and scan jobs and adds deploy stages on top rather than re-authoring them. |
+| **Security baseline** | `.repo-ready/SECURITY.md` (and root `SECURITY.md`) | `harden-ready` reads the disclosure baseline and extends it into a full responsible-disclosure program. |
+| **Agent brief** | `AGENTS.md` (with a `CLAUDE.md` overlay) | Any harness arriving at the repo cold reads the conventions, build commands, and forbidden actions. |
+
+If a downstream skill is not installed, the scaffolding still stands on its own. The files are the durable artifact; there is no separate state document to maintain.
 
 ## Keep going until it's actually set up
 

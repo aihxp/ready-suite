@@ -987,7 +987,7 @@ build/
 
 ### Zig
 
-Zig is a systems-programming language positioned as a modern alternative to Rust and C — explicit memory management, no hidden control flow, and a toolchain that ships compiler, build system, test runner, and formatter in one binary. Pin to **Zig 0.13.0** for examples; Zig is pre-1.0 and language semantics change between minor releases.
+Zig is a systems-programming language positioned as a modern alternative to Rust and C, explicit memory management, no hidden control flow, and a toolchain that ships compiler, build system, test runner, and formatter in one binary. Pin to **Zig 0.13.0** for examples; Zig is pre-1.0 and language semantics change between minor releases.
 
 ```
 zig-cli-tool/
@@ -998,7 +998,7 @@ zig-cli-tool/
       build.zig
       run.zig
   tests/
-    integration_test.zig    # Optional — most tests live inline via test blocks
+    integration_test.zig    # Optional, most tests live inline via test blocks
   build.zig                 # Build script (REQUIRED, root-only)
   build.zig.zon             # Manifest + dependencies (Zig 0.11+)
   zig-out/                  # Build output (gitignored)
@@ -1028,7 +1028,7 @@ zig-lib/
 - `build.zig.zon` filename: enforced by Zig 0.11+ when using package deps
 - `src/main.zig` vs `src/root.zig`: convention (executable vs library idiom)
 - `zig-out/` and `.zig-cache/` / `zig-cache/`: hard-coded output/cache names, always gitignore
-- `tests/` directory: convention only — Zig allows `test "name" { ... }` blocks inline in any module
+- `tests/` directory: convention only, Zig allows `test "name" { ... }` blocks inline in any module
 - Zig does not have "zero-cost abstractions" hidden under macros; every allocation is explicit via `std.mem.Allocator`
 
 **Standard .gitignore:**
@@ -1061,7 +1061,7 @@ vgcore.*
 
 ### Gleam
 
-Gleam is a statically-typed functional language that runs on the BEAM (Erlang virtual machine), with first-class interop into Erlang and Elixir via Hex. Pin examples to **Gleam 1.4+** on **OTP 27.x**. Idiomatic Gleam uses the pipe operator (`|>`) heavily — snippets should reflect that.
+Gleam is a statically-typed functional language that runs on the BEAM (Erlang virtual machine), with first-class interop into Erlang and Elixir via Hex. Pin examples to **Gleam 1.4+** on **OTP 27.x**. Idiomatic Gleam uses the pipe operator (`|>`) heavily, snippets should reflect that.
 
 ```
 gleam_app/
@@ -1075,7 +1075,7 @@ gleam_app/
   build/                    # Compiler output (gitignored)
   deps/                     # Fetched Hex deps (gitignored)
   gleam.toml                # Manifest (name, version, deps, targets)
-  manifest.toml             # Lockfile — COMMIT this
+  manifest.toml             # Lockfile, COMMIT this
   README.md
   LICENSE
   .editorconfig
@@ -1128,12 +1128,12 @@ erl_crash.dump
 
 ### Deno
 
-Deno is a JavaScript/TypeScript runtime with built-in tooling (formatter, linter, type checker, test runner, bundler, JSR publisher) and secure-by-default permissions. Distinct enough from Node that it warrants its own layout — no `node_modules/`, no `package.json`, URL/JSR-based imports. Pin examples to **Deno 2.x** (v2 was the API-stability release) and use `jsr:@scope/mod` imports, not legacy `https://deno.land/std/...`.
+Deno is a JavaScript/TypeScript runtime with built-in tooling (formatter, linter, type checker, test runner, bundler, JSR publisher) and secure-by-default permissions. Distinct enough from Node that it warrants its own layout, no `node_modules/`, no `package.json`, URL/JSR-based imports. Pin examples to **Deno 2.x** (v2 was the API-stability release) and use `jsr:@scope/mod` imports, not legacy `https://deno.land/std/...`.
 
 ```
 my-deno-lib/
   src/
-    mod.ts                  # Public entry (or use root mod.ts — both common)
+    mod.ts                  # Public entry (or use root mod.ts, both common)
     handlers.ts
     types.ts
   tests/
@@ -1141,8 +1141,8 @@ my-deno-lib/
   scripts/
     build.ts                # Deno tasks live in deno.json, scripts are optional
   deno.json                 # Manifest: tasks, imports, fmt/lint/test config
-  deno.lock                 # Lockfile — COMMIT this
-  import_map.json           # Optional — legacy; prefer deno.json "imports"
+  deno.lock                 # Lockfile, COMMIT this
+  import_map.json           # Optional, legacy; prefer deno.json "imports"
   README.md
   LICENSE
   .editorconfig
@@ -1150,7 +1150,7 @@ my-deno-lib/
   .gitattributes
 ```
 
-**JSR-publishable library** (minimal — `mod.ts` at root is idiomatic for small libs):
+**JSR-publishable library** (minimal, `mod.ts` at root is idiomatic for small libs):
 ```
 deno-lib/
   mod.ts                    # Root entry, re-exports the public API
@@ -1175,7 +1175,7 @@ deno-app/
 **Enforced vs. convention:**
 - `deno.json` (or `deno.jsonc`) filename: enforced by the Deno CLI
 - `deno.lock` filename: enforced; commit for reproducibility
-- Layout itself (`src/`, `mod.ts` root): convention — Deno does not enforce a folder shape
+- Layout itself (`src/`, `mod.ts` root): convention, Deno does not enforce a folder shape
 - `_test.ts` / `.test.ts` suffix: enforced by `deno test` discovery
 - Permissions (`--allow-net`, `--allow-read`): enforced at runtime; document required flags in README
 - JSR imports (`jsr:@scope/pkg`) are the modern idiom; `import_map.json` is legacy vs `"imports"` in `deno.json`
@@ -1205,10 +1205,10 @@ node_modules/
 
 Bun is a Node-compatible runtime + package manager + test runner + bundler in a single binary. Choose between two usage modes up front:
 
-**Bun-first vs Bun-drop-in — pick one:**
+**Bun-first vs Bun-drop-in, pick one:**
 
-- **New JS/TS project in 2026+?** Bun-first — use `bun` as the runtime, commit `bun.lockb`, use `bun test`, skip `node_modules` conflicts.
-- **Migrating a Node project and just want faster installs?** Bun-drop-in — keep Node as the runtime, use `bun install` only, and keep your existing `package-lock.json` (or switch to `bun.lockb` if you also want `bun test`).
+- **New JS/TS project in 2026+?** Bun-first, use `bun` as the runtime, commit `bun.lockb`, use `bun test`, skip `node_modules` conflicts.
+- **Migrating a Node project and just want faster installs?** Bun-drop-in, keep Node as the runtime, use `bun install` only, and keep your existing `package-lock.json` (or switch to `bun.lockb` if you also want `bun test`).
 - **Rule of thumb:** if you commit `bun.lockb`, you're Bun-first; if you commit `package-lock.json`, you're Bun-drop-in. Don't commit both.
 
 Pin examples to **Bun 1.1+**. Bun is Node-compatible, so the folder shape mirrors Node.
@@ -1224,8 +1224,8 @@ bun-api/
     users.test.ts           # Bun picks up *.test.ts automatically
   dist/                     # Build output from bun build (gitignored)
   package.json              # Node-compatible manifest
-  bun.lockb                 # Binary lockfile — commit (Bun-first)
-  bunfig.toml               # Optional — Bun runtime config
+  bun.lockb                 # Binary lockfile, commit (Bun-first)
+  bunfig.toml               # Optional, Bun runtime config
   tsconfig.json
   biome.json                # Biome for fmt + lint (Bun does not ship a formatter)
   README.md
@@ -1235,7 +1235,7 @@ bun-api/
   .gitattributes
 ```
 
-**Minimal `bunfig.toml`** (optional — only needed if defaults don't fit):
+**Minimal `bunfig.toml`** (optional, only needed if defaults don't fit):
 ```toml
 [install]
 # Use exact versions in package.json instead of carets
@@ -1249,10 +1249,10 @@ coverage = false
 
 **Enforced vs. convention:**
 - `package.json` at root: enforced (Node-compatible)
-- `bun.lockb` is a **binary** lockfile — merge conflicts cannot be hand-resolved; regenerate via `bun install` and commit the new binary
+- `bun.lockb` is a **binary** lockfile, merge conflicts cannot be hand-resolved; regenerate via `bun install` and commit the new binary
 - `bunfig.toml` filename: enforced only if you use it (optional)
 - `*.test.ts` / `*_test.ts` discovery: enforced by `bun test`
-- Bun workspaces: handled in `monorepo-patterns.md` — not covered here (single-package only)
+- Bun workspaces: handled in `monorepo-patterns.md`, not covered here (single-package only)
 - Bun respects `package.json` `"type": "module"`; match it to runtime expectations when migrating Node code
 
 **Standard .gitignore:**

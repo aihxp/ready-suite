@@ -1,7 +1,7 @@
 ---
 name: launch-ready
 description: "Put a deployed, healthy app in front of real users without shipping AI-slop. Owns landing page, positioning, launch-day SEO, Open Graph cards, waitlist and email funnel, launch channels (Product Hunt, Show HN, Reddit, X, IH, dev.to, LinkedIn), press outreach, launch-day telemetry, and the D-7 to D+7 runbook. Refuses AI-slop landings, hero-fatigue copy, spec-sheet positioning, paper waitlists, unrendered OG cards, and silent launches (launch-day signups with no source attribution). Triggers on 'launch my product,' 'build a landing page,' 'Product Hunt,' 'Show HN,' 'waitlist,' 'OG card,' 'launch-day SEO,' 'press kit,' 'launch week plan.' Does not build the app (production-ready), deploy it (deploy-ready), monitor it (observe-ready), pick tools (stack-ready), or own ongoing marketing. Pairs with deploy-ready and observe-ready. Full trigger list in README."
-version: 3.0.1
+version: 3.0.2
 updated: 2026-05-30
 changelog: CHANGELOG.md
 suite: ready-suite
@@ -20,6 +20,7 @@ compatible_with:
   - codex
   - cursor
   - windsurf
+  - antigravity
   - pi
   - openclaw
   - any-agentskills-compatible-harness

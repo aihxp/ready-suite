@@ -15,7 +15,7 @@ The universal default. Works everywhere, ships with every Unix system, understoo
 ```makefile
 .PHONY: help setup dev test build lint format clean check ci
 
-# Self-documenting help target — grep all targets with ## comments
+# Self-documenting help target, grep all targets with ## comments
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | \
 		awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
@@ -71,7 +71,7 @@ clean-all: clean ## Remove everything including node_modules
 - `.PHONY` prevents conflicts with files named after targets
 - `.DEFAULT_GOAL := help` means bare `make` shows the help menu
 
-**Python variant — replace the command bodies:**
+**Python variant, replace the command bodies:**
 
 ```makefile
 setup: ## Install dependencies and set up local environment
@@ -389,10 +389,10 @@ For Node.js-only projects, `package.json` scripts are the natural choice. No add
 | **Adoption** | Universal | Growing | Growing | Node ecosystem |
 
 **Recommendation:**
-- **Node.js project, no other languages** → npm scripts. No additional tooling.
-- **Polyglot project or non-Node** → Makefile. Zero-dependency, universally understood.
-- **Team that wants modern DX** → Justfile. Better ergonomics than Make, cross-platform.
-- **Complex build dependencies, incremental builds** → Taskfile. Best dependency graph support.
+- **Node.js project, no other languages** -> npm scripts. No additional tooling.
+- **Polyglot project or non-Node** -> Makefile. Zero-dependency, universally understood.
+- **Team that wants modern DX** -> Justfile. Better ergonomics than Make, cross-platform.
+- **Complex build dependencies, incremental builds** -> Taskfile. Best dependency graph support.
 
 ---
 
@@ -400,7 +400,7 @@ For Node.js-only projects, `package.json` scripts are the natural choice. No add
 
 Dev Containers define reproducible development environments in a Docker container. Every team member gets the same toolchain regardless of their host OS. Works in VS Code, JetBrains IDEs, GitHub Codespaces, and Devpod.
 
-### .devcontainer/devcontainer.json — Complete Template
+### .devcontainer/devcontainer.json, Complete Template
 
 ```jsonc
 // .devcontainer/devcontainer.json
@@ -690,7 +690,7 @@ RUN apt-get update && apt-get install -y \
 
 A `docker-compose.yml` for local development services. The application itself runs on the host (not in a container) for fast iteration. The services (database, cache, queue, etc.) run in containers for zero-install setup.
 
-### docker-compose.yml — Common Services
+### docker-compose.yml, Common Services
 
 ```yaml
 # docker-compose.yml
@@ -729,7 +729,7 @@ services:
       timeout: 5s
       retries: 5
 
-  # MinIO — S3-compatible object storage
+  # MinIO, S3-compatible object storage
   minio:
     image: minio/minio:latest
     restart: unless-stopped
@@ -748,7 +748,7 @@ services:
       timeout: 5s
       retries: 3
 
-  # Mailpit — local email testing (catches all outgoing email)
+  # Mailpit, local email testing (catches all outgoing email)
   mailpit:
     image: axllent/mailpit:latest
     restart: unless-stopped
@@ -772,7 +772,7 @@ volumes:
 Create `.env.example` with all variables and safe defaults. Never commit `.env`.
 
 ```shell
-# .env.example — copy to .env and fill in real values
+# .env.example, copy to .env and fill in real values
 # cp .env.example .env
 
 # Application
@@ -797,11 +797,11 @@ SMTP_HOST=localhost
 SMTP_PORT=1025
 SMTP_FROM=noreply@localhost
 
-# Auth — generate real values for production
+# Auth, generate real values for production
 JWT_SECRET=dev-jwt-secret-change-in-production
 SESSION_SECRET=dev-session-secret-change-in-production
 
-# External APIs — get your own keys
+# External APIs, get your own keys
 # STRIPE_SECRET_KEY=sk_test_...
 # OPENAI_API_KEY=sk-...
 ```
@@ -811,7 +811,7 @@ SESSION_SECRET=dev-session-secret-change-in-production
 When the application runs inside Docker (instead of on the host), mount the source for hot reload:
 
 ```yaml
-# docker-compose.override.yml — development overrides
+# docker-compose.override.yml, development overrides
 services:
   app:
     build:
@@ -853,7 +853,7 @@ Pattern for each service type:
 
 ## 4. Setup Scripts
 
-### scripts/setup.sh — Idempotent Setup
+### scripts/setup.sh, Idempotent Setup
 
 The setup script must be safe to run multiple times. Running it twice should produce the same result as running it once. It checks for prerequisites, installs what's missing, and skips what's already done.
 
@@ -932,7 +932,7 @@ ok "Dependencies installed"
 if [ ! -f .env ]; then
   info "Creating .env from .env.example..."
   cp .env.example .env
-  ok "Created .env — review and update values as needed"
+  ok "Created .env, review and update values as needed"
 else
   ok ".env already exists (skipping)"
 fi
@@ -983,7 +983,7 @@ echo "  make help          See all available commands"
 echo ""
 ```
 
-**Python variant — prerequisite section:**
+**Python variant, prerequisite section:**
 
 ```bash
 check_command python3   || MISSING=1
@@ -998,7 +998,7 @@ pip install -e ".[dev]"
 ok "Dependencies installed in .venv"
 ```
 
-**Go variant — prerequisite section:**
+**Go variant, prerequisite section:**
 
 ```bash
 check_command go        || MISSING=1
@@ -1017,12 +1017,12 @@ ok "Development tools installed"
 
 ### Key Design Principles for Setup Scripts
 
-1. **Idempotent** — running twice does not break anything. Use `[ -f .env ] || cp .env.example .env` not bare `cp`.
-2. **Fail fast** — `set -euo pipefail` at the top. Check prerequisites before doing anything.
-3. **Informative** — print what you are doing and what succeeded. Color-coded output.
-4. **No sudo** — never require root. If a tool needs root, tell the user to install it themselves.
-5. **No interactivity** — the script should run unattended. Use flags or env vars for options.
-6. **Platform-aware** — detect macOS vs Linux when commands differ. Use `uname -s` to branch.
+1. **Idempotent**, running twice does not break anything. Use `[ -f .env ] || cp .env.example .env` not bare `cp`.
+2. **Fail fast**, `set -euo pipefail` at the top. Check prerequisites before doing anything.
+3. **Informative**, print what you are doing and what succeeded. Color-coded output.
+4. **No sudo**, never require root. If a tool needs root, tell the user to install it themselves.
+5. **No interactivity**, the script should run unattended. Use flags or env vars for options.
+6. **Platform-aware**, detect macOS vs Linux when commands differ. Use `uname -s` to branch.
 
 ---
 
@@ -1036,7 +1036,7 @@ Version manager config files pin the language runtime version. Commit these file
 22
 ```
 
-Both `.nvmrc` and `.node-version` use the same format. `.nvmrc` is for nvm, `.node-version` is for fnm, nodenv, volta, and mise. Use `.node-version` — it has broader tool support.
+Both `.nvmrc` and `.node-version` use the same format. `.nvmrc` is for nvm, `.node-version` is for fnm, nodenv, volta, and mise. Use `.node-version`, it has broader tool support.
 
 To auto-switch on `cd`, add to `~/.zshrc`:
 - **fnm**: `eval "$(fnm env --use-on-cd)"`
@@ -1106,7 +1106,7 @@ Rustup reads this file automatically. The `components` field ensures rustfmt and
 1.22
 ```
 
-Less common than the others. Used by goenv and some CI systems. Go's built-in toolchain management (`go1.22.0 download`) is increasingly popular and does not use a dotfile — it reads the `go` directive in `go.mod`:
+Less common than the others. Used by goenv and some CI systems. Go's built-in toolchain management (`go1.22.0 download`) is increasingly popular and does not use a dotfile, it reads the `go` directive in `go.mod`:
 
 ```
 // go.mod
@@ -1121,12 +1121,12 @@ go 1.22
 
 ## 6. IDE Configuration
 
-### .vscode/settings.json — Format on Save, Linter Integration
+### .vscode/settings.json, Format on Save, Linter Integration
 
 ```jsonc
 // .vscode/settings.json
 {
-  // Format on save — the single most impactful DX setting
+  // Format on save, the single most impactful DX setting
   "editor.formatOnSave": true,
 
   // Default formatter (pick one per ecosystem)
@@ -1165,7 +1165,7 @@ go 1.22
   // "python.analysis.typeCheckingMode": "standard",
   // "python.defaultInterpreterPath": ".venv/bin/python",
 
-  // File exclusions — hide noise in the explorer
+  // File exclusions, hide noise in the explorer
   "files.exclude": {
     "**/.git": true,
     "**/node_modules": true,
@@ -1176,7 +1176,7 @@ go 1.22
     "**/coverage": true
   },
 
-  // Search exclusions — keep search results relevant
+  // Search exclusions, keep search results relevant
   "search.exclude": {
     "**/node_modules": true,
     "**/dist": true,
@@ -1192,7 +1192,7 @@ go 1.22
 }
 ```
 
-### .vscode/extensions.json — Recommended Extensions
+### .vscode/extensions.json, Recommended Extensions
 
 ```jsonc
 // .vscode/extensions.json
@@ -1232,7 +1232,7 @@ go 1.22
 }
 ```
 
-**Python stack variant — replace the JS/TS recommendations:**
+**Python stack variant, replace the JS/TS recommendations:**
 ```json
 [
   "ms-python.python",
@@ -1258,7 +1258,7 @@ go 1.22
 ]
 ```
 
-### .vscode/launch.json — Debug Configurations
+### .vscode/launch.json, Debug Configurations
 
 ```jsonc
 // .vscode/launch.json
@@ -1345,7 +1345,7 @@ go 1.22
 }
 ```
 
-### JetBrains (.idea/) — What to Commit vs .gitignore
+### JetBrains (.idea/), What to Commit vs .gitignore
 
 JetBrains IDEs store project configuration in `.idea/`. Some files are shareable, some are user-specific.
 
@@ -1361,7 +1361,7 @@ JetBrains IDEs store project configuration in `.idea/`. Some files are shareable
 
 **Gitignore these (user-specific):**
 ```gitignore
-# .gitignore — JetBrains section
+# .gitignore, JetBrains section
 .idea/*
 !.idea/codeStyles/
 !.idea/inspectionProfiles/
@@ -1388,7 +1388,7 @@ JetBrains IDEs store project configuration in `.idea/`. Some files are shareable
 
 ## 7. Deployment Configuration Files
 
-### Dockerfile — Multi-Stage Build Template
+### Dockerfile, Multi-Stage Build Template
 
 ```dockerfile
 # ── Stage 1: Dependencies ────────────────────────────────────────
@@ -1471,7 +1471,7 @@ EXPOSE 8080
 ENTRYPOINT ["/server"]
 ```
 
-### .dockerignore — Comprehensive Template
+### .dockerignore, Comprehensive Template
 
 ```
 # .dockerignore
@@ -1700,7 +1700,7 @@ This is the sequence every `CONTRIBUTING.md` "Development Setup" section should 
 
 Steps 3-6 should be automated in a single `make setup` or `scripts/setup.sh`. The developer should only need to do steps 1, 2, 7, and 8 manually.
 
-### CONTRIBUTING.md — Development Setup Section Template
+### CONTRIBUTING.md, Development Setup Section Template
 
 ```markdown
 ## Development Setup
@@ -1792,7 +1792,7 @@ If any step fails or requires information not in the docs, the onboarding is inc
 
 If you use Claude Code / Cursor / Copilot / Windsurf on this repo, tell them your conventions once, in a file they'll read, instead of re-typing them every conversation. Every major AI coding agent now looks for a project-local config file at start-of-session; leaving that file empty wastes the first five minutes of every interaction on re-establishing context the agent could have loaded in one shot.
 
-This is developer-experience plumbing: the file exists to shorten the feedback loop for contributors who use AI tools, the same way a `Makefile` shortens the feedback loop for contributors at the shell. Treat it as part of onboarding DX — not as a meta-document about the project.
+This is developer-experience plumbing: the file exists to shorten the feedback loop for contributors who use AI tools, the same way a `Makefile` shortens the feedback loop for contributors at the shell. Treat it as part of onboarding DX, not as a meta-document about the project.
 
 ### The five config files covered
 
@@ -1837,15 +1837,15 @@ Five formats, one job: tell an agent what the repo is, how to build and test it,
 - **Purpose:** Windsurf (Codeium's agentic IDE) reads this file for project-local rules. Parallel to `.cursorrules` in both purpose and format.
 - **Location:** Repo root.
 - **Format:** Plain text.
-- **What to include:** Same content as `.cursorrules`. In practice, teams symlink `.windsurfrules` → `.cursorrules` or copy the content. Keep one canonical source and mirror into the others during release.
+- **What to include:** Same content as `.cursorrules`. In practice, teams symlink `.windsurfrules` -> `.cursorrules` or copy the content. Keep one canonical source and mirror into the others during release.
 - **What NOT to include:** Same exclusions as `.cursorrules`.
 
 #### `.github/copilot-instructions.md`
 
 - **Purpose:** GitHub Copilot (VS Code, Visual Studio, JetBrains, and Copilot in the browser on github.com) reads this file as repository-scoped instructions. It applies to Copilot Chat, Copilot Edits, and inline code suggestions when the feature is enabled in the repo/workspace.
-- **Location:** `.github/copilot-instructions.md` — not the repo root.
+- **Location:** `.github/copilot-instructions.md`, not the repo root.
 - **Format:** Markdown.
-- **What to include:** Project intro, stack, conventions, build/test commands, forbidden actions — same canonical content as `CLAUDE.md`. Copilot responds especially well to explicit style directives ("Prefer `async/await` over `.then()`"; "Use `const` unless reassignment is required").
+- **What to include:** Project intro, stack, conventions, build/test commands, forbidden actions, same canonical content as `CLAUDE.md`. Copilot responds especially well to explicit style directives ("Prefer `async/await` over `.then()`"; "Use `const` unless reassignment is required").
 - **What NOT to include:** Organization-wide policies (those go in GitHub Copilot enterprise settings, not a per-repo file). User-specific preferences. Secrets.
 
 ### Tier placement
@@ -1883,23 +1883,23 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full contributor guide. Non-obv
 - All new routes live under `src/routes/<domain>/`; each route exports a `register(app)` function.
 - Database access goes through `src/db/` repositories; route handlers never import `drizzle` directly.
 - Error responses use the `src/lib/errors.ts` helpers; never throw bare `new Error(...)` at the HTTP boundary.
-- Commit messages follow Conventional Commits (`feat:`, `fix:`, `chore:`...) — enforced by `commitlint` on push.
+- Commit messages follow Conventional Commits (`feat:`, `fix:`, `chore:`...), enforced by `commitlint` on push.
 
 ## Commands
 
-- `pnpm dev` — start the API in watch mode on port 3000
-- `pnpm test` — run the full Vitest suite (unit + integration)
-- `pnpm lint` — run Biome lint + format check
-- `pnpm build` — compile TypeScript to `dist/`
-- `pnpm db:migrate` — apply pending Drizzle migrations to the local database
-- `pnpm db:reset` — drop and recreate the local database (destructive)
+- `pnpm dev`, start the API in watch mode on port 3000
+- `pnpm test`, run the full Vitest suite (unit + integration)
+- `pnpm lint`, run Biome lint + format check
+- `pnpm build`, compile TypeScript to `dist/`
+- `pnpm db:migrate`, apply pending Drizzle migrations to the local database
+- `pnpm db:reset`, drop and recreate the local database (destructive)
 
 ## Forbidden actions
 
 - Do not commit directly to `main`. All changes land via pull request with at least one review.
 - Do not add new runtime dependencies without opening a proposal issue first.
 - Do not edit `pnpm-lock.yaml` by hand; run `pnpm install` and commit the result.
-- Do not write to `dist/` — it is generated by `pnpm build` and is gitignored.
+- Do not write to `dist/`, it is generated by `pnpm build` and is gitignored.
 - Do not disable Biome rules inline. If a rule is wrong, change the config in `biome.json` so the exception is reviewable.
 - Do not run `pnpm db:reset` against anything except your local database.
 ```
@@ -1908,8 +1908,8 @@ Keep the file under ~150 lines. Agents load it every session; long files bleed i
 
 **Per-tool deltas:**
 
-- `.cursorrules` / `.windsurfrules` — same content, Markdown headings stripped. Replace `## Commands` with a blank line + `Commands:` on its own line, then the bullets.
-- `.github/copilot-instructions.md` — identical Markdown content; only the path differs (`.github/copilot-instructions.md` instead of the repo root).
+- `.cursorrules` / `.windsurfrules`, same content, Markdown headings stripped. Replace `## Commands` with a blank line + `Commands:` on its own line, then the bullets.
+- `.github/copilot-instructions.md`, identical Markdown content; only the path differs (`.github/copilot-instructions.md` instead of the repo root).
 - `CLAUDE.md` when `AGENTS.md` is canonical: symlink (`ln -s AGENTS.md CLAUDE.md`) or a thin overlay starting with `@AGENTS.md` followed by Claude-Code-specific notes (Skill tool invocations, slash-command preferences, `.claude/settings.json` references).
 
 ### Anti-patterns
@@ -1917,10 +1917,10 @@ Keep the file under ~150 lines. Agents load it every session; long files bleed i
 1. **Duplicating the same rules in five files.** Updates drift, agents read stale content, contributors stop trusting any of them. **Fix:** make `AGENTS.md` canonical; symlink `CLAUDE.md -> AGENTS.md` (or use a `@AGENTS.md` overlay for Claude-Code-specific additions); regenerate `.cursorrules` / `.windsurfrules` / `.github/copilot-instructions.md` from the canonical source as a pre-commit step.
 2. **Listing every convention.** Agents re-read the file every session; long configs burn tokens on the obvious. **Fix:** list only non-obvious rules. Link to `CONTRIBUTING.md` for the rest.
 3. **Letting agent-config rules contradict `CODE_OF_CONDUCT.md` or `CONTRIBUTING.md`.** When the `CLAUDE.md` says "always rebase before merging" and `CONTRIBUTING.md` says "use merge commits, never rebase," the agent picks one and the human team fights about the other. **Fix:** the human-facing docs are authoritative. The agent-config file should never contain policy the community docs don't already state.
-4. **Including secrets or full API surfaces.** API keys in `CLAUDE.md` get committed to git history; full generated OpenAPI specs in `.cursorrules` burn tokens on content the agent could fetch on demand. **Fix:** link to secret management (`.env.example`); link to `openapi.yaml` — don't inline either.
+4. **Including secrets or full API surfaces.** API keys in `CLAUDE.md` get committed to git history; full generated OpenAPI specs in `.cursorrules` burn tokens on content the agent could fetch on demand. **Fix:** link to secret management (`.env.example`); link to `openapi.yaml`, don't inline either.
 5. **Letting the file grow past ~200 lines.** Every line costs tokens every session. **Fix:** summarise aggressively; move depth into the referenced docs (`ARCHITECTURE.md`, `CONTRIBUTING.md`).
-6. **Writing once and letting it rot.** The config file documents a snapshot of conventions; six months later the team has moved on and the file still says "we use ESLint" when the team is on Biome. **Fix:** treat it as a living document — include it in the same review cycle as `CONTRIBUTING.md`; flag it in `CHANGELOG.md` when conventions change.
+6. **Writing once and letting it rot.** The config file documents a snapshot of conventions; six months later the team has moved on and the file still says "we use ESLint" when the team is on Biome. **Fix:** treat it as a living document, include it in the same review cycle as `CONTRIBUTING.md`; flag it in `CHANGELOG.md` when conventions change.
 
 ### Verification
 
-A good agent-config file passes this check: clone the repo into a fresh directory, open Claude Code / Cursor / Copilot with no prior context, ask "what do I need to know to contribute?" The first response should correctly state the stack, the test command, and at least one non-obvious convention — all from the config file, with no follow-up questions.
+A good agent-config file passes this check: clone the repo into a fresh directory, open Claude Code / Cursor / Copilot with no prior context, ask "what do I need to know to contribute?" The first response should correctly state the stack, the test command, and at least one non-obvious convention, all from the config file, with no follow-up questions.

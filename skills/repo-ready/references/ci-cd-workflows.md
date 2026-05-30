@@ -506,7 +506,7 @@ jobs:
 
 ### Zig
 
-Zig pre-1.0 breaks between releases — pin Zig 0.13.0 explicitly in CI. Uses `goto-bus-stop/setup-zig@v2` (alternative: `mlugg/setup-zig@v0.1.0`). Runs formatter check, then the `test` step, then a full build.
+Zig pre-1.0 breaks between releases, pin Zig 0.13.0 explicitly in CI. Uses `goto-bus-stop/setup-zig@v2` (alternative: `mlugg/setup-zig@v0.1.0`). Runs formatter check, then the `test` step, then a full build.
 
 ```yaml
 # .github/workflows/ci.yml
@@ -554,15 +554,15 @@ jobs:
         run: zig build
 ```
 
-- Cache paths cover both legacy (`zig-cache/`) and new (`.zig-cache/`) layouts so the workflow works across 0.12 → 0.13 toolchains; `build.zig.zon` is the cache key so dependency changes bust the cache.
+- Cache paths cover both legacy (`zig-cache/`) and new (`.zig-cache/`) layouts so the workflow works across 0.12 -> 0.13 toolchains; `build.zig.zon` is the cache key so dependency changes bust the cache.
 - Cross-compile matrix (e.g. `-Dtarget=x86_64-linux-musl` + `-Dtarget=aarch64-macos`) is a natural extension; it's deferred here to keep the baseline minimal.
-- Windows and macOS runners work identically with `setup-zig@v2` — add them to `runs-on` via matrix if you need per-OS smoke tests.
+- Windows and macOS runners work identically with `setup-zig@v2`, add them to `runs-on` via matrix if you need per-OS smoke tests.
 
 ---
 
 ### Gleam
 
-Gleam runs on the BEAM — use the canonical `erlef/setup-beam@v1` action, which pins both Erlang/OTP and Gleam in a single step. Pin Gleam to `1.4.0` on OTP `27.0`.
+Gleam runs on the BEAM, use the canonical `erlef/setup-beam@v1` action, which pins both Erlang/OTP and Gleam in a single step. Pin Gleam to `1.4.0` on OTP `27.0`.
 
 ```yaml
 # .github/workflows/ci.yml
@@ -613,15 +613,15 @@ jobs:
         run: gleam test
 ```
 
-- `manifest.toml` is the lockfile, so it's the cache key — any new dep refreshes the cache.
+- `manifest.toml` is the lockfile, so it's the cache key, any new dep refreshes the cache.
 - For pure-Gleam projects you do NOT need `rebar3-version`; add it only if you have Erlang deps that require rebar3.
-- Matrix across OTP 26/27 is a simple extension — add `strategy.matrix.otp` and reference it in `otp-version`.
+- Matrix across OTP 26/27 is a simple extension, add `strategy.matrix.otp` and reference it in `otp-version`.
 
 ---
 
 ### Deno
 
-Deno 2.x ships everything in one binary, so CI is a single job with linear steps. Pin `deno-version: v2.0.x`. This template also shows an optional JSR publish job that fires on tag push and uses OIDC (`id-token: write`) — no secrets needed.
+Deno 2.x ships everything in one binary, so CI is a single job with linear steps. Pin `deno-version: v2.0.x`. This template also shows an optional JSR publish job that fires on tag push and uses OIDC (`id-token: write`), no secrets needed.
 
 ```yaml
 # .github/workflows/ci.yml
@@ -685,7 +685,7 @@ jobs:
         run: deno publish
 ```
 
-- `id-token: write` is mandatory for JSR's OIDC trust — no npm-style token in `secrets` needed.
+- `id-token: write` is mandatory for JSR's OIDC trust, no npm-style token in `secrets` needed.
 - Deno caches modules under `~/.cache/deno`; keying on `deno.lock` gives reproducible cache hits.
 - `deno compile` can be added as a separate matrix job to produce per-OS standalone binaries for release artifacts.
 
@@ -693,7 +693,7 @@ jobs:
 
 ### Bun
 
-Bun 1.1+ ships the package manager, runtime, and test runner — so the CI boils down to install, fmt+lint (via Biome), test, build. Use `oven-sh/setup-bun@v2` pinned to `bun-version: 1.1.x`.
+Bun 1.1+ ships the package manager, runtime, and test runner, so the CI boils down to install, fmt+lint (via Biome), test, build. Use `oven-sh/setup-bun@v2` pinned to `bun-version: 1.1.x`.
 
 ```yaml
 # .github/workflows/ci.yml
@@ -734,7 +734,7 @@ jobs:
         run: bun run build
 ```
 
-- `--frozen-lockfile` is critical in CI — any drift in `bun.lockb` that wasn't committed will fail the install instead of silently resolving.
+- `--frozen-lockfile` is critical in CI, any drift in `bun.lockb` that wasn't committed will fail the install instead of silently resolving.
 - `bunx biome ci .` is Biome's combined format+lint check (no writes); it replaces two steps.
 - For Bun-drop-in projects (Node is the runtime, Bun is just the installer), swap the last step to `npm run build` or `node --run build` and keep the rest.
 

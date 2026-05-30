@@ -1,7 +1,7 @@
 ---
 name: architecture-ready
 description: "Given a PRD, produce an architecture that says what system shape to build and why, before any code is written or any tool is chosen. Triggers on 'design the architecture,' 'system diagram,' 'monolith or microservices,' 'integration shape,' 'service boundaries,' 'data architecture,' 'how do the pieces fit,' 'ADR,' 'trust boundaries,' 'C4 diagram,' 'arc42,' 'non-functional requirements map to architecture.' Refuses architecture theater (diagrams with no load-bearing decisions), paper-tiger architecture (looks robust until first real load), cargo-cult cloud-native (Kubernetes and Kafka for a ten-user CRUD), stackitecture (stack picked and called architecture), resume-driven architecture, and 'scalable' as a claim with no numbers. Planning tier; consumes .prd-ready/PRD.md; produces .architecture-ready/ARCH.md for stack-ready, roadmap-ready, and production-ready. Does not pick tools (stack-ready), sequence milestones (roadmap-ready), or build the app (production-ready). Full trigger list in README."
-version: 3.0.1
+version: 3.0.2
 updated: 2026-05-30
 changelog: CHANGELOG.md
 suite: ready-suite
@@ -21,6 +21,7 @@ compatible_with:
   - codex
   - cursor
   - windsurf
+  - antigravity
   - pi
   - openclaw
   - any-agentskills-compatible-harness

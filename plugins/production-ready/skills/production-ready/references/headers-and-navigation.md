@@ -1,8 +1,8 @@
 # Headers and Navigation
 
-This file covers website headers and navigation — the top bar, nav links, mega menus, mobile menus, breadcrumbs, and responsive collapse behavior for public-facing sites, marketing pages, docs, and multi-page apps. Dashboard shell navigation (sidebar-based) is in `information-architecture.md`; this file is about the horizontal header pattern that sits at the top of every page on a traditional website.
+This file covers website headers and navigation, the top bar, nav links, mega menus, mobile menus, breadcrumbs, and responsive collapse behavior for public-facing sites, marketing pages, docs, and multi-page apps. Dashboard shell navigation (sidebar-based) is in `information-architecture.md`; this file is about the horizontal header pattern that sits at the top of every page on a traditional website.
 
-Headers are the single most interacted-with UI region. Users touch them on every page. Get the header wrong — too tall, too cluttered, inaccessible, broken on mobile — and every page suffers. Get it right and the user never thinks about it.
+Headers are the single most interacted-with UI region. Users touch them on every page. Get the header wrong, too tall, too cluttered, inaccessible, broken on mobile, and every page suffers. Get it right and the user never thinks about it.
 
 **Canonical scope:** public-site headers, mega menus, mobile nav, footer design, responsive header collapse. **See also:** `information-architecture.md` for the dashboard sidebar shell, `marketing-and-landing-pages.md` for hero and landing-page patterns.
 
@@ -29,11 +29,11 @@ There are three header behaviors. Pick one and commit.
   position: sticky;
   top: 0;
   z-index: 1000;
-  /* Parent container must NOT have overflow: hidden — breaks sticky */
+  /* Parent container must NOT have overflow: hidden, breaks sticky */
 }
 ```
 
-`position: sticky` has ~97% browser support. Prefer it over `position: fixed` — sticky participates in document flow so it doesn't require a spacer element to prevent content from jumping behind it.
+`position: sticky` has ~97% browser support. Prefer it over `position: fixed`, sticky participates in document flow so it doesn't require a spacer element to prevent content from jumping behind it.
 
 #### Scroll-hide implementation
 
@@ -52,7 +52,7 @@ Use a scroll direction detector. Track `lastScrollY` and toggle a class:
 
 .site-header.header--hidden {
   transform: translateY(-110%);
-  /* -110% not -100% — accounts for any box-shadow or border */
+  /* -110% not -100%, accounts for any box-shadow or border */
 }
 ```
 
@@ -95,16 +95,16 @@ new IntersectionObserver(([entry]) => {
 
 ### Header height
 
-These are the proven ranges. Going outside them causes problems — too short and touch targets are cramped, too tall and you waste screen real estate.
+These are the proven ranges. Going outside them causes problems, too short and touch targets are cramped, too tall and you waste screen real estate.
 
 | Context | Height | Notes |
 |---|---|---|
-| Desktop | 64–80px | 64px is the sweet spot for most sites. 80px if the logo needs breathing room. |
-| Desktop (sticky, scrolled) | 48–64px | Shrink by 16px on scroll for density. Animate with `transition: height 200ms ease`. |
-| Tablet | 56–72px | Usually same as desktop or slightly shorter. |
-| Mobile | 48–60px | 56px is the standard. Never exceed 60px — mobile viewport is precious. |
+| Desktop | 64-80px | 64px is the sweet spot for most sites. 80px if the logo needs breathing room. |
+| Desktop (sticky, scrolled) | 48-64px | Shrink by 16px on scroll for density. Animate with `transition: height 200ms ease`. |
+| Tablet | 56-72px | Usually same as desktop or slightly shorter. |
+| Mobile | 48-60px | 56px is the standard. Never exceed 60px, mobile viewport is precious. |
 
-**Critical rule: a sticky header must never exceed 20% of the viewport height.** On mobile at 667px viewport height, that means absolute max of ~133px — but aim for under 60px. Baymard research shows user satisfaction drops when sticky headers exceed this threshold.
+**Critical rule: a sticky header must never exceed 20% of the viewport height.** On mobile at 667px viewport height, that means absolute max of ~133px, but aim for under 60px. Baymard research shows user satisfaction drops when sticky headers exceed this threshold.
 
 ```css
 .site-header {
@@ -120,16 +120,16 @@ These are the proven ranges. Going outside them causes problems — too short an
 
 ### Logo placement and sizing
 
-**Logo goes top-left. Always.** Left-aligned logos have near-universal recognition as the "home" link. Center-aligned logos work for fashion, editorial, and portfolio sites — nowhere else. If you're building a SaaS site, e-commerce, docs, or anything functional, the logo sits left.
+**Logo goes top-left. Always.** Left-aligned logos have near-universal recognition as the "home" link. Center-aligned logos work for fashion, editorial, and portfolio sites, nowhere else. If you're building a SaaS site, e-commerce, docs, or anything functional, the logo sits left.
 
 | Guideline | Value |
 |---|---|
-| Logo max height | 32–40px (inside a 64px header, gives 12–16px breathing room top/bottom) |
-| Logo area width | 120–200px (enough for most wordmarks) |
-| Logo link target | Always wraps the logo in `<a href="/">` — the click area should be the full logo bounding box |
-| Logo padding | 16–24px from left edge of header |
+| Logo max height | 32-40px (inside a 64px header, gives 12-16px breathing room top/bottom) |
+| Logo area width | 120-200px (enough for most wordmarks) |
+| Logo link target | Always wraps the logo in `<a href="/">`, the click area should be the full logo bounding box |
+| Logo padding | 16-24px from left edge of header |
 
-For sticky headers that shrink on scroll, scale the logo down proportionally — 40px in default state, 28–32px in compact state. Use `transition: height 200ms ease` for smooth scaling.
+For sticky headers that shrink on scroll, scale the logo down proportionally, 40px in default state, 28-32px in compact state. Use `transition: height 200ms ease` for smooth scaling.
 
 ```html
 <a href="/" class="site-logo" aria-label="Home">
@@ -146,13 +146,13 @@ The header has a fixed reading order. Do not rearrange it.
 ```
 ┌──────────────────────────────────────────────────────────────────┐
 │ [Logo]     Primary Nav Links          [Search] [CTA] [Auth/Avatar] │
-│  ← left                                               right →      │
+│  <- left                                               right ->      │
 └──────────────────────────────────────────────────────────────────┘
 ```
 
 **Left zone:** Logo (always first). On mobile, this may be the only thing on the left side.
 
-**Center zone:** Primary navigation. 5–7 top-level items max. This is the main nav.
+**Center zone:** Primary navigation. 5-7 top-level items max. This is the main nav.
 
 **Right zone:** Actions, in this order:
 1. Search (icon or bar)
@@ -160,9 +160,9 @@ The header has a fixed reading order. Do not rearrange it.
 3. Auth state: logged out = "Log In" text link + "Sign Up" CTA; logged in = avatar/user menu
 
 **Rules:**
-- Do not put nav links on the right side and actions on the left. Users scan left-to-right: identity → navigation → actions.
+- Do not put nav links on the right side and actions on the left. Users scan left-to-right: identity -> navigation -> actions.
 - Do not mix navigation and actions in the same visual group. Separate them with space or a divider.
-- The CTA button is visually distinct from nav links — it is a button, not a link. Primary fill color, stands out from the text links.
+- The CTA button is visually distinct from nav links, it is a button, not a link. Primary fill color, stands out from the text links.
 
 ```css
 .header-nav {
@@ -257,7 +257,7 @@ Header z-index must be lower than modals/dialogs but higher than page content.
 }
 ```
 
-- Never set `overflow: hidden` on a parent of a sticky header — it breaks sticky positioning.
+- Never set `overflow: hidden` on a parent of a sticky header, it breaks sticky positioning.
 - Dropdowns that are children of the header inherit its stacking context. They don't need a separate z-index unless they must overlay sibling content.
 
 ### Backdrop-filter / glass effect headers
@@ -279,7 +279,7 @@ The frosted glass look (`backdrop-filter: blur()`) is the current standard for s
 }
 ```
 
-**Performance note:** `backdrop-filter` triggers compositing. Keep the header area small (slim height) and avoid applying it to large areas. On low-end mobile devices, it can cause jank — test on real hardware. Fallback for unsupported browsers:
+**Performance note:** `backdrop-filter` triggers compositing. Keep the header area small (slim height) and avoid applying it to large areas. On low-end mobile devices, it can cause jank, test on real hardware. Fallback for unsupported browsers:
 
 ```css
 @supports not (backdrop-filter: blur(1px)) {
@@ -297,9 +297,9 @@ The frosted glass look (`backdrop-filter: blur()`) is the current standard for s
 
 Primary navigation sits in the header as horizontal links. Three tiers:
 
-1. **Simple links** — 3–7 text items, no dropdowns. Best for small sites. Clean, fast, accessible by default.
-2. **Dropdown nav** — top-level items trigger dropdown panels with 3–10 sub-items. Standard for most SaaS and corporate sites.
-3. **Mega menu** — top-level items trigger wide panels with multiple columns, images, featured content. For sites with 50+ pages organized in deep hierarchies (e-commerce, enterprise).
+1. **Simple links**, 3-7 text items, no dropdowns. Best for small sites. Clean, fast, accessible by default.
+2. **Dropdown nav**, top-level items trigger dropdown panels with 3-10 sub-items. Standard for most SaaS and corporate sites.
+3. **Mega menu**, top-level items trigger wide panels with multiple columns, images, featured content. For sites with 50+ pages organized in deep hierarchies (e-commerce, enterprise).
 
 **Default recommendation: simple links or dropdown nav.** Use mega menus only when you have genuinely complex information architecture. Most sites that use mega menus would be better served by a simpler nav with a good search.
 
@@ -350,7 +350,7 @@ Primary navigation sits in the header as horizontal links. Three tiers:
 }
 ```
 
-**Item count rule: 5–7 top-level items max.** Nielsen Norman Group research consistently shows this as the sweet spot. Beyond 7, users struggle to scan. At 8+, move lower-priority items to a footer or "More" dropdown — but "More" is itself an anti-pattern (see anti-patterns section), so restructure the IA first.
+**Item count rule: 5-7 top-level items max.** Nielsen Norman Group research consistently shows this as the sweet spot. Beyond 7, users struggle to scan. At 8+, move lower-priority items to a footer or "More" dropdown, but "More" is itself an anti-pattern (see anti-patterns section), so restructure the IA first.
 
 ### Dropdown menus
 
@@ -361,15 +361,15 @@ Dropdowns extend a top-level nav item with a panel of sub-items.
 | Trigger | Pros | Cons | Use when |
 |---|---|---|---|
 | **Hover** | Faster for mouse users, feels responsive | Accidental triggering, unusable on touch, accessibility harder | Desktop-only audience, simple dropdowns with few items |
-| **Click** | Intentional, works on touch and keyboard, accessible by default | Slightly slower — one extra click | Any site with mobile users (so: every site) |
+| **Click** | Intentional, works on touch and keyboard, accessible by default | Slightly slower, one extra click | Any site with mobile users (so: every site) |
 
 **Recommendation: click on mobile, hover-with-delay on desktop.** The hover delay is critical.
 
 #### Hover delay timing (Baymard / NNg research)
 
-- **Open delay:** 300–500ms after hover enters the trigger. This prevents accidental activation when the user is just passing the mouse over the nav. 60% of sites fail to implement this, causing the "flickering menu" problem.
-- **Close delay:** 300–500ms after hover leaves both the trigger and the dropdown panel. This gives users a "grace period" to move the mouse diagonally from the trigger to the dropdown content without the menu snapping shut.
-- **Display speed:** Once the delay threshold passes, the menu should appear in < 100ms (essentially instant). Do not add a slow fade-in after the delay — the delay *is* the buffer.
+- **Open delay:** 300-500ms after hover enters the trigger. This prevents accidental activation when the user is just passing the mouse over the nav. 60% of sites fail to implement this, causing the "flickering menu" problem.
+- **Close delay:** 300-500ms after hover leaves both the trigger and the dropdown panel. This gives users a "grace period" to move the mouse diagonally from the trigger to the dropdown content without the menu snapping shut.
+- **Display speed:** Once the delay threshold passes, the menu should appear in < 100ms (essentially instant). Do not add a slow fade-in after the delay, the delay *is* the buffer.
 
 ```css
 .dropdown-panel {
@@ -388,7 +388,7 @@ Dropdowns extend a top-level nav item with a panel of sub-items.
 }
 ```
 
-Implement the 300ms hover delay in JavaScript — CSS `:hover` doesn't support delayed activation natively. Use `mouseenter` / `mouseleave` with `setTimeout` and clear the timer on re-entry.
+Implement the 300ms hover delay in JavaScript, CSS `:hover` doesn't support delayed activation natively. Use `mouseenter` / `mouseleave` with `setTimeout` and clear the timer on re-entry.
 
 #### Dropdown panel styling
 
@@ -469,7 +469,7 @@ Mega menus are full-width or near-full-width panels with multiple columns of lin
   margin: 0 auto;
 }
 
-/* For smaller menus, use 2–3 columns */
+/* For smaller menus, use 2-3 columns */
 .mega-menu-grid--compact {
   grid-template-columns: repeat(3, 1fr);
   max-width: 900px;
@@ -499,11 +499,11 @@ Each column is a category:
 ```
 
 **Rules:**
-- Max 7–9 items per category column before cognitive load becomes an issue. If you have more, split into sub-categories or reconsider the IA.
+- Max 7-9 items per category column before cognitive load becomes an issue. If you have more, split into sub-categories or reconsider the IA.
 - Include a "featured" area (right column or bottom row) for promoted content, new features, or key CTAs.
-- Add icons/illustrations only if they genuinely aid scanning — decorative icons slow users down.
+- Add icons/illustrations only if they genuinely aid scanning, decorative icons slow users down.
 - Category headings should be clickable links to the category landing page, not dead text.
-- Animate with `opacity` and `transform: translateY(-8px)` on open, 150–200ms duration.
+- Animate with `opacity` and `transform: translateY(-8px)` on open, 150-200ms duration.
 
 ### Navigation grouping
 
@@ -511,21 +511,21 @@ Structure nav into tiers based on priority:
 
 | Tier | Location | Content | Item count |
 |---|---|---|---|
-| **Primary nav** | Header, center | Core pages users visit most (Products, Pricing, Docs, Solutions) | 5–7 max |
+| **Primary nav** | Header, center | Core pages users visit most (Products, Pricing, Docs, Solutions) | 5-7 max |
 | **Secondary nav** | Footer, or collapsed under "More" | Supporting pages (About, Careers, Press, Partners, Legal) | No strict limit |
-| **Utility nav** | Header, far right, above primary nav or inline | Actions and tools (Search, Language, Log In, Sign Up) | 2–4 |
+| **Utility nav** | Header, far right, above primary nav or inline | Actions and tools (Search, Language, Log In, Sign Up) | 2-4 |
 
 On complex sites (enterprise, e-commerce), you may see a thin utility bar above the main header:
 
 ```
 ┌────────────────────────────────────────────────────────────┐
-│ 🌐 EN  |  Support  |  Contact Sales  |  Log In            │  ← utility nav (32px)
+│ 🌐 EN  |  Support  |  Contact Sales  |  Log In            │  <- utility nav (32px)
 ├────────────────────────────────────────────────────────────┤
-│ [Logo]      Products ▾   Solutions ▾   Pricing   Docs     │  ← primary header (64px)
+│ [Logo]      Products ▾   Solutions ▾   Pricing   Docs     │  <- primary header (64px)
 └────────────────────────────────────────────────────────────┘
 ```
 
-Utility nav bar: 28–36px tall, smaller text (12–13px), muted colors, right-aligned content. This is optional and adds height. Only use it if the site genuinely needs these items persistent and visible.
+Utility nav bar: 28-36px tall, smaller text (12-13px), muted colors, right-aligned content. This is optional and adds height. Only use it if the site genuinely needs these items persistent and visible.
 
 ### Active state indicators
 
@@ -537,7 +537,7 @@ The current page's nav link must be visually distinct. Do not rely on color alon
 | **Color** | `color: var(--text-primary)` vs `var(--text-secondary)` | Active is darker/more prominent |
 | **Bottom border** | `border-bottom: 2px solid var(--brand-primary)` | Underline effect, classic and reliable |
 | **Background** | `background-color: var(--bg-subtle)` | Pill/highlight effect |
-| **Dot indicator** | `::before` pseudo-element, 6px circle below text | Minimal, modern — used by Vercel, Linear |
+| **Dot indicator** | `::before` pseudo-element, 6px circle below text | Minimal, modern, used by Vercel, Linear |
 
 **Recommended default: font weight + color shift + bottom border.** This is the clearest, most accessible combination.
 
@@ -571,7 +571,7 @@ The header CTA ("Get Started", "Sign Up", "Try Free") is the most important acti
 **Styling rules:**
 - Use a solid filled button, not an outline button. Research shows solid buttons have higher click-through rates than outline/ghost buttons.
 - Brand primary color background, white or contrast text.
-- Same height as nav items (36–40px) but visually distinct through fill color and border-radius.
+- Same height as nav items (36-40px) but visually distinct through fill color and border-radius.
 - `font-weight: 600`, slightly more prominent than nav link text.
 - On mobile: the CTA should remain visible even when nav is collapsed. Place it next to the hamburger icon, or as the first/last item in the mobile menu.
 
@@ -599,7 +599,7 @@ The header CTA ("Get Started", "Sign Up", "Try Free") is the most important acti
 
 ### Breadcrumbs
 
-Breadcrumbs show the user's position in the site hierarchy. They are secondary navigation — they supplement the primary nav, never replace it.
+Breadcrumbs show the user's position in the site hierarchy. They are secondary navigation, they supplement the primary nav, never replace it.
 
 **When to use:**
 - Sites with 3+ levels of hierarchy (Category > Sub-category > Product)
@@ -609,7 +609,7 @@ Breadcrumbs show the user's position in the site hierarchy. They are secondary n
 - Single-level sites or flat sites with < 10 pages: skip breadcrumbs
 
 **When to skip:**
-- Homepage (no breadcrumb needed — you're at the root)
+- Homepage (no breadcrumb needed, you're at the root)
 - Top-level pages that are direct children of home (optional, low value)
 
 #### Breadcrumb markup
@@ -681,7 +681,7 @@ Use `<nav aria-label="Breadcrumb">` with an ordered list and JSON-LD for schema.
 
 **Separator options:** `/` (most compact, modern), `>` or `›` (classic, implies hierarchy), `chevron-right` SVG icon (visual polish). Pick one and use it site-wide. Avoid heavy decorative separators.
 
-**Depth:** Keep breadcrumb trails to 3–5 levels. Beyond 5, truncate middle items with `...` and show first + last 2 levels:
+**Depth:** Keep breadcrumb trails to 3-5 levels. Beyond 5, truncate middle items with `...` and show first + last 2 levels:
 
 ```
 Home / Products / ... / Enterprise / Analytics
@@ -799,7 +799,7 @@ The menu slides in from the right (or left) as an overlay panel. Most common pat
 
 **Slide direction:** Right-to-left (slide from right) is the modern default and matches swipe-to-dismiss gestures. Left-to-right works too but feels dated.
 
-**Width:** `min(320px, 85vw)`. Never 100% width — leave a visible strip of the backdrop so users understand they can tap outside to close.
+**Width:** `min(320px, 85vw)`. Never 100% width, leave a visible strip of the backdrop so users understand they can tap outside to close.
 
 #### 2. Full-screen overlay
 
@@ -832,7 +832,7 @@ The menu expands to fill the entire screen. Good for sites with minimal menu ite
 }
 ```
 
-The close button (X or hamburger-to-X) must remain in the same position as the hamburger trigger — typically top-right. Users expect to close the menu by tapping where they opened it.
+The close button (X or hamburger-to-X) must remain in the same position as the hamburger trigger, typically top-right. Users expect to close the menu by tapping where they opened it.
 
 #### 3. Bottom sheet / slide-up
 
@@ -857,13 +857,13 @@ The menu slides up from the bottom of the screen. Feels native on mobile. Good f
 
 ### Bottom navigation bar
 
-A fixed bar at the bottom of the screen with 3–5 primary actions. This is an app-pattern — use it for PWAs and app-like websites, not for traditional content sites.
+A fixed bar at the bottom of the screen with 3-5 primary actions. This is an app-pattern, use it for PWAs and app-like websites, not for traditional content sites.
 
 **When to use:**
 - Progressive web apps
 - SaaS dashboards on mobile
 - Sites where users perform frequent, repeated actions
-- Sites with 3–5 equally important top-level sections
+- Sites with 3-5 equally important top-level sections
 
 **When NOT to use:**
 - Marketing/brochure sites
@@ -871,10 +871,10 @@ A fixed bar at the bottom of the screen with 3–5 primary actions. This is an a
 - E-commerce product pages (the bottom bar competes with Add to Cart)
 
 **Specs:**
-- Height: 56–64px (matches mobile header height for visual balance)
-- Items: 3–5. Never more than 5. At 6+ items, the icons become too small and labels get truncated.
+- Height: 56-64px (matches mobile header height for visual balance)
+- Items: 3-5. Never more than 5. At 6+ items, the icons become too small and labels get truncated.
 - Touch targets: each item gets equal width (100% / item count), minimum 48px wide
-- Icon + label: 24px icon above 10–12px label text, centered vertically
+- Icon + label: 24px icon above 10-12px label text, centered vertically
 - Active state: icon filled + label bold + accent color. Inactive: icon outlined + muted label.
 - Position: `position: fixed; bottom: 0;` with safe-area inset for phones with home indicator bars
 
@@ -912,7 +912,7 @@ A fixed bar at the bottom of the screen with 3–5 primary actions. This is an a
 }
 ```
 
-**Thumb zone:** The bottom 1/3 of the screen is the easiest reach zone for one-handed use. Bottom nav leverages this — it's the most ergonomic placement for frequent actions. Redbooth saw a 65% increase in daily active users and 70% increase in session time after switching from hamburger menu to bottom tab bar.
+**Thumb zone:** The bottom 1/3 of the screen is the easiest reach zone for one-handed use. Bottom nav leverages this, it's the most ergonomic placement for frequent actions. Redbooth saw a 65% increase in daily active users and 70% increase in session time after switching from hamburger menu to bottom tab bar.
 
 ### Mobile menu content decisions
 
@@ -931,18 +931,18 @@ Not everything in the desktop nav belongs in the mobile menu. Prioritize ruthles
 **Move to the footer or omit:**
 - Utility links (Press, Careers, Legal, Terms)
 - Social media links
-- Exhaustive sub-navigation items — collapse into accordion sections if needed
+- Exhaustive sub-navigation items, collapse into accordion sections if needed
 
 ### Touch targets
 
-Minimum touch target size is **44x44px** (Apple HIG) or **48x48px** (Material Design). Use 48px as the safe default — it satisfies both guidelines.
+Minimum touch target size is **44x44px** (Apple HIG) or **48x48px** (Material Design). Use 48px as the safe default, it satisfies both guidelines.
 
 ```css
 .mobile-nav-link {
   display: block;
   min-height: 48px;
   padding: 12px 16px;
-  font-size: 1rem; /* 16px — larger than desktop nav for readability */
+  font-size: 1rem; /* 16px, larger than desktop nav for readability */
   line-height: 1.5;
 }
 ```
@@ -959,8 +959,8 @@ Use three breakpoints that map to header behavior changes. Do not add more unles
 
 | Breakpoint | Range | Header behavior |
 |---|---|---|
-| **Mobile** | 0–767px | Hamburger menu, collapsed nav, icon-only actions, 48–56px header |
-| **Tablet** | 768–1023px | Partial collapse — show 3–4 top nav items, collapse rest to "More" or hamburger. Or full hamburger at tablet too. | 
+| **Mobile** | 0-767px | Hamburger menu, collapsed nav, icon-only actions, 48-56px header |
+| **Tablet** | 768-1023px | Partial collapse, show 3-4 top nav items, collapse rest to "More" or hamburger. Or full hamburger at tablet too. |
 | **Desktop** | 1024px+ | Full horizontal nav, all items visible, full search bar, complete header |
 
 The 1024px mark is the critical transition point in modern web development. Below it, assume touch-first interfaces. Above it, assume cursor-driven.
@@ -978,7 +978,7 @@ The 1024px mark is the critical transition point in modern web development. Belo
 
 /* Tablet: optional intermediate state */
 @media (min-width: 768px) and (max-width: 1023px) {
-  /* Show abbreviated nav or keep hamburger — decide per project */
+  /* Show abbreviated nav or keep hamburger, decide per project */
 }
 ```
 
@@ -986,11 +986,11 @@ The 1024px mark is the critical transition point in modern web development. Belo
 
 When moving from desktop to smaller screens, collapse in this priority order:
 
-1. **Search bar** → icon (magnifying glass) that expands to a full-width search input on tap
-2. **Secondary/utility nav items** → hidden, moved to mobile menu
-3. **CTA button text** → shorter text or icon-only (but keep visible if possible)
-4. **Primary nav links** → hamburger menu
-5. **Logo** → smaller variant or icon-only logo mark (last resort)
+1. **Search bar** -> icon (magnifying glass) that expands to a full-width search input on tap
+2. **Secondary/utility nav items** -> hidden, moved to mobile menu
+3. **CTA button text** -> shorter text or icon-only (but keep visible if possible)
+4. **Primary nav links** -> hamburger menu
+5. **Logo** -> smaller variant or icon-only logo mark (last resort)
 
 **Search responsive pattern:**
 
@@ -1025,7 +1025,7 @@ On tap, the search icon expands to a full-width input overlaying the header:
 | Desktop | Tablet | Mobile |
 |---|---|---|
 | "Log In" text link + "Sign Up" filled button | "Log In" + "Sign Up" (may shorten to "Start") | Avatar icon (logged in) or single "Sign Up" button (logged out) |
-| Full user dropdown: name, email, avatar, menu items | Same as desktop | Avatar icon → tap → full account menu in slide-in drawer |
+| Full user dropdown: name, email, avatar, menu items | Same as desktop | Avatar icon -> tap -> full account menu in slide-in drawer |
 
 ```css
 /* Desktop: full buttons */
@@ -1099,7 +1099,7 @@ The first focusable element on the page must be a skip link that jumps past the 
 }
 ```
 
-The skip link is invisible until focused via keyboard Tab. This is WCAG 2.4.1 (Bypass Blocks) — required for Level A compliance.
+The skip link is invisible until focused via keyboard Tab. This is WCAG 2.4.1 (Bypass Blocks), required for Level A compliance.
 
 ### Keyboard navigation through dropdowns
 
@@ -1137,7 +1137,7 @@ When the mobile menu opens, focus must be trapped inside it. When it closes, foc
 
 **Focus trap requirements:**
 1. On open: move focus to the first focusable element inside the menu (typically the close button or first nav link)
-2. While open: Tab cycles only through elements inside the menu — it does not escape to the page behind
+2. While open: Tab cycles only through elements inside the menu, it does not escape to the page behind
 3. On close (Escape key or close button): return focus to the hamburger button that opened the menu
 4. The backdrop is inert: clicking it closes the menu but does not move focus to the page
 
@@ -1203,11 +1203,11 @@ Mark the current page in navigation with `aria-current="page"`. This is announce
 <a href="/pricing" aria-current="page">Pricing</a>
 ```
 
-Do not use `aria-selected` for navigation — that is for widget patterns like tabs. `aria-current="page"` is the correct attribute for page-level navigation.
+Do not use `aria-selected` for navigation, that is for widget patterns like tabs. `aria-current="page"` is the correct attribute for page-level navigation.
 
 ### Screen reader announcements for menu state
 
-When the mobile menu opens or closes, screen reader users need to know. The `aria-expanded` attribute on the hamburger button handles this — screen readers announce the state change. But also consider:
+When the mobile menu opens or closes, screen reader users need to know. The `aria-expanded` attribute on the hamburger button handles this, screen readers announce the state change. But also consider:
 
 - Adding `aria-live="polite"` to a visually hidden status region that announces "Navigation menu opened" / "Navigation menu closed"
 - Using `role="dialog"` on the mobile menu overlay with `aria-label="Navigation menu"` so screen readers announce the context
@@ -1222,13 +1222,13 @@ These are the things NOT to do. Each one degrades usability, accessibility, or b
 
 **Problem:** More than 7 top-level items in the primary nav. Users can't scan them, and on tablet widths they overflow or get crushed into unreadable sizes.
 
-**Fix:** Audit nav items. Move low-traffic items to the footer or a secondary nav. Use analytics to identify which items actually get clicked — most sites discover that 2–3 items get 80% of nav traffic.
+**Fix:** Audit nav items. Move low-traffic items to the footer or a secondary nav. Use analytics to identify which items actually get clicked, most sites discover that 2-3 items get 80% of nav traffic.
 
 ### Hidden navigation on desktop
 
 **Problem:** Using a hamburger menu on desktop to look "clean" or "minimal." Forces every user to click to see their options, reduces discoverability, and lowers engagement.
 
-**Fix:** Show the full horizontal nav on desktop. The hamburger is a mobile compromise, not a desktop design choice. If you have too many items to show horizontally, fix the information architecture — don't hide it.
+**Fix:** Show the full horizontal nav on desktop. The hamburger is a mobile compromise, not a desktop design choice. If you have too many items to show horizontally, fix the information architecture, don't hide it.
 
 ### Double navigation
 
@@ -1240,31 +1240,31 @@ These are the things NOT to do. Each one degrades usability, accessibility, or b
 
 **Problem:** Nav items, their order, or the nav structure changes depending on which page the user is on. This destroys the user's spatial model of the site.
 
-**Fix:** Navigation is consistent across every page. The only thing that changes is the active state indicator. If different sections of the site need different sub-navigation, use sub-nav within the content area — not in the global header.
+**Fix:** Navigation is consistent across every page. The only thing that changes is the active state indicator. If different sections of the site need different sub-navigation, use sub-nav within the content area, not in the global header.
 
 ### Oversized sticky headers
 
-**Problem:** A sticky header that takes up 100–200px of vertical space, blocking content as the user scrolls. Often caused by combining logo + primary nav + utility bar + banner/announcement bar, all sticky.
+**Problem:** A sticky header that takes up 100-200px of vertical space, blocking content as the user scrolls. Often caused by combining logo + primary nav + utility bar + banner/announcement bar, all sticky.
 
-**Fix:** Keep the sticky portion under 64px. If you have an announcement bar, make it dismissible and non-sticky. If you have a utility bar, make it scroll away — only the primary header should stick. On scroll, shrink the header to 48–56px.
+**Fix:** Keep the sticky portion under 64px. If you have an announcement bar, make it dismissible and non-sticky. If you have a utility bar, make it scroll away, only the primary header should stick. On scroll, shrink the header to 48-56px.
 
 ### Hover-only dropdowns
 
 **Problem:** Dropdown menus that only work on mouse hover. Broken on touch devices, broken for keyboard users, broken for screen readers.
 
-**Fix:** Every dropdown must work with click/tap AND keyboard. Hover is an enhancement for mouse users on desktop — not the primary interaction model.
+**Fix:** Every dropdown must work with click/tap AND keyboard. Hover is an enhancement for mouse users on desktop, not the primary interaction model.
 
 ### Slow or janky menu animations
 
 **Problem:** Menu animations that take 500ms+ to complete, use `left`/`top` instead of `transform`, or cause layout shifts.
 
-**Fix:** Keep menu animations under 300ms. Use `transform: translateX()` and `opacity` for GPU-accelerated, jank-free animation. Never animate `width`, `height`, `left`, `top`, or `margin` — these trigger layout recalculation.
+**Fix:** Keep menu animations under 300ms. Use `transform: translateX()` and `opacity` for GPU-accelerated, jank-free animation. Never animate `width`, `height`, `left`, `top`, or `margin`, these trigger layout recalculation.
 
 ```css
-/* BAD — triggers layout */
+/* BAD, triggers layout */
 .menu { left: -100%; transition: left 300ms; }
 
-/* GOOD — GPU composited */
+/* GOOD, GPU composited */
 .menu { transform: translateX(-100%); transition: transform 300ms; }
 ```
 
@@ -1291,12 +1291,12 @@ Use `:focus-visible` (not `:focus`) so the outline only shows for keyboard navig
 
 ### Dropdown menus that require pixel-perfect cursor paths
 
-**Problem:** A dropdown that closes the instant the cursor leaves the trigger button, requiring users to move the cursor in a perfect vertical line to reach the dropdown content. This is the "diagonal problem" — users naturally move diagonally from the trigger to the sub-items.
+**Problem:** A dropdown that closes the instant the cursor leaves the trigger button, requiring users to move the cursor in a perfect vertical line to reach the dropdown content. This is the "diagonal problem", users naturally move diagonally from the trigger to the sub-items.
 
-**Fix:** Implement a 300–500ms close delay (see hover delay timing above). Or use the "triangle" or "safe zone" technique: calculate the triangle between the cursor position, the near edge, and the far edge of the dropdown, and keep the menu open while the cursor is within that zone. Amazon popularized this approach.
+**Fix:** Implement a 300-500ms close delay (see hover delay timing above). Or use the "triangle" or "safe zone" technique: calculate the triangle between the cursor position, the near edge, and the far edge of the dropdown, and keep the menu open while the cursor is within that zone. Amazon popularized this approach.
 
 ### Missing skip link
 
 **Problem:** No skip navigation link, forcing keyboard users to tab through the entire header on every page load.
 
-**Fix:** Add a skip link as the first focusable element. This is WCAG 2.4.1 Level A — the minimum compliance level. There is no excuse for omitting it.
+**Fix:** Add a skip link as the first focusable element. This is WCAG 2.4.1 Level A, the minimum compliance level. There is no excuse for omitting it.

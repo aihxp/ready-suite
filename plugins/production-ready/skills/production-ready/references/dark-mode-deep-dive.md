@@ -1,8 +1,8 @@
 # Dark Mode Deep-Dive
 
-This file covers everything about implementing dark mode in a dashboard/SaaS product — the CSS architecture, color mapping, image handling, chart adjustments, preference persistence, transitions, common bugs, and component-level patterns. The color system foundations are in `ui-design-patterns.md` (which covers the token hierarchy and basic dark mode surface rules); this file goes deeper into implementation.
+This file covers everything about implementing dark mode in a dashboard/SaaS product, the CSS architecture, color mapping, image handling, chart adjustments, preference persistence, transitions, common bugs, and component-level patterns. The color system foundations are in `ui-design-patterns.md` (which covers the token hierarchy and basic dark mode surface rules); this file goes deeper into implementation.
 
-Dark mode is not optional. It's a baseline UX expectation. But doing it well — not just inverting colors — requires deliberate decisions at every layer.
+Dark mode is not optional. It's a baseline UX expectation. But doing it well, not just inverting colors, requires deliberate decisions at every layer.
 
 ---
 
@@ -116,7 +116,7 @@ module.exports = {
 };
 ```
 
-Then use `bg-background text-foreground` — no `dark:` prefix needed because the variable itself swaps.
+Then use `bg-background text-foreground`, no `dark:` prefix needed because the variable itself swaps.
 
 ### next-themes / ThemeProvider pattern
 
@@ -163,7 +163,7 @@ export function ThemeToggle() {
 **Key concepts:**
 - `theme` returns "system", "light", or "dark" (the user's selection).
 - `resolvedTheme` returns "light" or "dark" (the actual applied theme). Use this for conditional rendering.
-- The provider injects a blocking `<script>` in `<head>` that reads localStorage before paint — no flash.
+- The provider injects a blocking `<script>` in `<head>` that reads localStorage before paint, no flash.
 - `suppressHydrationWarning` on `<html>` is required because the server doesn't know the theme.
 
 ### CSS light-dark() function (2024+)
@@ -202,7 +202,7 @@ body {
 
 ## Color mapping strategy
 
-### Don't invert — remap
+### Don't invert, remap
 
 Color inversion (filter: invert) is lazy and produces garbage. Dark mode requires intentional remapping of every semantic role.
 
@@ -262,12 +262,12 @@ Brand colors often need adjustment between modes:
 
 ```css
 :root {
-  --accent: #2563eb;           /* Blue-600 — works on white */
+  --accent: #2563eb;           /* Blue-600, works on white */
   --accent-foreground: #ffffff;
 }
 
 html.dark {
-  --accent: #3b82f6;           /* Blue-500 — lighter for visibility on dark */
+  --accent: #3b82f6;           /* Blue-500, lighter for visibility on dark */
   --accent-foreground: #ffffff;
 }
 ```
@@ -276,7 +276,7 @@ Mid-range tones (400-500) work better on dark backgrounds than deep tones (700-9
 
 ### Status colors
 
-Adjust saturation and lightness for dark mode — the same green/red/yellow that works on white looks different on dark gray.
+Adjust saturation and lightness for dark mode, the same green/red/yellow that works on white looks different on dark gray.
 
 ```css
 :root {
@@ -287,7 +287,7 @@ Adjust saturation and lightness for dark mode — the same green/red/yellow that
 }
 
 html.dark {
-  --status-success: #22c55e;   /* Green-500 — more vibrant */
+  --status-success: #22c55e;   /* Green-500, more vibrant */
   --status-warning: #f59e0b;   /* Amber-500 */
   --status-error: #ef4444;     /* Red-500 */
   --status-info: #3b82f6;      /* Blue-500 */
@@ -379,7 +379,7 @@ Slightly reduces photo intensity in dark mode. Less jarring than full brightness
 
 ### Vibrancy adjustment
 
-Colors that look good on white backgrounds appear washed out or overly saturated on dark backgrounds. The fix is not one-size-fits-all — it depends on the color.
+Colors that look good on white backgrounds appear washed out or overly saturated on dark backgrounds. The fix is not one-size-fits-all, it depends on the color.
 
 **General rule:** Increase lightness and reduce saturation slightly for dark mode chart colors.
 
@@ -417,7 +417,7 @@ html.dark {
 }
 ```
 
-**Grid lines** should be barely visible — structural guides, not visual elements. On dark backgrounds, use very low contrast (1-2 steps lighter than the background).
+**Grid lines** should be barely visible, structural guides, not visual elements. On dark backgrounds, use very low contrast (1-2 steps lighter than the background).
 
 ### Tooltip styling
 
@@ -458,8 +458,8 @@ Limit to 4-5 colors per chart in dark mode. More colors compete for attention on
 ### Detection and storage layers
 
 ```
-System preference (OS-level) → prefers-color-scheme
-Manual override (user toggle) → localStorage or server-side
+System preference (OS-level) -> prefers-color-scheme
+Manual override (user toggle) -> localStorage or server-side
 ```
 
 ### Implementation pattern
@@ -528,7 +528,7 @@ Sync theme preference across devices when:
 - Your product has a settings page where theme is a visible preference.
 
 Don't sync when:
-- User is on "system" — each device has its own system preference for a reason.
+- User is on "system", each device has its own system preference for a reason.
 - The user hasn't explicitly changed the default.
 
 ---
@@ -538,7 +538,7 @@ Don't sync when:
 ### Smooth transition
 
 ```css
-/* Apply to body or html — NOT * (too expensive) */
+/* Apply to body or html, NOT * (too expensive) */
 body {
   transition: background-color 200ms ease, color 200ms ease;
 }
@@ -554,7 +554,7 @@ body {
 
 ### Preventing flash of wrong theme (FOWT)
 
-The most common dark mode bug. The server renders light mode HTML, the browser paints it, then JavaScript reads localStorage and switches to dark — producing a visible white flash.
+The most common dark mode bug. The server renders light mode HTML, the browser paints it, then JavaScript reads localStorage and switches to dark, producing a visible white flash.
 
 **Solution: Blocking script in `<head>`**
 
@@ -579,7 +579,7 @@ This runs before the browser paints, so the correct class is applied from the fi
 
 **For Next.js:** Use next-themes (already does this). Or use a custom `Script` with `strategy="beforeInteractive"`.
 
-**For SSR without Next.js:** Inject the script inline in your HTML template's `<head>`. Don't load it as an external file — that defeats the purpose.
+**For SSR without Next.js:** Inject the script inline in your HTML template's `<head>`. Don't load it as an external file, that defeats the purpose.
 
 ### color-scheme CSS property
 
@@ -622,7 +622,7 @@ html.dark, html.dark body {
 }
 ```
 
-Set it on `html` too — some browsers paint `html`'s background during transitions before `body` is ready.
+Set it on `html` too, some browsers paint `html`'s background during transitions before `body` is ready.
 
 ### 2. Form autofill colors
 
@@ -652,7 +652,7 @@ html.dark {
   scrollbar-color: #3f3f46 #18181b;
 }
 
-/* Safari — relies on color-scheme */
+/* Safari, relies on color-scheme */
 html.dark {
   color-scheme: dark;
 }
@@ -700,7 +700,7 @@ html.dark ::selection {
 
 /* Ensure dark mode value is actually visible */
 html.dark ::placeholder {
-  color: #71717a; /* zinc-500 — visible on zinc-900 backgrounds */
+  color: #71717a; /* zinc-500, visible on zinc-900 backgrounds */
 }
 ```
 
@@ -801,7 +801,7 @@ tbody td {
 }
 ```
 
-**Dark mode note:** The alternating row color difference should be very subtle — 1-2 lightness steps. `#111113` vs `#09090b` is enough. Too much contrast between rows creates a distracting zebra effect.
+**Dark mode note:** The alternating row color difference should be very subtle, 1-2 lightness steps. `#111113` vs `#09090b` is enough. Too much contrast between rows creates a distracting zebra effect.
 
 ### Modals and backdrop
 
@@ -833,7 +833,7 @@ html.dark {
 }
 ```
 
-**Dark mode note:** Increase backdrop opacity from 0.5 to 0.7 — dark backgrounds behind the backdrop need a stronger overlay to create adequate separation. The modal itself should be one surface level above the page (e.g., zinc-900 on zinc-950 background).
+**Dark mode note:** Increase backdrop opacity from 0.5 to 0.7, dark backgrounds behind the backdrop need a stronger overlay to create adequate separation. The modal itself should be one surface level above the page (e.g., zinc-900 on zinc-950 background).
 
 ### Tooltips
 
@@ -908,7 +908,7 @@ html.dark {
 }
 ```
 
-**Dark mode note:** Dropdowns should be one level higher than cards (zinc-800 if card is zinc-900). Border is critical in dark mode — without it, the dropdown blends into the surface behind it.
+**Dark mode note:** Dropdowns should be one level higher than cards (zinc-800 if card is zinc-900). Border is critical in dark mode, without it, the dropdown blends into the surface behind it.
 
 ### Syntax highlighting / code blocks
 
@@ -927,7 +927,7 @@ html.dark {
 html.dark {
   --code-bg: #0a0a0a;
   --code-text: #e4e4e7;
-  --code-keyword: #a78bfa;      /* Purple-400 — lighter */
+  --code-keyword: #a78bfa;      /* Purple-400, lighter */
   --code-string: #4ade80;       /* Green-400 */
   --code-comment: #52525b;      /* zinc-600 */
   --code-function: #60a5fa;     /* Blue-400 */
@@ -1030,7 +1030,7 @@ input:focus, select:focus, textarea:focus {
 }
 ```
 
-**Dark mode note:** Increase the focus ring opacity from 15% to 25% on dark backgrounds — it needs to be more visible against the dark surface. Input background should match or be slightly darker than the card it sits on.
+**Dark mode note:** Increase the focus ring opacity from 15% to 25% on dark backgrounds, it needs to be more visible against the dark surface. Input background should match or be slightly darker than the card it sits on.
 
 ---
 
@@ -1070,7 +1070,7 @@ input:focus, select:focus, textarea:focus {
 
 ## Don'ts
 
-- **Don't invert colors with `filter: invert(1)`.** It produces garbage — inverted images, wrong brand colors, broken semantics.
+- **Don't invert colors with `filter: invert(1)`.** It produces garbage, inverted images, wrong brand colors, broken semantics.
 - **Don't use pure black (#000000) backgrounds.** Use #09090b to #171717. Pure black creates excessive contrast and the "OLED hole" effect.
 - **Don't use pure white (#ffffff) text.** Use #fafafa or #e4e4e7. Pure white on dark backgrounds causes eye strain.
 - **Don't rely on shadows for hierarchy in dark mode.** Use surface color differences (lighter = higher).

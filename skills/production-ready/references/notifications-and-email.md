@@ -1,6 +1,6 @@
 # Notifications & Email
 
-This file covers the notification system and email subsystem — the infrastructure that keeps users informed across channels. Almost every dashboard needs this: in-app notifications, transactional email, and optionally push, SMS, and Slack/Teams. The other reference files mention email and notifications in passing; this file covers how to actually build them.
+This file covers the notification system and email subsystem, the infrastructure that keeps users informed across channels. Almost every dashboard needs this: in-app notifications, transactional email, and optionally push, SMS, and Slack/Teams. The other reference files mention email and notifications in passing; this file covers how to actually build them.
 
 ---
 
@@ -26,10 +26,10 @@ Domain event (order.placed)
 ### Tools
 
 If you don't want to build the pipeline from scratch:
-- **Novu** (open-source) — Node.js, MongoDB, Redis + BullMQ, Socket.io. Workflow engine with digest/delay/batching steps. Self-hostable.
-- **Knock** — managed. Workflow engine with cross-channel orchestration, batching, preferences.
-- **Courier** — managed. Visual workflow builder, routing engine with fallback logic.
-- **MagicBell** — focused on the in-app inbox. Real-time via WebSocket. Pre-built React components.
+- **Novu** (open-source), Node.js, MongoDB, Redis + BullMQ, Socket.io. Workflow engine with digest/delay/batching steps. Self-hostable.
+- **Knock**, managed. Workflow engine with cross-channel orchestration, batching, preferences.
+- **Courier**, managed. Visual workflow builder, routing engine with fallback logic.
+- **MagicBell**, focused on the in-app inbox. Real-time via WebSocket. Pre-built React components.
 
 For most dashboards, build in-app notifications yourself (it's a table + SSE) and use a provider for email/SMS/push delivery.
 
@@ -71,10 +71,10 @@ SSE is sufficient (server-to-client only). Use WebSocket only if you also need b
 ### Notification center UI
 
 - **Bell icon** with badge showing unread count (update in real-time).
-- **Dropdown panel** — recent notifications grouped by date, read/unread visual distinction.
-- **Full page** — paginated list with filters (all, unread, by category).
-- **Mark as read** — individual (on click) and bulk ("Mark all as read").
-- **Archive/delete** — soft-delete with `archived_at`.
+- **Dropdown panel**, recent notifications grouped by date, read/unread visual distinction.
+- **Full page**, paginated list with filters (all, unread, by category).
+- **Mark as read**, individual (on click) and bulk ("Mark all as read").
+- **Archive/delete**, soft-delete with `archived_at`.
 
 ### API
 
@@ -94,9 +94,9 @@ DELETE /api/notifications/:id
 
 A three-tier hierarchy:
 
-1. **Admin/workflow level** — admin sets which channels are available per notification type. If email is disabled at the workflow level, user preferences are irrelevant.
-2. **User global defaults** — user sets global defaults per channel ("I never want SMS").
-3. **User per-type overrides** — user overrides for specific types ("Send me email for deploy alerts but not for comments").
+1. **Admin/workflow level**, admin sets which channels are available per notification type. If email is disabled at the workflow level, user preferences are irrelevant.
+2. **User global defaults**, user sets global defaults per channel ("I never want SMS").
+3. **User per-type overrides**, user overrides for specific types ("Send me email for deploy alerts but not for comments").
 
 ```sql
 notification_preferences
@@ -149,21 +149,21 @@ For ops/on-call dashboards:
 
 | Scenario | Email | In-app | Both |
 |---|---|---|---|
-| Password reset | Yes | No | — |
+| Password reset | Yes | No |, |
 | Welcome / onboarding | Yes | Yes | Yes |
 | Payment receipt | Yes | Yes | Yes |
 | Someone commented | Maybe | Yes | User's choice |
 | Task assigned | Maybe | Yes | User's choice |
 | Security alert | Yes | Yes | Yes |
-| Daily digest | Yes | No | — |
+| Daily digest | Yes | No |, |
 
 Rule: email when the user may not be active. In-app for real-time context. Both for important actions.
 
 ### Email template system
 
-- **React Email** (by Resend) — write templates as React components. Pre-built components, dev server with preview. Best for React teams.
-- **MJML** — markup language that compiles to responsive HTML compatible with all clients including Outlook. Abstracts table-based layout.
-- **Server-rendered HTML** (Handlebars/Pug/EJS) — simplest but no built-in responsiveness.
+- **React Email** (by Resend), write templates as React components. Pre-built components, dev server with preview. Best for React teams.
+- **MJML**, markup language that compiles to responsive HTML compatible with all clients including Outlook. Abstracts table-based layout.
+- **Server-rendered HTML** (Handlebars/Pug/EJS), simplest but no built-in responsiveness.
 
 ### Email categories
 
@@ -173,14 +173,14 @@ Rule: email when the user may not be active. In-app for real-time context. Both 
 | **System** | Subscription change, payment receipt, account alerts | No |
 | **Activity** | Comment added, task assigned, mention | No |
 | **Digest** | Daily/weekly summary | No |
-| **Marketing** | Product updates, announcements | **Yes** — separate domain to protect transactional reputation |
+| **Marketing** | Product updates, announcements | **Yes**, separate domain to protect transactional reputation |
 
 ### Sender configuration
 
-- **From address** — use a subdomain: `notifications@mail.yourdomain.com`. Isolates transactional reputation from marketing.
-- **DKIM** — cryptographic signature proving the email is from your domain. Required.
-- **SPF** — DNS record listing authorized senders. Required.
-- **DMARC** — policy for failing SPF/DKIM. Start with `p=none`, move to `p=quarantine` after verification.
+- **From address**, use a subdomain: `notifications@mail.yourdomain.com`. Isolates transactional reputation from marketing.
+- **DKIM**, cryptographic signature proving the email is from your domain. Required.
+- **SPF**, DNS record listing authorized senders. Required.
+- **DMARC**, policy for failing SPF/DKIM. Start with `p=none`, move to `p=quarantine` after verification.
 
 ### Gmail/Yahoo sender requirements (2024-2025, enforced)
 
@@ -202,7 +202,7 @@ Rule: email when the user may not be active. In-app for real-time context. Both 
 
 ### Unsubscribe handling
 
-- **Per-category** — users can turn off "activity" emails while keeping "security."
+- **Per-category**, users can turn off "activity" emails while keeping "security."
 - **One-click** via `List-Unsubscribe-Post` header (RFC 8058).
 - **Footer link** in every non-auth email pointing to preferences page with category toggles.
 - **Auth/security emails are non-unsubscribable.**
@@ -210,8 +210,8 @@ Rule: email when the user may not be active. In-app for real-time context. Both 
 
 ### Email rendering
 
-- Outlook uses the Word rendering engine — no CSS grid, no flexbox. Use table-based layout.
-- Gmail strips `<style>` in `<head>` — inline styles required.
+- Outlook uses the Word rendering engine, no CSS grid, no flexbox. Use table-based layout.
+- Gmail strips `<style>` in `<head>`, inline styles required.
 - Keep total email under 102KB (Gmail clips larger messages).
 - Test with Litmus or Email on Acid.
 - Always include `alt` text on images. Use `width`/`height` attributes (not just CSS).
@@ -229,7 +229,7 @@ Rule: email when the user may not be active. In-app for real-time context. Both 
 5. Server sends push via `web-push` library.
 6. Service worker receives `push` event, calls `showNotification()`.
 
-### Permission UX — critical
+### Permission UX, critical
 
 **NEVER prompt on first visit.** Users reflexively deny and recovery requires manual browser settings.
 
@@ -263,9 +263,9 @@ Requires pre-approved message templates for outbound messages outside the 24-hou
 
 ### Compliance
 
-- **TCPA (US)** — prior express consent for transactional, written consent for marketing. $500-$1,500/message violation.
-- **10DLC (US)** — mandatory since February 2025. Brand and campaign registration via provider (3-15 day approval).
-- **GDPR** — explicit consent, right to withdraw.
+- **TCPA (US)**, prior express consent for transactional, written consent for marketing. $500-$1,500/message violation.
+- **10DLC (US)**, mandatory since February 2025. Brand and campaign registration via provider (3-15 day approval).
+- **GDPR**, explicit consent, right to withdraw.
 - Every SMS must include opt-out instructions ("Reply STOP"). Honor immediately.
 
 ---
@@ -274,9 +274,9 @@ Requires pre-approved message templates for outbound messages outside the 24-hou
 
 ### Slack tiers
 
-1. **Incoming webhooks** (simplest) — one-way, post to a channel. Block Kit formatting. No interactivity. ~1 msg/sec rate limit.
-2. **Bot messages** (richer) — post to any channel, send DMs, update/delete messages, interactive buttons/menus.
-3. **Interactive notifications** — buttons that POST to your API: "New order #1234. [View] [Assign to Me]." Your server processes the action and updates the Slack message.
+1. **Incoming webhooks** (simplest), one-way, post to a channel. Block Kit formatting. No interactivity. ~1 msg/sec rate limit.
+2. **Bot messages** (richer), post to any channel, send DMs, update/delete messages, interactive buttons/menus.
+3. **Interactive notifications**, buttons that POST to your API: "New order #1234. [View] [Assign to Me]." Your server processes the action and updates the Slack message.
 
 ### Channel routing
 
@@ -292,25 +292,25 @@ Incoming webhooks with Adaptive Cards (richer than Slack Block Kit). Bot Framewo
 
 ### Receiving email
 
-- **Webhook-based (recommended)** — SendGrid Inbound Parse, Postmark Inbound, Mailgun Routes. Provider parses email, POSTs structured data to your API.
-- **IMAP polling** — connect to mailbox, poll for new messages. More complex but works with any provider.
+- **Webhook-based (recommended)**, SendGrid Inbound Parse, Postmark Inbound, Mailgun Routes. Provider parses email, POSTs structured data to your API.
+- **IMAP polling**, connect to mailbox, poll for new messages. More complex but works with any provider.
 
 ### Email threading
 
 Three headers govern threading (RFC 2822):
-- **Message-ID** — unique per email.
-- **In-Reply-To** — the Message-ID being replied to.
-- **References** — chain of all Message-IDs in the thread.
+- **Message-ID**, unique per email.
+- **In-Reply-To**, the Message-ID being replied to.
+- **References**, chain of all Message-IDs in the thread.
 
 On receive: match In-Reply-To/References to existing threads. On send: set In-Reply-To and References to maintain the thread.
 
 ### Shared inbox
 
 - Multiple team members access the same inbox.
-- **Assignment** — anyone can assign to themselves or others.
-- **Collision detection** — soft lock (Redis key with TTL) when someone is viewing/replying. Show "Alice is replying" to others.
-- **Internal notes** — comments visible only to the team, not sent to customer.
-- **Status** — open, pending (waiting on customer), resolved, closed.
+- **Assignment**, anyone can assign to themselves or others.
+- **Collision detection**, soft lock (Redis key with TTL) when someone is viewing/replying. Show "Alice is replying" to others.
+- **Internal notes**, comments visible only to the team, not sent to customer.
+- **Status**, open, pending (waiting on customer), resolved, closed.
 
 ---
 
@@ -326,10 +326,10 @@ Per-locale variants keyed by `(template_id, locale)`. Fallback: exact locale > l
 
 ### Dynamic content
 
-- **Variables** — `{user_name}`, `{order_total}`, `{action_url}`.
-- **Conditional blocks** — show/hide sections based on user attributes.
-- **Loops** — iterate over items (order line items, digest entries).
-- **Partials** — reusable header, footer, button, card components.
+- **Variables**, `{user_name}`, `{order_total}`, `{action_url}`.
+- **Conditional blocks**, show/hide sections based on user attributes.
+- **Loops**, iterate over items (order line items, digest entries).
+- **Partials**, reusable header, footer, button, card components.
 
 ### Preview and testing
 
@@ -356,9 +356,9 @@ created > queued > sent > delivered > opened > clicked
 
 ### Provider webhook integration
 
-- **SendGrid** — Event Webhook: processed, dropped, delivered, bounce, open, click, spam_report.
-- **Postmark** — separate webhooks per event type: Bounce, Delivery, Open, Click, Spam Complaint.
-- **Twilio (SMS)** — status callback per message: queued, sent, delivered, undelivered, failed.
+- **SendGrid**, Event Webhook: processed, dropped, delivered, bounce, open, click, spam_report.
+- **Postmark**, separate webhooks per event type: Bounce, Delivery, Open, Click, Spam Complaint.
+- **Twilio (SMS)**, status callback per message: queued, sent, delivered, undelivered, failed.
 
 ### Delivery log
 
@@ -366,10 +366,10 @@ Store in `notification_deliveries` table. Searchable by: user, notification type
 
 ### Failed delivery handling
 
-- **Retry** — exponential backoff (1min, 5min, 15min, 1hr, 4hr). Max 5 retries for transient failures.
-- **Channel fallback** — email fails after retries > fall back to in-app. Push fails (expired subscription) > fall back to email.
-- **Hard bounce suppression** — on first hard bounce, add to suppression list permanently.
-- **Provider circuit breaker** — if error rate exceeds 50% in 5 minutes, failover to backup provider.
+- **Retry**, exponential backoff (1min, 5min, 15min, 1hr, 4hr). Max 5 retries for transient failures.
+- **Channel fallback**, email fails after retries > fall back to in-app. Push fails (expired subscription) > fall back to email.
+- **Hard bounce suppression**, on first hard bounce, add to suppression list permanently.
+- **Provider circuit breaker**, if error rate exceeds 50% in 5 minutes, failover to backup provider.
 
 ---
 
@@ -411,5 +411,5 @@ Check preferences BEFORE queuing, not just before sending. Maintain a suppressio
 - **Don't skip duplicate detection.** Event replay, at-least-once delivery, and retry logic all produce duplicates.
 - **Don't ignore complaint rate.** Above 0.3% and Gmail starts rejecting all your email.
 - **Don't let runaway workflows generate unlimited notifications.** Spike detection and per-user caps are essential.
-- **Don't send digests with the same urgency styling as individual notifications.** Digests are lower priority — style them accordingly.
+- **Don't send digests with the same urgency styling as individual notifications.** Digests are lower priority, style them accordingly.
 - **Don't build shared inbox without collision detection.** Two agents replying to the same customer simultaneously is a support disaster.

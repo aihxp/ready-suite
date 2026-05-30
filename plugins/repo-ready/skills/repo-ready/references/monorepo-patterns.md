@@ -1,26 +1,26 @@
 # Monorepo Patterns Reference
 
-Tier 3 reference for multi-package monorepos. Load this when the repo holds more than one deployable, publishable, or independently versioned package in a single Git root — an Nx workspace, a Turborepo, a pnpm/yarn workspace, a moon polyglot workspace, a Cargo workspace, or a Go multi-module layout. Covers the seven mainstream tools with paste-ready configs, affected-only CI patterns, per-package changelog strategy, root-vs-package boundary rules, and the anti-patterns that kill monorepos in year two.
+Tier 3 reference for multi-package monorepos. Load this when the repo holds more than one deployable, publishable, or independently versioned package in a single Git root, an Nx workspace, a Turborepo, a pnpm/yarn workspace, a moon polyglot workspace, a Cargo workspace, or a Go multi-module layout. Covers the seven mainstream tools with paste-ready configs, affected-only CI patterns, per-package changelog strategy, root-vs-package boundary rules, and the anti-patterns that kill monorepos in year two.
 
 A monorepo helps when packages share owners, CI gates, versions, or atomic breaking changes. It hurts when packages release on different cadences with no shared code, when teams fight over root config, or when affected-only tooling is never wired up and CI is O(packages). If you land in the "hurts" column, multi-repo is the correct answer.
 
-> **Scope boundary.** Multi-package monorepos only. Polyglot within a **single** package (one Python service also shipping a TypeScript SDK) is covered in `SKILL.md` §"Polyglot repositories — layering tools across languages".
+> **Scope boundary.** Multi-package monorepos only. Polyglot within a **single** package (one Python service also shipping a TypeScript SDK) is covered in `SKILL.md` §"Polyglot repositories, layering tools across languages".
 
-## 1. Decision matrix — which tool for which stack
+## 1. Decision matrix, which tool for which stack
 
 | Tool | Best for stack | Team size | Recommendation notes |
 |---|---|---|---|
 | **Nx** | Large JS/TS (Next, NestJS, Angular, React Native) with >10 packages, strong plugin needs | 10+ devs, multi-squad | Task graph + remote caching + generators. Highest ceiling, highest floor. Overkill for 3 packages. |
-| **Turborepo** | Small–medium JS/TS (Next, Vite, Remix, Svelte) with 2–20 packages | 2–20 devs | Fast to set up, opinionated pipeline config, Vercel Remote Cache in ~5 minutes. Picks up where pnpm-workspaces ends. |
-| **pnpm workspaces** | Minimal JS/TS where you want the package manager to do everything and no extra tool | 1–10 devs | Just `pnpm-workspace.yaml` + `workspace:*` deps. No task graph. Add Turborepo/Nx later if needed. |
-| **yarn workspaces** | Teams already on Yarn 4 (Berry) with Plug'n'Play or zero-installs | 1–20 devs | Roughly feature-parity with pnpm workspaces; `yarn workspaces foreach --since` covers affected-only. Choose on ecosystem familiarity. |
-| **moon** | Polyglot JS + Go + Rust + Python in one repo | 5–30 devs | Rust-written orchestrator that treats each language as a first-class task. Use when you need one tool across four ecosystems. |
-| **Cargo workspaces** | Rust-only monorepos (crates sharing `[workspace.dependencies]`) | 1–50 devs | First-party in `cargo`. Zero extra dependency. Use for any Rust repo with >1 crate. |
-| **Go workspaces** | Go-only multi-module repos (Go 1.18+) | 1–50 devs | `go.work` replaces `replace` directives for local development. Use when you have >1 `go.mod` in one repo. |
-| Bazel | Enterprise polyglot, massive codebases, remote execution cluster | 50+ devs, dedicated build eng | Out of depth-scope here — high setup cost, strong guarantees. See [bazel.build/docs](https://bazel.build/docs). |
-| uv workspaces | Python monorepos (2024+, emerging) | 1–10 devs | Brief mention only — API still evolving. See [docs.astral.sh/uv/concepts/workspaces](https://docs.astral.sh/uv/concepts/workspaces/). |
+| **Turborepo** | Small, medium JS/TS (Next, Vite, Remix, Svelte) with 2-20 packages | 2-20 devs | Fast to set up, opinionated pipeline config, Vercel Remote Cache in ~5 minutes. Picks up where pnpm-workspaces ends. |
+| **pnpm workspaces** | Minimal JS/TS where you want the package manager to do everything and no extra tool | 1-10 devs | Just `pnpm-workspace.yaml` + `workspace:*` deps. No task graph. Add Turborepo/Nx later if needed. |
+| **yarn workspaces** | Teams already on Yarn 4 (Berry) with Plug'n'Play or zero-installs | 1-20 devs | Roughly feature-parity with pnpm workspaces; `yarn workspaces foreach --since` covers affected-only. Choose on ecosystem familiarity. |
+| **moon** | Polyglot JS + Go + Rust + Python in one repo | 5-30 devs | Rust-written orchestrator that treats each language as a first-class task. Use when you need one tool across four ecosystems. |
+| **Cargo workspaces** | Rust-only monorepos (crates sharing `[workspace.dependencies]`) | 1-50 devs | First-party in `cargo`. Zero extra dependency. Use for any Rust repo with >1 crate. |
+| **Go workspaces** | Go-only multi-module repos (Go 1.18+) | 1-50 devs | `go.work` replaces `replace` directives for local development. Use when you have >1 `go.mod` in one repo. |
+| Bazel | Enterprise polyglot, massive codebases, remote execution cluster | 50+ devs, dedicated build eng | Out of depth-scope here, high setup cost, strong guarantees. See [bazel.build/docs](https://bazel.build/docs). |
+| uv workspaces | Python monorepos (2024+, emerging) | 1-10 devs | Brief mention only, API still evolving. See [docs.astral.sh/uv/concepts/workspaces](https://docs.astral.sh/uv/concepts/workspaces/). |
 
-**One-line selection rule:** JS/TS → Turborepo (default) or Nx (scale). Rust → Cargo workspaces. Go → Go workspaces. Polyglot → moon. Enterprise polyglot → Bazel. Python → uv workspaces (watch this space) or per-package `pyproject.toml` with no workspace tool.
+**One-line selection rule:** JS/TS -> Turborepo (default) or Nx (scale). Rust -> Cargo workspaces. Go -> Go workspaces. Polyglot -> moon. Enterprise polyglot -> Bazel. Python -> uv workspaces (watch this space) or per-package `pyproject.toml` with no workspace tool.
 
 ## 2. Nx
 
@@ -126,17 +126,17 @@ jobs:
       - run: pnpm nx affected --target=build --parallel=3
 ```
 
-`nrwl/nx-set-shas` resolves the "base" and "head" SHAs for affected detection on PRs and on main. Remote caching (Nx Cloud) turns subsequent CI runs near-instant for unchanged packages — configure once via `npx nx connect`.
+`nrwl/nx-set-shas` resolves the "base" and "head" SHAs for affected detection on PRs and on main. Remote caching (Nx Cloud) turns subsequent CI runs near-instant for unchanged packages, configure once via `npx nx connect`.
 
 ### Deep features worth learning
 
-- **Project graph (`nx graph`)** — renders an HTML graph of project dependencies; use it when a package shows up as "affected" unexpectedly.
-- **Module boundary tags** — the `tags` array in `project.json` plus `@nx/enforce-module-boundaries` ESLint rule prevents `apps/web` from importing `apps/api` internals; enforces scope-based architecture in CI.
-- **Generators** — `nx g @nx/react:lib ui-buttons` scaffolds a new library with the right config, tsconfig path mappings, and target definitions. Custom generators keep new packages consistent.
+- **Project graph (`nx graph`)**, renders an HTML graph of project dependencies; use it when a package shows up as "affected" unexpectedly.
+- **Module boundary tags**, the `tags` array in `project.json` plus `@nx/enforce-module-boundaries` ESLint rule prevents `apps/web` from importing `apps/api` internals; enforces scope-based architecture in CI.
+- **Generators**, `nx g @nx/react:lib ui-buttons` scaffolds a new library with the right config, tsconfig path mappings, and target definitions. Custom generators keep new packages consistent.
 
 ## 3. Turborepo
 
-Turborepo is the lighter JS/TS option: one `turbo.json`, a pipeline DAG, content-addressed caching, and Remote Cache via Vercel or a self-hosted S3-compatible store. No project files per package, no generators, no plugins — just `turbo run <task>` with `dependsOn` wiring. Start here for a 2–20 package repo on pnpm or Yarn.
+Turborepo is the lighter JS/TS option: one `turbo.json`, a pipeline DAG, content-addressed caching, and Remote Cache via Vercel or a self-hosted S3-compatible store. No project files per package, no generators, no plugins, just `turbo run <task>` with `dependsOn` wiring. Start here for a 2-20 package repo on pnpm or Yarn.
 
 ### Layout
 
@@ -234,13 +234,13 @@ The `...[origin/main]` filter means "every package that changed since `origin/ma
 
 ### Deep features worth learning
 
-- **Pipeline `dependsOn: ["^build"]`** — the caret means "build all upstream dependencies first." The most common cause of flaky monorepo CI is forgetting this and racing on stale dist output.
-- **`inputs` globs** — by default, `turbo` hashes the entire package. Scoping `inputs` to source files keeps the cache sharp when you only touched a README.
-- **Remote Cache** — push and pull cache artifacts across machines. The payoff: CI and local dev hit the same cache; a PR lint run finishes in seconds after a teammate's main-branch run warmed the cache.
+- **Pipeline `dependsOn: ["^build"]`**, the caret means "build all upstream dependencies first." The most common cause of flaky monorepo CI is forgetting this and racing on stale dist output.
+- **`inputs` globs**, by default, `turbo` hashes the entire package. Scoping `inputs` to source files keeps the cache sharp when you only touched a README.
+- **Remote Cache**, push and pull cache artifacts across machines. The payoff: CI and local dev hit the same cache; a PR lint run finishes in seconds after a teammate's main-branch run warmed the cache.
 
 ## 4. pnpm workspaces
 
-pnpm workspaces is the minimal option: a `pnpm-workspace.yaml`, `workspace:*` deps, `pnpm --filter` on the CLI. No orchestrator. Reach for this at 2–10 packages with some shared libs and no task-graph need. Graduate to Turborepo when you want `dependsOn` wiring.
+pnpm workspaces is the minimal option: a `pnpm-workspace.yaml`, `workspace:*` deps, `pnpm --filter` on the CLI. No orchestrator. Reach for this at 2-10 packages with some shared libs and no task-graph need. Graduate to Turborepo when you want `dependsOn` wiring.
 
 ### Layout
 
@@ -271,7 +271,7 @@ catalog:
   vitest: ^2.0.0
 ```
 
-The `catalog` block (pnpm 9.5+) centralises version pins — packages reference them as `"react": "catalog:"` instead of repeating `^18.3.0` across every `package.json`.
+The `catalog` block (pnpm 9.5+) centralises version pins, packages reference them as `"react": "catalog:"` instead of repeating `^18.3.0` across every `package.json`.
 
 ### Consumer `package.json` (`apps/web/package.json`)
 
@@ -291,7 +291,7 @@ The `catalog` block (pnpm 9.5+) centralises version pins — packages reference 
 }
 ```
 
-`workspace:*` resolves to the local package at install time; published artefacts get the real version number via `pnpm publish`'s version rewriting. `workspace:^` is "match the caret range"; `workspace:~` is "match the tilde range" — pick one convention and stick to it.
+`workspace:*` resolves to the local package at install time; published artefacts get the real version number via `pnpm publish`'s version rewriting. `workspace:^` is "match the caret range"; `workspace:~` is "match the tilde range", pick one convention and stick to it.
 
 ### Affected-only CI (GitHub Actions)
 
@@ -320,15 +320,15 @@ The `...` ancestor syntax matches Turborepo's. `pnpm --filter '@acme/web...'` se
 
 ### Deep features worth learning
 
-- **Catalogs** (pnpm 9.5+) — single source of truth for cross-package versions; kills "three packages on three different React minors" drift.
-- **`workspace:` protocol** — install-time vs publish-time resolution; get the rules right or published packages will point to unpublished workspace versions.
-- **`pnpm deploy`** — produces a fully resolved, flattened `node_modules` tree for a single package; ideal for Dockerfile `COPY` lines in multi-stage builds.
+- **Catalogs** (pnpm 9.5+), single source of truth for cross-package versions; kills "three packages on three different React minors" drift.
+- **`workspace:` protocol**, install-time vs publish-time resolution; get the rules right or published packages will point to unpublished workspace versions.
+- **`pnpm deploy`**, produces a fully resolved, flattened `node_modules` tree for a single package; ideal for Dockerfile `COPY` lines in multi-stage builds.
 
-For workspace-protocol semantics (`workspace:*`, `workspace:^`, `workspace:~`, `workspace:./path`), see [pnpm.io/workspaces](https://pnpm.io/workspaces) — resolver rules have sharp edges.
+For workspace-protocol semantics (`workspace:*`, `workspace:^`, `workspace:~`, `workspace:./path`), see [pnpm.io/workspaces](https://pnpm.io/workspaces), resolver rules have sharp edges.
 
 ## 5. yarn workspaces
 
-Yarn workspaces (Yarn 4, Berry line) is the feature-par alternative to pnpm workspaces for teams already on Yarn. Plug'n'Play (PnP) is optional — many teams stay on `nodeLinker: node-modules` for compatibility with tools that expect a real `node_modules` tree. The `yarn workspaces foreach --since` command is the native affected-only query.
+Yarn workspaces (Yarn 4, Berry line) is the feature-par alternative to pnpm workspaces for teams already on Yarn. Plug'n'Play (PnP) is optional, many teams stay on `nodeLinker: node-modules` for compatibility with tools that expect a real `node_modules` tree. The `yarn workspaces foreach --since` command is the native affected-only query.
 
 ### Layout
 
@@ -379,7 +379,7 @@ plugins:
     spec: "@yarnpkg/plugin-workspace-tools"
 ```
 
-`nodeLinker: pnp` enables Plug'n'Play — faster, stricter, but some tools (Next.js < 14, some TS language-server configs) need extra wiring. Start on `node-modules` and migrate to `pnp` intentionally.
+`nodeLinker: pnp` enables Plug'n'Play, faster, stricter, but some tools (Next.js < 14, some TS language-server configs) need extra wiring. Start on `node-modules` and migrate to `pnp` intentionally.
 
 ### Consumer `package.json` (`apps/web/package.json`)
 
@@ -421,13 +421,13 @@ jobs:
 
 ### Deep features worth learning
 
-- **Zero-installs** — commit `.yarn/cache` and skip `yarn install` in CI entirely. Trade-off: repo size grows. Best for repos with few deps changing often.
-- **Constraints** — declarative `yarn constraints` rules that enforce "every workspace must declare the same React version" or "no workspace may depend on `lodash`". Caught version drift that would otherwise silently diverge.
-- **`yarn workspaces foreach` with `-W`** — limits a command to workspaces matching a pattern; useful for running one command across the `apps/*` slice only.
+- **Zero-installs**, commit `.yarn/cache` and skip `yarn install` in CI entirely. Trade-off: repo size grows. Best for repos with few deps changing often.
+- **Constraints**, declarative `yarn constraints` rules that enforce "every workspace must declare the same React version" or "no workspace may depend on `lodash`". Caught version drift that would otherwise silently diverge.
+- **`yarn workspaces foreach` with `-W`**, limits a command to workspaces matching a pattern; useful for running one command across the `apps/*` slice only.
 
 ## 6. moon
 
-moon is the polyglot orchestrator — a Rust-written task runner that treats JavaScript, TypeScript, Go, Rust, Python, Ruby, and the rest as first-class with per-project toolchains, a task graph, file-hash-based caching, and an affected-only query (`moon query touched-files`). Reach for moon when one repo genuinely hosts more than one ecosystem and you want a single CLI instead of five.
+moon is the polyglot orchestrator, a Rust-written task runner that treats JavaScript, TypeScript, Go, Rust, Python, Ruby, and the rest as first-class with per-project toolchains, a task graph, file-hash-based caching, and an affected-only query (`moon query touched-files`). Reach for moon when one repo genuinely hosts more than one ecosystem and you want a single CLI instead of five.
 
 ### Layout
 
@@ -529,9 +529,9 @@ jobs:
 
 ### Deep features worth learning
 
-- **Toolchain pinning** — `moon` installs and manages the exact Node/Rust/Go/pnpm versions declared in `.moon/toolchain.yml`; no nvm/rustup/goenv dance per developer.
-- **Polyglot task graph** — a TS app can `dependsOn` a Rust crate; moon orders `cargo build` before `next build` automatically.
-- **Project tags + constraints** — `tags: ["frontend"]` plus `constraints` in `workspace.yml` enforce "frontend projects can't depend on backend projects"; monorepo-wide architecture rules in one place.
+- **Toolchain pinning**, `moon` installs and manages the exact Node/Rust/Go/pnpm versions declared in `.moon/toolchain.yml`; no nvm/rustup/goenv dance per developer.
+- **Polyglot task graph**, a TS app can `dependsOn` a Rust crate; moon orders `cargo build` before `next build` automatically.
+- **Project tags + constraints**, `tags: ["frontend"]` plus `constraints` in `workspace.yml` enforce "frontend projects can't depend on backend projects"; monorepo-wide architecture rules in one place.
 
 ## 7. Cargo workspaces
 
@@ -581,7 +581,7 @@ lto = "thin"
 codegen-units = 1
 ```
 
-`resolver = "2"` enables the Rust 2021 feature resolver — required for feature unification to behave correctly in workspaces. `default-members` controls which members run when you type `cargo build` at the root with no `-p`.
+`resolver = "2"` enables the Rust 2021 feature resolver, required for feature unification to behave correctly in workspaces. `default-members` controls which members run when you type `cargo build` at the root with no `-p`.
 
 ### Member `Cargo.toml` (`crates/cli/Cargo.toml`)
 
@@ -600,7 +600,7 @@ anyhow.workspace = true
 clap.workspace = true
 ```
 
-`.workspace = true` pulls the value from the root's `[workspace.package]` or `[workspace.dependencies]` — fields stay consistent across all crates without copy-paste.
+`.workspace = true` pulls the value from the root's `[workspace.package]` or `[workspace.dependencies]`, fields stay consistent across all crates without copy-paste.
 
 ### Affected-only CI (GitHub Actions)
 
@@ -637,13 +637,13 @@ jobs:
       - run: cargo test ${{ steps.changed.outputs.pkgs }}
 ```
 
-The changed-crate detection assumes a `crates/<name>/` → `acme-<name>` naming convention; adjust the `sed` for your scheme. For a small workspace (<10 crates), skip the filter and just run `cargo test --workspace` — it's simpler and Cargo's incremental compilation keeps it fast.
+The changed-crate detection assumes a `crates/<name>/` -> `acme-<name>` naming convention; adjust the `sed` for your scheme. For a small workspace (<10 crates), skip the filter and just run `cargo test --workspace`, it's simpler and Cargo's incremental compilation keeps it fast.
 
 ### Deep features worth learning
 
-- **Shared `[workspace.dependencies]`** — single source of truth for versions across every crate; eliminates "crate A pulls serde 1.0.150, crate B pulls 1.0.152" drift.
-- **Feature unification** — features enabled on a dep in one crate unify across the workspace under resolver v2; test with `cargo check -p <single-crate>` to surface hidden feature dependencies.
-- **`cargo-release` + `release-plz`** — workspace-aware release automation; bumps versions, writes `CHANGELOG.md`, and tags per-crate or workspace-wide. See [release-plz.ieni.dev](https://release-plz.ieni.dev).
+- **Shared `[workspace.dependencies]`**, single source of truth for versions across every crate; eliminates "crate A pulls serde 1.0.150, crate B pulls 1.0.152" drift.
+- **Feature unification**, features enabled on a dep in one crate unify across the workspace under resolver v2; test with `cargo check -p <single-crate>` to surface hidden feature dependencies.
+- **`cargo-release` + `release-plz`**, workspace-aware release automation; bumps versions, writes `CHANGELOG.md`, and tags per-crate or workspace-wide. See [release-plz.ieni.dev](https://release-plz.ieni.dev).
 
 ## 8. Go workspaces
 
@@ -740,17 +740,17 @@ For workspaces with <10 modules, `go test ./...` at the root runs tests across e
 
 ### Deep features worth learning
 
-- **`go work sync`** — rewrites each module's `go.sum` to match the workspace-resolved versions; run after updating shared deps.
-- **`go.work.sum`** — checksum file for workspace-resolved modules; commit this alongside `go.work` so CI sees the same resolution.
-- **Don't `replace` in `go.mod`** — the common pre-workspaces pattern of `replace github.com/acme/core => ../core` still works but is fragile (forgotten in PRs, breaks downstream consumers). Use `go.work` instead.
+- **`go work sync`**, rewrites each module's `go.sum` to match the workspace-resolved versions; run after updating shared deps.
+- **`go.work.sum`**, checksum file for workspace-resolved modules; commit this alongside `go.work` so CI sees the same resolution.
+- **Don't `replace` in `go.mod`**, the common pre-workspaces pattern of `replace github.com/acme/core => ../core` still works but is fragile (forgotten in PRs, breaks downstream consumers). Use `go.work` instead.
 
-## 9. Bazel and uv — brief mentions only
+## 9. Bazel and uv, brief mentions only
 
-**Bazel** is the enterprise-scale polyglot build system — hermetic builds, remote execution, cross-language correctness guarantees no other tool here matches. High fixed cost: `BUILD` files per directory, `WORKSPACE` / `MODULE.bazel` external dep wiring, and Starlark to learn. Reach for Bazel when (a) incremental rebuilds are the dominant bottleneck, (b) you have a dedicated build-engineering team, and (c) remote execution pays for itself. Overkill otherwise. Docs: [bazel.build/start](https://bazel.build/start); rules for [JS/TS](https://github.com/bazelbuild/rules_nodejs), [Go](https://github.com/bazelbuild/rules_go), [Rust](https://github.com/bazelbuild/rules_rust).
+**Bazel** is the enterprise-scale polyglot build system, hermetic builds, remote execution, cross-language correctness guarantees no other tool here matches. High fixed cost: `BUILD` files per directory, `WORKSPACE` / `MODULE.bazel` external dep wiring, and Starlark to learn. Reach for Bazel when (a) incremental rebuilds are the dominant bottleneck, (b) you have a dedicated build-engineering team, and (c) remote execution pays for itself. Overkill otherwise. Docs: [bazel.build/start](https://bazel.build/start); rules for [JS/TS](https://github.com/bazelbuild/rules_nodejs), [Go](https://github.com/bazelbuild/rules_go), [Rust](https://github.com/bazelbuild/rules_rust).
 
-**uv workspaces** (Python) arrived with uv 0.4+ (2024) — the closest Python has had to Cargo workspaces. Declare members in root `pyproject.toml` `[tool.uv.workspace]`; each member has its own `pyproject.toml`; `uv sync` resolves across the workspace. API is young — feature flags, lockfile layout, and publish semantics have shifted between minor versions. Docs: [docs.astral.sh/uv/concepts/workspaces](https://docs.astral.sh/uv/concepts/workspaces/). For conservative repos, per-package `pyproject.toml` managed by Poetry or Hatch with path deps during local dev still works.
+**uv workspaces** (Python) arrived with uv 0.4+ (2024), the closest Python has had to Cargo workspaces. Declare members in root `pyproject.toml` `[tool.uv.workspace]`; each member has its own `pyproject.toml`; `uv sync` resolves across the workspace. API is young, feature flags, lockfile layout, and publish semantics have shifted between minor versions. Docs: [docs.astral.sh/uv/concepts/workspaces](https://docs.astral.sh/uv/concepts/workspaces/). For conservative repos, per-package `pyproject.toml` managed by Poetry or Hatch with path deps during local dev still works.
 
-## 10. Affected-only CI patterns — cross-tool summary
+## 10. Affected-only CI patterns, cross-tool summary
 
 Every mature monorepo runs CI only against PR-touched packages; full-repo CI past ~20 packages is where reviewers stop waiting and merge on green-from-last-week. The hooks each tool exposes:
 
@@ -761,15 +761,15 @@ Every mature monorepo runs CI only against PR-touched packages; full-repo CI pas
 | pnpm workspaces | `pnpm --filter '...[origin/main]' test` | `pnpm/action-setup@v4` + `fetch-depth: 0` | Shares filter syntax with Turborepo; works without a task runner |
 | yarn workspaces | `yarn workspaces foreach --since=origin/main run test` | `corepack enable` + `fetch-depth: 0` | `--since` compares against a ref, not a PR-specific base; set the ref explicitly |
 | moon | `moon ci` | `moonrepo/setup-toolchain@v0`; sharding via `--job=N --job-total=M` | Computes affected graph automatically from `git diff` against `vcs.defaultBranch` |
-| Cargo workspaces | `cargo test -p <changed-pkgs>` via `git diff` | No native affected; glue-script `git diff` → crate list → `-p` args | For <10 crates, skip filter and run `cargo test --workspace` |
-| Go workspaces | `go test $(changed-modules)` via `git diff` | No native affected; walk `git diff` → module dirs containing `go.mod` | For <10 modules, skip filter and run `go test ./...` at root |
+| Cargo workspaces | `cargo test -p <changed-pkgs>` via `git diff` | No native affected; glue-script `git diff` -> crate list -> `-p` args | For <10 crates, skip filter and run `cargo test --workspace` |
+| Go workspaces | `go test $(changed-modules)` via `git diff` | No native affected; walk `git diff` -> module dirs containing `go.mod` | For <10 modules, skip filter and run `go test ./...` at root |
 
 **Shared rules across all seven:**
 
-- **`fetch-depth: 0`** (or `2` for Turborepo) on `actions/checkout` is mandatory — shallow clones have no base to diff against.
+- **`fetch-depth: 0`** (or `2` for Turborepo) on `actions/checkout` is mandatory, shallow clones have no base to diff against.
 - **Run affected-only on PRs, full on main.** The main-branch run warms the cache and catches drift the PR filter missed.
-- **Don't short-circuit format/lint.** Even affected-only CI should run formatter checks on the whole repo — formatter misses creep in as "untouched" config edits.
-- **Pair with caching.** Affected filtering reduces work; remote caching reduces repeated work. Nx Cloud, Turbo Remote Cache, moon's `archivableTargets`, `Swatinem/rust-cache`, `actions/setup-go` `cache: true` — set one up before the affected filter, not after.
+- **Don't short-circuit format/lint.** Even affected-only CI should run formatter checks on the whole repo, formatter misses creep in as "untouched" config edits.
+- **Pair with caching.** Affected filtering reduces work; remote caching reduces repeated work. Nx Cloud, Turbo Remote Cache, moon's `archivableTargets`, `Swatinem/rust-cache`, `actions/setup-go` `cache: true`, set one up before the affected filter, not after.
 
 ## 11. Per-package changelog strategy
 
@@ -795,7 +795,7 @@ Three working patterns. Pick one per repo and stick to it.
 }
 ```
 
-`linked` keeps the listed packages on the same version (e.g., a Next app and its docs site that ship together). `fixed` is stricter — fixed packages always share a version even when unrelated. `updateInternalDependencies: patch` auto-bumps a package when a workspace dep it consumes gets any version bump, preventing downstream consumers from pointing at stale internal versions.
+`linked` keeps the listed packages on the same version (e.g., a Next app and its docs site that ship together). `fixed` is stricter, fixed packages always share a version even when unrelated. `updateInternalDependencies: patch` auto-bumps a package when a workspace dep it consumes gets any version bump, preventing downstream consumers from pointing at stale internal versions.
 
 Release workflow (GitHub Actions):
 
@@ -828,18 +828,18 @@ The action opens (or updates) a "Version Packages" PR each time changesets land 
 
 ### Pattern B: Language-native release tools (Rust / Go)
 
-- **Rust — `release-plz`** ([release-plz.ieni.dev](https://release-plz.ieni.dev)) opens a PR per push to main with `Cargo.toml` version bumps, updated `CHANGELOG.md` files (Keep-a-Changelog format), and on merge runs `cargo publish` for each changed crate in dependency order. Configure via `release-plz.toml` at the repo root.
-- **Rust — `cargo-release`** ([crates.io/crates/cargo-release](https://crates.io/crates/cargo-release)) is the manual alternative; run `cargo release minor -p <crate>` to bump and publish one crate at a time.
-- **Go — `goreleaser`** ([goreleaser.com](https://goreleaser.com)) handles binary builds, archives, and GitHub releases per module. Changelogs are generated from conventional commits via the `changelog` section of `.goreleaser.yaml`.
-- **Language-agnostic — `release-please`** (Google, [github.com/googleapis/release-please](https://github.com/googleapis/release-please)) works across Rust, Go, Python, JS, Java in a single monorepo; reads conventional commits, opens a release PR per changed package, writes per-package `CHANGELOG.md`.
+- **Rust, `release-plz`** ([release-plz.ieni.dev](https://release-plz.ieni.dev)) opens a PR per push to main with `Cargo.toml` version bumps, updated `CHANGELOG.md` files (Keep-a-Changelog format), and on merge runs `cargo publish` for each changed crate in dependency order. Configure via `release-plz.toml` at the repo root.
+- **Rust, `cargo-release`** ([crates.io/crates/cargo-release](https://crates.io/crates/cargo-release)) is the manual alternative; run `cargo release minor -p <crate>` to bump and publish one crate at a time.
+- **Go, `goreleaser`** ([goreleaser.com](https://goreleaser.com)) handles binary builds, archives, and GitHub releases per module. Changelogs are generated from conventional commits via the `changelog` section of `.goreleaser.yaml`.
+- **Language-agnostic, `release-please`** (Google, [github.com/googleapis/release-please](https://github.com/googleapis/release-please)) works across Rust, Go, Python, JS, Java in a single monorepo; reads conventional commits, opens a release PR per changed package, writes per-package `CHANGELOG.md`.
 
 ### Pattern C: Manual per-package `CHANGELOG.md`
 
-For small repos (<5 packages) or repos where releases are coordinated by hand, keep one `CHANGELOG.md` per package following [Keep a Changelog](https://keepachangelog.com). Contributors update the relevant package's changelog in their PR. The root has no changelog — only packages do.
+For small repos (<5 packages) or repos where releases are coordinated by hand, keep one `CHANGELOG.md` per package following [Keep a Changelog](https://keepachangelog.com). Contributors update the relevant package's changelog in their PR. The root has no changelog, only packages do.
 
-### One-root vs per-package — which?
+### One-root vs per-package, which?
 
-**Per-package changelog** wins when packages release independently (a utils lib moves faster than the app that consumes it). **One root changelog** wins when packages always ship together (fixed versioning, single published artefact). Don't do both — readers will never know which is authoritative. If you must have both, the root changelog links to per-package files; it does not duplicate entries.
+**Per-package changelog** wins when packages release independently (a utils lib moves faster than the app that consumes it). **One root changelog** wins when packages always ship together (fixed versioning, single published artefact). Don't do both, readers will never know which is authoritative. If you must have both, the root changelog links to per-package files; it does not duplicate entries.
 
 ## 12. Root-vs-package boundary rules
 
@@ -856,7 +856,7 @@ Fastest way to kill a monorepo: let everybody edit everything at the root. These
 | Member `Cargo.toml` `[dependencies]` | **Package** | Per-crate feature flags, path deps, dev-deps |
 | `go.work` | **Root only** | Workspace manifest; never committed at package level |
 | Module `go.mod` | **Package** | Each module declares its own deps; `go.work` composes them |
-| CI config (`.github/workflows/`, `.gitlab-ci.yml`) | **Root only** | One CI surface per repo; per-package CI forks are an anti-pattern — use affected filters instead |
+| CI config (`.github/workflows/`, `.gitlab-ci.yml`) | **Root only** | One CI surface per repo; per-package CI forks are an anti-pattern, use affected filters instead |
 | `.gitignore` | **Root** (shared) + **package** (package-specific artefacts) | Language artefacts (`node_modules`, `target/`, `dist/`) at root; package-local test fixtures at the package |
 | `LICENSE` | **Root** (default) + **package** (only when a package needs a different license) | Most packages inherit the root license; document overrides in each package's `package.json` `license` field |
 | `README.md` | **Root** (repo overview) + **package** (per-package README) | Root README orients contributors; package READMEs describe that package's API and local dev loop |
@@ -879,20 +879,20 @@ Failure modes that reliably eat monorepos in year two. All are recoverable; all 
 7. **Full-repo CI past 20 packages.** Every PR runs every test; queue time climbs until PRs land on stale bases. **Fix:** affected-only on PRs (§10); full-workspace CI on main and nightly.
 8. **Per-package CI forks.** Each package has its own `.github/workflows/pkg-X.yml`. Drift is inevitable; onboarding a new package means copy-pasting YAML. **Fix:** one root workflow using the tool's affected filter; matrices only for truly per-package config (e.g., deploy targets).
 9. **Root `package.json` as dumping ground.** Deps used by one package creep into the root; the root becomes the biggest package. **Fix:** root has only `devDependencies` (orchestrator, formatters, commit-linters). Runtime deps live in the package that uses them.
-10. **No "why is this a monorepo" answer.** Three repos get cargo-culted into one because "monorepo is modern," nothing is actually shared, and every CI run costs 3× what separate repos would. **Fix:** before starting, write down what you expect to share. Empty list → keep the repos separate.
+10. **No "why is this a monorepo" answer.** Three repos get cargo-culted into one because "monorepo is modern," nothing is actually shared, and every CI run costs 3× what separate repos would. **Fix:** before starting, write down what you expect to share. Empty list -> keep the repos separate.
 
 ## Sources
 
-- **Nx** — [nx.dev/concepts/mental-model](https://nx.dev/concepts/mental-model), [nx.dev/ci/features/affected](https://nx.dev/ci/features/affected), [nx.dev/recipes/running-tasks/configure-inputs](https://nx.dev/recipes/running-tasks/configure-inputs)
-- **Turborepo** — [turbo.build/repo/docs/crafting-your-repository](https://turbo.build/repo/docs/crafting-your-repository), [turbo.build/repo/docs/crafting-your-repository/running-tasks#using-filters](https://turbo.build/repo/docs/crafting-your-repository/running-tasks#using-filters)
-- **pnpm** — [pnpm.io/workspaces](https://pnpm.io/workspaces), [pnpm.io/catalogs](https://pnpm.io/catalogs), [pnpm.io/filtering](https://pnpm.io/filtering)
-- **yarn** — [yarnpkg.com/features/workspaces](https://yarnpkg.com/features/workspaces), [yarnpkg.com/cli/workspaces/foreach](https://yarnpkg.com/cli/workspaces/foreach), [yarnpkg.com/features/constraints](https://yarnpkg.com/features/constraints)
-- **moon** — [moonrepo.dev/docs](https://moonrepo.dev/docs), [moonrepo.dev/docs/config/workspace](https://moonrepo.dev/docs/config/workspace), [moonrepo.dev/docs/guides/ci](https://moonrepo.dev/docs/guides/ci)
-- **Cargo workspaces** — [doc.rust-lang.org/cargo/reference/workspaces.html](https://doc.rust-lang.org/cargo/reference/workspaces.html), [doc.rust-lang.org/cargo/reference/resolver.html](https://doc.rust-lang.org/cargo/reference/resolver.html)
-- **Go workspaces** — [go.dev/ref/mod#workspaces](https://go.dev/ref/mod#workspaces), [go.dev/blog/get-familiar-with-workspaces](https://go.dev/blog/get-familiar-with-workspaces)
-- **Bazel** — [bazel.build/start](https://bazel.build/start), [bazelbuild/rules_nodejs](https://github.com/bazelbuild/rules_nodejs), [bazelbuild/rules_go](https://github.com/bazelbuild/rules_go), [bazelbuild/rules_rust](https://github.com/bazelbuild/rules_rust)
-- **uv workspaces** — [docs.astral.sh/uv/concepts/workspaces](https://docs.astral.sh/uv/concepts/workspaces/)
-- **Changesets** — [github.com/changesets/changesets](https://github.com/changesets/changesets)
-- **release-plz (Rust)** — [release-plz.ieni.dev](https://release-plz.ieni.dev)
-- **release-please (polyglot)** — [github.com/googleapis/release-please](https://github.com/googleapis/release-please)
-- **Keep a Changelog** — [keepachangelog.com](https://keepachangelog.com)
+- **Nx**, [nx.dev/concepts/mental-model](https://nx.dev/concepts/mental-model), [nx.dev/ci/features/affected](https://nx.dev/ci/features/affected), [nx.dev/recipes/running-tasks/configure-inputs](https://nx.dev/recipes/running-tasks/configure-inputs)
+- **Turborepo**, [turbo.build/repo/docs/crafting-your-repository](https://turbo.build/repo/docs/crafting-your-repository), [turbo.build/repo/docs/crafting-your-repository/running-tasks#using-filters](https://turbo.build/repo/docs/crafting-your-repository/running-tasks#using-filters)
+- **pnpm**, [pnpm.io/workspaces](https://pnpm.io/workspaces), [pnpm.io/catalogs](https://pnpm.io/catalogs), [pnpm.io/filtering](https://pnpm.io/filtering)
+- **yarn**, [yarnpkg.com/features/workspaces](https://yarnpkg.com/features/workspaces), [yarnpkg.com/cli/workspaces/foreach](https://yarnpkg.com/cli/workspaces/foreach), [yarnpkg.com/features/constraints](https://yarnpkg.com/features/constraints)
+- **moon**, [moonrepo.dev/docs](https://moonrepo.dev/docs), [moonrepo.dev/docs/config/workspace](https://moonrepo.dev/docs/config/workspace), [moonrepo.dev/docs/guides/ci](https://moonrepo.dev/docs/guides/ci)
+- **Cargo workspaces**, [doc.rust-lang.org/cargo/reference/workspaces.html](https://doc.rust-lang.org/cargo/reference/workspaces.html), [doc.rust-lang.org/cargo/reference/resolver.html](https://doc.rust-lang.org/cargo/reference/resolver.html)
+- **Go workspaces**, [go.dev/ref/mod#workspaces](https://go.dev/ref/mod#workspaces), [go.dev/blog/get-familiar-with-workspaces](https://go.dev/blog/get-familiar-with-workspaces)
+- **Bazel**, [bazel.build/start](https://bazel.build/start), [bazelbuild/rules_nodejs](https://github.com/bazelbuild/rules_nodejs), [bazelbuild/rules_go](https://github.com/bazelbuild/rules_go), [bazelbuild/rules_rust](https://github.com/bazelbuild/rules_rust)
+- **uv workspaces**, [docs.astral.sh/uv/concepts/workspaces](https://docs.astral.sh/uv/concepts/workspaces/)
+- **Changesets**, [github.com/changesets/changesets](https://github.com/changesets/changesets)
+- **release-plz (Rust)**, [release-plz.ieni.dev](https://release-plz.ieni.dev)
+- **release-please (polyglot)**, [github.com/googleapis/release-please](https://github.com/googleapis/release-please)
+- **Keep a Changelog**, [keepachangelog.com](https://keepachangelog.com)

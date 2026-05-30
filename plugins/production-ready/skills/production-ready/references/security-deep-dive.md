@@ -43,7 +43,7 @@ Modern users have multiple devices. Don't block concurrent sessions outright. In
 ### Session binding
 
 Tie sessions to contextual attributes:
-- **User-agent**: store at creation, flag if it changes (don't kill — browser updates change it). Log the mismatch.
+- **User-agent**: store at creation, flag if it changes (don't kill, browser updates change it). Log the mismatch.
 - **IP range**: if IP changes dramatically (different /16 or different country), prompt re-authentication.
 - **Fingerprint**: hash user-agent + accept-language + timezone. Cheap anomaly detection.
 
@@ -76,7 +76,7 @@ Admin capability to kill sessions:
 - Kill all sessions globally (incident response).
 - Kill a specific session (targeted revocation).
 
-This is why server-side sessions (Redis, database) are preferred over JWTs for dashboards — JWTs can't be revoked without a blocklist.
+This is why server-side sessions (Redis, database) are preferred over JWTs for dashboards, JWTs can't be revoked without a blocklist.
 
 ### Session storage tradeoffs
 
@@ -97,7 +97,7 @@ This is why server-side sessions (Redis, database) are preferred over JWTs for d
 2. **Store:** hash with SHA-256 (API keys are already high-entropy, unlike passwords). Look up by hash.
 3. **Scope:** permissions per key (read-only, read-write, admin) + optional resource scoping.
 4. **Rate limit per key:** separate from per-user limits. A misbehaving integration shouldn't exhaust the user's other integrations.
-5. **Rotate:** support key pairs — create new, update integration, delete old. Both work during overlap.
+5. **Rotate:** support key pairs, create new, update integration, delete old. Both work during overlap.
 6. **Expire:** optional expiration date. Audit keys unused for 90 days and suggest revocation.
 
 ### API versioning
@@ -157,9 +157,9 @@ Prevents: double-charges, duplicate creates, retry-caused duplicates.
 
 Maintain a data inventory: every table, which columns contain PII, classification level, who has access, retention policy.
 
-### Encryption at rest — layered approach
+### Encryption at rest, layered approach
 
-1. **Database-level TDE:** encrypts entire database on disk. Protects against physical theft, file system access. Baseline — enable it on every database.
+1. **Database-level TDE:** encrypts entire database on disk. Protects against physical theft, file system access. Baseline, enable it on every database.
 2. **Column-level encryption:** encrypt specific PII columns. Protects against SQL injection (attacker gets ciphertext), database dumps, backup exposure.
 3. **Application-level encryption:** encrypt before data reaches the database. Maximum protection. Use envelope encryption: data key (DEK) encrypts data, key encryption key (KEK) from KMS encrypts DEK. Allows key rotation without re-encrypting all data.
 
@@ -212,9 +212,9 @@ Use pseudonymization for non-prod (can restore for debugging). Use anonymization
 
 ### Download security
 
-- `Content-Disposition: attachment` — forces download, prevents rendering.
-- `X-Content-Type-Options: nosniff` — prevents MIME-sniffing.
-- **Serve from a different origin** (`files.example.com`, not `dashboard.example.com`) — isolates any script execution from dashboard cookies.
+- `Content-Disposition: attachment`, forces download, prevents rendering.
+- `X-Content-Type-Options: nosniff`, prevents MIME-sniffing.
+- **Serve from a different origin** (`files.example.com`, not `dashboard.example.com`), isolates any script execution from dashboard cookies.
 
 ### Presigned URLs
 
@@ -233,7 +233,7 @@ Never use user-supplied filenames in paths. Rename to UUID on upload:
 const filename = crypto.randomUUID() + path.extname(originalName);
 ```
 
-Use object storage (S3, R2, GCS) — no directory structure to traverse.
+Use object storage (S3, R2, GCS), no directory structure to traverse.
 
 ### File type allowlists
 
@@ -245,8 +245,8 @@ Allowlist (not blocklist) the exact types you accept. Reject everything else. A 
 
 ### Environment variable patterns
 
-- **`.env.local`** — actual secrets. Never committed. In `.gitignore`.
-- **`.env.example`** — committed. Every variable name with empty/placeholder values. Documentation for new developers.
+- **`.env.local`**, actual secrets. Never committed. In `.gitignore`.
+- **`.env.example`**, committed. Every variable name with empty/placeholder values. Documentation for new developers.
 - **Validation on startup:** use a schema (Zod, envalid, pydantic) to verify all required vars are present. Fail fast with clear error.
 
 ### Secrets in CI/CD
@@ -274,11 +274,11 @@ Allowlist (not blocklist) the exact types you accept. Reject everything else. A 
 
 ### When a secret leaks
 
-1. **Rotate immediately** — generate new secret, deploy. Before investigating.
+1. **Rotate immediately**, generate new secret, deploy. Before investigating.
 2. **Revoke the old secret** in the service that issued it.
 3. **Audit** access logs for unauthorized use.
-4. **Scrub from git** — `git filter-repo` or BFG Repo-Cleaner. Force-push.
-5. **Post-mortem** — how did it get committed? Add pre-commit hooks.
+4. **Scrub from git**, `git filter-repo` or BFG Repo-Cleaner. Force-push.
+5. **Post-mortem**, how did it get committed? Add pre-commit hooks.
 6. **Notify** if the leak could have exposed user data.
 
 ---
@@ -305,8 +305,8 @@ Allowlist (not blocklist) the exact types you accept. Reject everything else. A 
 
 User input in logs can forge entries (inject newlines) or exploit parsing tools.
 
-- Use structured logging (JSON) — newlines are escaped in strings.
-- Use a logging library (pino, winston, structlog) — not string concatenation.
+- Use structured logging (JSON), newlines are escaped in strings.
+- Use a logging library (pino, winston, structlog), not string concatenation.
 - Never pass user input as the log format string.
 
 ### Structured format
@@ -351,7 +351,7 @@ Route: PagerDuty for critical (credential stuffing, escalation), Slack for warni
 
 ### The threat landscape (2025-2026)
 
-Supply chain attacks have escalated. In September 2025, 18 popular npm packages (including `debug` and `chalk`) were hijacked — 2.6 billion combined weekly downloads. In February 2026, the "SANDWORM_MODE" attack used 19 typosquatting packages that spread worm-like, stealing API keys and SSH keys.
+Supply chain attacks have escalated. In September 2025, 18 popular npm packages (including `debug` and `chalk`) were hijacked, 2.6 billion combined weekly downloads. In February 2026, the "SANDWORM_MODE" attack used 19 typosquatting packages that spread worm-like, stealing API keys and SSH keys.
 
 Attack vectors:
 - **Typosquatting:** `axois` instead of `axios`.
@@ -363,7 +363,7 @@ Attack vectors:
 ### Lockfile integrity
 
 - Always commit lockfiles.
-- Use `npm ci` (not `npm install`) in CI — fails if lockfile doesn't match package.json.
+- Use `npm ci` (not `npm install`) in CI, fails if lockfile doesn't match package.json.
 - Verify lockfile hasn't changed from what was committed.
 
 ### Scanning tools
@@ -373,7 +373,7 @@ Attack vectors:
 | `npm audit` / `pip audit` | Known CVEs |
 | Dependabot / Renovate | Auto-creates update PRs |
 | Snyk | Deep vulnerability DB, fix PRs, license compliance |
-| **Socket.dev** | Behavioral analysis — typosquatting, install-time network requests, obfuscated code. Catches what `npm audit` misses. |
+| **Socket.dev** | Behavioral analysis, typosquatting, install-time network requests, obfuscated code. Catches what `npm audit` misses. |
 | TruffleHog | Leaked secrets in code and dependencies |
 
 ### SCA in CI

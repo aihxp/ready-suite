@@ -2,7 +2,7 @@
 
 39-point scorecard for evaluating repository health. Used by the skill in two modes: audit mode (score an existing repo) and verification mode (confirm setup is complete before declaring a tier done).
 
-Every item has a check method, a pass criteria, a fail criteria, and a fix. No subjective judgment calls — each item is binary pass/fail.
+Every item has a check method, a pass criteria, a fail criteria, and a fix. No subjective judgment calls, each item is binary pass/fail.
 
 ---
 
@@ -125,7 +125,7 @@ test -f .editorconfig && grep -q 'indent_style' .editorconfig
 
 **Fail:** File missing or present but effectively empty (no `indent_style` defined).
 
-**Fix:** Create `.editorconfig` matching the project's existing style. Detect indent style from source files before generating — do not impose a style that conflicts with what's already committed.
+**Fix:** Create `.editorconfig` matching the project's existing style. Detect indent style from source files before generating, do not impose a style that conflicts with what's already committed.
 
 ---
 
@@ -168,7 +168,7 @@ git ls-files | grep -E '\.env$|\.env\.local$|\.env\.production$'
 
 **Pass:** No `.env` files tracked in git. No hardcoded API keys, passwords, or private keys in source. No credential files (`.pem`, `.key`, `.p12`) in the repository.
 
-**Fail:** Any secret file tracked. Any hardcoded credential found in source. Any `.env` file committed (`.env.example` is fine — `.env` is not).
+**Fail:** Any secret file tracked. Any hardcoded credential found in source. Any `.env` file committed (`.env.example` is fine, `.env` is not).
 
 **Fix:** Remove secrets from git history with `git filter-repo` or BFG Repo Cleaner. Add secret patterns to `.gitignore`. Rotate any exposed credentials immediately. Consider enabling GitHub secret scanning.
 
@@ -454,10 +454,10 @@ test -f tsconfig.json && grep -q '"strict"' tsconfig.json 2>/dev/null
 grep -qE '\[tool\.(mypy|pyright)\]' pyproject.toml 2>/dev/null || \
   test -f mypy.ini || test -f pyrightconfig.json
 
-# Languages with built-in type systems (Go, Rust, Java, C#) — auto-pass
+# Languages with built-in type systems (Go, Rust, Java, C#), auto-pass
 ```
 
-**Pass:** For TypeScript: `tsconfig.json` exists with `strict: true` (or equivalent strict settings). For Python: mypy or pyright configured. For statically typed languages (Go, Rust, Java, C#, Swift): automatic pass — the compiler is the type checker. Type checker runs in CI.
+**Pass:** For TypeScript: `tsconfig.json` exists with `strict: true` (or equivalent strict settings). For Python: mypy or pyright configured. For statically typed languages (Go, Rust, Java, C#, Swift): automatic pass, the compiler is the type checker. Type checker runs in CI.
 
 **Fail:** TypeScript project without `tsconfig.json` or with `strict: false` and no alternate strict settings. Python project using type hints but no type checker configured.
 
@@ -539,7 +539,7 @@ grep -rl 'snyk' .github/workflows/ 2>/dev/null
 
 **Check:**
 ```bash
-# GitHub CLI — check branch protection rules
+# GitHub CLI, check branch protection rules
 gh api repos/{owner}/{repo}/branches/main/protection 2>/dev/null | \
   grep -oE '"required_pull_request_reviews|required_status_checks"'
 
@@ -572,7 +572,7 @@ govulncheck ./... 2>/dev/null | tail -5
 # Rust
 cargo audit 2>/dev/null | tail -5
 
-# GitHub CLI — check Dependabot alerts
+# GitHub CLI, check Dependabot alerts
 gh api repos/{owner}/{repo}/dependabot/alerts --jq '[.[] | select(.state=="open")] | length' 2>/dev/null
 ```
 
@@ -588,7 +588,7 @@ gh api repos/{owner}/{repo}/dependabot/alerts --jq '[.[] | select(.state=="open"
 
 **Check:**
 ```bash
-# GitHub — check if push protection is enabled
+# GitHub, check if push protection is enabled
 gh api repos/{owner}/{repo} --jq '.security_and_analysis.secret_scanning.status' 2>/dev/null
 gh api repos/{owner}/{repo} --jq '.security_and_analysis.secret_scanning_push_protection.status' 2>/dev/null
 ```
@@ -626,7 +626,7 @@ cargo outdated 2>/dev/null | tail -20
 
 ---
 
-## Category 5: DX — Developer Experience (6 points)
+## Category 5: DX, Developer Experience (6 points)
 
 The onboarding layer. If a new contributor can't go from clone to running in five minutes, these are failing.
 
@@ -991,7 +991,7 @@ if command -v gh &>/dev/null && gh auth status &>/dev/null 2>&1; then
   [ "$label_count" -gt 5 ] \
     && pass "2.7 Labels configured ($label_count labels)" || fail "2.7 Labels not configured"
 else
-  fail "2.7 Labels — cannot check (gh CLI not authenticated)"
+  fail "2.7 Labels, cannot check (gh CLI not authenticated)"
 fi
 
 # === QUALITY ===
@@ -1059,7 +1059,7 @@ if command -v gh &>/dev/null && gh auth status &>/dev/null 2>&1; then
   gh api repos/{owner}/{repo}/branches/main/protection &>/dev/null \
     && pass "4.3 Branch protection on main" || fail "4.3 No branch protection"
 else
-  fail "4.3 Branch protection — cannot check (gh CLI not authenticated)"
+  fail "4.3 Branch protection, cannot check (gh CLI not authenticated)"
 fi
 
 # 4.4 No vulnerable deps (basic check)
@@ -1078,7 +1078,7 @@ if command -v gh &>/dev/null && gh auth status &>/dev/null 2>&1; then
   [ "$ss_status" = "enabled" ] \
     && pass "4.5 Secret scanning enabled" || fail "4.5 Secret scanning not enabled"
 else
-  fail "4.5 Secret scanning — cannot check (gh CLI not authenticated)"
+  fail "4.5 Secret scanning, cannot check (gh CLI not authenticated)"
 fi
 
 # 4.6 Dependencies up to date (heuristic: check Dependabot PR count)
@@ -1087,7 +1087,7 @@ if command -v gh &>/dev/null && gh auth status &>/dev/null 2>&1; then
   [ "${dep_prs:-0}" -lt 10 ] \
     && pass "4.6 Dependencies reasonably current" || fail "4.6 Too many open dependency PRs ($dep_prs)"
 else
-  fail "4.6 Dependency freshness — cannot check (gh CLI not authenticated)"
+  fail "4.6 Dependency freshness, cannot check (gh CLI not authenticated)"
 fi
 
 # === DX ===
@@ -1160,7 +1160,7 @@ if command -v gh &>/dev/null && gh auth status &>/dev/null 2>&1; then
   [ "${release_count:-0}" -gt 0 ] \
     && pass "6.5 GitHub Releases exist" || fail "6.5 No GitHub Releases"
 else
-  fail "6.5 GitHub Releases — cannot check (gh CLI not authenticated)"
+  fail "6.5 GitHub Releases, cannot check (gh CLI not authenticated)"
 fi
 
 # 6.6 CODEOWNERS
@@ -1201,7 +1201,7 @@ Use this format when reporting audit results to the user:
 ```
 ## Repo Health Audit: {project-name}
 
-**Score: {score}/39 — {rating}**
+**Score: {score}/39, {rating}**
 
 ### Summary
 - Essentials: {n}/7
@@ -1238,4 +1238,4 @@ Order fixes by impact: Essentials > Security > Quality > Community > DX > Releas
 
 **Enhancement mode (Mode B):** Run the scorecard to determine the current tier. Use failures to build the work list for advancing to the next tier.
 
-The scorecard is the single source of truth for "is this repo ready?" If the scorecard says it fails, it fails — regardless of how the files look at a glance.
+The scorecard is the single source of truth for "is this repo ready?" If the scorecard says it fails, it fails, regardless of how the files look at a glance.

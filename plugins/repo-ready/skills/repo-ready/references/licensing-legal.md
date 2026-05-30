@@ -1,6 +1,6 @@
 # Licensing, Legal, and Compliance
 
-Reference for license selection, contributor agreements, compliance documents, and dependency scanning. This file covers the legal surface area of a repository — from choosing a license to scanning dependencies for compatibility.
+Reference for license selection, contributor agreements, compliance documents, and dependency scanning. This file covers the legal surface area of a repository, from choosing a license to scanning dependencies for compatibility.
 
 **Not legal advice.** This reference provides practical guidance for common scenarios. Consult a lawyer for anything involving regulated industries, dual licensing, or commercial relicensing.
 
@@ -11,7 +11,7 @@ Reference for license selection, contributor agreements, compliance documents, a
 Use this decision tree to pick a license. Start at the top, follow the branch that matches your intent.
 
 ```
-START → What is your goal?
+START -> What is your goal?
 │
 ├─ Maximum adoption, minimum friction?
 │   └─ MIT (SPDX: MIT)
@@ -56,7 +56,7 @@ START → What is your goal?
 ├─ Documentation or creative content (not code)?
 │   └─ Creative Commons
 │      CC BY 4.0 for attribution-only. CC BY-SA 4.0 for share-alike.
-│      Never use CC for code — it doesn't address patents or software distribution.
+│      Never use CC for code, it doesn't address patents or software distribution.
 │
 └─ Dual licensing (open source + commercial)?
     └─ GPL v3 or AGPL v3 for the open source track.
@@ -93,7 +93,7 @@ For each license: what it permits, what it requires, what it restricts, and the 
 - **Permits:** Commercial use, modification, distribution, private use, sublicensing
 - **Requires:** License and copyright notice included in copies
 - **Restricts:** Nothing. No warranty, no liability.
-- **Notes:** The most popular open source license. Two paragraphs. No ambiguity. If your only goal is "let people use this," MIT is the answer. Does not include an explicit patent grant — this is its one weakness compared to Apache 2.0.
+- **Notes:** The most popular open source license. Two paragraphs. No ambiguity. If your only goal is "let people use this," MIT is the answer. Does not include an explicit patent grant, this is its one weakness compared to Apache 2.0.
 
 #### Apache License 2.0
 
@@ -125,7 +125,7 @@ For each license: what it permits, what it requires, what it restricts, and the 
 - **Permits:** Commercial use, modification, distribution, private use
 - **Requires:** License and copyright notice
 - **Restricts:** Nothing. No warranty, no liability.
-- **Notes:** Functionally equivalent to MIT but with simpler language. Preferred by OpenBSD and some npm packages. Two sentences instead of MIT's two paragraphs. Use MIT instead for new projects — it's better understood.
+- **Notes:** Functionally equivalent to MIT but with simpler language. Preferred by OpenBSD and some npm packages. Two sentences instead of MIT's two paragraphs. Use MIT instead for new projects, it's better understood.
 
 ### Copyleft licenses
 
@@ -135,7 +135,7 @@ For each license: what it permits, what it requires, what it restricts, and the 
 - **Permits:** Commercial use, modification, distribution
 - **Requires:** Source code disclosure, license and copyright notice, state changes, same license for derivative works
 - **Restricts:** Sublicensing (copyleft terms pass through). No warranty, no liability.
-- **Notes:** The Linux kernel uses GPL v2-only. The key difference from v3: no explicit patent grant, no anti-tivoization clause. Projects locked to GPL-2.0-only cannot upgrade to v3. New projects should use GPL v3 unless they have a specific reason to use v2. **GPL v2 is incompatible with Apache 2.0** — this is one of the most common license conflicts.
+- **Notes:** The Linux kernel uses GPL v2-only. The key difference from v3: no explicit patent grant, no anti-tivoization clause. Projects locked to GPL-2.0-only cannot upgrade to v3. New projects should use GPL v3 unless they have a specific reason to use v2. **GPL v2 is incompatible with Apache 2.0**, this is one of the most common license conflicts.
 
 #### GPL v3
 
@@ -159,14 +159,14 @@ For each license: what it permits, what it requires, what it restricts, and the 
 - **Permits:** Commercial use, modification, distribution, patent use
 - **Requires:** Everything GPL v3 requires + source code must be provided to users who interact with the software over a network
 - **Restricts:** Running modified versions as a service without sharing source. No warranty, no liability.
-- **Notes:** Closes the "SaaS loophole" in GPL. If you modify AGPL code and run it as a web service, you must provide the source to your users. This is the strongest copyleft license. Used by MongoDB (before SSPL), Grafana, Mastodon. Some companies have policies that prohibit using AGPL software — factor this into adoption considerations.
+- **Notes:** Closes the "SaaS loophole" in GPL. If you modify AGPL code and run it as a web service, you must provide the source to your users. This is the strongest copyleft license. Used by MongoDB (before SSPL), Grafana, Mastodon. Some companies have policies that prohibit using AGPL software, factor this into adoption considerations.
 
 #### MPL 2.0
 
 - **SPDX:** `MPL-2.0`
 - **Permits:** Commercial use, modification, distribution, patent use
 - **Requires:** Source code disclosure for modified MPL files, license and copyright notice
-- **Restricts:** Copyleft applies only at the file level — new files in the same project can be under any license. No warranty, no liability.
+- **Restricts:** Copyleft applies only at the file level, new files in the same project can be under any license. No warranty, no liability.
 - **Notes:** The "middle ground" copyleft. Modifications to MPL-licensed files must stay MPL, but you can add proprietary files alongside them. Compatible with Apache 2.0 and GPL v3 (MPL 2.0 code can be combined with either). Used by Firefox, Terraform (before BSL). Good for projects that want some copyleft protection without the viral nature of GPL.
 
 ### Source-available licenses
@@ -179,13 +179,13 @@ These are **not** OSI-approved open source licenses. They restrict certain uses.
 - **Permits:** Non-production use, viewing source, modification for non-production
 - **Requires:** Compliance with "Additional Use Grant" and "Change Date" terms
 - **Restricts:** Production use beyond what the Additional Use Grant allows (typically: no competing products). Converts to an open source license (specified in the license) on the Change Date.
-- **Notes:** Time-delayed open source. The license specifies a Change Date (typically 3-4 years) after which the code converts to the specified open source license (usually Apache 2.0 or GPL). Used by MariaDB (creator of BSL), HashiCorp (Terraform, Vault), Sentry, CockroachDB. The Additional Use Grant defines what production use is allowed before the Change Date — this varies by project.
+- **Notes:** Time-delayed open source. The license specifies a Change Date (typically 3-4 years) after which the code converts to the specified open source license (usually Apache 2.0 or GPL). Used by MariaDB (creator of BSL), HashiCorp (Terraform, Vault), Sentry, CockroachDB. The Additional Use Grant defines what production use is allowed before the Change Date, this varies by project.
 
 #### Server Side Public License (SSPL)
 
 - **SPDX:** `SSPL-1.0`
 - **Permits:** Use, modification, distribution
-- **Requires:** If you offer the software as a service, you must open source your entire service stack (not just the SSPL software, but the management, monitoring, user interface — everything needed to run the service)
+- **Requires:** If you offer the software as a service, you must open source your entire service stack (not just the SSPL software, but the management, monitoring, user interface, everything needed to run the service)
 - **Restricts:** Offering as a managed service without open sourcing your entire stack
 - **Notes:** Created by MongoDB. Rejected by OSI and not considered open source. The "offer your entire stack" requirement is intentionally onerous to prevent cloud providers from offering competing managed services. MongoDB, Elastic (briefly), and Graylog have used SSPL. Most projects choose BSL or ELv2 over SSPL due to the extreme scope of the requirement.
 
@@ -195,7 +195,7 @@ These are **not** OSI-approved open source licenses. They restrict certain uses.
 - **Permits:** Use, modification, distribution, including commercial use
 - **Requires:** License and copyright notice
 - **Restricts:** Two things: (1) providing the software as a managed service, (2) circumventing license key functionality or removing/obscuring features protected by license keys
-- **Notes:** Simpler than SSPL, less restrictive than BSL. You can use and modify the software commercially — you just cannot offer it as a managed service that competes with the licensor. Used by Elastic (Elasticsearch, Kibana). Short and readable. Not OSI-approved.
+- **Notes:** Simpler than SSPL, less restrictive than BSL. You can use and modify the software commercially, you just cannot offer it as a managed service that competes with the licensor. Used by Elastic (Elasticsearch, Kibana). Short and readable. Not OSI-approved.
 
 ### Creative Commons (for documentation and content, NOT code)
 
@@ -211,7 +211,7 @@ Creative Commons licenses are designed for creative works, not software. Use the
 
 **For docs in a code repo:** Use `CC-BY-4.0` for documentation. This lets anyone share and adapt your docs with attribution. If you want your docs to be completely free, use `CC0-1.0`.
 
-**Never use Creative Commons for code.** CC licenses don't address patents, software distribution, or linking — use a proper software license instead.
+**Never use Creative Commons for code.** CC licenses don't address patents, software distribution, or linking, use a proper software license instead.
 
 **Dual licensing for repos with code + docs:** License code under MIT/Apache/GPL and docs under CC BY 4.0. State this clearly in your README and LICENSE file.
 
@@ -249,7 +249,7 @@ Reading: "Can code under the **row** license be included in a project under the 
 
 ### Common conflicts
 
-**Apache 2.0 + GPL v2:** Incompatible. Apache 2.0's patent retaliation clause imposes additional restrictions that GPL v2 does not allow. This is one of the most common license conflicts in practice. If you depend on a GPL v2-only library and want to use Apache 2.0 code, you have a problem. GPL v3 resolved this — Apache 2.0 code can be included in GPL v3 projects.
+**Apache 2.0 + GPL v2:** Incompatible. Apache 2.0's patent retaliation clause imposes additional restrictions that GPL v2 does not allow. This is one of the most common license conflicts in practice. If you depend on a GPL v2-only library and want to use Apache 2.0 code, you have a problem. GPL v3 resolved this, Apache 2.0 code can be included in GPL v3 projects.
 
 **GPL v2-only + GPL v3:** Incompatible. Code licensed under `GPL-2.0-only` (not "or later") cannot be combined with GPL v3 code. Code licensed under `GPL-2.0-or-later` can be used under GPL v3.
 
@@ -290,7 +290,7 @@ Two mechanisms for managing contributor intellectual property. Every project wit
 4. CLA Assistant bot will comment on PRs from contributors who haven't signed
 5. Contributors sign by commenting on the PR (no separate form)
 
-Alternative: [CLA Assistant Lite](https://github.com/contributor-assistant/github-action) — a GitHub Action that stores signatures in a file in the repo instead of an external service.
+Alternative: [CLA Assistant Lite](https://github.com/contributor-assistant/github-action), a GitHub Action that stores signatures in a file in the repo instead of an external service.
 
 **.github/workflows/cla.yml:**
 
@@ -327,12 +327,12 @@ jobs:
 
 ### Developer Certificate of Origin (DCO)
 
-**What it is:** A lightweight attestation that the contributor has the right to submit their contribution. Not a license grant — it's a certification that the contributor wrote the code (or has permission to submit it) and agrees to the project's license.
+**What it is:** A lightweight attestation that the contributor has the right to submit their contribution. Not a license grant, it's a certification that the contributor wrote the code (or has permission to submit it) and agrees to the project's license.
 
 **The full DCO text is short:** Contributors certify that their contribution is their original work or they have the right to submit it, and they agree to the project's license terms.
 
 **Why use it:**
-- Simpler than a CLA — no legal agreement to sign
+- Simpler than a CLA, no legal agreement to sign
 - Used by the Linux kernel, CNCF projects, and many large open source projects
 - Lower barrier to entry for contributors
 - Sufficient for projects that don't need to relicense contributions
@@ -354,7 +354,7 @@ The `-s` flag automatically adds the `Signed-off-by` line using the committer's 
 
 Install the [DCO GitHub App](https://github.com/apps/dco) on your repository. It checks every commit in a PR for a valid `Signed-off-by` line and sets a required status check.
 
-No workflow file needed — the DCO app runs as a GitHub App, not an Action.
+No workflow file needed, the DCO app runs as a GitHub App, not an Action.
 
 **Document it in CONTRIBUTING.md:**
 
@@ -369,7 +369,7 @@ Add a section explaining:
 
 | Factor | CLA | DCO |
 |---|---|---|
-| **Contributor friction** | Higher — must sign before first PR | Lower — just add `-s` to commits |
+| **Contributor friction** | Higher, must sign before first PR | Lower, just add `-s` to commits |
 | **Relicensing** | Enables it | Does not enable it |
 | **Dual licensing** | Required | Not sufficient |
 | **Patent grant** | Explicit | Implicit (through project license) |
@@ -522,7 +522,7 @@ Not every project needs these. The triggers below tell you when each document be
 - You still need to ensure you're not distributing to sanctioned entities
 - Most open source hosting platforms (GitHub, GitLab) handle geographic restrictions at the platform level
 
-**Not needed for:** Projects that don't use encryption and have no military/dual-use applications. However, if your project uses HTTPS (most do), technically EAR applies — the TSU exception covers this for open source.
+**Not needed for:** Projects that don't use encryption and have no military/dual-use applications. However, if your project uses HTTPS (most do), technically EAR applies, the TSU exception covers this for open source.
 
 ---
 
@@ -762,7 +762,7 @@ Define which licenses are acceptable for your project. A typical policy for a pe
 | Category | Licenses | Action |
 |---|---|---|
 | **Allowed** | MIT, Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, CC0-1.0, Unlicense, 0BSD | No action needed |
-| **Review** | MPL-2.0, LGPL-2.1-only, LGPL-3.0-only, CC-BY-4.0 | Manual review — usually fine for dependencies |
+| **Review** | MPL-2.0, LGPL-2.1-only, LGPL-3.0-only, CC-BY-4.0 | Manual review, usually fine for dependencies |
 | **Denied** | GPL-2.0-only, GPL-3.0-only, AGPL-3.0-only, SSPL-1.0, BUSL-1.1 | Cannot use in a permissively licensed project |
 | **Unknown** | Unlisted or custom licenses | Must be reviewed by a human before inclusion |
 
@@ -849,7 +849,7 @@ Your open source license covers copyright, not trademarks. Add a note in your RE
 for usage guidelines.
 ```
 
-Apache 2.0 explicitly states it does not grant trademark rights (Section 6). Other licenses are silent on trademarks. Either way, trademark rights exist independently — the TRADEMARK.md file makes your policy explicit.
+Apache 2.0 explicitly states it does not grant trademark rights (Section 6). Other licenses are silent on trademarks. Either way, trademark rights exist independently, the TRADEMARK.md file makes your policy explicit.
 
 ---
 

@@ -94,16 +94,16 @@ All eleven skills live in the [aihxp/ready-suite](https://github.com/aihxp/ready
 
 | Skill | Current version | Path |
 |---|---|---|
-| **kickoff-ready** | 3.0.1 | [skills/kickoff-ready](https://github.com/aihxp/ready-suite/tree/main/skills/kickoff-ready) |
-| **production-ready** | 3.0.1 | [skills/production-ready](https://github.com/aihxp/ready-suite/tree/main/skills/production-ready) |
-| **repo-ready** | 3.0.1 | [skills/repo-ready](https://github.com/aihxp/ready-suite/tree/main/skills/repo-ready) |
-| **stack-ready** | 3.0.1 | [skills/stack-ready](https://github.com/aihxp/ready-suite/tree/main/skills/stack-ready) |
-| **deploy-ready** | 3.0.1 | [skills/deploy-ready](https://github.com/aihxp/ready-suite/tree/main/skills/deploy-ready) |
-| **observe-ready** | 3.0.1 | [skills/observe-ready](https://github.com/aihxp/ready-suite/tree/main/skills/observe-ready) |
-| **launch-ready** | 3.0.1 | [skills/launch-ready](https://github.com/aihxp/ready-suite/tree/main/skills/launch-ready) |
-| **prd-ready** | 3.0.1 | [skills/prd-ready](https://github.com/aihxp/ready-suite/tree/main/skills/prd-ready) |
-| **architecture-ready** | 3.0.1 | [skills/architecture-ready](https://github.com/aihxp/ready-suite/tree/main/skills/architecture-ready) |
-| **roadmap-ready** | 3.0.1 | [skills/roadmap-ready](https://github.com/aihxp/ready-suite/tree/main/skills/roadmap-ready) |
-| **harden-ready** | 3.0.1 | [skills/harden-ready](https://github.com/aihxp/ready-suite/tree/main/skills/harden-ready) |
+| **kickoff-ready** | 3.0.2 | [skills/kickoff-ready](https://github.com/aihxp/ready-suite/tree/main/skills/kickoff-ready) |
+| **production-ready** | 3.0.2 | [skills/production-ready](https://github.com/aihxp/ready-suite/tree/main/skills/production-ready) |
+| **repo-ready** | 3.0.2 | [skills/repo-ready](https://github.com/aihxp/ready-suite/tree/main/skills/repo-ready) |
+| **stack-ready** | 3.0.2 | [skills/stack-ready](https://github.com/aihxp/ready-suite/tree/main/skills/stack-ready) |
+| **deploy-ready** | 3.0.2 | [skills/deploy-ready](https://github.com/aihxp/ready-suite/tree/main/skills/deploy-ready) |
+| **observe-ready** | 3.0.2 | [skills/observe-ready](https://github.com/aihxp/ready-suite/tree/main/skills/observe-ready) |
+| **launch-ready** | 3.0.2 | [skills/launch-ready](https://github.com/aihxp/ready-suite/tree/main/skills/launch-ready) |
+| **prd-ready** | 3.0.2 | [skills/prd-ready](https://github.com/aihxp/ready-suite/tree/main/skills/prd-ready) |
+| **architecture-ready** | 3.0.2 | [skills/architecture-ready](https://github.com/aihxp/ready-suite/tree/main/skills/architecture-ready) |
+| **roadmap-ready** | 3.0.2 | [skills/roadmap-ready](https://github.com/aihxp/ready-suite/tree/main/skills/roadmap-ready) |
+| **harden-ready** | 3.0.2 | [skills/harden-ready](https://github.com/aihxp/ready-suite/tree/main/skills/harden-ready) |
 
 The suite is additive. A skill not yet released does not block any other skill from functioning. With the consolidated layout the eleven skills span orchestration (one), planning (four), building (two), and shipping (four).

@@ -38,7 +38,7 @@ Show a count + avatar stack when multiple users are on the same page/resource.
 **Implementation:**
 - Avatar stack: overlap by 25% of width (`margin-left: -8px` for 32px avatars). Show max 3 faces, then `+N` pill.
 - Position: top-right of the page header or within a resource card header.
-- Update count via WebSocket presence channel — subscribe to `presence:page:{pageId}`.
+- Update count via WebSocket presence channel, subscribe to `presence:page:{pageId}`.
 - Clicking the avatar stack opens a popover listing all viewers: avatar, name, role, and how long they've been on the page.
 
 ```css
@@ -71,7 +71,7 @@ WebSocket presence pattern:
 1. Client connects and joins a channel: `presence:page:{id}`.
 2. Server broadcasts `user_joined` with user metadata (id, name, avatar, color).
 3. Client receives existing member list on join.
-4. Heartbeat every **30 seconds** — server marks user offline if 2 heartbeats missed (60s timeout).
+4. Heartbeat every **30 seconds**, server marks user offline if 2 heartbeats missed (60s timeout).
 5. On disconnect, server broadcasts `user_left` after a **5-second grace period** (covers brief reconnects).
 
 ---
@@ -90,7 +90,7 @@ Live cursors show where other users are pointing in real time. This is the signa
 Each remote cursor is an absolutely positioned element with:
 - A **colored arrow** (SVG, 16-20px). Each user gets a unique color from a preset palette of 8-12 high-contrast colors.
 - A **name label** pinned to the cursor. Background matches cursor color, white text, `text-xs` (12px), `font-medium`, `border-radius: 4px`, `padding: 2px 8px`. Appears 4px below and 12px right of the cursor tip.
-- **Smooth interpolation** between positions. Don't snap — lerp (linear interpolation) over 50-100ms for fluid movement.
+- **Smooth interpolation** between positions. Don't snap, lerp (linear interpolation) over 50-100ms for fluid movement.
 
 ```css
 .remote-cursor {
@@ -132,7 +132,7 @@ Cursor updates are high-frequency. Unthrottled, they generate 60+ events/second 
 - **Binary protocol:** Use binary WebSocket frames for cursor positions (userId as uint32 + x,y as float32 = 12 bytes vs ~80 bytes JSON).
 
 ```typescript
-// Throttled cursor broadcast — 50ms minimum interval
+// Throttled cursor broadcast, 50ms minimum interval
 let lastSent = 0;
 const THROTTLE_MS = 50;
 
@@ -203,8 +203,8 @@ When User A focuses on a field, broadcast a lock. Other users see:
 
 For last-write-wins fields that don't use locking, show a warning when a conflict occurs:
 
-- **Pre-conflict:** "Sarah is also editing this field" — shown as an inline hint below the field when another user focuses the same field. Informational, doesn't block.
-- **Post-conflict:** "This field was updated by Sarah. Your version: [X]. Current version: [Y]. Keep yours / Accept theirs / View diff" — toast or inline conflict resolver.
+- **Pre-conflict:** "Sarah is also editing this field", shown as an inline hint below the field when another user focuses the same field. Informational, doesn't block.
+- **Post-conflict:** "This field was updated by Sarah. Your version: [X]. Current version: [Y]. Keep yours / Accept theirs / View diff", toast or inline conflict resolver.
 
 ### Highlighted editing sections
 
@@ -228,7 +228,7 @@ Every collaborative document needs a version history. Pattern:
 
 ## Real-time data updates
 
-Dashboards display live data — metrics, charts, tables. Updates must feel smooth, not jarring.
+Dashboards display live data, metrics, charts, tables. Updates must feel smooth, not jarring.
 
 ### Animating number changes
 
@@ -293,11 +293,11 @@ Always show WebSocket connection state. Users must know if their data is live.
 |---|---|---|---|---|
 | Connected | Filled circle or signal bars | "Live" or "Connected" | Green | Bottom-left of page or header bar |
 | Reconnecting | Spinning circle | "Reconnecting..." | Amber | Same position |
-| Disconnected | Slashed circle | "Offline — data may be stale" | Red | Same position, more prominent |
+| Disconnected | Slashed circle | "Offline, data may be stale" | Red | Same position, more prominent |
 
 **Rules:**
-- Don't show "Connected" status at all when things are healthy — it's noise. Only show status when it degrades.
-- "Reconnecting" should appear after **2 seconds** of disconnect (not immediately — brief drops are invisible).
+- Don't show "Connected" status at all when things are healthy, it's noise. Only show status when it degrades.
+- "Reconnecting" should appear after **2 seconds** of disconnect (not immediately, brief drops are invisible).
 - "Disconnected" appears after **3 failed reconnection attempts** or 30 seconds without connection.
 - Clicking the disconnected indicator triggers a manual reconnect attempt.
 
@@ -305,7 +305,7 @@ Always show WebSocket connection state. Users must know if their data is live.
 
 When the WebSocket is disconnected and data is potentially stale:
 
-- Show a **banner** at the top of the data area: "Data last updated 2 minutes ago. Reconnecting..." — amber background, dismiss-on-reconnect.
+- Show a **banner** at the top of the data area: "Data last updated 2 minutes ago. Reconnecting...", amber background, dismiss-on-reconnect.
 - **Dim** the data area slightly (`opacity: 0.7`) to visually signal staleness.
 - Add a **timestamp** to stat cards and tables: "Updated 2m ago" in caption text (12px, muted).
 - On reconnect, fetch a full state snapshot before removing the stale warning.
@@ -314,7 +314,7 @@ When the WebSocket is disconnected and data is potentially stale:
 
 ## Real-time notifications
 
-Notifications tell users about events they didn't directly cause — other users' actions, system events, background job completions.
+Notifications tell users about events they didn't directly cause, other users' actions, system events, background job completions.
 
 ### Toast notifications
 
@@ -325,9 +325,9 @@ Toasts are the primary vehicle for transient notifications.
 **Anatomy:**
 
 ```
-[icon] [title — bold, 14px]                              [X close]
-       [description — regular, 13px, muted color]
-       [action link — "View" / "Undo" — 13px, primary color]
+[icon] [title, bold, 14px]                              [X close]
+       [description, regular, 13px, muted color]
+       [action link, "View" / "Undo", 13px, primary color]
 ```
 
 - **Width:** 360-420px fixed.
@@ -349,9 +349,9 @@ Toasts are the primary vehicle for transient notifications.
 For a persistent log of team activity, use an activity feed panel.
 
 - **Position:** Right sidebar (320-400px) or dedicated page. Toggle via bell icon in header.
-- **Entry format:** `[avatar] [user name] [action verb] [object] — [relative time]`
-  - Example: "Sarah created Order #1234 — 5m ago"
-- **Grouping:** Collapse repeated actions from the same user within 2 minutes. "Sarah created 3 orders — 5m ago".
+- **Entry format:** `[avatar] [user name] [action verb] [object], [relative time]`
+  - Example: "Sarah created Order #1234, 5m ago"
+- **Grouping:** Collapse repeated actions from the same user within 2 minutes. "Sarah created 3 orders, 5m ago".
 - **Filtering:** Tabs or dropdown to filter by: All, Mentions, My Activity, System.
 - **Pagination:** Infinite scroll with "Load more" at the bottom.
 
@@ -524,4 +524,4 @@ These are the mistakes that make real-time features feel broken.
 3. On success: no-op (already showing correct state).
 4. On failure: revert local state, show error toast with details.
 
-Store the pre-mutation state snapshot for rollback. Don't try to "undo" the mutation — replace with the saved snapshot.
+Store the pre-mutation state snapshot for rollback. Don't try to "undo" the mutation, replace with the saved snapshot.

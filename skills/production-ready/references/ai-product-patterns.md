@@ -1,6 +1,6 @@
 # AI Product Patterns
 
-This file covers how to build the functionality layer for AI/LLM-powered products — the dashboards and interfaces that ARE AI products (like ChatGPT, Claude, Cursor, or any SaaS wrapping LLM capabilities). This is not about adding AI features to regular dashboards. This is about building the systems that make an AI product work: streaming, context management, model orchestration, prompt management, RAG, evaluation, cost control, moderation, conversation persistence, and tool calling.
+This file covers how to build the functionality layer for AI/LLM-powered products, the dashboards and interfaces that ARE AI products (like ChatGPT, Claude, Cursor, or any SaaS wrapping LLM capabilities). This is not about adding AI features to regular dashboards. This is about building the systems that make an AI product work: streaming, context management, model orchestration, prompt management, RAG, evaluation, cost control, moderation, conversation persistence, and tool calling.
 
 The domain section (#21 in `domain-considerations.md`) covers the *what*. This file covers the *how*.
 
@@ -10,7 +10,7 @@ The domain section (#21 in `domain-considerations.md`) covers the *what*. This f
 
 ### SSE is the standard
 
-Server-Sent Events, not WebSocket. Both Anthropic and OpenAI use SSE. The Vercel AI SDK defaults to SSE. SSE is unidirectional (server to client — the LLM's output pattern), auto-reconnects, works through CDNs/proxies, and is natively supported by all browsers.
+Server-Sent Events, not WebSocket. Both Anthropic and OpenAI use SSE. The Vercel AI SDK defaults to SSE. SSE is unidirectional (server to client, the LLM's output pattern), auto-reconnects, works through CDNs/proxies, and is natively supported by all browsers.
 
 Use WebSocket only when you need bidirectional communication beyond streaming (collaborative editing, real-time presence).
 
@@ -31,9 +31,9 @@ Client sends request (POST with messages)
 The problem: calling `setState` on every token (50-100/second) causes re-render jank.
 
 Solutions:
-- **Vercel AI SDK `useChat` hook** — handles all complexity. Manages messages, streams tokens, batches updates. The recommended approach for React.
-- **Buffering** — accumulate tokens in a ref, flush to state on `requestAnimationFrame` cadence (batches multiple tokens per re-render).
-- **Streaming-aware Markdown renderer** — regular Markdown components break with character-by-character input. Libraries like `assistant-ui` and shadcn/ui AI components handle incremental Markdown parsing without flickering.
+- **Vercel AI SDK `useChat` hook**, handles all complexity. Manages messages, streams tokens, batches updates. The recommended approach for React.
+- **Buffering**, accumulate tokens in a ref, flush to state on `requestAnimationFrame` cadence (batches multiple tokens per re-render).
+- **Streaming-aware Markdown renderer**, regular Markdown components break with character-by-character input. Libraries like `assistant-ui` and shadcn/ui AI components handle incremental Markdown parsing without flickering.
 
 ### "Stop generating" (AbortController)
 
@@ -94,11 +94,11 @@ remaining_for_history   = available - system - current
 ```
 
 **Priority order** (what gets cut last):
-1. System prompt — never truncated
-2. Current user message — never truncated
-3. Most recent assistant response — coherence
-4. Recent turns — sliding window newest to oldest
-5. Older turns — first to be dropped
+1. System prompt, never truncated
+2. Current user message, never truncated
+3. Most recent assistant response, coherence
+4. Recent turns, sliding window newest to oldest
+5. Older turns, first to be dropped
 
 ### Truncation strategies
 
@@ -120,7 +120,7 @@ remaining_for_history   = available - system - current
 
 **Use long context (200K+):** short conversations with large documents, cost is acceptable, want simplicity.
 
-**Manage shorter context:** hundreds of turns, cost control needed, quality consistency needed (models degrade in very long contexts — "lost in the middle"), high-volume/low-margin use cases.
+**Manage shorter context:** hundreds of turns, cost control needed, quality consistency needed (models degrade in very long contexts, "lost in the middle"), high-volume/low-margin use cases.
 
 ---
 
@@ -146,9 +146,9 @@ Route by task type (from your app's feature flag), not by the user's input.
 
 ### Provider abstraction
 
-- **Vercel AI SDK** — `@ai-sdk/anthropic`, `@ai-sdk/openai` share the same `streamText`/`generateText` interface. TypeScript-native.
-- **LiteLLM** — unified OpenAI-compatible interface to 100+ providers. Python-based proxy with routing, retries, fallbacks, spend tracking.
-- **Custom adapter** — define `sendMessage(messages, config) > stream` and implement per provider. Simplest for 2-3 providers.
+- **Vercel AI SDK**, `@ai-sdk/anthropic`, `@ai-sdk/openai` share the same `streamText`/`generateText` interface. TypeScript-native.
+- **LiteLLM**, unified OpenAI-compatible interface to 100+ providers. Python-based proxy with routing, retries, fallbacks, spend tracking.
+- **Custom adapter**, define `sendMessage(messages, config) > stream` and implement per provider. Simplest for 2-3 providers.
 
 ### Health monitoring per model
 
@@ -188,7 +188,7 @@ Every edit creates a new version. Never mutate in place. Store diffs. Rollback =
 3. Log which version served each request.
 4. Track per version: quality scores, latency, cost, user feedback.
 5. Use feature flag systems for traffic management.
-6. Statistical significance is harder with LLMs (high output variance) — need larger sample sizes.
+6. Statistical significance is harder with LLMs (high output variance), need larger sample sizes.
 
 **Shadow testing** (lower risk): send to both versions, show user only the control, log both for offline comparison.
 
@@ -245,26 +245,26 @@ Chunking configuration has as much influence on retrieval quality as embedding m
 
 ### Embedding models
 
-- **OpenAI text-embedding-3-small** — 1536 dims, $0.02/M tokens. Best cost/quality for most.
-- **OpenAI text-embedding-3-large** — 3072 dims, $0.13/M tokens. Higher quality, supports dimension reduction.
-- **Cohere embed-v3** — competitive quality, multi-language, 1024 dims.
-- **Open-source (nomic-embed, e5, bge)** — free, run locally. For cost-sensitive or data sovereignty.
+- **OpenAI text-embedding-3-small**, 1536 dims, $0.02/M tokens. Best cost/quality for most.
+- **OpenAI text-embedding-3-large**, 3072 dims, $0.13/M tokens. Higher quality, supports dimension reduction.
+- **Cohere embed-v3**, competitive quality, multi-language, 1024 dims.
+- **Open-source (nomic-embed, e5, bge)**, free, run locally. For cost-sensitive or data sovereignty.
 
 ### Vector storage
 
-- **pgvector** — Postgres extension. Under 1M docs, sub-50ms latency. Keeps everything in Postgres. Start here.
-- **Pinecone** — managed, serverless, billions of vectors. No infrastructure to manage.
-- **Qdrant** — open-source, Rust-based, high performance. Self-hosted at scale.
-- **Weaviate** — open-source, native hybrid search (vector + keyword).
+- **pgvector**, Postgres extension. Under 1M docs, sub-50ms latency. Keeps everything in Postgres. Start here.
+- **Pinecone**, managed, serverless, billions of vectors. No infrastructure to manage.
+- **Qdrant**, open-source, Rust-based, high performance. Self-hosted at scale.
+- **Weaviate**, open-source, native hybrid search (vector + keyword).
 
 **Decision:** start with pgvector if you use Postgres. Move to dedicated vector DB only at millions of documents.
 
 ### Retrieval pipeline
 
-1. **Embed the query** — same model as documents.
-2. **Similarity search** — cosine/dot product, top-K (5-20 results).
-3. **Rerank** (recommended) — Cohere Rerank or cross-encoder model re-scores top-K. Dramatically improves precision. Top 20 > rerank to top 5.
-4. **Hybrid search** (recommended) — combine vector + keyword/BM25. Catches exact matches semantic search misses (product IDs, names, code).
+1. **Embed the query**, same model as documents.
+2. **Similarity search**, cosine/dot product, top-K (5-20 results).
+3. **Rerank** (recommended), Cohere Rerank or cross-encoder model re-scores top-K. Dramatically improves precision. Top 20 > rerank to top 5.
+4. **Hybrid search** (recommended), combine vector + keyword/BM25. Catches exact matches semantic search misses (product IDs, names, code).
 
 ### Source attribution
 
@@ -370,7 +370,7 @@ Alert when: daily spend > 2x trailing 7-day average, single user > 10x their ave
 
 | Pattern | Savings | How |
 |---|---|---|
-| **Provider prefix caching** | 50-90% | Anthropic: 90% cost reduction for stable system prompts. OpenAI: 50%. Free — just keep system prompt stable. |
+| **Provider prefix caching** | 50-90% | Anthropic: 90% cost reduction for stable system prompts. OpenAI: 50%. Free, just keep system prompt stable. |
 | **Semantic caching** | ~73% in high-repetition | Cache responses by meaning similarity. Redis LangCache. 31% of queries exhibit semantic similarity. |
 | **Right-sizing models** | 50-90% | Use cheapest model that meets quality per task. |
 | **Combined** | 80%+ | Semantic cache > prefix cache > full inference. |
@@ -381,17 +381,17 @@ Alert when: daily spend > 2x trailing 7-day average, single user > 10x their ave
 
 ### Input filtering (before model)
 
-1. **PII detection** — regex for emails, phones, SSNs, cards + NER for names, addresses. Libraries: Presidio (Microsoft, open-source), LLM Guard.
-2. **Harmful content** — OpenAI Moderation API (free), Anthropic built-in filtering, custom classifiers.
-3. **Prompt injection** — detect "ignore previous instructions," base64-encoded instructions, markdown injection. Multi-agent defense pipelines achieve 100% mitigation in tested scenarios.
-4. **Input length limits** — reject over max token count to prevent cost abuse.
+1. **PII detection**, regex for emails, phones, SSNs, cards + NER for names, addresses. Libraries: Presidio (Microsoft, open-source), LLM Guard.
+2. **Harmful content**, OpenAI Moderation API (free), Anthropic built-in filtering, custom classifiers.
+3. **Prompt injection**, detect "ignore previous instructions," base64-encoded instructions, markdown injection. Multi-agent defense pipelines achieve 100% mitigation in tested scenarios.
+4. **Input length limits**, reject over max token count to prevent cost abuse.
 
 ### Output filtering (after model)
 
-1. **PII leakage** — model may include PII from training data or context. Scan with same detectors.
-2. **Harmful content** — same moderation check on output.
-3. **Hallucinated URLs/emails** — detect and flag.
-4. **Off-topic** — did the model respond about something outside the product's domain?
+1. **PII leakage**, model may include PII from training data or context. Scan with same detectors.
+2. **Harmful content**, same moderation check on output.
+3. **Hallucinated URLs/emails**, detect and flag.
+4. **Off-topic**, did the model respond about something outside the product's domain?
 
 ### Moderation logging
 
@@ -399,11 +399,11 @@ Log every decision: request_id, direction (input/output), checks run, results, a
 
 ### Prompt injection defense layers
 
-1. System prompt hardening — separate instructions from user content with delimiters.
-2. Input/output separation — never embed raw user input in the control portion.
-3. Guardrail models — specialized classifiers (PromptGuard, OpenAI Guardrails).
-4. Multi-agent defense — separate classifier evaluates input before main agent processes.
-5. Output validation — check response is consistent with intended task, not injected instructions.
+1. System prompt hardening, separate instructions from user content with delimiters.
+2. Input/output separation, never embed raw user input in the control portion.
+3. Guardrail models, specialized classifiers (PromptGuard, OpenAI Guardrails).
+4. Multi-agent defense, separate classifier evaluates input before main agent processes.
+5. Output validation, check response is consistent with intended task, not injected instructions.
 
 ---
 
@@ -415,7 +415,7 @@ Log every decision: request_id, direction (input/output), checks run, results, a
 Thread: id, user_id, org_id, title (auto-generated), model_config (JSON),
         created_at, updated_at, archived_at, metadata (tags, folder_id)
 
-Message: id, thread_id, parent_message_id (nullable — enables branching),
+Message: id, thread_id, parent_message_id (nullable, enables branching),
          role (user/assistant/system/tool), content, content_blocks (JSON),
          model_used, prompt_version, input_tokens, output_tokens, latency_ms,
          cost_usd, status (complete/partial/error/cancelled),
@@ -493,10 +493,10 @@ Admin configures which tools are available per org/user/role. Enable/disable tog
 
 ### Chat interface
 
-- **Message bubbles** — distinct for user (right, colored) vs assistant (left, neutral). Role indicator, timestamp, model badge.
-- **Markdown rendering** — full Markdown with syntax-highlighted code blocks (copy button, language label), tables, lists, LaTeX math.
-- **"Thinking" indicator** — animated dots while waiting for first token. Switch to streaming text when tokens arrive.
-- **Code blocks** — syntax highlighting, copy button, language label. Tabbed for multi-file.
+- **Message bubbles**, distinct for user (right, colored) vs assistant (left, neutral). Role indicator, timestamp, model badge.
+- **Markdown rendering**, full Markdown with syntax-highlighted code blocks (copy button, language label), tables, lists, LaTeX math.
+- **"Thinking" indicator**, animated dots while waiting for first token. Switch to streaming text when tokens arrive.
+- **Code blocks**, syntax highlighting, copy button, language label. Tabbed for multi-file.
 
 **React libraries:** shadcn/ui AI components (25+), assistant-ui (200K+ monthly downloads), prompt-kit.
 
@@ -523,9 +523,9 @@ On every assistant response:
 
 ### Regenerate and edit
 
-- **Regenerate** — button on every assistant message. Creates branch. Option to regenerate with a different model.
-- **Edit** — click to edit previous user message. Regenerates from that point. Creates branch.
-- **Branch navigation** — "Version 1 of 3" with arrows at every fork.
+- **Regenerate**, button on every assistant message. Creates branch. Option to regenerate with a different model.
+- **Edit**, click to edit previous user message. Regenerates from that point. Creates branch.
+- **Branch navigation**, "Version 1 of 3" with arrows at every fork.
 
 ### Conversation starters
 

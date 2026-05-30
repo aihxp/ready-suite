@@ -19,17 +19,17 @@ Priority  What to test                         Why
 4 (nice)  Visual regression (screenshots)       Catches CSS drift, low urgency
 ```
 
-**Minimum viable test suite:** 1 auth flow test, 1 CRUD flow test, 1 permission denial test, axe scan on every page. This covers priorities 1–3 in ~4 test files. Add priority 4 tests when the dashboard stabilizes.
+**Minimum viable test suite:** 1 auth flow test, 1 CRUD flow test, 1 permission denial test, axe scan on every page. This covers priorities 1-3 in ~4 test files. Add priority 4 tests when the dashboard stabilizes.
 
 ## The testing pyramid for dashboards
 
 Dashboards are UI-heavy, data-heavy, and auth-heavy. The testing strategy reflects that:
 
 ```
-            /  E2E  \              ← few, slow, high confidence
-           / Integration \         ← moderate, test real flows
-          /   Component    \       ← many, fast, isolated UI
-         /      Unit        \      ← many, fastest, pure logic
+            /  E2E  \              <- few, slow, high confidence
+           / Integration \         <- moderate, test real flows
+          /   Component    \       <- many, fast, isolated UI
+         /      Unit        \      <- many, fastest, pure logic
 ```
 
 Most dashboard teams over-invest in unit tests for utility functions and under-invest in integration tests that exercise real auth + real queries + real UI. Flip that. The highest-value tests for a dashboard are integration tests that walk through a real user flow with a real (or realistic) database.
@@ -40,11 +40,11 @@ Test pure logic: permission checks, data formatting, validation schemas, utility
 
 ### What to unit test
 
-- **Permission logic** — `can(role, permission)` for every role × permission combination. This is a truth table; test it exhaustively.
-- **Validation schemas** — Zod/Yup/Valibot schemas with valid input, invalid input, edge cases (empty strings, null, boundary values).
-- **Formatters** — currency, date, number, percentage formatting. Edge cases: zero, negative, very large, undefined.
-- **URL builders** — filter-to-query-string and query-string-to-filter round-trip.
-- **Derived state** — any function that transforms server data for display (aggregations, sorting, grouping).
+- **Permission logic**, `can(role, permission)` for every role × permission combination. This is a truth table; test it exhaustively.
+- **Validation schemas**, Zod/Yup/Valibot schemas with valid input, invalid input, edge cases (empty strings, null, boundary values).
+- **Formatters**, currency, date, number, percentage formatting. Edge cases: zero, negative, very large, undefined.
+- **URL builders**, filter-to-query-string and query-string-to-filter round-trip.
+- **Derived state**, any function that transforms server data for display (aggregations, sorting, grouping).
 
 ### What NOT to unit test
 
@@ -54,34 +54,34 @@ Test pure logic: permission checks, data formatting, validation schemas, utility
 
 ### Tools
 
-- **JavaScript/TypeScript** — Vitest (recommended; fast, ESM-native, compatible with Jest API), Jest
-- **Python** — pytest
-- **Ruby** — RSpec, Minitest
-- **Go** — stdlib `testing`
-- **PHP** — PHPUnit, Pest
+- **JavaScript/TypeScript**, Vitest (recommended; fast, ESM-native, compatible with Jest API), Jest
+- **Python**, pytest
+- **Ruby**, RSpec, Minitest
+- **Go**, stdlib `testing`
+- **PHP**, PHPUnit, Pest
 
 ## Component tests
 
-Test UI components with realistic data and interactions. These are the middle layer — faster than E2E, more realistic than unit tests.
+Test UI components with realistic data and interactions. These are the middle layer, faster than E2E, more realistic than unit tests.
 
 ### What to component test
 
-- **Forms** — render the form, fill fields, submit, assert the mutation was called with correct data. Test validation: submit with invalid data, assert error messages appear next to the right fields.
-- **Tables** — render with mock data, test sort (click header, assert order changes), test pagination (click next, assert new rows), test empty state (render with empty array, assert empty state message).
-- **Permission-gated UI** — render as admin, assert the delete button exists. Render as member, assert it doesn't. This catches regressions where someone removes a permission check.
-- **Loading/error/empty states** — render each state explicitly and assert the right UI appears.
-- **Modals and drawers** — open, interact, close. Assert focus management (focus trapped inside, returns on close).
+- **Forms**, render the form, fill fields, submit, assert the mutation was called with correct data. Test validation: submit with invalid data, assert error messages appear next to the right fields.
+- **Tables**, render with mock data, test sort (click header, assert order changes), test pagination (click next, assert new rows), test empty state (render with empty array, assert empty state message).
+- **Permission-gated UI**, render as admin, assert the delete button exists. Render as member, assert it doesn't. This catches regressions where someone removes a permission check.
+- **Loading/error/empty states**, render each state explicitly and assert the right UI appears.
+- **Modals and drawers**, open, interact, close. Assert focus management (focus trapped inside, returns on close).
 
 ### How to component test
 
 Use a tool that renders real DOM and supports user interactions:
 
-- **React** — React Testing Library + Vitest (or Jest). Render components, query by role/text/label, fire events, assert DOM state.
-- **Vue** — Vue Testing Library + Vitest
-- **Svelte** — Svelte Testing Library + Vitest
-- **Angular** — Angular Testing Library or TestBed + Jest
+- **React**, React Testing Library + Vitest (or Jest). Render components, query by role/text/label, fire events, assert DOM state.
+- **Vue**, Vue Testing Library + Vitest
+- **Svelte**, Svelte Testing Library + Vitest
+- **Angular**, Angular Testing Library or TestBed + Jest
 
-The testing library philosophy: test what the user sees and does, not implementation details. Query by `role`, `label`, `text` — not by CSS class or component internals.
+The testing library philosophy: test what the user sees and does, not implementation details. Query by `role`, `label`, `text`, not by CSS class or component internals.
 
 ```tsx
 // Example: testing a create form
@@ -114,8 +114,8 @@ test('shows validation errors for empty required fields', async () => {
 
 Component tests need data but shouldn't hit a real API. Two approaches:
 
-1. **Mock the query hooks** — override `useQuery` / `useMutation` to return controlled data. Fast, but tightly coupled to the library.
-2. **Mock the network layer** — use MSW (Mock Service Worker) to intercept `fetch`/`xhr` and return realistic responses. Decoupled from the query library, closer to real behavior.
+1. **Mock the query hooks**, override `useQuery` / `useMutation` to return controlled data. Fast, but tightly coupled to the library.
+2. **Mock the network layer**, use MSW (Mock Service Worker) to intercept `fetch`/`xhr` and return realistic responses. Decoupled from the query library, closer to real behavior.
 
 **MSW is the recommended approach** for dashboard testing. Define handlers once, reuse across tests. The handlers mirror your real API contract, so mismatches surface as test failures.
 
@@ -150,16 +150,16 @@ Test real user flows that cross multiple components, hit the API (or a realistic
 
 Write one integration test per vertical slice. The test walks through the full flow a real user would:
 
-1. **Auth flow** — visit protected page, get redirected to login, log in with valid credentials, land on dashboard home. Log out, confirm redirect back to login.
-2. **CRUD flow per entity** — navigate to the list, create a new record, verify it appears in the list, open it, edit it, save, verify the edit is reflected, delete it, confirm it's gone.
-3. **Permission flow** — log in as admin, verify admin-only actions are available. Log in as member, verify they're hidden and the API rejects direct access.
-4. **Filter/sort/paginate** — apply filters, verify URL updates and table narrows. Sort, verify order changes. Paginate, verify new rows load.
+1. **Auth flow**, visit protected page, get redirected to login, log in with valid credentials, land on dashboard home. Log out, confirm redirect back to login.
+2. **CRUD flow per entity**, navigate to the list, create a new record, verify it appears in the list, open it, edit it, save, verify the edit is reflected, delete it, confirm it's gone.
+3. **Permission flow**, log in as admin, verify admin-only actions are available. Log in as member, verify they're hidden and the API rejects direct access.
+4. **Filter/sort/paginate**, apply filters, verify URL updates and table narrows. Sort, verify order changes. Paginate, verify new rows load.
 
 ### Tools
 
-- **Playwright** (recommended) — cross-browser, fast, reliable, built-in assertions, API testing, network interception. The best E2E tool in 2026.
-- **Cypress** — good developer experience, single-browser focus, slightly slower than Playwright for parallel runs.
-- **Testing Library + MSW** — for integration tests that don't need a real browser (faster, but less realistic).
+- **Playwright** (recommended), cross-browser, fast, reliable, built-in assertions, API testing, network interception. The best E2E tool in 2026.
+- **Cypress**, good developer experience, single-browser focus, slightly slower than Playwright for parallel runs.
+- **Testing Library + MSW**, for integration tests that don't need a real browser (faster, but less realistic).
 
 For dashboards, **Playwright** is the right default. It handles auth flows, cookie management, multiple browser contexts (testing two users simultaneously), and network interception natively.
 
@@ -206,11 +206,11 @@ test.describe('Authentication', () => {
 
 ### Auth in tests
 
-Don't log in through the UI for every test — it's slow. Use one of:
+Don't log in through the UI for every test, it's slow. Use one of:
 
-1. **Storage state** — log in once in a setup step, save cookies/localStorage to a file, reuse across tests. Playwright has built-in support (`storageState`).
-2. **API login** — call the login endpoint directly and set the cookies programmatically. Faster than UI login.
-3. **Test-only auth bypass** — in test environments only, accept a special header or token that skips the login flow. Guard with environment checks.
+1. **Storage state**, log in once in a setup step, save cookies/localStorage to a file, reuse across tests. Playwright has built-in support (`storageState`).
+2. **API login**, call the login endpoint directly and set the cookies programmatically. Faster than UI login.
+3. **Test-only auth bypass**, in test environments only, accept a special header or token that skips the login flow. Guard with environment checks.
 
 Create separate storage states for each role: `admin.storageState.json`, `member.storageState.json`. Tests that check permissions use the appropriate state.
 
@@ -222,8 +222,8 @@ Accessibility is a requirement, not a nice-to-have. Automate what you can; manua
 
 Use `axe-core` (the engine behind most a11y tools) integrated into your test suite:
 
-- **Component tests** — `jest-axe` or `vitest-axe` to run axe on rendered components
-- **E2E tests** — `@axe-core/playwright` to run axe on full pages in Playwright
+- **Component tests**, `jest-axe` or `vitest-axe` to run axe on rendered components
+- **E2E tests**, `@axe-core/playwright` to run axe on full pages in Playwright
 
 ```ts
 // Component test with axe
@@ -255,38 +255,38 @@ Run axe on every page. It catches ~30-40% of accessibility issues automatically:
 
 Axe can't catch everything. Do these manually at least once:
 
-- **Keyboard walkthrough** — Tab through every page. Can you reach every interactive element? Can you see where focus is? Can you operate every control with keyboard alone?
-- **Screen reader test** — use VoiceOver (Mac), NVDA (Windows), or Orca (Linux) to navigate the dashboard. Does it make sense spoken aloud? Are headings in order? Are buttons labeled?
-- **Zoom test** — zoom to 200%. Does the layout still work? Is text readable? Do controls still function?
-- **Reduced motion** — enable "prefers-reduced-motion" in the OS. Do animations respect it?
-- **High contrast** — enable high contrast mode. Is everything still visible?
+- **Keyboard walkthrough**, Tab through every page. Can you reach every interactive element? Can you see where focus is? Can you operate every control with keyboard alone?
+- **Screen reader test**, use VoiceOver (Mac), NVDA (Windows), or Orca (Linux) to navigate the dashboard. Does it make sense spoken aloud? Are headings in order? Are buttons labeled?
+- **Zoom test**, zoom to 200%. Does the layout still work? Is text readable? Do controls still function?
+- **Reduced motion**, enable "prefers-reduced-motion" in the OS. Do animations respect it?
+- **High contrast**, enable high contrast mode. Is everything still visible?
 
 ## API tests
 
-Test your API endpoints directly — independent of the UI. This catches issues the UI tests miss (malformed responses, missing fields, wrong status codes).
+Test your API endpoints directly, independent of the UI. This catches issues the UI tests miss (malformed responses, missing fields, wrong status codes).
 
 ### What to API test
 
 - **Every endpoint returns the documented response shape.** Assert the JSON structure matches the contract.
 - **Validation rejects bad input with field-level errors.** Send invalid data, assert 400/422 with the right error fields.
-- **Auth is enforced.** Call every protected endpoint without a session — assert 401. Call with wrong role — assert 403.
-- **Org scoping works.** Create a resource in Org A, try to access it as a user in Org B — assert 404 (not 403).
+- **Auth is enforced.** Call every protected endpoint without a session, assert 401. Call with wrong role, assert 403.
+- **Org scoping works.** Create a resource in Org A, try to access it as a user in Org B, assert 404 (not 403).
 - **Pagination, sorting, filtering.** Assert the response reflects the query params.
 
 ### Tools
 
-- **Playwright's `request` API** — make HTTP calls directly in your E2E test suite. Shares auth setup with browser tests.
-- **Supertest** (Node.js) — test Express/Fastify/Koa handlers without starting a server.
-- **httpx** / **requests** (Python) — for Django/FastAPI/Flask.
-- **Hurl** — a command-line HTTP testing tool with a declarative syntax. Good for CI.
+- **Playwright's `request` API**, make HTTP calls directly in your E2E test suite. Shares auth setup with browser tests.
+- **Supertest** (Node.js), test Express/Fastify/Koa handlers without starting a server.
+- **httpx** / **requests** (Python), for Django/FastAPI/Flask.
+- **Hurl**, a command-line HTTP testing tool with a declarative syntax. Good for CI.
 
 ## Database setup for tests
 
 Tests need a database. Three strategies:
 
-1. **Real database, per-test-suite** — spin up a Postgres/SQLite instance for the test run, run migrations, seed, test, tear down. The most realistic. Use Docker for Postgres; use in-memory SQLite for speed.
-2. **Transaction rollback** — each test runs inside a transaction that rolls back at the end. Fast, clean, but doesn't test transaction behavior or constraints that only fire on commit.
-3. **Seed + truncate** — seed once, truncate tables between tests. Faster than re-seeding, but tests must not depend on seed data order.
+1. **Real database, per-test-suite**, spin up a Postgres/SQLite instance for the test run, run migrations, seed, test, tear down. The most realistic. Use Docker for Postgres; use in-memory SQLite for speed.
+2. **Transaction rollback**, each test runs inside a transaction that rolls back at the end. Fast, clean, but doesn't test transaction behavior or constraints that only fire on commit.
+3. **Seed + truncate**, seed once, truncate tables between tests. Faster than re-seeding, but tests must not depend on seed data order.
 
 For dashboards, **real database with seed data per test suite** is the right default. It matches production most closely and catches migration issues.
 
@@ -296,10 +296,10 @@ Catch unintended visual changes before they ship. Especially valuable for dashbo
 
 ### Tools
 
-- **Playwright screenshots** — built-in, compare screenshots between runs. Good enough for most teams.
-- **Percy** (BrowserStack) — cloud service that diffs screenshots with smart comparison (ignores anti-aliasing, font rendering). SaaS.
-- **Chromatic** — from the Storybook team. Tests components in isolation with visual diffs.
-- **Argos** — open-source visual testing.
+- **Playwright screenshots**, built-in, compare screenshots between runs. Good enough for most teams.
+- **Percy** (BrowserStack), cloud service that diffs screenshots with smart comparison (ignores anti-aliasing, font rendering). SaaS.
+- **Chromatic**, from the Storybook team. Tests components in isolation with visual diffs.
+- **Argos**, open-source visual testing.
 
 ### How to use
 
@@ -314,11 +314,11 @@ test('dashboard home looks correct', async ({ page }) => {
 });
 ```
 
-Don't screenshot every page in every state — the maintenance burden grows fast. Focus on: landing page, main list page, main form, empty states, and the login page.
+Don't screenshot every page in every state, the maintenance burden grows fast. Focus on: landing page, main list page, main form, empty states, and the login page.
 
 ## Playwright component testing
 
-Playwright now supports component testing for React, Vue, Svelte, and Angular. This sits between Testing Library (JSDOM, not a real browser) and full E2E (real browser, full app). Components render in a real browser with full CSS — ideal for testing visual states, focus management, and responsive behavior that JSDOM misses.
+Playwright now supports component testing for React, Vue, Svelte, and Angular. This sits between Testing Library (JSDOM, not a real browser) and full E2E (real browser, full app). Components render in a real browser with full CSS, ideal for testing visual states, focus management, and responsive behavior that JSDOM misses.
 
 Use for: components with complex CSS (dark mode, responsive breakpoints), focus management (modals, drawers), and hover/animation states.
 
@@ -383,23 +383,23 @@ Every test gets unique data. No test depends on specific seed IDs.
 
 ```
 tests/
-  unit/                  ← pure logic, fast
+  unit/                  <- pure logic, fast
     permissions.test.ts
     formatters.test.ts
     validators.test.ts
-  components/            ← component tests with Testing Library
+  components/            <- component tests with Testing Library
     CustomerForm.test.tsx
     CustomerTable.test.tsx
     EmptyState.test.tsx
-  e2e/                   ← Playwright integration + E2E
+  e2e/                   <- Playwright integration + E2E
     auth.spec.ts
     customers.spec.ts
     settings.spec.ts
     permissions.spec.ts
-  fixtures/              ← shared test data
+  fixtures/              <- shared test data
     customers.ts
     users.ts
-  mocks/                 ← MSW handlers
+  mocks/                 <- MSW handlers
     handlers.ts
     server.ts
 ```
@@ -408,12 +408,12 @@ tests/
 
 Tests must run on every push. A test that only runs locally is a test that stops running after week two.
 
-- **Run unit + component tests first** — they're fast. Fail fast.
-- **Run E2E tests in parallel** — Playwright supports sharding across CI workers.
-- **Run a11y tests as part of E2E** — axe adds negligible time.
-- **Run visual regression as a separate job** — it's slower and the diffs need human review.
-- **Seed the test database in CI** — same seed script as local dev. If the seed breaks, CI catches it.
-- **Report coverage** — not as a gate (100% coverage is a vanity metric), but as a trend. Declining coverage on critical paths (auth, permissions, CRUD) is a signal.
+- **Run unit + component tests first**, they're fast. Fail fast.
+- **Run E2E tests in parallel**, Playwright supports sharding across CI workers.
+- **Run a11y tests as part of E2E**, axe adds negligible time.
+- **Run visual regression as a separate job**, it's slower and the diffs need human review.
+- **Seed the test database in CI**, same seed script as local dev. If the seed breaks, CI catches it.
+- **Report coverage**, not as a gate (100% coverage is a vanity metric), but as a trend. Declining coverage on critical paths (auth, permissions, CRUD) is a signal.
 
 ## The minimum test suite
 

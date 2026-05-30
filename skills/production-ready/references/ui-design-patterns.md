@@ -1,8 +1,8 @@
 # UI Design Patterns
 
-This file covers the visual design layer — the components, typography, spacing, tokens, motion, and micro-copy that make a dashboard feel polished and professional. The layout structure is in `information-architecture.md`; this file is about what goes inside it.
+This file covers the visual design layer, the components, typography, spacing, tokens, motion, and micro-copy that make a dashboard feel polished and professional. The layout structure is in `information-architecture.md`; this file is about what goes inside it.
 
-Dashboard UI is not marketing-site UI. Dashboards are data-dense, functional, used for hours daily. Every decision here optimizes for **scannability, density, and clarity** — not novelty.
+Dashboard UI is not marketing-site UI. Dashboards are data-dense, functional, used for hours daily. Every decision here optimizes for **scannability, density, and clarity**, not novelty.
 
 **Precedence note.** If a project-root `DESIGN.md` exists (the [Google Labs format](https://github.com/google-labs-code/design.md), Apache 2.0; YAML frontmatter holds machine-readable design tokens), it is the canonical token source and supersedes the archetype + 5-decision derivation in this file. See SKILL.md Step 3 sub-step 3a and `references/design-md-integration.md` for the consumption recipe. This file is the scaffold-from-scratch path: read it when no `DESIGN.md` is present, and optionally use the chosen archetype to scaffold a `DESIGN.md` before Step 4 so the next agent starts from sub-step 3a, not 3b.
 
@@ -22,7 +22,7 @@ Use exactly these variants, in descending visual weight. **One primary per visib
 | **Secondary** | Supporting actions (Cancel, Back, Export) | Muted bg, standard foreground |
 | **Outline** | Tertiary actions, filters, toggles | Border only, transparent bg, hover fills |
 | **Ghost** | Inline actions, table row actions, toolbar items | No visible bg at rest, hover fills |
-| **Destructive** | Delete, revoke, disconnect — anything irreversible | Red/danger bg, white foreground |
+| **Destructive** | Delete, revoke, disconnect, anything irreversible | Red/danger bg, white foreground |
 | **Link** | Navigation-styled action, "Learn more" | Text-only, underline on hover |
 
 **Sizes:** `sm` (h-8, text-xs), `default` (h-9, text-sm), `lg` (h-10, text-base), `icon` (h-9 w-9, square).
@@ -35,9 +35,9 @@ Use exactly these variants, in descending visual weight. **One primary per visib
 
 ### Badge / chip / pill
 
-- **Badge** — read-only label, no interaction. Padding 2px 10px, border-radius full, text-xs, font-medium. Use for counts, categories, metadata.
-- **Chip** — dismissible or selectable. Same styling plus an X icon (16px) with 4px gap. Use for active filters, tag inputs.
-- Semantic colors: `default` (muted bg), `success` (green), `warning` (amber), `error` (red), `info` (blue). Always pair color with a text label — never color alone.
+- **Badge**, read-only label, no interaction. Padding 2px 10px, border-radius full, text-xs, font-medium. Use for counts, categories, metadata.
+- **Chip**, dismissible or selectable. Same styling plus an X icon (16px) with 4px gap. Use for active filters, tag inputs.
+- Semantic colors: `default` (muted bg), `success` (green), `warning` (amber), `error` (red), `info` (blue). Always pair color with a text label, never color alone.
 
 ### Avatar
 
@@ -62,9 +62,9 @@ Dot: 8px circle, 6px gap to label. In tables, the dot sits inline left of the te
 
 ### Toggle vs checkbox
 
-- **Toggle/switch** — for settings that take effect immediately (enable notifications, dark mode). No form submission needed.
-- **Checkbox** — for settings that require explicit save/submit (form fields, bulk selection, consent).
-- Never use a toggle inside a form that has a Save button — that conflates immediate and deferred actions.
+- **Toggle/switch**, for settings that take effect immediately (enable notifications, dark mode). No form submission needed.
+- **Checkbox**, for settings that require explicit save/submit (form fields, bulk selection, consent).
+- Never use a toggle inside a form that has a Save button, that conflates immediate and deferred actions.
 
 ### Progress components
 
@@ -74,8 +74,8 @@ Dot: 8px circle, 6px gap to label. In tables, the dot sits inline left of the te
 
 ### Dropdown vs command palette
 
-- **Dropdown menu** — 3-12 known options, contextual to a trigger. Max height ~300px, then scroll.
-- **Command palette** (Cmd+K) — 10+ items, search-driven, keyboard-first. Group by category. Show keyboard shortcuts right-aligned in muted text.
+- **Dropdown menu**, 3-12 known options, contextual to a trigger. Max height ~300px, then scroll.
+- **Command palette** (Cmd+K), 10+ items, search-driven, keyboard-first. Group by category. Show keyboard shortcuts right-aligned in muted text.
 
 ---
 
@@ -135,9 +135,9 @@ Dashboards rarely need large headings. The working scale:
 
 ### Truncation
 
-- **Single-line ellipsis:** `overflow: hidden; text-overflow: ellipsis; white-space: nowrap` — for table cells, nav labels, card titles.
-- **Multi-line clamp:** `-webkit-line-clamp: 2` (or 3) — for descriptions, preview text.
-- **Middle truncation** for URLs/paths: `/users/.../profile` not `/users/settings/pr...` — keep the meaningful suffix visible.
+- **Single-line ellipsis:** `overflow: hidden; text-overflow: ellipsis; white-space: nowrap`, for table cells, nav labels, card titles.
+- **Multi-line clamp:** `-webkit-line-clamp: 2` (or 3), for descriptions, preview text.
+- **Middle truncation** for URLs/paths: `/users/.../profile` not `/users/settings/pr...`, keep the meaningful suffix visible.
 - Always provide full text via `title` attribute or tooltip on hover.
 - Tags/badges in a row: show 3, then `+N more` pill. Expand on click.
 
@@ -204,14 +204,14 @@ Store the preference per user. Apply via a CSS class on `<body>` or a `data-dens
 Primitive (raw values) -> Semantic (intent) -> Component (specific usage)
 ```
 
-**Tier 1 — Primitives:** Raw palette values. Never used directly in components.
+**Tier 1, Primitives:** Raw palette values. Never used directly in components.
 ```css
 --color-gray-50: oklch(0.985 0 0);
 --color-gray-900: oklch(0.205 0 0);
 --color-blue-500: oklch(0.623 0.214 259);
 ```
 
-**Tier 2 — Semantic:** Describe purpose, reference primitives. This is where dark mode swapping happens.
+**Tier 2, Semantic:** Describe purpose, reference primitives. This is where dark mode swapping happens.
 ```css
 --background: var(--color-gray-50);         /* page bg */
 --foreground: var(--color-gray-900);        /* primary text */
@@ -222,7 +222,7 @@ Primitive (raw values) -> Semantic (intent) -> Component (specific usage)
 --border: var(--color-gray-200);            /* default borders */
 ```
 
-**Tier 3 — Component** (optional, for complex systems):
+**Tier 3, Component** (optional, for complex systems):
 ```css
 --button-primary-bg: var(--primary);
 --card-bg: var(--card);
@@ -259,7 +259,7 @@ Pattern: `--{category}-{element}-{property}-{state}`
 
 ### Dark mode swapping
 
-Light tokens on `:root`, dark tokens on `.dark`. Use the class strategy (not media query) for dashboards — users want explicit control.
+Light tokens on `:root`, dark tokens on `.dark`. Use the class strategy (not media query) for dashboards, users want explicit control.
 
 ```css
 :root {
@@ -329,9 +329,9 @@ Keep opacity fades (safe for motion-sensitive users). Remove all transforms, sli
 
 ### What NOT to animate
 
-- Table row data changes — just swap values
-- Filter application results — just re-render
-- Pagination — just swap content
+- Table row data changes, just swap values
+- Filter application results, just re-render
+- Pagination, just swap content
 - Sort column changes
 - Breadcrumb updates
 - Anything that would delay a power user
@@ -357,7 +357,7 @@ new Intl.NumberFormat('en', { style: 'percent', minimumFractionDigits: 1 })
 
 Rules:
 - Compact display for stat cards and chart axes. Full precision in tables and detail views.
-- Always locale-aware — pass the user's locale, never hardcode `'en-US'`.
+- Always locale-aware, pass the user's locale, never hardcode `'en-US'`.
 - Tabular figures for all number columns.
 - Right-align all numeric columns AND their headers.
 
@@ -382,14 +382,14 @@ Rule: Audit logs and data tables always use absolute timestamps. Relative is for
 - Click: replace content with an input, auto-focused, pre-filled.
 - Save on Enter or blur. Cancel on Escape.
 - Brief inline success indicator (checkmark, fades after 1.5s).
-- Never inline-edit critical fields (email, permissions, financial amounts) — use a modal or detail page.
+- Never inline-edit critical fields (email, permissions, financial amounts), use a modal or detail page.
 
 ### Skeleton loading
 
 - Skeleton shape must match the content it replaces: rectangle for text, circle for avatars, rounded rect for cards.
 - Table skeletons: 5-8 rows with **randomized widths** (not identical) so they look organic.
 - Shimmer: `linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)` sweeping at 1.5s, linear, infinite.
-- If data loads in <200ms, don't show a skeleton at all — use a `setTimeout` delay before rendering to prevent flash.
+- If data loads in <200ms, don't show a skeleton at all, use a `setTimeout` delay before rendering to prevent flash.
 
 ---
 
@@ -475,7 +475,7 @@ Position: bottom-right (or top-right). Stack max 3, queue the rest. Always inclu
 - Desktop: 4-column grid.
 - Tablet: 2-column.
 - Mobile: 2-column compact or single-column stack.
-- Never 3-column — breaks awkwardly to 2.
+- Never 3-column, breaks awkwardly to 2.
 
 **Charts:**
 - Maintain aspect ratio, single chart per row on mobile.
@@ -533,7 +533,7 @@ In dark mode, **lighter = higher elevation** (closer to the light source). Inver
 | 12px | Inline with small/caption text (rare) |
 | 16px | Inline with body text, table row actions, dense UI |
 | 20px | Inside buttons (with text), form field icons, nav items (compact) |
-| 24px | Standalone, nav items (standard), card actions — the default icon size |
+| 24px | Standalone, nav items (standard), card actions, the default icon size |
 | 32px | Empty state feature icons, large action buttons |
 | 40-48px | Empty state centerpieces, hero illustrations |
 
@@ -567,7 +567,7 @@ Minimum touch target: 44x44px even if the icon is 16px.
 
 | Token | Use |
 |---|---|
-| `shadow-xs` | Subtle lift — input fields, secondary buttons |
+| `shadow-xs` | Subtle lift, input fields, secondary buttons |
 | `shadow-sm` | Standard cards (when not using border-only), floating toolbar |
 | `shadow-md` | Dropdowns, popovers, elevated cards |
 | `shadow-lg` | Drawers, panels, command palette |
@@ -581,7 +581,7 @@ Modern dashboard trend (Linear, Vercel, shadcn/ui): prefer **1px borders** over 
 
 - Use `ring` utilities for keyboard focus, not shadow.
 - Default: 2px ring in the `ring` token color, 2px offset from the element.
-- **Never remove focus outlines.** Style them if the defaults are ugly — don't delete them.
+- **Never remove focus outlines.** Style them if the defaults are ugly, don't delete them.
 
 ### Dark mode shadows
 
@@ -634,7 +634,7 @@ Increase opacity from 10% to 25-40%. Or skip shadows entirely in dark mode and r
 
 Never use `bg-primary text-white`. Use `bg-primary text-primary-foreground`. The `-foreground` token pattern (from shadcn/ui) pairs every background with a tested, accessible text color. When the primary color changes or dark mode activates, the foreground adjusts automatically.
 
-The auto-foreground algorithm: compute relative luminance of the background. If luminance > ~0.18, use dark text. Otherwise, use light text. Mid-tone backgrounds (grays ~50%, muted pastels) may fail with BOTH pure black and white — use off-black/off-white or avoid these as text backgrounds.
+The auto-foreground algorithm: compute relative luminance of the background. If luminance > ~0.18, use dark text. Otherwise, use light text. Mid-tone backgrounds (grays ~50%, muted pastels) may fail with BOTH pure black and white, use off-black/off-white or avoid these as text backgrounds.
 
 ### Contrast requirements
 
@@ -650,9 +650,9 @@ Check with: Chrome DevTools color picker (inline contrast ratio), axe DevTools (
 ### Buttons need three contrast checks
 
 Not just text-vs-button, but three relationships simultaneously:
-1. **Button text vs. button background** — 4.5:1
-2. **Button background vs. page surface** — 3:1 (so the button is visually distinct)
-3. **Focus state vs. default state** — 3:1 change in the focus indicator
+1. **Button text vs. button background**, 4.5:1
+2. **Button background vs. page surface**, 3:1 (so the button is visually distinct)
+3. **Focus state vs. default state**, 3:1 change in the focus indicator
 
 ### Status colors: the inversion pattern
 
@@ -680,9 +680,9 @@ Warning: bg-yellow-50 border-l-4 border-yellow-500 text-yellow-800
 
 When the sidebar or header has a dark or colored background, ALL elements inside must use separate tokens:
 
-- **Sidebar tokens:** `sidebar-background`, `sidebar-foreground`, `sidebar-primary`, `sidebar-accent`, `sidebar-border` — separate from the main content tokens
+- **Sidebar tokens:** `sidebar-background`, `sidebar-foreground`, `sidebar-primary`, `sidebar-accent`, `sidebar-border`, separate from the main content tokens
 - **Why:** if the sidebar is dark navy and the content area is white, they need independent foreground colors. Using the main `foreground` token inside a dark sidebar produces invisible text.
-- **Active nav item:** needs EXTRA contrast against the sidebar background — lighter/darker background strip + bold text or left border indicator
+- **Active nav item:** needs EXTRA contrast against the sidebar background, lighter/darker background strip + bold text or left border indicator
 - **Hover:** subtle background change (white at 5-10% opacity on dark sidebars)
 
 ### Brand color problems
@@ -691,7 +691,7 @@ When the sidebar or header has a dark or colored background, ALL elements inside
 
 **Too dark (navy, near-black):** disappears in dark mode, loses brand identity against dark surfaces. Solutions: lighten for dark mode (use mid-tone 400-500), add saturation.
 
-**Dark mode adaptation:** reduce saturation ~10-20% and increase lightness ~10-15%. Vibrant colors cause eye strain on dark backgrounds. The Radix Colors approach: a 12-step scale with step 9 as the pure brand color, steps 1-8 for backgrounds/borders, steps 10-12 for text — all with guaranteed accessible pairings.
+**Dark mode adaptation:** reduce saturation ~10-20% and increase lightness ~10-15%. Vibrant colors cause eye strain on dark backgrounds. The Radix Colors approach: a 12-step scale with step 9 as the pure brand color, steps 1-8 for backgrounds/borders, steps 10-12 for text, all with guaranteed accessible pairings.
 
 ### Color accessibility
 
@@ -699,7 +699,7 @@ When the sidebar or header has a dark or colored background, ALL elements inside
 
 **Simulation tools:** Chrome DevTools Rendering tab > Emulate vision deficiencies (protanopia, deuteranopia, tritanopia). Sim Daltonism (macOS) for real-time overlay.
 
-**The triple-indicator rule:** every status uses icon (distinct shape) + label (text) + color. A checkmark and an X are recognizable regardless of color. Use: checkmark circle for success, X circle for error, triangle for warning, info circle for info — distinct shapes, not just colors.
+**The triple-indicator rule:** every status uses icon (distinct shape) + label (text) + color. A checkmark and an X are recognizable regardless of color. Use: checkmark circle for success, X circle for error, triangle for warning, info circle for info, distinct shapes, not just colors.
 
 ### Focus ring that works on ALL backgrounds
 
@@ -713,7 +713,7 @@ The two-color technique: a white inner ring + black outer ring (or vice versa). 
 }
 ```
 
-Do NOT use `outline: none` and rely on `box-shadow` alone — Windows High Contrast Mode suppresses box-shadow.
+Do NOT use `outline: none` and rely on `box-shadow` alone, Windows High Contrast Mode suppresses box-shadow.
 
 ---
 
@@ -725,8 +725,8 @@ Same component, same appearance, everywhere. No exceptions.
 
 - **Sizes:** if buttons are 36px tall, they're 36px tall on EVERY page. Inputs match button height.
 - **Spacing:** if cards have 16px padding, they have 16px padding everywhere. Form field gaps are identical across all forms.
-- **Typography:** h1 is h1 everywhere — same size, weight, line-height. Don't use a different heading scale on Settings vs Dashboard.
-- **Border radius:** one radius for everything — buttons, cards, inputs, modals, dropdowns. 6px or 8px. Don't mix 4px buttons with 12px cards.
+- **Typography:** h1 is h1 everywhere, same size, weight, line-height. Don't use a different heading scale on Settings vs Dashboard.
+- **Border radius:** one radius for everything, buttons, cards, inputs, modals, dropdowns. 6px or 8px. Don't mix 4px buttons with 12px cards.
 - **Shadows:** same shadow for the same elevation level across all pages.
 
 **Design tokens are the enforcement mechanism.** `rounded-md` is easier than `rounded-[7px]`. `text-foreground` is easier than `text-[#1a1a1a]`. When someone reaches for an arbitrary value, that's a violation. Catch it in code review.
@@ -742,7 +742,7 @@ Same component, same appearance, everywhere. No exceptions.
 
 ### Layout consistency
 
-- **Page header:** same structure on every page — title left, actions right, same height, same spacing.
+- **Page header:** same structure on every page, title left, actions right, same height, same spacing.
 - **Content width:** same max-width or same full-width behavior across pages of the same type.
 - **Table alignment:** numbers right-aligned in ALL tables. Dates in the same format everywhere. Actions always the rightmost column.
 - **Form layout:** labels above inputs on ALL forms. Not above on some and beside on others.
@@ -755,7 +755,7 @@ How to catch drift:
 1. **Component inventory:** search for duplicate implementations (`StatusBadge` in two files with different styling).
 2. **Hardcoded value scan:** `grep` for hex codes, `rgb(`, arbitrary Tailwind values (`text-[#...]`, `p-[...]`) in component files. These bypass the token system.
 3. **Cross-page comparison:** render the same data type (dates, currency, status badges) on different pages. They must look identical.
-4. **Storybook:** see all component variants in one place. Every button state, every badge color, every form input state — side by side.
+4. **Storybook:** see all component variants in one place. Every button state, every badge color, every form input state, side by side.
 5. **Visual regression in CI:** Chromatic or Playwright screenshots catch unintended changes before merge.
 6. **ESLint/Stylelint rules:** flag hardcoded colors, arbitrary spacing values, raw Tailwind scale usage when semantic tokens exist.
 
@@ -771,7 +771,7 @@ How to catch drift:
 - **Don't mix icon families.** One family (Lucide, Heroicons, Phosphor). Mixed families look chaotic.
 - **Don't mix filled and outlined icons** in the same context.
 - **Don't use custom z-index values.** Use the token scale. `z-index: 99999` is a symptom.
-- **Don't remove focus outlines.** Style them — don't delete them.
+- **Don't remove focus outlines.** Style them, don't delete them.
 - **Don't use `color` alone to convey meaning.** Always pair with icon, label, or shape.
 - **Don't exceed 500ms** on any UI transition in a dashboard.
 - **Don't show skeletons for loads under 200ms.** Add a delay before rendering the skeleton.
@@ -814,36 +814,36 @@ Write these into the architecture note alongside the stack and route map.
 
 | Domain mood | Primary hue range | Example |
 |---|---|---|
-| Trust, stability (finance, healthcare, legal) | Blue 200–230, Slate 210–220 | `hsl(217 71% 45%)` |
-| Growth, nature (agriculture, sustainability) | Green 130–160 | `hsl(142 64% 38%)` |
-| Energy, urgency (gaming, marketing, sales) | Orange 15–30, Red 0–10 | `hsl(24 95% 53%)` |
-| Creativity, premium (media, design, luxury) | Purple 260–290, Rose 330–350 | `hsl(271 76% 53%)` |
-| Warmth, hospitality (HR, education, food) | Amber 35–50, Warm gray | `hsl(43 96% 56%)` |
-| Technology, precision (DevOps, IoT, cyber) | Cyan 180–200, Cool gray | `hsl(192 91% 36%)` |
-| Neutrality, authority (government, enterprise) | Slate 200–220, minimal accent | `hsl(215 16% 47%)` |
+| Trust, stability (finance, healthcare, legal) | Blue 200-230, Slate 210-220 | `hsl(217 71% 45%)` |
+| Growth, nature (agriculture, sustainability) | Green 130-160 | `hsl(142 64% 38%)` |
+| Energy, urgency (gaming, marketing, sales) | Orange 15-30, Red 0-10 | `hsl(24 95% 53%)` |
+| Creativity, premium (media, design, luxury) | Purple 260-290, Rose 330-350 | `hsl(271 76% 53%)` |
+| Warmth, hospitality (HR, education, food) | Amber 35-50, Warm gray | `hsl(43 96% 56%)` |
+| Technology, precision (DevOps, IoT, cyber) | Cyan 180-200, Cool gray | `hsl(192 91% 36%)` |
+| Neutrality, authority (government, enterprise) | Slate 200-220, minimal accent | `hsl(215 16% 47%)` |
 
 Build the full palette from one primary:
 1. Pick the primary hue from the table above.
 2. Derive the secondary accent: +120° or +180° on the hue wheel, reduced saturation.
-3. Surface tones: desaturate the primary to 5–10% saturation for backgrounds.
-4. Sidebar: darken the primary to 15–20% lightness for dark sidebars, or use the surface tone for light sidebars.
+3. Surface tones: desaturate the primary to 5-10% saturation for backgrounds.
+4. Sidebar: darken the primary to 15-20% lightness for dark sidebars, or use the surface tone for light sidebars.
 5. Semantic colors (success/warning/error/info) stay constant. Only adjust lightness to contrast with your surfaces.
 
 **Decision 2. Typography pairing.** Pick one pair from the table. Every pair is on Google Fonts and tested for dashboard readability.
 
 | Personality | Heading font | Body font | Best for |
 |---|---|---|---|
-| **Corporate precision** | DM Sans (500–700) | DM Sans (400) | Finance, legal, enterprise |
-| **Warm professional** | Nunito (600–700) | Nunito Sans (400) | HR, education, hospitality |
-| **Modern technical** | Space Grotesk (500–700) | IBM Plex Sans (400) | DevOps, analytics, developer tools |
+| **Corporate precision** | DM Sans (500-700) | DM Sans (400) | Finance, legal, enterprise |
+| **Warm professional** | Nunito (600-700) | Nunito Sans (400) | HR, education, hospitality |
+| **Modern technical** | Space Grotesk (500-700) | IBM Plex Sans (400) | DevOps, analytics, developer tools |
 | **Editorial authority** | Fraunces (600) | Source Serif 4 (400) | Media, publishing, CMS |
-| **Soft consumer** | Plus Jakarta Sans (600–700) | Plus Jakarta Sans (400) | Consumer SaaS, productivity |
-| **Bold startup** | Outfit (600–700) | Inter (400) | Marketing, CRM, general SaaS |
-| **Playful friendly** | Quicksand (600–700) | Nunito Sans (400) | Food, community, consumer |
+| **Soft consumer** | Plus Jakarta Sans (600-700) | Plus Jakarta Sans (400) | Consumer SaaS, productivity |
+| **Bold startup** | Outfit (600-700) | Inter (400) | Marketing, CRM, general SaaS |
+| **Playful friendly** | Quicksand (600-700) | Nunito Sans (400) | Food, community, consumer |
 | **Luxury restrained** | Cormorant Garamond (500) | Lato (400) | Real estate, premium, fashion |
-| **Industrial utility** | Barlow (600–700) | Barlow (400) | Logistics, construction, manufacturing |
-| **Data-dense mono** | JetBrains Mono (500–700) | Inter (400) | Trading, monitoring, cybersecurity |
-| **Clean geometric** | Satoshi (500–700) | General Sans (400) | Minimal SaaS, design tools |
+| **Industrial utility** | Barlow (600-700) | Barlow (400) | Logistics, construction, manufacturing |
+| **Data-dense mono** | JetBrains Mono (500-700) | Inter (400) | Trading, monitoring, cybersecurity |
+| **Clean geometric** | Satoshi (500-700) | General Sans (400) | Minimal SaaS, design tools |
 | **Humanist warmth** | Merriweather Sans (700) | Source Sans 3 (400) | Healthcare, wellness, non-profit |
 | **Tech-forward** | Sora (600) | DM Sans (400) | AI/ML, IoT, futuristic |
 | **Dense professional** | Figtree (600) | Figtree (400) | Analytics, reporting, dense data |
@@ -865,9 +865,9 @@ Apply uniformly: buttons, cards, inputs, badges, dropdowns, modals all use the s
 
 | Level | Row height | Gap | Padding | Best for |
 |---|---|---|---|---|
-| **Compact** | 32px | 8–12px | 12–16px | Data-heavy: analytics, trading, monitoring, tables with 50+ rows |
-| **Comfortable** | 40px | 16px | 16–24px | General SaaS, admin panels, most dashboards |
-| **Spacious** | 48px | 20–24px | 24–32px | Consumer-facing, onboarding-heavy, low data density |
+| **Compact** | 32px | 8-12px | 12-16px | Data-heavy: analytics, trading, monitoring, tables with 50+ rows |
+| **Comfortable** | 40px | 16px | 16-24px | General SaaS, admin panels, most dashboards |
+| **Spacious** | 48px | 20-24px | 24-32px | Consumer-facing, onboarding-heavy, low data density |
 
 Density affects every surface: table rows, sidebar items, form fields, card padding, section gaps. Set it once via the spacing unit token and derive everything from it.
 

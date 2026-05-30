@@ -2,7 +2,7 @@
 
 Bitbucket Cloud-specific repository configuration: project settings, branch permissions, merge checks, issue tracker, Pipelines 2.0 (for all 12 supported stacks), Pipes, deployment environments, self-hosted runners, and the build status API. Load this reference when the target platform is Bitbucket Cloud (detected by `bitbucket-pipelines.yml` at repo root, a `bitbucket.org` remote, or user statement).
 
-Bitbucket Cloud is Atlassian's Git host. Teams reach for it when they already live inside the Atlassian ecosystem — Jira for issues, Confluence for docs, Trello for planning — and want the tightest possible integration across those surfaces. Pipelines 2.0 is Docker-image-based, YAML-defined, configured from a single `bitbucket-pipelines.yml` file at the repo root, and runs on Atlassian-hosted or self-hosted runners. Deployment environments (`test`, `staging`, `production`) are first-class pipeline features with their own variable scopes, and Pipes — Bitbucket's marketplace of composable Docker steps — fill the role GitHub Actions plays on GitHub.
+Bitbucket Cloud is Atlassian's Git host. Teams reach for it when they already live inside the Atlassian ecosystem, Jira for issues, Confluence for docs, Trello for planning, and want the tightest possible integration across those surfaces. Pipelines 2.0 is Docker-image-based, YAML-defined, configured from a single `bitbucket-pipelines.yml` file at the repo root, and runs on Atlassian-hosted or self-hosted runners. Deployment environments (`test`, `staging`, `production`) are first-class pipeline features with their own variable scopes, and Pipes, Bitbucket's marketplace of composable Docker steps, fill the role GitHub Actions plays on GitHub.
 
 > **Scope note.** This reference covers **Bitbucket Cloud** (`bitbucket.org`). Bitbucket Server / Data Center is a different product with a different Pipelines engine and is out of scope for this reference.
 >
@@ -13,7 +13,7 @@ Bitbucket Cloud is Atlassian's Git host. Teams reach for it when they already li
 Reach for Bitbucket Cloud when at least one of these is already true:
 
 - **You already pay for Atlassian.** Jira + Confluence + Bitbucket share one identity, admin surface, and billing line.
-- **Jira is the system of record for work.** Smart Commits and branch/PR linking are first-class — more native than any third-party Jira integration on GitHub or GitLab.
+- **Jira is the system of record for work.** Smart Commits and branch/PR linking are first-class, more native than any third-party Jira integration on GitHub or GitLab.
 - **You want deployment environments as a built-in pipeline feature.** Declare `deployment: production` on a step and Bitbucket tracks the deploy with zero extra config.
 - **You need mixed-platform self-hosted runners.** Linux, Windows, and macOS runners are first-class alongside Atlassian-hosted runners, targeted by label from YAML.
 
@@ -27,17 +27,17 @@ Configure these under **Repository settings** (per-repo) or **Workspace settings
 
 ### Feature toggles
 
-Toggle under **Repository settings → Repository details** and **Repository settings → Features**:
+Toggle under **Repository settings -> Repository details** and **Repository settings -> Features**:
 
-- **Pipelines** — on if the repo runs CI. Enabled per-repo; workspace admins can disable entirely for cost control.
-- **Deployments** — on if the repo deploys anywhere. Requires Pipelines.
-- **Issue tracker** — on if you want native Bitbucket issues. Off if you use Jira or an external tracker (most teams on Atlassian turn this off and route everything through Jira).
-- **Wiki** — on if you want in-repo wiki. Most teams use Confluence instead.
-- **Forks** — allow / restrict to workspace / disallow. Public repos typically allow; private repos typically restrict.
+- **Pipelines**, on if the repo runs CI. Enabled per-repo; workspace admins can disable entirely for cost control.
+- **Deployments**, on if the repo deploys anywhere. Requires Pipelines.
+- **Issue tracker**, on if you want native Bitbucket issues. Off if you use Jira or an external tracker (most teams on Atlassian turn this off and route everything through Jira).
+- **Wiki**, on if you want in-repo wiki. Most teams use Confluence instead.
+- **Forks**, allow / restrict to workspace / disallow. Public repos typically allow; private repos typically restrict.
 
 ### Access levels
 
-Bitbucket uses three per-repo permission levels — **Admin**, **Write**, and **Read**. Grants come from direct users, groups, or workspace-level defaults.
+Bitbucket uses three per-repo permission levels, **Admin**, **Write**, and **Read**. Grants come from direct users, groups, or workspace-level defaults.
 
 | Level | Can do |
 |---|---|
@@ -45,27 +45,27 @@ Bitbucket uses three per-repo permission levels — **Admin**, **Write**, and **
 | **Write** | Push to unprotected branches, open PRs, merge PRs (subject to branch permissions and merge checks) |
 | **Read** | Clone, fork, open PRs from forks, comment |
 
-Configure under **Repository settings → User and group access**. Workspace-wide defaults live at **Workspace settings → User groups**; repo-level grants override group defaults.
+Configure under **Repository settings -> User and group access**. Workspace-wide defaults live at **Workspace settings -> User groups**; repo-level grants override group defaults.
 
-For PR reviewer enforcement, map these to branch permission rules (see next section) — access level alone does not gate merge. A Write user still cannot merge a protected branch without satisfying the branch's merge checks.
+For PR reviewer enforcement, map these to branch permission rules (see next section), access level alone does not gate merge. A Write user still cannot merge a protected branch without satisfying the branch's merge checks.
 
 ### Visibility
 
-Bitbucket repos are either **Private** (explicit members) or **Public** (world-readable). There is no "Internal" tier like GitLab's — workspace-wide visibility is modeled via private repos plus workspace membership.
+Bitbucket repos are either **Private** (explicit members) or **Public** (world-readable). There is no "Internal" tier like GitLab's, workspace-wide visibility is modeled via private repos plus workspace membership.
 
 ---
 
 ## Branch permissions
 
-Bitbucket's equivalent of GitHub branch protection rules and GitLab protected branches. Configure under **Repository settings → Branch restrictions**. Unlike GitHub rulesets, branch permissions are **UI- and API-configured only** — there is no file-based representation that round-trips into the repo.
+Bitbucket's equivalent of GitHub branch protection rules and GitLab protected branches. Configure under **Repository settings -> Branch restrictions**. Unlike GitHub rulesets, branch permissions are **UI- and API-configured only**, there is no file-based representation that round-trips into the repo.
 
-### Mapping GitHub rulesets → Bitbucket branch restrictions
+### Mapping GitHub rulesets -> Bitbucket branch restrictions
 
 | GitHub ruleset concept | Bitbucket branch restriction |
 |---|---|
 | Require a pull request before merging | Restriction type: **Prevent changes without a pull request** |
 | Require N approving reviews | Merge check: **Minimum number of approvals** |
-| Require review from code owners | Use **Default reviewers** — no CODEOWNERS file equivalent (see next section) |
+| Require review from code owners | Use **Default reviewers**, no CODEOWNERS file equivalent (see next section) |
 | Dismiss stale approvals on new commits | Merge check: **Reset approvals when new changes are pushed** |
 | Require status checks to pass | Merge check: **Minimum successful builds** |
 | Require conversation resolution | Merge check: **No failed tasks** / no unresolved tasks |
@@ -78,7 +78,7 @@ Bitbucket's equivalent of GitHub branch protection rules and GitLab protected br
 
 A typical `main` branch restriction for a small team looks like:
 
-- **Branch match:** `main` (exact name — glob patterns like `release/*` are supported)
+- **Branch match:** `main` (exact name, glob patterns like `release/*` are supported)
 - **Prevent changes without a pull request:** on
 - **Prevent rewriting history:** on (no force pushes)
 - **Prevent deletion:** on
@@ -90,7 +90,7 @@ A typical `main` branch restriction for a small team looks like:
 
 ### Creating a restriction via REST API
 
-Bitbucket's REST API can create restrictions programmatically — useful for applying the same policy across a workspace's repos. Authenticate with a workspace access token or app password.
+Bitbucket's REST API can create restrictions programmatically, useful for applying the same policy across a workspace's repos. Authenticate with a workspace access token or app password.
 
 ```bash
 curl -X POST \
@@ -104,7 +104,7 @@ curl -X POST \
   }'
 ```
 
-Each restriction "kind" is a separate API call — apply them one by one:
+Each restriction "kind" is a separate API call, apply them one by one:
 
 - `push` (who can push at all)
 - `force` (prevent force-push)
@@ -119,7 +119,7 @@ See the Sources section for the full Atlassian API reference.
 
 ### Difference from GitHub rulesets
 
-GitHub rulesets can be exported, version-controlled, and reimported as JSON. Bitbucket branch permissions are stateful server-side only — the REST API is the backup/replay story. If you need branch permissions checked into the repo itself, that's a gap; teams work around it by scripting the REST calls in a `scripts/apply-branch-permissions.sh` file and running it via Pipelines on workspace setup.
+GitHub rulesets can be exported, version-controlled, and reimported as JSON. Bitbucket branch permissions are stateful server-side only, the REST API is the backup/replay story. If you need branch permissions checked into the repo itself, that's a gap; teams work around it by scripting the REST calls in a `scripts/apply-branch-permissions.sh` file and running it via Pipelines on workspace setup.
 
 ---
 
@@ -127,7 +127,7 @@ GitHub rulesets can be exported, version-controlled, and reimported as JSON. Bit
 
 ### Supported merge strategies
 
-Bitbucket PR merges support three strategies, configurable per-repo under **Repository settings → Merge strategies**:
+Bitbucket PR merges support three strategies, configurable per-repo under **Repository settings -> Merge strategies**:
 
 | Strategy | Effect | Best for |
 |---|---|---|
@@ -141,21 +141,21 @@ Bitbucket PR merges support three strategies, configurable per-repo under **Repo
 
 Merge checks are configured per branch restriction (see Branch permissions above), not as a separate branch-protection object. Supported checks:
 
-- **Minimum number of approvals** — N reviewer approvals before merge is allowed
-- **Minimum approvals from default reviewers** — N of the configured default reviewers must approve
-- **Minimum successful builds** — N pipeline builds must report green on the PR's head commit
-- **No failed tasks** — all inline tasks (task checkboxes in PR comments) must be resolved
-- **Reset approvals on new commits** — approvals are dismissed when the PR branch is updated
+- **Minimum number of approvals**, N reviewer approvals before merge is allowed
+- **Minimum approvals from default reviewers**, N of the configured default reviewers must approve
+- **Minimum successful builds**, N pipeline builds must report green on the PR's head commit
+- **No failed tasks**, all inline tasks (task checkboxes in PR comments) must be resolved
+- **Reset approvals on new commits**, approvals are dismissed when the PR branch is updated
 
 Enabling all five on the `main` branch restriction is the recommended default for production repos.
 
-### No CODEOWNERS — use default reviewers
+### No CODEOWNERS, use default reviewers
 
 Bitbucket does **not** have a CODEOWNERS file. The closest analog is **default reviewers**, a workspace- or repo-scoped list of users who are automatically added as reviewers to every PR targeting the repo's main branch.
 
-Configure under **Repository settings → Default reviewers**:
+Configure under **Repository settings -> Default reviewers**:
 
-1. Navigate to **Repository settings → Default reviewers**.
+1. Navigate to **Repository settings -> Default reviewers**.
 2. Click **Add default reviewer** and select users from the workspace.
 3. Optionally set the number of required approvals from this list on the branch restriction (`require_default_reviewer_approvals_to_merge` via API).
 
@@ -179,21 +179,21 @@ Bitbucket ships a lightweight native issue tracker. It's suitable for:
 - **Open-source repos on Bitbucket** where external contributors need to file bugs without a Jira account
 - **Simple bug and feature lists** without sprints, epics, custom fields, or workflow automation
 
-For anything beyond that — sprint planning, custom workflows, time tracking, cross-project epics, formal ITSM — use **Jira Cloud** and turn the native tracker off. Teams already on Atlassian almost universally do this.
+For anything beyond that, sprint planning, custom workflows, time tracking, cross-project epics, formal ITSM, use **Jira Cloud** and turn the native tracker off. Teams already on Atlassian almost universally do this.
 
 ### Jira integration (brief)
 
-When a Bitbucket repo is connected to a Jira Cloud site (configured at the workspace level under **Workspace settings → Jira integration**), these work automatically with zero per-repo setup:
+When a Bitbucket repo is connected to a Jira Cloud site (configured at the workspace level under **Workspace settings -> Jira integration**), these work automatically with zero per-repo setup:
 
-- **Smart Commits** — write `ACME-123 #comment Fixed login bug #time 2h #close` in a commit message and Jira adds the comment, logs the time, and transitions the issue to Done.
-- **Issue key auto-linking** — any `ACME-123`-style token in a branch name, commit message, PR title, or PR description becomes a clickable link in both Bitbucket and Jira, and the PR shows up on the Jira issue's "Development" panel.
-- **Branch and PR creation from Jira** — Jira issues have a "Create branch" action that opens the Bitbucket branch-creation dialog pre-populated with the issue key.
+- **Smart Commits**, write `ACME-123 #comment Fixed login bug #time 2h #close` in a commit message and Jira adds the comment, logs the time, and transitions the issue to Done.
+- **Issue key auto-linking**, any `ACME-123`-style token in a branch name, commit message, PR title, or PR description becomes a clickable link in both Bitbucket and Jira, and the PR shows up on the Jira issue's "Development" panel.
+- **Branch and PR creation from Jira**, Jira issues have a "Create branch" action that opens the Bitbucket branch-creation dialog pre-populated with the issue key.
 
 Deep Jira configuration is out of scope for this reference. See the Sources section for the Atlassian doc.
 
 ### Issue templates for native Bitbucket issues
 
-Bitbucket's native issue tracker accepts Markdown bodies (not YAML issue forms like GitHub). Templates are managed under **Repository settings → Issues → Templates** — you paste the Markdown once and it becomes the default body when contributors open a new issue of that type.
+Bitbucket's native issue tracker accepts Markdown bodies (not YAML issue forms like GitHub). Templates are managed under **Repository settings -> Issues -> Templates**, you paste the Markdown once and it becomes the default body when contributors open a new issue of that type.
 
 Bitbucket issues are lighter-weight than GitHub issue forms, so keep templates short.
 
@@ -238,7 +238,7 @@ What problem does this solve? Who hits it?
 
 ## Proposed solution
 
-Describe the feature. Keep it to one concrete approach — alternatives go in the next section.
+Describe the feature. Keep it to one concrete approach, alternatives go in the next section.
 
 ## Alternatives considered
 
@@ -250,7 +250,7 @@ Describe the feature. Keep it to one concrete approach — alternatives go in th
 Links, mockups, related issues.
 ```
 
-These two templates cover 90% of the native tracker's use. Add a third "Question / support" template only if your repo actually accepts support questions as issues (most don't — point them to a discussion forum or Stack Overflow tag instead).
+These two templates cover 90% of the native tracker's use. Add a third "Question / support" template only if your repo actually accepts support questions as issues (most don't, point them to a discussion forum or Stack Overflow tag instead).
 
 ---
 
@@ -271,7 +271,7 @@ Every `bitbucket-pipelines.yml` follows this shape. Copy this skeleton, then fil
 image: atlassian/default-image:4
 
 definitions:
-  # Reusable caches — declared once, referenced by name from steps.
+  # Reusable caches, declared once, referenced by name from steps.
   caches:
     pnpm: $HOME/.local/share/pnpm/store
   # Reusable service containers (databases, Redis, etc.).
@@ -338,7 +338,7 @@ The stack-specific blocks below fill in the `script:` and `caches:` parts for ea
 
 ### Stack-specific pipelines
 
-Each block below is a complete, paste-ready `bitbucket-pipelines.yml` that covers install → lint → test → build for one stack. Drop it in the repo root, replace the real test / build script paths, commit, and enable Pipelines in **Repository settings → Pipelines → Settings**.
+Each block below is a complete, paste-ready `bitbucket-pipelines.yml` that covers install -> lint -> test -> build for one stack. Drop it in the repo root, replace the real test / build script paths, commit, and enable Pipelines in **Repository settings -> Pipelines -> Settings**.
 
 #### JavaScript / TypeScript (Node.js)
 
@@ -392,7 +392,7 @@ pipelines:
           - dist/**
 ```
 
-For pnpm or yarn, swap `npm ci` → `pnpm install --frozen-lockfile` or `yarn install --frozen-lockfile`, and add a custom cache (see the Structure overview's `definitions.caches.pnpm` example).
+For pnpm or yarn, swap `npm ci` -> `pnpm install --frozen-lockfile` or `yarn install --frozen-lockfile`, and add a custom cache (see the Structure overview's `definitions.caches.pnpm` example).
 
 #### Python
 
@@ -443,7 +443,7 @@ pipelines:
               - coverage.xml
 ```
 
-For Poetry, swap `pip install -r requirements-dev.txt` → `poetry install --with dev` and cache `~/.cache/pypoetry`. For uv, swap to `uv sync --extra dev` and cache `~/.cache/uv`.
+For Poetry, swap `pip install -r requirements-dev.txt` -> `poetry install --with dev` and cache `~/.cache/pypoetry`. For uv, swap to `uv sync --extra dev` and cache `~/.cache/uv`.
 
 #### Go
 
@@ -548,7 +548,7 @@ pipelines:
 
 #### Java / Kotlin (JVM)
 
-Two variants below — Maven and Gradle — since the JVM ecosystem is split. Pick one. Both use Eclipse Temurin 21 (current LTS).
+Two variants below, Maven and Gradle, since the JVM ecosystem is split. Pick one. Both use Eclipse Temurin 21 (current LTS).
 
 **Maven variant:**
 
@@ -594,7 +594,7 @@ pipelines:
           - build/reports/**
 ```
 
-Kotlin projects follow the same shape — `./gradlew check build` works whether the build script is `.gradle` or `.gradle.kts`.
+Kotlin projects follow the same shape, `./gradlew check build` works whether the build script is `.gradle` or `.gradle.kts`.
 
 #### Ruby
 
@@ -667,7 +667,7 @@ pipelines:
 
 #### Swift
 
-The official `swift:5.10` image is Linux-only and builds pure Swift packages via SPM. **iOS / macOS / watchOS builds require self-hosted macOS runners** — see the self-hosted runners section below.
+The official `swift:5.10` image is Linux-only and builds pure Swift packages via SPM. **iOS / macOS / watchOS builds require self-hosted macOS runners**, see the self-hosted runners section below.
 
 **Linux SPM (library or Linux-only executable):**
 
@@ -830,7 +830,7 @@ For `clang`-only builds, swap the image to `silkeh/clang:17`. For cross-compilat
 
 #### Dart / Flutter
 
-Two variants — pure Dart (uses the official `dart:stable` image) and Flutter (uses the Cirrus Labs Flutter image, the community standard for CI).
+Two variants, pure Dart (uses the official `dart:stable` image) and Flutter (uses the Cirrus Labs Flutter image, the community standard for CI).
 
 **Pure Dart:**
 
@@ -906,11 +906,11 @@ pipelines:
 
 ### Pipes (Bitbucket's Action marketplace)
 
-Pipes are composable Docker-based steps you invoke from `bitbucket-pipelines.yml` with a `pipe:` key — the Bitbucket equivalent of GitHub Actions `uses:`. Atlassian ships official Pipes for common deploy and notify tasks, and the community publishes third-party Pipes. Unlike GitHub Actions, Pipes are always Docker images — there is no JavaScript or composite pipe format.
+Pipes are composable Docker-based steps you invoke from `bitbucket-pipelines.yml` with a `pipe:` key, the Bitbucket equivalent of GitHub Actions `uses:`. Atlassian ships official Pipes for common deploy and notify tasks, and the community publishes third-party Pipes. Unlike GitHub Actions, Pipes are always Docker images, there is no JavaScript or composite pipe format.
 
 Browse the marketplace at <https://bitbucket.org/product/features/pipelines/integrations>.
 
-**Example 1 — Slack notification on build status:**
+**Example 1, Slack notification on build status:**
 
 ```yaml
 pipelines:
@@ -929,7 +929,7 @@ pipelines:
               MESSAGE: "Build $BITBUCKET_BUILD_NUMBER on $BITBUCKET_BRANCH succeeded"
 ```
 
-**Example 2 — Deploy a static site to AWS S3:**
+**Example 2, Deploy a static site to AWS S3:**
 
 ```yaml
 pipelines:
@@ -964,14 +964,14 @@ Pin Pipes to a specific version (not `:latest`) so pipeline behavior doesn't dri
 Use self-hosted runners when you need:
 
 - **Private network access** (on-prem databases, internal APIs behind a firewall)
-- **macOS builds** (Swift, Xcode, iOS Flutter — not available on Atlassian-hosted Linux runners)
+- **macOS builds** (Swift, Xcode, iOS Flutter, not available on Atlassian-hosted Linux runners)
 - **Windows builds** with preinstalled toolchains (.NET Framework, MSVC)
 - **GPU hardware** for ML workloads
-- **Custom compliance** — air-gapped or regulated environments
+- **Custom compliance**, air-gapped or regulated environments
 
 **Registering a runner:**
 
-1. Navigate to **Repository settings → Pipelines → Runners** (or **Workspace settings → Runners** for workspace-shared runners).
+1. Navigate to **Repository settings -> Pipelines -> Runners** (or **Workspace settings -> Runners** for workspace-shared runners).
 2. Click **Add runner**. Choose OS (Linux / macOS / Windows) and give it a name and labels (e.g. `macos`, `gpu`, `internal-network`).
 3. Bitbucket generates a `docker run` command (Linux) or a shell script (macOS / Windows) containing the runner's UUID and OAuth credentials. Run it on your host.
 4. The runner appears in the **Runners** tab as `Online` within ~30 seconds.
@@ -1005,8 +1005,8 @@ Deployment environments are a first-class Pipelines feature. Declaring `deployme
 
 **Configuration:**
 
-1. Create environments under **Repository settings → Deployments**. The defaults `Test`, `Staging`, and `Production` are created automatically when you first use `deployment:` in YAML.
-2. Set environment variables under **Repository settings → Deployments → {env} → Variables**. Scoped variables override repo- and workspace-level variables when the step runs with `deployment: <env>`.
+1. Create environments under **Repository settings -> Deployments**. The defaults `Test`, `Staging`, and `Production` are created automatically when you first use `deployment:` in YAML.
+2. Set environment variables under **Repository settings -> Deployments -> {env} -> Variables**. Scoped variables override repo- and workspace-level variables when the step runs with `deployment: <env>`.
 3. Mark secrets as **Secured** (the toggle on the variable) so they are masked in build logs and not exposed to forked-PR builds.
 
 **Multi-environment pipeline example.** Test on every push, deploy to staging automatically on `develop`, deploy to production manually on `main`:
@@ -1051,9 +1051,9 @@ pipelines:
             - ./scripts/deploy.sh "$DEPLOY_HOST" "$DEPLOY_KEY"
 ```
 
-`trigger: manual` makes the step wait for a human to click **Deploy** in the Bitbucket UI — this is the typical production guard. Combine with default-reviewer approval on the PR to get a two-person deploy workflow.
+`trigger: manual` makes the step wait for a human to click **Deploy** in the Bitbucket UI, this is the typical production guard. Combine with default-reviewer approval on the PR to get a two-person deploy workflow.
 
-**How secrets flow.** Secured variables set at the workspace, repo, or deployment level are injected as environment variables into the step's container. Precedence: **deployment > repo > workspace** (deployment variables win). Secured variables are masked in logs and — critically — are **not** exposed to pull-request pipelines that come from forks, which prevents credential exfiltration from malicious PRs.
+**How secrets flow.** Secured variables set at the workspace, repo, or deployment level are injected as environment variables into the step's container. Precedence: **deployment > repo > workspace** (deployment variables win). Secured variables are masked in logs and, critically, are **not** exposed to pull-request pipelines that come from forks, which prevents credential exfiltration from malicious PRs.
 
 ### Build status API
 
@@ -1075,12 +1075,12 @@ curl -X POST \
 
 Supported `state` values:
 
-- `INPROGRESS` — the external check is running
-- `SUCCESSFUL` — passed
-- `FAILED` — failed
-- `STOPPED` — canceled
+- `INPROGRESS`, the external check is running
+- `SUCCESSFUL`, passed
+- `FAILED`, failed
+- `STOPPED`, canceled
 
-The `key` is the unique identifier per external system — posting a new status with the same `key` overwrites the previous one. These statuses show up alongside Pipelines' own statuses on the PR and can be required in branch-restriction merge checks (**Minimum successful builds** counts both Pipelines and external statuses with matching `key`).
+The `key` is the unique identifier per external system, posting a new status with the same `key` overwrites the previous one. These statuses show up alongside Pipelines' own statuses on the PR and can be required in branch-restriction merge checks (**Minimum successful builds** counts both Pipelines and external statuses with matching `key`).
 
 ---
 
@@ -1095,25 +1095,25 @@ project-root/
     PULL_REQUEST_TEMPLATE.md # Default PR description (optional)
 ```
 
-Bitbucket puts more configuration into the UI and REST API than GitHub puts into `.github/`. The table below lists what is *not* stored as a file — document these in a generated `docs/bitbucket-setup.md`.
+Bitbucket puts more configuration into the UI and REST API than GitHub puts into `.github/`. The table below lists what is *not* stored as a file, document these in a generated `docs/bitbucket-setup.md`.
 
 | Concern | Where it lives | File? |
 |---|---|---|
 | Pipelines config | `bitbucket-pipelines.yml` (repo root) | **Yes** |
 | PR description default | `.bitbucket/PULL_REQUEST_TEMPLATE.md` | Yes (optional) |
-| Issue templates | Repository settings → Issues → Templates | No — document body |
-| Default reviewers | Repository settings → Default reviewers | No |
-| Branch permissions | Repository settings → Branch restrictions | No — optional REST-API script |
-| Deployment environments | Repository settings → Deployments | No |
-| Repo / workspace variables | Repository or Workspace settings → Variables | No (never commit secrets) |
-| Merge strategy defaults | Repository settings → Merge strategies | No |
+| Issue templates | Repository settings -> Issues -> Templates | No, document body |
+| Default reviewers | Repository settings -> Default reviewers | No |
+| Branch permissions | Repository settings -> Branch restrictions | No, optional REST-API script |
+| Deployment environments | Repository settings -> Deployments | No |
+| Repo / workspace variables | Repository or Workspace settings -> Variables | No (never commit secrets) |
+| Merge strategy defaults | Repository settings -> Merge strategies | No |
 
 ### Settings to recommend (cannot auto-configure from files)
 
 Document these in the project README or a generated `docs/bitbucket-setup.md`:
 
 - Description, topics, avatar for workspace-level discoverability
-- Branch permissions on `main` — see Branch permissions section
+- Branch permissions on `main`, see Branch permissions section
 - Merge checks on the `main` restriction: min 1 approval, min 1 successful build, no failed tasks, reset-approvals-on-push
 - Default reviewers populated with maintainers
 - Deployment environments (`test`, `staging`, `production`) with scoped variables
@@ -1123,37 +1123,37 @@ Document these in the project README or a generated `docs/bitbucket-setup.md`:
 
 ---
 
-## Migrating from GitHub — the five biggest differences
+## Migrating from GitHub, the five biggest differences
 
 The five conceptual shifts that catch teams out when moving a repo from GitHub to Bitbucket. Translate each, and the rest of the platform follows.
 
-1. **Pipelines YAML shape — single file, step-based, not job-based.** GitHub Actions lives in `.github/workflows/*.yml` — a *directory* where every file is an independent workflow with its own `jobs:` graph. Bitbucket Pipelines is **one** `bitbucket-pipelines.yml` at the repo root. Instead of jobs that depend on each other, you have an ordered list of `steps` inside named pipelines (`default`, `branches.main`, `pull-requests.**`, `custom.*`, `tags.v*`). Parallelism is declared inline with `parallel:` blocks, not by a separate `jobs.X.needs:` DAG.
+1. **Pipelines YAML shape, single file, step-based, not job-based.** GitHub Actions lives in `.github/workflows/*.yml`, a *directory* where every file is an independent workflow with its own `jobs:` graph. Bitbucket Pipelines is **one** `bitbucket-pipelines.yml` at the repo root. Instead of jobs that depend on each other, you have an ordered list of `steps` inside named pipelines (`default`, `branches.main`, `pull-requests.**`, `custom.*`, `tags.v*`). Parallelism is declared inline with `parallel:` blocks, not by a separate `jobs.X.needs:` DAG.
 
-2. **Pipes vs Actions — smaller marketplace, Docker-only, no `uses:`.** GitHub Actions has `uses: actions/checkout@v4` with a huge first- and third-party marketplace. Bitbucket Pipes use `pipe: atlassian/slack-notify:2.2.0` — always a Docker image, always with `variables:` instead of Actions' `with:`. The Pipes marketplace is substantially smaller than Actions', and community contribution is less common; expect to write more inline shell for deploy/notify glue on Bitbucket.
+2. **Pipes vs Actions, smaller marketplace, Docker-only, no `uses:`.** GitHub Actions has `uses: actions/checkout@v4` with a huge first- and third-party marketplace. Bitbucket Pipes use `pipe: atlassian/slack-notify:2.2.0`, always a Docker image, always with `variables:` instead of Actions' `with:`. The Pipes marketplace is substantially smaller than Actions', and community contribution is less common; expect to write more inline shell for deploy/notify glue on Bitbucket.
 
-3. **Branch permissions UI, not rulesets — no file-based import/export.** GitHub rulesets can be exported as JSON, committed, code-reviewed, and reimported. Bitbucket branch permissions are configured only via UI or the REST API — there is no JSON document you can commit to the repo that round-trips. Fork restrictions also live on the branch restriction object (`restrict_merges` kind), not on a separate "who can fork" setting. Teams that want their branch-permission state in version control typically script it in `scripts/apply-branch-permissions.sh` using the REST endpoints listed in the Branch permissions section.
+3. **Branch permissions UI, not rulesets, no file-based import/export.** GitHub rulesets can be exported as JSON, committed, code-reviewed, and reimported. Bitbucket branch permissions are configured only via UI or the REST API, there is no JSON document you can commit to the repo that round-trips. Fork restrictions also live on the branch restriction object (`restrict_merges` kind), not on a separate "who can fork" setting. Teams that want their branch-permission state in version control typically script it in `scripts/apply-branch-permissions.sh` using the REST endpoints listed in the Branch permissions section.
 
-4. **No CODEOWNERS — default reviewers is the analog (with less granularity).** GitHub's `CODEOWNERS` file uses path globs to map directories to reviewing teams. Bitbucket has **no** CODEOWNERS-like file. The closest feature is **default reviewers** (see the merge-strategies section) — a flat list of users automatically added to every PR targeting main. There is no path-glob, no team-level assignment, and no per-directory override. Teams that need real path-based ownership either tolerate coarse-grained review or add a third-party bot.
+4. **No CODEOWNERS, default reviewers is the analog (with less granularity).** GitHub's `CODEOWNERS` file uses path globs to map directories to reviewing teams. Bitbucket has **no** CODEOWNERS-like file. The closest feature is **default reviewers** (see the merge-strategies section), a flat list of users automatically added to every PR targeting main. There is no path-glob, no team-level assignment, and no per-directory override. Teams that need real path-based ownership either tolerate coarse-grained review or add a third-party bot.
 
-5. **Merge checks on the branch restriction, not "required status contexts".** On GitHub, branch protection has a separate "require status checks to pass before merging" screen where you pick specific check names. On Bitbucket, merge checks are configured directly on the branch restriction: "Minimum successful builds: N", "Minimum number of approvals: N", "No failed tasks", "Reset approvals on new commits". There is no per-check-name selection — the count-based model is coarser but simpler. External systems that post build statuses via the Commit Statuses API count toward "Minimum successful builds" alongside Pipelines' own builds.
+5. **Merge checks on the branch restriction, not "required status contexts".** On GitHub, branch protection has a separate "require status checks to pass before merging" screen where you pick specific check names. On Bitbucket, merge checks are configured directly on the branch restriction: "Minimum successful builds: N", "Minimum number of approvals: N", "No failed tasks", "Reset approvals on new commits". There is no per-check-name selection, the count-based model is coarser but simpler. External systems that post build statuses via the Commit Statuses API count toward "Minimum successful builds" alongside Pipelines' own builds.
 
 ---
 
 ## Sources
 
-Authoritative Atlassian documentation. Consult these first when behavior diverges from this reference — Pipelines and the REST API do evolve.
+Authoritative Atlassian documentation. Consult these first when behavior diverges from this reference, Pipelines and the REST API do evolve.
 
-- Pipelines YAML reference — <https://support.atlassian.com/bitbucket-cloud/docs/configure-bitbucket-pipelinesyml/>
-- Branch permissions — <https://support.atlassian.com/bitbucket-cloud/docs/branch-permissions/>
-- Deployments and deployment variables — <https://support.atlassian.com/bitbucket-cloud/docs/deployments/>
-- Default reviewers — <https://support.atlassian.com/bitbucket-cloud/docs/default-reviewers/>
-- Pipes — <https://support.atlassian.com/bitbucket-cloud/docs/pipes/>
-- Self-hosted runners — <https://support.atlassian.com/bitbucket-cloud/docs/runners/>
-- Merge strategies and merge checks — <https://support.atlassian.com/bitbucket-cloud/docs/suggest-or-require-checks-before-a-merge/>
-- Commit Statuses REST API (build status API) — <https://developer.atlassian.com/cloud/bitbucket/rest/api-group-commit-statuses/>
-- Branch Restrictions REST API — <https://developer.atlassian.com/cloud/bitbucket/rest/api-group-branch-restrictions/>
-- Pipes marketplace — <https://bitbucket.org/product/features/pipelines/integrations>
-- Smart Commits and Jira integration — <https://support.atlassian.com/bitbucket-cloud/docs/use-smart-commits/>
+- Pipelines YAML reference, <https://support.atlassian.com/bitbucket-cloud/docs/configure-bitbucket-pipelinesyml/>
+- Branch permissions, <https://support.atlassian.com/bitbucket-cloud/docs/branch-permissions/>
+- Deployments and deployment variables, <https://support.atlassian.com/bitbucket-cloud/docs/deployments/>
+- Default reviewers, <https://support.atlassian.com/bitbucket-cloud/docs/default-reviewers/>
+- Pipes, <https://support.atlassian.com/bitbucket-cloud/docs/pipes/>
+- Self-hosted runners, <https://support.atlassian.com/bitbucket-cloud/docs/runners/>
+- Merge strategies and merge checks, <https://support.atlassian.com/bitbucket-cloud/docs/suggest-or-require-checks-before-a-merge/>
+- Commit Statuses REST API (build status API), <https://developer.atlassian.com/cloud/bitbucket/rest/api-group-commit-statuses/>
+- Branch Restrictions REST API, <https://developer.atlassian.com/cloud/bitbucket/rest/api-group-branch-restrictions/>
+- Pipes marketplace, <https://bitbucket.org/product/features/pipelines/integrations>
+- Smart Commits and Jira integration, <https://support.atlassian.com/bitbucket-cloud/docs/use-smart-commits/>
 
 **Cross-reference.** For per-stack install / lint / test / build command rationale (why Ruff, why `cargo clippy -- -D warnings`, etc.), see `references/ci-cd-workflows.md`.
 

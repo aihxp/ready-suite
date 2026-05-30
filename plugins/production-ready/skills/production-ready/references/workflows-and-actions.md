@@ -10,28 +10,28 @@ Forms are the most common interaction in a dashboard and the easiest to do badly
 
 - **One column.** Multi-column forms scatter the eye. The only exception is short paired fields (first name + last name on one row).
 - **Labels above fields, not beside them.** Easier to scan, works on mobile, accommodates long labels.
-- **Group related fields into sections** with subtle headings. "Basics," "Plan & billing," "Notification preferences." Even a 10-field form benefits from 2–3 sections.
-- **Generous spacing between fields** — 16–24px. Cramped forms feel hostile.
+- **Group related fields into sections** with subtle headings. "Basics," "Plan & billing," "Notification preferences." Even a 10-field form benefits from 2-3 sections.
+- **Generous spacing between fields**, 16-24px. Cramped forms feel hostile.
 - **Sticky footer with primary action** for forms that scroll. The Save button must always be reachable without scrolling.
 - **Cancel + Save** in the footer. Cancel on the left, primary action on the right (or per your locale convention).
-- **Width** — forms read best at 480–640px. Don't stretch to fill the page.
+- **Width**, forms read best at 480-640px. Don't stretch to fill the page.
 
 ### Field anatomy
 
 ```
-Label *                              ← required marker if applicable
-Help text in subtle color            ← optional, above the field
-[__________________________]         ← the input
-Validation error in red              ← only when invalid
+Label *                              <- required marker if applicable
+Help text in subtle color            <- optional, above the field
+[__________________________]         <- the input
+Validation error in red              <- only when invalid
 ```
 
-- **Label** — short, descriptive, sentence case. "Email address," not "EMAIL_ADDRESS" or "Your Email Address Here:"
-- **Required marker** — a small `*` after the label. Or, conversely, mark optional fields with "(optional)" — pick one and stay consistent. The "(optional)" approach is friendlier when most fields are required.
-- **Help text** — when the field needs explanation, show it above the field, not as a tooltip. Tooltips hide critical info.
-- **Placeholder** — only for format hints, never as a substitute for label. "you@example.com" is fine; "Enter your email" instead of a label is not.
-- **Validation error** — below the field, in the danger color, with an icon. Replaces help text temporarily.
+- **Label**, short, descriptive, sentence case. "Email address," not "EMAIL_ADDRESS" or "Your Email Address Here:"
+- **Required marker**, a small `*` after the label. Or, conversely, mark optional fields with "(optional)", pick one and stay consistent. The "(optional)" approach is friendlier when most fields are required.
+- **Help text**, when the field needs explanation, show it above the field, not as a tooltip. Tooltips hide critical info.
+- **Placeholder**, only for format hints, never as a substitute for label. "you@example.com" is fine; "Enter your email" instead of a label is not.
+- **Validation error**, below the field, in the danger color, with an icon. Replaces help text temporarily.
 
-### Input types — use the right one
+### Input types, use the right one
 
 The HTML standard has many input types. Most dashboards use ~3. Use them all:
 
@@ -42,7 +42,7 @@ The HTML standard has many input types. Most dashboards use ~3. Use them all:
 | Phone | `type="tel"` |
 | Number | `type="number"` (with `min`, `max`, `step`) |
 | Date | A date picker library, not the native control |
-| Time | Same — use a library |
+| Time | Same, use a library |
 | Date range | A range picker |
 | URL | `type="url"` |
 | Long text | `<textarea>` with auto-resize |
@@ -56,51 +56,51 @@ The HTML standard has many input types. Most dashboards use ~3. Use them all:
 | Code | A code editor (Monaco, CodeMirror) |
 | Color | Color picker library |
 
-Native date/time pickers are inconsistent across browsers and locales — use a library (react-day-picker, react-aria, vaul, melt-ui, etc.).
+Native date/time pickers are inconsistent across browsers and locales, use a library (react-day-picker, react-aria, vaul, melt-ui, etc.).
 
 ### Validation timing
 
 Three moments to validate:
 
-1. **On blur** — when the user leaves a field. Shows errors as the user moves through the form.
-2. **On submit** — final check, also catches fields they skipped.
-3. **On server response** — the server is the source of truth. Display field-level errors next to the relevant fields.
+1. **On blur**, when the user leaves a field. Shows errors as the user moves through the form.
+2. **On submit**, final check, also catches fields they skipped.
+3. **On server response**, the server is the source of truth. Display field-level errors next to the relevant fields.
 
 Don't validate on every keystroke (annoying). Don't only validate on submit (the user fills the whole form before learning the first field was wrong).
 
 Use a schema validation library:
-- **TypeScript** — Zod (recommended), Valibot, ArkType, Yup, Joi
-- **Python** — Pydantic
-- **Ruby** — dry-validation, ActiveModel
-- **PHP** — Laravel validators, Symfony Validator
-- **Java** — Bean Validation (JSR 380)
+- **TypeScript**, Zod (recommended), Valibot, ArkType, Yup, Joi
+- **Python**, Pydantic
+- **Ruby**, dry-validation, ActiveModel
+- **PHP**, Laravel validators, Symfony Validator
+- **Java**, Bean Validation (JSR 380)
 
 Schema validation gives you one source of truth that runs on both client and server (in TS) or on the server only (otherwise). Don't write validation logic twice.
 
 ### Submit button states
 
 ```
-[Save Changes]              ← idle, enabled
-[Save Changes] (gray)       ← idle but form invalid
-[Saving...] (disabled)      ← in flight
-[✓ Saved] (briefly)         ← success
-[Save Changes]              ← back to idle
+[Save Changes]              <- idle, enabled
+[Save Changes] (gray)       <- idle but form invalid
+[Saving...] (disabled)      <- in flight
+[✓ Saved] (briefly)         <- success
+[Save Changes]              <- back to idle
 ```
 
-Disable the button while in-flight to prevent double submits. Disable until the form is valid (or always enable but show errors on click — pick one and stay consistent). Show a spinner inside the button, not somewhere else.
+Disable the button while in-flight to prevent double submits. Disable until the form is valid (or always enable but show errors on click, pick one and stay consistent). Show a spinner inside the button, not somewhere else.
 
 ### Auto-save patterns
 
 For long forms or settings the user is exploring, auto-save reduces anxiety:
 
-- Debounce 500–1000ms after the last change
-- Show a small indicator: "Saved" / "Saving..." / "Failed to save — retry"
-- Never auto-save invalid data — wait until validation passes
+- Debounce 500-1000ms after the last change
+- Show a small indicator: "Saved" / "Saving..." / "Failed to save, retry"
+- Never auto-save invalid data, wait until validation passes
 - For complex forms, save as a draft (not the live record) and require explicit "Publish" to commit
 
 ## Onboarding / first-time user experience
 
-The first 5 minutes after login determine whether a user becomes active or churns. Onboarding is the guided path from first login to first value — the moment the user does something real with the dashboard. Empty states (covered in `states-and-feedback.md`) handle what the user sees on each empty page. This section covers the orchestrated flow that gets them to a productive state.
+The first 5 minutes after login determine whether a user becomes active or churns. Onboarding is the guided path from first login to first value, the moment the user does something real with the dashboard. Empty states (covered in `states-and-feedback.md`) handle what the user sees on each empty page. This section covers the orchestrated flow that gets them to a productive state.
 
 ### The onboarding sequence
 
@@ -139,17 +139,17 @@ Collect only what's needed to make the dashboard useful. Everything else can be 
 Rules:
 - **3-5 steps maximum.** Each step has one clear action.
 - **Every step is skippable** except the one that creates the minimum viable data (you can't show an empty dashboard and call it onboarded).
-- **Show progress** — step indicator at the top ("Step 2 of 4").
-- **Persist state** — if the user closes the tab and comes back, resume where they left off.
-- **Pre-fill where possible** — if they signed up with a Google account, pre-fill name and email. If the domain is `@acme.com`, suggest "Acme" as the org name.
+- **Show progress**, step indicator at the top ("Step 2 of 4").
+- **Persist state**, if the user closes the tab and comes back, resume where they left off.
+- **Pre-fill where possible**, if they signed up with a Google account, pre-fill name and email. If the domain is `@acme.com`, suggest "Acme" as the org name.
 
 ### First value moment
 
-The setup must end with the user seeing something real — not an empty dashboard. Strategies:
+The setup must end with the user seeing something real, not an empty dashboard. Strategies:
 
 - **Seed sample data** if the user skips data entry. Show 3-5 example records with a banner: "These are sample records to show you around. Delete them anytime." Better than nothing.
 - **Import existing data** as part of setup (CSV upload, connect an existing tool). The user sees their own data immediately.
-- **Create one real record** as the final setup step. "Create your first project" → the user lands on their project page with the project they just named.
+- **Create one real record** as the final setup step. "Create your first project" -> the user lands on their project page with the project they just named.
 
 ### Post-onboarding guidance
 
@@ -168,9 +168,9 @@ Getting started                           3 of 6 complete
 ```
 
 Rules:
-- The checklist is **dismissible** — "Hide this" link. Don't force it.
+- The checklist is **dismissible**, "Hide this" link. Don't force it.
 - Each item is a **link** to the relevant page, not just a label.
-- **Celebrate completion** — when all items are done, show a brief congratulations, then remove the checklist permanently.
+- **Celebrate completion**, when all items are done, show a brief congratulations, then remove the checklist permanently.
 - **Track completion** server-side, not just in localStorage (survives device switches).
 
 **Guided tour (use sparingly):** Tooltip-based walkthrough highlighting UI elements. Libraries: Driver.js, Shepherd.js, Intro.js. Keep it to 4-5 steps max. Let the user dismiss at any time. **Never replay on subsequent logins.** A guided tour shown twice is hostile.
@@ -182,7 +182,7 @@ Rules:
 - **Don't ask questions you can infer.** If they're on a Pro trial, don't ask "What plan are you on?"
 - **Don't collect information that isn't needed yet.** Billing details can wait until trial ends. Notification preferences can wait until there are notifications.
 - **Don't treat returning users as new users.** The onboarding state is a flag on the user record (`onboarding_completed_at`). Check it on every login.
-- **Don't build onboarding as a separate app.** It's a state of the main dashboard — same layout, same nav, just with guided elements and empty state handling.
+- **Don't build onboarding as a separate app.** It's a state of the main dashboard, same layout, same nav, just with guided elements and empty state handling.
 
 ### Invite-based onboarding (team members)
 
@@ -198,7 +198,7 @@ Different roles need different onboarding:
 
 **Admin/creator** (full onboarding): workspace name, branding, invite members, connect integrations, configure settings. This is the standard flow above.
 
-**Member (invited)**: abbreviated. Accept invite, set profile, learn the workspace that already exists. Show "Here's what your team has set up" — not "Let's set things up." Skip org setup entirely. The workspace already has data, channels, or projects visible.
+**Member (invited)**: abbreviated. Accept invite, set profile, learn the workspace that already exists. Show "Here's what your team has set up", not "Let's set things up." Skip org setup entirely. The workspace already has data, channels, or projects visible.
 
 **Viewer/guest**: minimal or zero onboarding. Read-only access. A single tooltip: "You have view access to this workspace." Don't show creation tutorials.
 
@@ -209,8 +209,8 @@ Different roles need different onboarding:
 Instead of starting from scratch, offer starter templates during onboarding (after welcome, before dashboard):
 
 **Two types:**
-- **Data templates** — pre-seeded records (sample contacts, projects, invoices). The user deletes or modifies them. Think Trello's "Welcome Board."
-- **Structural templates** — create entities, custom fields, views, and workflows. When a user selects "Project Management," the template creates databases with specific properties, Kanban/Timeline views, and sample pages. More complex to implement.
+- **Data templates**, pre-seeded records (sample contacts, projects, invoices). The user deletes or modifies them. Think Trello's "Welcome Board."
+- **Structural templates**, create entities, custom fields, views, and workflows. When a user selects "Project Management," the template creates databases with specific properties, Kanban/Timeline views, and sample pages. More complex to implement.
 
 **UI:** Show 3-6 templates with name, one-line description, preview icon. "Use this template" or "Start from scratch." Allow switching or clearing template data later.
 
@@ -223,8 +223,8 @@ The emails sent in the first 7-14 days, tied to in-app onboarding state:
 | Day | Email | Trigger |
 |---|---|---|
 | 0 | Welcome (confirm signup, link to get started) | Immediate on signup |
-| 1 | "Getting started" — one specific action with deep link | Time-based |
-| 3 | Feature highlight — one feature they haven't used yet | Behavioral (based on in-app state) |
+| 1 | "Getting started", one specific action with deep link | Time-based |
+| 3 | Feature highlight, one feature they haven't used yet | Behavioral (based on in-app state) |
 | 5-7 | Social proof / case study | Time-based |
 | 7 | "You haven't done X yet" nudge | Behavioral (only if they haven't) |
 | 10-12 | Trial expiry warning (if applicable) | Time-based |
@@ -243,7 +243,7 @@ The emails sent in the first 7-14 days, tied to in-app onboarding state:
 
 Initial onboarding covers 3-5 features. A dashboard with 15+ features needs a long-tail discovery strategy for weeks 2-4:
 
-**Contextual first-visit tooltips:** show a tooltip the first time a user visits a specific page or encounters a feature — not during initial onboarding, but days later. Dismissible, never replay, never block interaction.
+**Contextual first-visit tooltips:** show a tooltip the first time a user visits a specific page or encounters a feature, not during initial onboarding, but days later. Dismissible, never replay, never block interaction.
 
 **Behavioral triggers for education:** when a user manually does something 3+ times that could be automated, show a tooltip about the automation. When they create their 10th record, suggest bulk operations. Trigger on behavior, not time.
 
@@ -263,12 +263,12 @@ When a dormant user returns (30+ days inactive):
 - Do NOT restart onboarding or show the welcome screen.
 - If onboarding was incomplete, show the checklist in its previous state (completed items still checked).
 - Show a subtle "Welcome back" banner (not modal) with what's changed: "3 new features since your last visit" with changelog link.
-- If teammates were active: "Your team has been busy — 12 new projects were created."
+- If teammates were active: "Your team has been busy, 12 new projects were created."
 - Track `last_seen_at` on the user record. When >30 days ago, set a `returning_user` session flag.
 
 ### Activation metrics
 
-Onboarding completion is not activation. Activation is the specific behavior that predicts long-term retention — the "aha moment":
+Onboarding completion is not activation. Activation is the specific behavior that predicts long-term retention, the "aha moment":
 
 - Slack: team sends 2,000 messages (93% retention after threshold)
 - Dropbox: 1 file in 1 folder on 1 device
@@ -313,13 +313,13 @@ Provide an admin API to reset onboarding state for testing and customer support.
 ### Onboarding analytics
 
 Track the funnel:
-- `onboarding.started` — user hit the welcome screen
-- `onboarding.step_completed` — per step, with step name
-- `onboarding.skipped` — user clicked "Skip setup"
-- `onboarding.completed` — user finished all steps
-- `checklist.item_completed` — per checklist item
-- `checklist.dismissed` — user hid the checklist
-- `activation.reached` — user hit the activation metric threshold
+- `onboarding.started`, user hit the welcome screen
+- `onboarding.step_completed`, per step, with step name
+- `onboarding.skipped`, user clicked "Skip setup"
+- `onboarding.completed`, user finished all steps
+- `checklist.item_completed`, per checklist item
+- `checklist.dismissed`, user hid the checklist
+- `activation.reached`, user hit the activation metric threshold
 
 Measure: completion rate (what % finish all steps), drop-off per step (which step loses users), time to first value (signup to first real action), activation rate (what % reach the aha moment), email sequence performance (open rate, CTR per email).
 
@@ -329,14 +329,14 @@ Some operations are too big for one form: onboarding, multi-page checkout, compl
 
 ### Wizard rules
 
-- **Show progress** — a step indicator at the top. "Step 2 of 4: Plan selection." A linear progress bar or a numbered tab strip.
-- **Each step is self-contained** — the user can complete the current step without thinking about future steps.
+- **Show progress**, a step indicator at the top. "Step 2 of 4: Plan selection." A linear progress bar or a numbered tab strip.
+- **Each step is self-contained**, the user can complete the current step without thinking about future steps.
 - **Allow going back** without losing data from earlier steps.
 - **Validate per step** before allowing "Next."
-- **Persist state across reloads** — save partial state to the server (preferred) or localStorage. The user expects to come back tomorrow and continue.
+- **Persist state across reloads**, save partial state to the server (preferred) or localStorage. The user expects to come back tomorrow and continue.
 - **Allow saving as a draft and resuming.**
-- **The last step is a confirmation** — show the summary of what's about to happen before the final commit.
-- **After commit, redirect to the result** — never leave the user staring at the wizard's final step.
+- **The last step is a confirmation**, show the summary of what's about to happen before the final commit.
+- **After commit, redirect to the result**, never leave the user staring at the wizard's final step.
 
 ### When *not* to use a wizard
 
@@ -358,18 +358,18 @@ Rules:
 - **A toolbar appears above (or replaces) the filter bar** when 1+ rows are selected.
 - **Show the count** of selected items.
 - **Show the actions** as buttons or a "Bulk actions" menu for many actions.
-- **"Select all" inside the toolbar** with two modes: "All on this page" (default) and "All matching filter (1,247)" — both are useful.
+- **"Select all" inside the toolbar** with two modes: "All on this page" (default) and "All matching filter (1,247)", both are useful.
 - **Destructive bulk actions** require confirmation with the affected count: "Delete 12 customers?"
 - **For destructive actions on many rows**, require typing a confirmation word: "Type DELETE to confirm."
-- **Provide undo** when feasible — even bulk delete can soft-delete with a 30-second undo window.
+- **Provide undo** when feasible, even bulk delete can soft-delete with a 30-second undo window.
 
 ### Inline editing
 
-Some tables benefit from editing in place — settings tables, simple data grids, spreadsheet-like surfaces.
+Some tables benefit from editing in place, settings tables, simple data grids, spreadsheet-like surfaces.
 
-- **Click to edit** (single click for power users, double click for safer). Make the editable affordance visible — pencil icon on hover, or always-visible cell border.
+- **Click to edit** (single click for power users, double click for safer). Make the editable affordance visible, pencil icon on hover, or always-visible cell border.
 - **Save on blur or Enter.** Cancel on Esc.
-- **Show pending state** while saving — a small spinner in the cell or row.
+- **Show pending state** while saving, a small spinner in the cell or row.
 - **Field-level errors** displayed below the cell.
 - **Undo via Ctrl+Z** is too much for most apps; offer "undo" toast after each save.
 
@@ -389,7 +389,7 @@ Rules:
 - **Overlay covers the page** but the page underneath is dimmed but visible
 - **Esc closes** the drawer
 - **Click outside closes** (with confirmation if dirty)
-- **Width** — 400–600px for forms, 720+ for detail views
+- **Width**, 400-600px for forms, 720+ for detail views
 - **Sticky header with title and close button**
 - **Sticky footer with actions**
 - **Don't open a drawer over another drawer.** One layer max.
@@ -406,16 +406,16 @@ Modals are an interruption. Use them for:
 - Short forms (≤4 fields)
 
 Don't use modals for:
-- Long forms — use a drawer or a page
-- Multi-step flows — use a wizard page
+- Long forms, use a drawer or a page
+- Multi-step flows, use a wizard page
 - Anything the user might want to refer to while interacting with the page below
-- Notifications that don't block — use a toast
+- Notifications that don't block, use a toast
 
 ### Modal rules
 
 - **Centered, with a backdrop**
 - **Esc closes**
-- **Click outside closes** (or doesn't, if there's a confirmation button — be consistent)
+- **Click outside closes** (or doesn't, if there's a confirmation button, be consistent)
 - **Tab focus is trapped** inside the modal
 - **First focusable element receives focus** on open (usually the cancel button for destructive modals, the input for form modals)
 - **Focus returns** to the trigger element on close
@@ -429,9 +429,9 @@ Don't use modals for:
 
 Three kinds of search live in dashboards:
 
-1. **Global search** — `⌘K` command palette across everything
-2. **Page search** — search inside a single list/table
-3. **Filter search** — typeahead inside a select dropdown
+1. **Global search**, `⌘K` command palette across everything
+2. **Page search**, search inside a single list/table
+3. **Filter search**, typeahead inside a select dropdown
 
 ### Global search (command palette)
 
@@ -441,23 +441,23 @@ Build it when the dashboard has > 50 navigable destinations or > 100 records the
 
 **Implementation:** Use `cmdk` (React) or `kbar` (React) as the foundation. Key patterns:
 
-- **Action registration** — each page/feature registers its own actions. The palette aggregates them.
-- **Async search** — for records (customers, orders), search the server with debounce. Show recent items while results load.
-- **Nested commands** — select a project, then select an action on it ("Open" / "Edit" / "Archive").
-- **Recent items** — show the last 5-10 visited pages when the palette opens with no query.
-- **Action mode** — `>` prefix shows actions ("Export," "Invite user"), not navigation.
-- **Feedback** — when an action executes, close the palette and show a toast. If it fails, keep the palette open with an error.
+- **Action registration**, each page/feature registers its own actions. The palette aggregates them.
+- **Async search**, for records (customers, orders), search the server with debounce. Show recent items while results load.
+- **Nested commands**, select a project, then select an action on it ("Open" / "Edit" / "Archive").
+- **Recent items**, show the last 5-10 visited pages when the palette opens with no query.
+- **Action mode**, `>` prefix shows actions ("Export," "Invite user"), not navigation.
+- **Feedback**, when an action executes, close the palette and show a toast. If it fails, keep the palette open with an error.
 
 Rules:
-- **Fuzzy match** — match words out of order, ignore minor typos
-- **Group results by type** — Pages, Customers, Orders, Actions
-- **Show recent items when empty** — recently visited pages and records
-- **Keyboard-only navigation** — arrows to move, Enter to select, Esc to close
-- **Action mode** — `>` prefix shows actions ("> Export," "> Invite user") not just navigation. The Linear pattern.
+- **Fuzzy match**, match words out of order, ignore minor typos
+- **Group results by type**, Pages, Customers, Orders, Actions
+- **Show recent items when empty**, recently visited pages and records
+- **Keyboard-only navigation**, arrows to move, Enter to select, Esc to close
+- **Action mode**, `>` prefix shows actions ("> Export," "> Invite user") not just navigation. The Linear pattern.
 
 ### Page search
 
-A search input above a table, narrows the rows shown. Debounce 250–400ms. Use server-side search for tables > 500 rows; client-side filtering is fine below.
+A search input above a table, narrows the rows shown. Debounce 250-400ms. Use server-side search for tables > 500 rows; client-side filtering is fine below.
 
 ### Filter typeaheads
 
@@ -467,9 +467,9 @@ Inside a select with > 10 options, add a search input at the top. Esc closes. Ar
 
 Three use cases in dashboards:
 
-1. **Kanban boards** — drag cards between columns (status changes). The drop triggers a mutation.
-2. **List reordering** — drag to reorder items in a priority list. Save the new order immediately or on explicit save.
-3. **File organization** — drag files into folders.
+1. **Kanban boards**, drag cards between columns (status changes). The drop triggers a mutation.
+2. **List reordering**, drag to reorder items in a priority list. Save the new order immediately or on explicit save.
+3. **File organization**, drag files into folders.
 
 **Libraries:** `dnd-kit` (React, modular, accessible), `pragmatic-drag-and-drop` (Atlassian, headless, framework-agnostic), `@hello-pangea/dnd` (fork of react-beautiful-dnd, list-focused).
 
@@ -493,20 +493,20 @@ The request is a state machine: `draft > pending_manager > pending_finance > app
 
 When multiple users can edit the same record simultaneously:
 
-- **Presence indicators** — "Alice is also editing this record" with avatar badge.
-- **Live cursors** — show where others are editing (for rich text / spreadsheet surfaces).
-- **Conflict resolution** — optimistic locking (version field) for form-based editing. CRDTs (Yjs, Automerge) for real-time collaborative text.
+- **Presence indicators**, "Alice is also editing this record" with avatar badge.
+- **Live cursors**, show where others are editing (for rich text / spreadsheet surfaces).
+- **Conflict resolution**, optimistic locking (version field) for form-based editing. CRDTs (Yjs, Automerge) for real-time collaborative text.
 - **Tools:** Liveblocks (managed, easiest), Yjs + a provider (self-hosted), Convex (built-in reactivity).
 
-Build this only when the use case demands it. Most CRUD dashboards don't need real-time collaboration — optimistic locking (covered in `data-layer.md`) is sufficient.
+Build this only when the use case demands it. Most CRUD dashboards don't need real-time collaboration, optimistic locking (covered in `data-layer.md`) is sufficient.
 
 ## Conditional form fields
 
 Fields that appear/disappear based on other selections:
 
 - Selecting "Payment method: Credit card" reveals card fields; "Bank transfer" reveals bank fields.
-- **Preserve values** of hidden fields (don't clear on hide) — the user may toggle back.
-- **Validate only visible fields** — hidden fields should not block submission.
+- **Preserve values** of hidden fields (don't clear on hide), the user may toggle back.
+- **Validate only visible fields**, hidden fields should not block submission.
 - **Animate show/hide** with a brief height transition (150ms).
 
 ## Filtering and saved views
@@ -537,13 +537,13 @@ Many dashboards need to import CSV/XLSX files. Build the import flow as a first-
 
 ### The import flow
 
-1. **Upload step** — drag-and-drop area + browse button. Accept CSV, XLSX. Show file size limits up front.
-2. **Preview step** — parse the first 50 rows and show a table. The user confirms the data looks right.
-3. **Mapping step** — map source columns to target fields. Auto-detect by header names. Let the user override.
-4. **Validation step** — server-side validation of all rows. Show a summary: "1,247 rows valid. 12 have errors." For errored rows, show the row number, the column, and the error. Let the user download the error report or fix it inline.
-5. **Confirm step** — "Import 1,235 customers? 12 will be skipped." Accept.
-6. **Background job** — for imports > 100 rows, kick off a background job. Show a progress page that polls the job status. Don't make the user wait on a request thread.
-7. **Result page** — "Imported 1,235 customers. 12 skipped." Link to the new records.
+1. **Upload step**, drag-and-drop area + browse button. Accept CSV, XLSX. Show file size limits up front.
+2. **Preview step**, parse the first 50 rows and show a table. The user confirms the data looks right.
+3. **Mapping step**, map source columns to target fields. Auto-detect by header names. Let the user override.
+4. **Validation step**, server-side validation of all rows. Show a summary: "1,247 rows valid. 12 have errors." For errored rows, show the row number, the column, and the error. Let the user download the error report or fix it inline.
+5. **Confirm step**, "Import 1,235 customers? 12 will be skipped." Accept.
+6. **Background job**, for imports > 100 rows, kick off a background job. Show a progress page that polls the job status. Don't make the user wait on a request thread.
+7. **Result page**, "Imported 1,235 customers. 12 skipped." Link to the new records.
 
 Key rules:
 - **Validate everything before committing.** Don't import 800 rows successfully and then fail on row 801, leaving the database in a half-state. Use a transaction.
@@ -559,9 +559,9 @@ Almost every dashboard needs export. Build them right:
 
 - **Match the on-screen view.** Export reflects the user's current filters. Not "all data ever."
 - **CSV is the default.** Excel (XLSX) is a feature flag, not the default.
-- **For < 10k rows** — generate on demand, stream the response. The browser's download manager handles it.
-- **For larger** — kick off a background job, email a download link or show a notification when ready.
-- **Format properly** — currency as numbers (not strings), dates in ISO or a documented format, no smart quotes, BOM for UTF-8 if Excel users will open it on Windows.
+- **For < 10k rows**, generate on demand, stream the response. The browser's download manager handles it.
+- **For larger**, kick off a background job, email a download link or show a notification when ready.
+- **Format properly**, currency as numbers (not strings), dates in ISO or a documented format, no smart quotes, BOM for UTF-8 if Excel users will open it on Windows.
 - **Include a header row** with field names.
 - **Include a metadata row** at the top, optional: "Exported by alice@acme.com on 2026-04-11 at 14:32 UTC. Filters: status=active, owner=Alice."
 - **Document the limit** if there is one. "Export limited to 50,000 rows."
@@ -617,7 +617,7 @@ Use confirm when:
 - The action has cascading consequences the user must understand
 - The user is likely to be on autopilot
 
-Combining both is fine: undo for the common path, confirm for the bulk path. "Delete 1 customer" → undo. "Delete 47 customers" → confirm with type-to-delete.
+Combining both is fine: undo for the common path, confirm for the bulk path. "Delete 1 customer" -> undo. "Delete 47 customers" -> confirm with type-to-delete.
 
 ## Keyboard shortcuts
 

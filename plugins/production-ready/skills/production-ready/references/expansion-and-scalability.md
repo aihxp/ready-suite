@@ -1,12 +1,12 @@
 # Expansion & Scalability Preparedness
 
-A dashboard that works for 10 users and 3 features is a prototype. A dashboard that works for 10,000 users, 50 features, 12 languages, and 3 pricing tiers is a product. The difference is not "scale it later" — it's the architectural decisions you make in week one that determine whether scaling is a refactor or a rewrite.
+A dashboard that works for 10 users and 3 features is a prototype. A dashboard that works for 10,000 users, 50 features, 12 languages, and 3 pricing tiers is a product. The difference is not "scale it later", it's the architectural decisions you make in week one that determine whether scaling is a refactor or a rewrite.
 
 This file covers what to build now, what to add hooks for, and what to defer entirely. The goal is zero rewrites as the product grows from MVP to enterprise.
 
 ---
 
-## Part 1 — Multi-Tenancy and Org Scaling
+## Part 1, Multi-Tenancy and Org Scaling
 
 Tenancy is a first-class dimension of your domain model. Every piece of data belongs to exactly one tenant. Every request runs with a tenant context. Every read/write path enforces that context. Every authorization decision evaluates within the tenant, not globally. If you skip this, you will rewrite your data layer.
 
@@ -16,13 +16,13 @@ Three patterns, each with distinct cost/compliance/performance tradeoffs:
 
 | Pattern | Isolation | Cost per tenant | Migration complexity | Best for |
 |---|---|---|---|---|
-| **Shared DB, shared schema** (tenant_id column) | Lowest — row-level only | Cheapest | Easiest — one migration, all tenants | MVP, free tiers, < 1,000 tenants |
-| **Schema-per-tenant** (tenant_a.projects, tenant_b.projects) | Medium — schema boundary | Moderate | Hard — N schemas x N migrations | Mid-market with compliance needs |
-| **Database-per-tenant** (silo model) | Highest — full DB isolation | Most expensive | Hardest — N databases x N migrations | Enterprise, regulated industries (HIPAA, SOC2) |
+| **Shared DB, shared schema** (tenant_id column) | Lowest, row-level only | Cheapest | Easiest, one migration, all tenants | MVP, free tiers, < 1,000 tenants |
+| **Schema-per-tenant** (tenant_a.projects, tenant_b.projects) | Medium, schema boundary | Moderate | Hard, N schemas x N migrations | Mid-market with compliance needs |
+| **Database-per-tenant** (silo model) | Highest, full DB isolation | Most expensive | Hardest, N databases x N migrations | Enterprise, regulated industries (HIPAA, SOC2) |
 
 **Decision rule:** Start with shared schema + tenant_id. Move enterprise customers to isolated schemas/databases when they ask (and pay for it). This hybrid model is now the most common pattern in mature SaaS.
 
-### Row-Level Security (RLS) — build it from day one
+### Row-Level Security (RLS), build it from day one
 
 PostgreSQL RLS is the standard for shared-schema tenancy. It enforces tenant isolation at the database level, not the application level. This means a bug in your application code cannot leak data across tenants.
 
@@ -42,24 +42,24 @@ Set `app.current_tenant` at the beginning of every request in your middleware. E
 
 **Do this now.** Retrofitting RLS onto an existing database with millions of rows and hundreds of queries is a 3-6 month project. Adding it on day one costs hours.
 
-### Org hierarchy — when to introduce each level
+### Org hierarchy, when to introduce each level
 
 Don't over-engineer your hierarchy. Add levels only when the lack of them becomes painful.
 
 | Level | When to introduce | Examples |
 |---|---|---|
-| **Single org** (all users in one flat space) | Day one — MVP | Most products at launch |
+| **Single org** (all users in one flat space) | Day one, MVP | Most products at launch |
 | **Teams within an org** | 10+ users per org, distinct departments | Linear, Notion, Slack |
 | **Workspaces** (isolated orgs under one billing entity) | Enterprise customers with multiple business units | Slack Enterprise Grid, Notion teamspaces |
 | **Projects within teams** | Teams working on 5+ parallel streams | Linear projects, Jira projects |
 
-The pattern from Slack, Notion, and Linear: start with a flat org, add teams when customers with 10+ users complain about noise, add workspaces when enterprise customers need isolated data boundaries under one billing account. The team-owner role pattern (used by Linear) sits between member and admin — team leads manage their own domain without workspace-wide admin access.
+The pattern from Slack, Notion, and Linear: start with a flat org, add teams when customers with 10+ users complain about noise, add workspaces when enterprise customers need isolated data boundaries under one billing account. The team-owner role pattern (used by Linear) sits between member and admin, team leads manage their own domain without workspace-wide admin access.
 
 **Build now:** Org with members. **Add hooks for:** Teams (a `team_id` foreign key you don't populate yet). **Defer:** Workspaces and cross-org collaboration.
 
 ### Tenant-level customization
 
-**Branding (white-labeling):** Store theme configuration as JSON per tenant — logo URL, primary/accent colors, font family. Serve it at the layout level. Use CSS custom properties so one JSON object drives the entire visual layer. Don't embed brand values deep in component code.
+**Branding (white-labeling):** Store theme configuration as JSON per tenant, logo URL, primary/accent colors, font family. Serve it at the layout level. Use CSS custom properties so one JSON object drives the entire visual layer. Don't embed brand values deep in component code.
 
 ```json
 {
@@ -90,7 +90,7 @@ The pattern from Slack, Notion, and Linear: start with a flat org, add teams whe
 
 ---
 
-## Part 2 — Feature Expansion Patterns
+## Part 2, Feature Expansion Patterns
 
 The wrong architecture makes adding feature #6 as hard as building the whole product. The right architecture makes feature #50 a config change.
 
@@ -117,18 +117,18 @@ Feature flags are not optional. They decouple deployment from release, enable gr
 | **PostHog** | Combined flags + analytics + session replay | Free tier, usage-based |
 | **Custom (DB + cache)** | Simple boolean flags, < 20 flags | Free but maintenance cost |
 
-For early-stage products: PostHog or Flagsmith. For enterprise: LaunchDarkly. Don't build a custom system until you have a specific reason the off-the-shelf options don't work — the maintenance cost of retry logic, caching, audit trails, and targeting rules is higher than the subscription.
+For early-stage products: PostHog or Flagsmith. For enterprise: LaunchDarkly. Don't build a custom system until you have a specific reason the off-the-shelf options don't work, the maintenance cost of retry logic, caching, audit trails, and targeting rules is higher than the subscription.
 
-LaunchDarkly delivers flag updates to all clients within 200ms via server-sent events (SSE). If you build custom, you need to match this — stale flags are worse than no flags.
+LaunchDarkly delivers flag updates to all clients within 200ms via server-sent events (SSE). If you build custom, you need to match this, stale flags are worse than no flags.
 
 ### Plugin/extension architecture
 
 Don't build a plugin system until you have 3+ customers asking for the same integration you can't prioritize. The progression:
 
-1. **Webhooks** (build first) — let customers react to events in their own systems
-2. **REST/GraphQL API** (build second) — let customers read/write your data
-3. **Embed SDK** (build when needed) — let customers embed your UI in their product
-4. **Plugin marketplace** (build last) — let third parties build and distribute extensions
+1. **Webhooks** (build first), let customers react to events in their own systems
+2. **REST/GraphQL API** (build second), let customers read/write your data
+3. **Embed SDK** (build when needed), let customers embed your UI in their product
+4. **Plugin marketplace** (build last), let third parties build and distribute extensions
 
 The marketplace pattern: define a plugin manifest (JSON schema for permissions, hooks, UI injection points), a sandboxed execution environment (iframe or Web Worker for frontend, Lambda/container for backend), and a review/approval pipeline. Shopify, Figma, and Linear all follow this pattern.
 
@@ -139,7 +139,7 @@ The marketplace pattern: define a plugin manifest (JSON schema for permissions, 
 Every feature should be a lazy-loaded module. The user loading the CRM should not download the code for the billing dashboard.
 
 ```tsx
-// Feature registry — config-driven
+// Feature registry, config-driven
 const FEATURES = {
   crm:      { path: '/crm',      loader: () => import('./features/crm') },
   billing:  { path: '/billing',  loader: () => import('./features/billing') },
@@ -169,7 +169,7 @@ Store feature availability per tenant in the database, not in code:
 }
 ```
 
-The admin panel reads this config to show/hide navigation items, enable/disable functionality, and enforce limits. Adding a new feature means adding a row to the feature registry — no code deployment required to enable it for specific tenants.
+The admin panel reads this config to show/hide navigation items, enable/disable functionality, and enforce limits. Adding a new feature means adding a row to the feature registry, no code deployment required to enable it for specific tenants.
 
 ### Custom fields and user-defined schemas
 
@@ -178,7 +178,7 @@ Users will ask for custom fields. Three approaches:
 | Approach | Performance | Flexibility | Query complexity | Best for |
 |---|---|---|---|---|
 | **JSONB column** | Good (with GIN index) | High | Moderate (JSON operators) | Most SaaS products |
-| **EAV tables** (entity-attribute-value) | Poor at scale | Highest | High (many JOINs) | Legacy — avoid for new builds |
+| **EAV tables** (entity-attribute-value) | Poor at scale | Highest | High (many JOINs) | Legacy, avoid for new builds |
 | **Dedicated columns** (ALTER TABLE per field) | Best | Lowest | Simplest | < 50 custom fields total |
 
 **Use JSONB.** PostgreSQL JSONB with GIN indexes outperforms EAV by orders of magnitude and avoids the join explosion. Store custom field definitions in a `custom_field_definitions` table (name, type, validation rules, tenant_id) and values in a `custom_data JSONB` column on the entity table.
@@ -204,19 +204,19 @@ CREATE INDEX idx_contacts_custom_data ON contacts USING GIN (custom_data);
 
 ---
 
-## Part 3 — Internationalization (i18n) Preparedness
+## Part 3, Internationalization (i18n) Preparedness
 
 i18n is the single most expensive thing to retrofit. A product with 200 screens and hardcoded strings takes 2-4 months to internationalize. A product that extracts strings from day one takes 2-4 days to add a new language.
 
-### String extraction — do this from day one
+### String extraction, do this from day one
 
 Even if you launch in English only. Every user-facing string goes through a translation function. No exceptions.
 
 ```tsx
-// Wrong — hardcoded string
+// Wrong, hardcoded string
 <Button>Save changes</Button>
 
-// Right — extracted string
+// Right, extracted string
 <Button>{t('common.save_changes')}</Button>
 ```
 
@@ -232,12 +232,12 @@ billing.plan.upgrade_cta
 ```
 
 **Libraries:**
-- **React** — react-i18next (recommended), react-intl
-- **Vue** — vue-i18n
-- **Svelte** — svelte-i18n
-- **Next.js** — next-intl (App Router native), next-i18next (Pages Router)
+- **React**, react-i18next (recommended), react-intl
+- **Vue**, vue-i18n
+- **Svelte**, svelte-i18n
+- **Next.js**, next-intl (App Router native), next-i18next (Pages Router)
 
-Store translations in JSON files per locale (`en.json`, `fr.json`, `de.json`). Use a translation management platform (Crowdin, Phrase, Lokalise) once you have > 500 strings — manual JSON editing doesn't scale.
+Store translations in JSON files per locale (`en.json`, `fr.json`, `de.json`). Use a translation management platform (Crowdin, Phrase, Lokalise) once you have > 500 strings, manual JSON editing doesn't scale.
 
 ### RTL layout support preparation
 
@@ -245,7 +245,7 @@ You don't need to build full RTL support on day one. But you need to not make it
 
 **Do now:**
 - Use CSS logical properties everywhere: `margin-inline-start` not `margin-left`, `padding-block-end` not `padding-bottom`
-- Use `flexbox` and `grid` — they respect `dir="rtl"` automatically
+- Use `flexbox` and `grid`, they respect `dir="rtl"` automatically
 - Never use `float: left` for layout (use flexbox)
 - Set `dir` attribute at the `<html>` level based on locale
 
@@ -258,20 +258,20 @@ German text is 15-30% longer than English. Arabic and Hebrew read right-to-left.
 
 ### Currency, date, and number formatting
 
-Use the `Intl` API — it's built into every modern browser and Node.js. Don't build custom formatters.
+Use the `Intl` API, it's built into every modern browser and Node.js. Don't build custom formatters.
 
 ```tsx
-// Currency — respects locale automatically
+// Currency, respects locale automatically
 new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(1234.56)
-// → "1.234,56 €"
+// -> "1.234,56 €"
 
-// Date — locale-aware
+// Date, locale-aware
 new Intl.DateTimeFormat('ja-JP', { dateStyle: 'long' }).format(new Date())
-// → "2026年4月12日"
+// -> "2026年4月12日"
 
-// Number — locale-aware separators
+// Number, locale-aware separators
 new Intl.NumberFormat('en-IN').format(1234567)
-// → "12,34,567" (Indian numbering system)
+// -> "12,34,567" (Indian numbering system)
 ```
 
 **Store dates as UTC timestamps in the database.** Display in the user's local timezone. Never store formatted date strings. Use `Intl.DateTimeFormat` or `date-fns` with timezone support for display.
@@ -290,11 +290,11 @@ new Intl.NumberFormat('en-IN').format(1234567)
 
 ---
 
-## Part 4 — API and Integration Scalability
+## Part 4, API and Integration Scalability
 
 Your API is a contract with every customer who integrates with you. Breaking changes lose customers. Not versioning loses trust. Not rate-limiting loses uptime.
 
-### API versioning — do it from the start
+### API versioning, do it from the start
 
 Pick a strategy and stick with it:
 
@@ -310,7 +310,7 @@ Pick a strategy and stick with it:
 - Support the current version and one prior version
 - Deprecation warning headers 6 months before shutdown (`Sunset: Sat, 01 Jan 2028 00:00:00 GMT`)
 - Breaking changes only in new major versions
-- Additive changes (new fields, new endpoints) are non-breaking — ship them anytime
+- Additive changes (new fields, new endpoints) are non-breaking, ship them anytime
 
 ### Webhook system architecture
 
@@ -318,12 +318,12 @@ Build a webhook delivery system, not just webhook endpoints. The difference is r
 
 **Core components:**
 
-1. **Event bus** — internal pub/sub that fires when state changes (order.created, user.updated)
-2. **Subscription store** — which tenant wants which events delivered where
-3. **Delivery queue** — async job queue (BullMQ/Redis, SQS) that processes deliveries
-4. **Retry policy** — exponential backoff: 1min, 5min, 30min, 2hr, 24hr, then dead-letter
-5. **Signature verification** — HMAC-SHA256 signature on every payload so receivers can verify authenticity
-6. **Delivery log** — every attempt recorded with status code, latency, response body (truncated)
+1. **Event bus**, internal pub/sub that fires when state changes (order.created, user.updated)
+2. **Subscription store**, which tenant wants which events delivered where
+3. **Delivery queue**, async job queue (BullMQ/Redis, SQS) that processes deliveries
+4. **Retry policy**, exponential backoff: 1min, 5min, 30min, 2hr, 24hr, then dead-letter
+5. **Signature verification**, HMAC-SHA256 signature on every payload so receivers can verify authenticity
+6. **Delivery log**, every attempt recorded with status code, latency, response body (truncated)
 
 **Payload structure:**
 
@@ -356,7 +356,7 @@ Rate limiting is a control plane, not a guardrail. Combine global, tenant, user,
 | Enterprise | 6,000 | 200 | 100 |
 | Custom | Negotiated | Negotiated | Negotiated |
 
-Use sliding window rate limiting (not fixed window — it prevents burst-at-boundary attacks). Return standard headers:
+Use sliding window rate limiting (not fixed window, it prevents burst-at-boundary attacks). Return standard headers:
 
 ```
 X-RateLimit-Limit: 600
@@ -367,19 +367,19 @@ Retry-After: 30
 
 Implement with Redis + sliding window algorithm. Store limits in the tenant config so plan changes take effect immediately.
 
-### GraphQL vs REST — when to use which
+### GraphQL vs REST, when to use which
 
 | Factor | REST | GraphQL |
 |---|---|---|
-| **Public API** | Better — universally understood, easy to cache | Harder for external developers |
-| **Internal API** (web + mobile clients) | Requires multiple endpoints or BFF | Better — clients fetch exactly what they need |
+| **Public API** | Better, universally understood, easy to cache | Harder for external developers |
+| **Internal API** (web + mobile clients) | Requires multiple endpoints or BFF | Better, clients fetch exactly what they need |
 | **Caching** | HTTP caching works natively | Requires client-side cache (Apollo, urql) |
 | **Schema evolution** | Requires versioning | Fields added/deprecated without versioning |
 | **Tooling** | Mature, well-understood | Strong but smaller ecosystem |
 | **File uploads** | Standard multipart | Requires workarounds |
 | **Real-time** | Requires separate WebSocket setup | Subscriptions built-in |
 
-**Recommendation:** REST for public API (customer integrations). GraphQL for internal API (your own web and mobile clients). This is the pattern used by Shopify, GitHub, and most mature SaaS platforms — GraphQL internally for flexible data fetching, REST externally for simplicity and compatibility.
+**Recommendation:** REST for public API (customer integrations). GraphQL for internal API (your own web and mobile clients). This is the pattern used by Shopify, GitHub, and most mature SaaS platforms, GraphQL internally for flexible data fetching, REST externally for simplicity and compatibility.
 
 ### OAuth provider expansion
 
@@ -397,7 +397,7 @@ Use a provider-agnostic auth library (NextAuth/Auth.js, Clerk, WorkOS) that supp
 
 ---
 
-## Part 5 — Data Layer Expansion
+## Part 5, Data Layer Expansion
 
 ### Schema evolution without downtime
 
@@ -405,9 +405,9 @@ Use the expand-contract pattern. Never make breaking schema changes in a single 
 
 **The three phases:**
 
-1. **Expand** — Add new columns/tables alongside existing ones. Old code is unaware and keeps working.
-2. **Migrate** — Deploy code that writes to both old and new. Backfill existing data in batches (1,000-10,000 rows per batch, not all at once).
-3. **Contract** — Remove old columns/tables after all code uses the new ones.
+1. **Expand**, Add new columns/tables alongside existing ones. Old code is unaware and keeps working.
+2. **Migrate**, Deploy code that writes to both old and new. Backfill existing data in batches (1,000-10,000 rows per batch, not all at once).
+3. **Contract**, Remove old columns/tables after all code uses the new ones.
 
 **Example: Renaming a column from `name` to `display_name`**
 
@@ -423,7 +423,7 @@ Deploy 3: Update application code to only use display_name
 Deploy 4: ALTER TABLE users DROP COLUMN name;
 ```
 
-Each deploy is independently rollback-safe. If Deploy 2 fails, roll back to Deploy 1 — the old column still works.
+Each deploy is independently rollback-safe. If Deploy 2 fails, roll back to Deploy 1, the old column still works.
 
 **Tools:** pgroll (open-source, automates expand-contract for Postgres), Flyway, Liquibase, or Drizzle Kit with manual expand-contract discipline.
 
@@ -433,7 +433,7 @@ Each deploy is independently rollback-safe. If Deploy 2 fails, roll back to Depl
 - Adding a NOT NULL constraint: unsafe without backfill first
 - Dropping a column: only after all code stops referencing it
 - Renaming a column: expand-contract, never a direct rename
-- Adding an index: use `CREATE INDEX CONCURRENTLY` (Postgres) — non-blocking
+- Adding an index: use `CREATE INDEX CONCURRENTLY` (Postgres), non-blocking
 
 ### Adding new entity types
 
@@ -453,9 +453,9 @@ CREATE TABLE entity_types (
 
 New entity types are rows, not new tables. Custom fields attach to entity types via the JSONB pattern described in Part 2. This means customers can define their own entity types without schema migrations.
 
-### Audit trail — from day one
+### Audit trail, from day one
 
-Every mutation (create, update, delete) should produce an audit record. This is not optional — enterprise customers require it, compliance demands it, and debugging without it is blind.
+Every mutation (create, update, delete) should produce an audit record. This is not optional, enterprise customers require it, compliance demands it, and debugging without it is blind.
 
 ```sql
 CREATE TABLE audit_log (
@@ -477,9 +477,9 @@ CREATE INDEX idx_audit_actor ON audit_log (tenant_id, actor_id);
 CREATE INDEX idx_audit_time ON audit_log (tenant_id, created_at);
 ```
 
-**Write audit logs asynchronously** — don't slow down the user's mutation. Use a background job or database trigger. Partition the audit_log table by month once it exceeds 10M rows.
+**Write audit logs asynchronously**, don't slow down the user's mutation. Use a background job or database trigger. Partition the audit_log table by month once it exceeds 10M rows.
 
-### Soft delete — never hard delete
+### Soft delete, never hard delete
 
 Every table gets `deleted_at TIMESTAMPTZ NULL`. A row with `deleted_at IS NOT NULL` is "deleted." Every query includes `WHERE deleted_at IS NULL` (enforce this with a view or RLS policy so developers can't forget).
 
@@ -494,7 +494,7 @@ CREATE VIEW active_contacts AS
 ```
 
 **Why soft delete:**
-- Undo is trivial — set `deleted_at = NULL`
+- Undo is trivial, set `deleted_at = NULL`
 - Audit trail preserves the full record
 - Foreign key integrity is maintained
 - GDPR "right to erasure" can be handled by a separate hard-delete job that runs after the retention period
@@ -502,7 +502,7 @@ CREATE VIEW active_contacts AS
 
 **Archive strategy:** Move rows with `deleted_at` older than 90 days to an archive table or cold storage. Move rows with `updated_at` older than 2 years to a read-only archive database. This keeps the primary database fast.
 
-### Search infrastructure — when to add it
+### Search infrastructure, when to add it
 
 | Stage | Records | Solution |
 |---|---|---|
@@ -511,9 +511,9 @@ CREATE VIEW active_contacts AS
 | Scale | 500,000 - 5M | Typesense or Meilisearch (simpler, faster setup) |
 | Enterprise | 5M+ | Elasticsearch (distributed, complex queries, aggregations) |
 
-**Typesense** keeps the entire index in RAM — sub-50ms queries, built-in clustering, predictable pricing. Best for most SaaS products.
+**Typesense** keeps the entire index in RAM, sub-50ms queries, built-in clustering, predictable pricing. Best for most SaaS products.
 
-**Meilisearch** uses memory-mapped disk storage — handles larger datasets without proportional RAM costs. Best for content-heavy products.
+**Meilisearch** uses memory-mapped disk storage, handles larger datasets without proportional RAM costs. Best for content-heavy products.
 
 **Elasticsearch** is justified only when you need distributed search across multiple nodes, complex aggregations, or billions of documents. Its operational complexity and cost (often five to six figures annually) make it the wrong default.
 
@@ -521,7 +521,7 @@ CREATE VIEW active_contacts AS
 
 ---
 
-## Part 6 — UI/UX Expansion Preparedness
+## Part 6, UI/UX Expansion Preparedness
 
 ### Navigation patterns that accommodate growth
 
@@ -549,7 +549,7 @@ Command palette (Cmd+K):          everything searchable
 
 **Sidebar width:** 240-280px. Collapsible to icon-only (64px) on small screens or user preference. Store collapsed state per user in localStorage.
 
-**The command palette is not optional** once you exceed 10 navigation destinations. It's the fastest way for power users to navigate, and it scales infinitely — adding a new feature means adding an entry to the command registry, not rethinking the sidebar.
+**The command palette is not optional** once you exceed 10 navigation destinations. It's the fastest way for power users to navigate, and it scales infinitely, adding a new feature means adding an entry to the command registry, not rethinking the sidebar.
 
 Use a config-driven navigation structure:
 
@@ -571,7 +571,7 @@ const visibleItems = NAV_ITEMS.filter(item =>
 
 ### Component library / design system investment
 
-Invest in a design system from day one. Not a comprehensive one — start with these foundational components:
+Invest in a design system from day one. Not a comprehensive one, start with these foundational components:
 
 **Build immediately (week 1):**
 - Button (primary, secondary, ghost, destructive variants)
@@ -588,7 +588,7 @@ Invest in a design system from day one. Not a comprehensive one — start with t
 - Dropdown menu, command palette
 
 **Build when needed:**
-- Chart components (wrap a library — Recharts, Chart.js, or Nivo)
+- Chart components (wrap a library, Recharts, Chart.js, or Nivo)
 - Rich text editor (wrap Tiptap or ProseMirror)
 - Date/time pickers (wrap a library)
 - File upload with drag-and-drop
@@ -599,7 +599,7 @@ Invest in a design system from day one. Not a comprehensive one — start with t
 
 **The three-panel layout** (sidebar + list + detail) works from 5 features to 50 features. Gmail, Linear, and Notion all use it.
 
-**Card-based metric strips** (4-6 KPI cards) work for dashboards with 3 metrics and dashboards with 30 — users scroll horizontally or the grid wraps.
+**Card-based metric strips** (4-6 KPI cards) work for dashboards with 3 metrics and dashboards with 30, users scroll horizontally or the grid wraps.
 
 **Tab-based sub-navigation** keeps feature pages organized without sidebar bloat. A contact detail page with 3 tabs (Overview, Activity, Files) works identically with 10 tabs.
 
@@ -649,19 +649,19 @@ Accessibility is not a retrofit. It's a foundation. Every component you build wi
 
 ---
 
-## Part 7 — Performance at Scale
+## Part 7, Performance at Scale
 
 ### Pagination patterns
 
 | Pattern | Best for | Performance at depth | Supports total count |
 |---|---|---|---|
-| **Offset** (`LIMIT 50 OFFSET 500`) | Admin tables, small datasets (< 10K rows) | Degrades — 17x slower at page 100 vs page 1 | Yes |
+| **Offset** (`LIMIT 50 OFFSET 500`) | Admin tables, small datasets (< 10K rows) | Degrades, 17x slower at page 100 vs page 1 | Yes |
 | **Cursor** (`WHERE id > :cursor LIMIT 50`) | Feeds, large datasets, real-time data | Constant O(1) regardless of depth | No (expensive to compute) |
 | **Keyset** (`WHERE (created_at, id) > (:ts, :id) LIMIT 50`) | Time-ordered data with ties | Constant, handles duplicates | No |
 
 **Default to cursor-based pagination** for any list that might exceed 10,000 records. Use offset only for admin interfaces where users need to jump to page 47.
 
-For total counts: cache the count and accept staleness (update every 5 minutes), or show "1,000+" instead of an exact number. `SELECT COUNT(*)` on a 1M-row table takes 200-500ms in Postgres — don't run it on every page load.
+For total counts: cache the count and accept staleness (update every 5 minutes), or show "1,000+" instead of an exact number. `SELECT COUNT(*)` on a 1M-row table takes 200-500ms in Postgres, don't run it on every page load.
 
 ### Caching strategies
 
@@ -673,7 +673,7 @@ For total counts: cache the count and accept staleness (update every 5 minutes),
 | **Query** | TanStack Query, SWR | `staleTime: 30s`, `gcTime: 5min` | Invalidate after mutations |
 | **Database** | Materialized views, pg_stat_statements | Refresh on schedule (every 5-15 min for dashboards) | Refresh manually or on trigger |
 
-**Cache dashboard aggregations aggressively.** A "total revenue this month" query doesn't need to be real-time — 5-minute staleness is acceptable. Pre-compute expensive aggregations in materialized views and refresh them on a schedule.
+**Cache dashboard aggregations aggressively.** A "total revenue this month" query doesn't need to be real-time, 5-minute staleness is acceptable. Pre-compute expensive aggregations in materialized views and refresh them on a schedule.
 
 ### Real-time features at scale
 
@@ -696,7 +696,7 @@ For total counts: cache the count and accept staleness (update every 5 minutes),
 Use a job queue for anything that takes > 500ms or can fail independently of the user's request.
 
 **Common background jobs in SaaS:**
-- Email sending (always async — never block a request on SMTP)
+- Email sending (always async, never block a request on SMTP)
 - Report generation and export
 - Webhook delivery
 - Data import/export
@@ -710,21 +710,21 @@ BullMQ provides: job priorities, delayed jobs, rate limiting per queue, retries 
 
 **Job design rules:**
 - Jobs must be idempotent (safe to retry)
-- Jobs must be small (< 30 seconds — break large tasks into batches)
+- Jobs must be small (< 30 seconds, break large tasks into batches)
 - Jobs must record their outcome (success/failure/error) for observability
 - Dead-letter queue for jobs that fail after all retries
 
 ### File storage and CDN
 
-- **User uploads** go to object storage (S3, R2, GCS) — never the application server's filesystem
+- **User uploads** go to object storage (S3, R2, GCS), never the application server's filesystem
 - **Generate signed URLs** for private files (expire in 1-24 hours)
-- **Serve public assets through a CDN** — immutable filenames (`logo-abc123.png`), `Cache-Control: public, max-age=31536000, immutable`
-- **Process images on upload** — generate thumbnails, compress to WebP, strip EXIF data
-- **Set file size limits per plan tier** — Free: 10MB/file, 1GB total. Pro: 100MB/file, 50GB total. Enterprise: negotiated.
+- **Serve public assets through a CDN**, immutable filenames (`logo-abc123.png`), `Cache-Control: public, max-age=31536000, immutable`
+- **Process images on upload**, generate thumbnails, compress to WebP, strip EXIF data
+- **Set file size limits per plan tier**, Free: 10MB/file, 1GB total. Pro: 100MB/file, 50GB total. Enterprise: negotiated.
 
 ---
 
-## Part 8 — Billing and Plan Expansion
+## Part 8, Billing and Plan Expansion
 
 ### Pricing architecture
 
@@ -761,7 +761,7 @@ CREATE TABLE subscriptions (
   stripe_subscription_id TEXT
 );
 
--- Usage metering (high-volume — consider TimescaleDB)
+-- Usage metering (high-volume, consider TimescaleDB)
 CREATE TABLE usage_events (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id UUID NOT NULL,
@@ -776,17 +776,17 @@ CREATE TABLE usage_events (
 Metering must be: real-time (users see current usage), accurate (billing disputes are expensive), and high-throughput (API call counting can be millions of events/day).
 
 **Architecture:**
-1. **Ingest** — fire-and-forget event from application code to a queue (Redis stream, Kafka)
-2. **Aggregate** — background worker rolls up raw events into hourly/daily buckets
-3. **Query** — API reads aggregated buckets for display and billing
-4. **Bill** — at period end, pull aggregated usage, calculate charges, send to Stripe/billing provider
+1. **Ingest**, fire-and-forget event from application code to a queue (Redis stream, Kafka)
+2. **Aggregate**, background worker rolls up raw events into hourly/daily buckets
+3. **Query**, API reads aggregated buckets for display and billing
+4. **Bill**, at period end, pull aggregated usage, calculate charges, send to Stripe/billing provider
 
 Don't count in the hot path. Increment a Redis counter on each event, flush to the database in batches every minute. This handles millions of events/day without slowing down the application.
 
 ### Plan changes mid-cycle
 
 - **Upgrade:** Apply immediately. Prorate the remaining days of the current period. Stripe handles this natively with `proration_behavior: 'create_prorations'`.
-- **Downgrade:** Apply at the end of the current billing period. Don't yank features mid-cycle — that generates support tickets.
+- **Downgrade:** Apply at the end of the current billing period. Don't yank features mid-cycle, that generates support tickets.
 - **Cancel:** Set `cancel_at_period_end = true`. Keep access until the period ends. Send a "we miss you" email 3 days before access ends.
 
 ### Free tier to paid conversion
@@ -798,35 +798,35 @@ Don't count in the hot path. Increment a Redis counter on each event, flush to t
 | Activation rate | > 40% within 7 days | Users who complete the "aha moment" action |
 
 **Design the free tier to create upgrade pressure:**
-- Limit the resource that scales with value (contacts, API calls, seats), not the features that demonstrate value (don't hide the best features behind the paywall — let users see what they're missing)
+- Limit the resource that scales with value (contacts, API calls, seats), not the features that demonstrate value (don't hide the best features behind the paywall, let users see what they're missing)
 - Show usage meters prominently: "You've used 847 of 1,000 contacts"
 - Trigger upgrade prompts at 80% of limits, not at 100%
 - Make the upgrade flow < 3 clicks: see limit warning, click upgrade, confirm plan, done
 
 ---
 
-## Part 9 — Team and Role Expansion
+## Part 9, Team and Role Expansion
 
 ### RBAC that scales
 
 Start simple. Flat roles with explicit permissions beat nested hierarchies.
 
-**Phase 1 (MVP) — three built-in roles:**
+**Phase 1 (MVP), three built-in roles:**
 
 | Role | Permissions |
 |---|---|
 | **Owner** | Everything, including billing and danger zone |
-| **Admin** | Manage members, settings, all data — no billing |
+| **Admin** | Manage members, settings, all data, no billing |
 | **Member** | CRUD on data they own or are assigned to |
 
-**Phase 2 (Growth) — add Viewer and custom roles:**
+**Phase 2 (Growth), add Viewer and custom roles:**
 
 | Role | Permissions |
 |---|---|
 | **Viewer** | Read-only access, no mutations |
 | **Custom** | Admin-defined permission sets |
 
-**Phase 3 (Enterprise) — add team-level roles and scoping:**
+**Phase 3 (Enterprise), add team-level roles and scoping:**
 
 Permissions scoped to teams/projects, not just the org. A "CRM Admin" can manage contacts but can't see billing. A "Marketing Viewer" can see campaigns but can't edit them.
 
@@ -851,22 +851,22 @@ CREATE TABLE role_assignments (
 );
 ```
 
-**Permission resolution:** Check org-level role first, then team-level role. Permissions are additive — if a user has "contacts.read" at the org level and "contacts.write" at the team level, they can read org-wide and write within that team.
+**Permission resolution:** Check org-level role first, then team-level role. Permissions are additive, if a user has "contacts.read" at the org level and "contacts.write" at the team level, they can read org-wide and write within that team.
 
 Avoid deeply nested role hierarchies. Most organizations are better served by flat role structures with explicit permission assignments. When roles inherit from other roles, permission troubleshooting becomes exponentially more complex.
 
 ### SSO and SCIM provisioning
 
 **SSO (Single Sign-On):**
-- Support SAML 2.0 and OIDC — enterprise customers require one or both
-- Use a library (WorkOS, Auth0, Clerk) — implementing SAML from scratch takes 2-4 weeks and has subtle security pitfalls
+- Support SAML 2.0 and OIDC, enterprise customers require one or both
+- Use a library (WorkOS, Auth0, Clerk), implementing SAML from scratch takes 2-4 weeks and has subtle security pitfalls
 - Store SSO config per tenant: IdP metadata URL, entity ID, certificate, attribute mapping
 - Enforce SSO-only login for enterprise orgs (disable password login when SSO is active)
 
 **SCIM (System for Cross-domain Identity Management):**
-- SCIM automates user provisioning/deprovisioning — when someone joins or leaves in the IdP (Okta, Azure AD, Google Workspace), your app creates/deactivates their account automatically
-- Essential for enterprise sales — companies with 100+ employees won't manually manage users
-- SCIM syncs role assignments from the IdP — map IdP groups to your app's roles
+- SCIM automates user provisioning/deprovisioning, when someone joins or leaves in the IdP (Okta, Azure AD, Google Workspace), your app creates/deactivates their account automatically
+- Essential for enterprise sales, companies with 100+ employees won't manually manage users
+- SCIM syncs role assignments from the IdP, map IdP groups to your app's roles
 - When a user's role changes in the IdP, SCIM updates their access across all connected apps
 
 **Build now:** Email/password + social login (Google). **Add hooks for:** SSO config table per tenant. **Defer:** SCIM endpoint implementation, SSO-only enforcement.
@@ -878,7 +878,7 @@ CREATE TABLE api_keys (
   id UUID PRIMARY KEY,
   tenant_id UUID NOT NULL,
   name TEXT NOT NULL,           -- "Production API Key", "CI/CD Key"
-  key_hash TEXT NOT NULL,       -- bcrypt hash — never store the raw key
+  key_hash TEXT NOT NULL,       -- bcrypt hash, never store the raw key
   key_prefix TEXT NOT NULL,     -- "sk_live_abc..." for identification
   scopes JSONB,                 -- ["contacts.read", "contacts.write"]
   created_by UUID NOT NULL,
@@ -892,9 +892,9 @@ Show the full key only once at creation. Store only the hash. Display the prefix
 
 ---
 
-## Part 10 — Operational Expansion
+## Part 10, Operational Expansion
 
-### Monitoring and observability — from day one
+### Monitoring and observability, from day one
 
 You cannot scale what you cannot see. Instrument before you need it, not after the first outage.
 
@@ -954,12 +954,12 @@ Use a dedicated error tracking service (Sentry, Bugsnag, Datadog Error Tracking)
 | **Staging** | Integration testing, QA | On PR merge to main | Anonymized production snapshot |
 | **Production** | Real users | Manual approval after staging green | Real data |
 
-**Preview environments** (Vercel, Netlify, Railway) for every PR — reviewers see the actual UI, not just code diff. Pair with a seeded database per preview environment.
+**Preview environments** (Vercel, Netlify, Railway) for every PR, reviewers see the actual UI, not just code diff. Pair with a seeded database per preview environment.
 
 **Database migrations in CI/CD:**
 1. Run migrations before deploying new code (expand phase)
 2. Deploy new code
-3. Run post-deploy migrations (contract phase) — only after monitoring confirms the deploy is healthy
+3. Run post-deploy migrations (contract phase), only after monitoring confirms the deploy is healthy
 4. Never run migrations manually in production. Always through the pipeline.
 
 ### Multi-region deployment preparation
@@ -984,13 +984,13 @@ Don't deploy multi-region on day one. But don't make it impossible.
 
 | Metric | Target |
 |---|---|
-| **RPO** (Recovery Point Objective — max data loss) | < 1 hour (< 5 min for enterprise) |
-| **RTO** (Recovery Time Objective — max downtime) | < 4 hours (< 30 min for enterprise) |
+| **RPO** (Recovery Point Objective, max data loss) | < 1 hour (< 5 min for enterprise) |
+| **RTO** (Recovery Time Objective, max downtime) | < 4 hours (< 30 min for enterprise) |
 
 **Minimum viable DR:**
-- Automated daily database backups (test restores monthly — untested backups are not backups)
+- Automated daily database backups (test restores monthly, untested backups are not backups)
 - Point-in-time recovery enabled (Postgres WAL archiving, or managed DB provider)
-- Application infrastructure defined as code (Terraform, Pulumi) — rebuild from scratch in < 1 hour
+- Application infrastructure defined as code (Terraform, Pulumi), rebuild from scratch in < 1 hour
 - Runbook for common failure scenarios: database failover, DNS switchover, third-party provider outage
 - Chaos testing quarterly (simulate failures: kill a service, corrupt a cache, overload the database)
 
@@ -998,7 +998,7 @@ Don't deploy multi-region on day one. But don't make it impossible.
 
 ---
 
-## Part 11 — Build Now / Hook / Defer Summary
+## Part 11, Build Now / Hook / Defer Summary
 
 This is the cheat sheet. For each category, what to build in the MVP, what to prepare hooks for, and what to defer entirely.
 

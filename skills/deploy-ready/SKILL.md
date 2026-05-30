@@ -1,7 +1,7 @@
 ---
 name: deploy-ready
 description: "Ship an app from a known-green build into real user-facing environments safely, repeatably, and reversibly. Triggers on 'deploy this,' 'CI/CD pipeline,' 'promote to staging,' 'zero-downtime migration,' 'expand-contract,' 'rollback,' 'canary,' 'blue/green,' 'progressive rollout,' 'first deploy,' 'environment parity,' 'promote through Actions,' 'GitOps,' 'promote the same artifact,' or any request to move code from pre-prod to prod. Enforces same-artifact promotion, expand/contract as a multi-deploy calendar, code-vs-data rollback asymmetry, and paper-canary detection. Does not pick IaC tools (stack-ready), wire observability (observe-ready), or manage secrets vaults (security). Pairs with observe-ready. Full trigger list in README."
-version: 3.0.1
+version: 3.0.2
 updated: 2026-05-30
 changelog: CHANGELOG.md
 suite: ready-suite
@@ -20,6 +20,7 @@ compatible_with:
   - codex
   - cursor
   - windsurf
+  - antigravity
   - pi
   - openclaw
   - any-agentskills-compatible-harness

@@ -1,6 +1,6 @@
 # Internationalization & Localization
 
-This file covers how to build a dashboard that works across languages, locales, writing directions, and cultural conventions. i18n is structural — retrofitting it after building a monolingual dashboard is a rewrite. If the dashboard will ever serve users who speak different languages or live in different countries, make the decisions in this file during pre-flight, not after launch.
+This file covers how to build a dashboard that works across languages, locales, writing directions, and cultural conventions. i18n is structural, retrofitting it after building a monolingual dashboard is a rewrite. If the dashboard will ever serve users who speak different languages or live in different countries, make the decisions in this file during pre-flight, not after launch.
 
 The scope: string translation, number/date/currency formatting, RTL layout support, timezone handling, translation workflows, and dashboard-specific i18n concerns.
 
@@ -12,7 +12,7 @@ The scope: string translation, number/date/currency formatting, RTL layout suppo
 
 **Use key-based translation (`t('dashboard.welcome')`) for dashboards.**
 
-Why: dashboard strings are short and context-dependent (the word "Status" translates differently as a table header vs. a filter label). Keys serve as stable identifiers — changing the English copy doesn't break the translation key. Tooling (scanners, TMS sync, unused-key detection) is more mature for key-based workflows.
+Why: dashboard strings are short and context-dependent (the word "Status" translates differently as a table header vs. a filter label). Keys serve as stable identifiers, changing the English copy doesn't break the translation key. Tooling (scanners, TMS sync, unused-key detection) is more mature for key-based workflows.
 
 Use ICU MessageFormat as the *value* format so translators see real sentences:
 
@@ -42,7 +42,7 @@ locales/
     notifications.json  // Toasts, alerts
 ```
 
-Keep `common.json` lean — only truly universal strings. If a string appears in only 2-3 features, put it in each feature file rather than common.
+Keep `common.json` lean, only truly universal strings. If a string appears in only 2-3 features, put it in each feature file rather than common.
 
 ### Where to store locale preference
 
@@ -68,8 +68,8 @@ Configure your i18n library to warn (not crash) on missing keys in development, 
 
 - **Bundle the default locale** (English) into the main JS bundle so first paint never waits for a fetch.
 - **Lazy-load other locales** per namespace on demand: when a user with `locale=de` navigates to billing, fetch `de/billing.json`.
-- For Next.js with `next-intl`, translations load in Server Components — zero client-side fetch.
-- Compile-time approaches (Lingui, Paraglide) produce tree-shakable JS modules per locale — the most performant option.
+- For Next.js with `next-intl`, translations load in Server Components, zero client-side fetch.
+- Compile-time approaches (Lingui, Paraglide) produce tree-shakable JS modules per locale, the most performant option.
 
 ---
 
@@ -80,7 +80,7 @@ Configure your i18n library to warn (not crash) on missing keys in development, 
 | Framework | Library | Why |
 |---|---|---|
 | **Next.js (App Router)** | next-intl | Purpose-built for App Router. Server Components, middleware routing, TypeScript-first. The clear winner. |
-| **React SPA (Vite)** | react-i18next | Largest ecosystem — plugins for backends, caching, language detection. Works everywhere. |
+| **React SPA (Vite)** | react-i18next | Largest ecosystem, plugins for backends, caching, language detection. Works everywhere. |
 | **React (performance-critical)** | Lingui | Compile-time extraction and optimization. Smallest runtime. |
 | **Vue / Nuxt** | vue-i18n (Composition API mode) | The standard. Use `legacy: false` for Composition API. |
 | **SvelteKit** | Paraglide JS | Officially recommended. Compiler approach, tree-shakable, type-safe. |
@@ -150,7 +150,7 @@ The same English word often needs different translations. Use namespace keys to 
 }
 ```
 
-Never use a single "Status" key everywhere — translators need context.
+Never use a single "Status" key everywhere, translators need context.
 
 ---
 
@@ -199,12 +199,12 @@ For shadcn/ui: the Calendar component wraps React DayPicker. Pass `locale` and `
 ### All formatting via `Intl.NumberFormat`
 
 ```javascript
-// Currency — position and symbol vary by locale
+// Currency, position and symbol vary by locale
 new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(1234.5) // "$1,234.50"
 new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(1234.5) // "1 234,50 €"
 new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY' }).format(1000)   // "¥1,000"
 
-// Compact notation — varies by language
+// Compact notation, varies by language
 new Intl.NumberFormat('en', { notation: 'compact' }).format(1500000)  // "1.5M"
 new Intl.NumberFormat('de', { notation: 'compact' }).format(1500000)  // "1,5 Mio."
 new Intl.NumberFormat('ja', { notation: 'compact' }).format(1500000)  // "150万"
@@ -258,7 +258,7 @@ Replace all physical properties with logical equivalents:
 | `left: 0` (positioning) | `inset-inline-start: 0` |
 | `border-top-left-radius` | `border-start-start-radius` |
 
-Vertical properties (`top`, `bottom`, `padding-top`, `padding-bottom`) stay physical — the block axis doesn't change in RTL.
+Vertical properties (`top`, `bottom`, `padding-top`, `padding-bottom`) stay physical, the block axis doesn't change in RTL.
 
 ### Tailwind CSS RTL
 
@@ -297,7 +297,7 @@ Use `dir="auto"` on user-generated content inputs so the browser detects directi
 ### Testing RTL without knowing Arabic
 
 1. Chrome DevTools: select `<html>`, add `dir="rtl"`. Instant layout flip.
-2. Set your app to Hebrew (`he`) with English fallback — layout flips, strings stay readable.
+2. Set your app to Hebrew (`he`) with English fallback, layout flips, strings stay readable.
 3. Storybook: `@storybook/addon-rtl` adds a toolbar toggle.
 4. Pseudo-RTL locale: transform English text with RTL Unicode markers.
 
@@ -312,7 +312,7 @@ Use `dir="auto"` on user-generated content inputs so the browser detects directi
 | i18next | `i18next-cli` (extraction, linting, syncing, type generation) |
 | FormatJS | `@formatjs/cli extract` |
 | Lingui | `lingui extract` |
-| next-intl | No extraction needed — author keys in JSON directly |
+| next-intl | No extraction needed, author keys in JSON directly |
 
 ### Translation management platforms
 
@@ -332,7 +332,7 @@ Use `dir="auto"` on user-generated content inputs so the browser detects directi
 
 ### Machine translation
 
-Use DeepL or Google Translate as initial fill, then mark as "needs review." Translators edit rather than translate from scratch — 2-3x faster.
+Use DeepL or Google Translate as initial fill, then mark as "needs review." Translators edit rather than translate from scratch, 2-3x faster.
 
 **Never ship machine-translated strings without human review** for: legal content, error messages, marketing copy, anything where tone matters.
 
@@ -344,7 +344,7 @@ Maintain a curated glossary of terms with approved translations:
 - Status labels (Active, Inactive, Pending)
 - Action verbs (Save, Delete, Archive, Export)
 
-This prevents inconsistency — "Cancel" should always be "Annuler" in French, not sometimes "Abandonner."
+This prevents inconsistency, "Cancel" should always be "Annuler" in French, not sometimes "Abandonner."
 
 ### String change management
 
@@ -352,7 +352,7 @@ When the English source changes:
 - **Key-based** (recommended): key stays the same, TMS shows diff to translator, marks translation as "fuzzy" (needs re-review). Old translation preserved until updated.
 - **Content-based**: old string removed, new one created. All translations lost unless TM catches it.
 
-This is the #1 reason key-based wins for production dashboards — you can fix a typo without invalidating 15 translations.
+This is the #1 reason key-based wins for production dashboards, you can fix a typo without invalidating 15 translations.
 
 ---
 
@@ -374,7 +374,7 @@ Avoid text in images. Use SVG with translatable `<text>` elements, or overlay te
 - Render in the recipient's locale.
 - Include timezone abbreviation in timestamps: "April 11, 2026 at 2:30 PM EDT".
 - Translate subject lines.
-- Test with German/Finnish — longer strings break fixed-width email layouts.
+- Test with German/Finnish, longer strings break fixed-width email layouts.
 
 ### Hardcoded units
 
@@ -434,14 +434,14 @@ action_key: 'audit.roleChanged'
 params: '{"actor": "Alice", "target": "Bob", "oldRole": "viewer", "newRole": "admin"}'
 ```
 
-Role names also need translation — store as keys, not literals.
+Role names also need translation, store as keys, not literals.
 
 ### Sidebar navigation
 
 - Keep labels short (1-2 words).
 - Test with German/Finnish for text expansion.
 - Tooltip on icon-only mode must also be translated.
-- If using abbreviations, they differ per language — use separate translation keys for full and abbreviated forms.
+- If using abbreviations, they differ per language, use separate translation keys for full and abbreviated forms.
 
 ---
 
@@ -456,9 +456,9 @@ Transform English to reveal i18n issues:
 ```
 
 Three effects:
-1. **Accented characters** — tests UTF-8 encoding and font rendering.
-2. **Padding** — adds ~30-40% characters to simulate German/Finnish length.
-3. **Brackets** — wraps string so any hardcoded (non-extracted) text is visually obvious.
+1. **Accented characters**, tests UTF-8 encoding and font rendering.
+2. **Padding**, adds ~30-40% characters to simulate German/Finnish length.
+3. **Brackets**, wraps string so any hardcoded (non-extracted) text is visually obvious.
 
 Add pseudo-locale as a dev environment option. Run visual regression tests against it.
 

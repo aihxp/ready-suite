@@ -2,7 +2,7 @@
 
 This reference provides complete, paste-ready configuration for code quality tooling across every major stack. Each config is opinionated and production-tested. When multiple tools exist for the same job, one is recommended and the alternative is documented for migration scenarios.
 
-The configs here are starting points calibrated for professional projects. Loosen rules for MVPs, tighten them for enterprise. But always start with something — adding linting to a 50,000-line codebase after the fact is exponentially harder than starting with it.
+The configs here are starting points calibrated for professional projects. Loosen rules for MVPs, tighten them for enterprise. But always start with something, adding linting to a 50,000-line codebase after the fact is exponentially harder than starting with it.
 
 ---
 
@@ -137,7 +137,7 @@ npx @biomejs/biome init
 
 ### Option B: ESLint v9 flat config + Prettier
 
-Use this when you need ESLint plugins that Biome does not yet cover (e.g., `eslint-plugin-react-compiler`, specialized framework plugins). ESLint v9 uses flat config by default — do not use `.eslintrc.*` files.
+Use this when you need ESLint plugins that Biome does not yet cover (e.g., `eslint-plugin-react-compiler`, specialized framework plugins). ESLint v9 uses flat config by default, do not use `.eslintrc.*` files.
 
 **Install:**
 
@@ -157,7 +157,7 @@ import prettier from 'eslint-config-prettier';
 import globals from 'globals';
 
 export default tseslint.config(
-  // Global ignores — replaces .eslintignore
+  // Global ignores, replaces .eslintignore
   {
     ignores: [
       'dist/**',
@@ -172,7 +172,7 @@ export default tseslint.config(
   // Base JS rules
   js.configs.recommended,
 
-  // TypeScript rules — type-aware linting
+  // TypeScript rules, type-aware linting
   ...tseslint.configs.recommendedTypeChecked,
   {
     languageOptions: {
@@ -244,7 +244,7 @@ export default tseslint.config(
     },
   },
 
-  // Prettier must be last — disables formatting rules that conflict
+  // Prettier must be last, disables formatting rules that conflict
   prettier,
 );
 ```
@@ -298,7 +298,7 @@ package-lock.json
 ```jsonc
 {
   "compilerOptions": {
-    // Target modern runtimes — Node 20+ / modern browsers
+    // Target modern runtimes, Node 20+ / modern browsers
     "target": "ES2022",
     "module": "Node16",
     "moduleResolution": "Node16",
@@ -311,7 +311,7 @@ package-lock.json
     "declarationMap": true,
     "sourceMap": true,
 
-    // Strictness — all of these matter, do not disable them
+    // Strictness, all of these matter, do not disable them
     "strict": true,
     "noUncheckedIndexedAccess": true, // Forces undefined checks on array/object access
     "noImplicitOverride": true,       // Requires 'override' keyword
@@ -333,7 +333,7 @@ package-lock.json
 }
 ```
 
-**tsconfig.json** (for libraries — adds stricter emit requirements):
+**tsconfig.json** (for libraries, adds stricter emit requirements):
 
 ```jsonc
 {
@@ -352,7 +352,7 @@ package-lock.json
 
 ### Testing: Vitest vs Jest
 
-**Vitest** (recommended for new projects — native ESM, TypeScript, fast):
+**Vitest** (recommended for new projects, native ESM, TypeScript, fast):
 
 **vitest.config.ts:**
 
@@ -382,7 +382,7 @@ export default defineConfig({
         'src/**/*.d.ts',
         'src/types/**',
       ],
-      // Enforce coverage minimums — prevent regression
+      // Enforce coverage minimums, prevent regression
       thresholds: {
         statements: 80,
         branches: 75,
@@ -454,7 +454,7 @@ export default config;
 
 ## 2. Python
 
-### Ruff (recommended — replaces Flake8, Black, isort, pydocstyle, pyupgrade, and more)
+### Ruff (recommended, replaces Flake8, Black, isort, pydocstyle, pyupgrade, and more)
 
 Ruff is written in Rust, is 10-100x faster than the tools it replaces, and consolidates configuration into a single `pyproject.toml` section. There is no reason to use Flake8 + Black + isort separately on a new project.
 
@@ -462,9 +462,9 @@ Ruff is written in Rust, is 10-100x faster than the tools it replaces, and conso
 
 ```toml
 [tool.ruff]
-# Target Python version — controls which syntax/builtins are allowed
+# Target Python version, controls which syntax/builtins are allowed
 target-version = "py312"
-# Line length — matches Black default
+# Line length, matches Black default
 line-length = 88
 # Files to lint
 include = ["*.py", "*.pyi", "pyproject.toml"]
@@ -479,38 +479,38 @@ extend-exclude = [
 ]
 
 [tool.ruff.lint]
-# Rule sets to enable — each letter maps to a legacy tool
+# Rule sets to enable, each letter maps to a legacy tool
 select = [
     "E",     # pycodestyle errors
     "W",     # pycodestyle warnings
-    "F",     # pyflakes — unused imports, undefined names
-    "I",     # isort — import sorting
-    "N",     # pep8-naming — naming conventions
-    "UP",    # pyupgrade — modernize syntax to target version
-    "B",     # flake8-bugbear — common gotchas and design problems
-    "A",     # flake8-builtins — prevent shadowing builtins
-    "C4",    # flake8-comprehensions — simplify comprehensions
-    "SIM",   # flake8-simplify — suggest simpler code
-    "TCH",   # flake8-type-checking — move imports to TYPE_CHECKING blocks
+    "F",     # pyflakes, unused imports, undefined names
+    "I",     # isort, import sorting
+    "N",     # pep8-naming, naming conventions
+    "UP",    # pyupgrade, modernize syntax to target version
+    "B",     # flake8-bugbear, common gotchas and design problems
+    "A",     # flake8-builtins, prevent shadowing builtins
+    "C4",    # flake8-comprehensions, simplify comprehensions
+    "SIM",   # flake8-simplify, suggest simpler code
+    "TCH",   # flake8-type-checking, move imports to TYPE_CHECKING blocks
     "RUF",   # Ruff-specific rules
-    "PT",    # flake8-pytest-style — pytest best practices
-    "S",     # flake8-bandit — security checks
-    "DTZ",   # flake8-datetimez — enforce timezone-aware datetimes
-    "PIE",   # flake8-pie — miscellaneous lints
-    "T20",   # flake8-print — catch print statements
-    "RSE",   # flake8-raise — raise improvements
-    "RET",   # flake8-return — return statement checks
+    "PT",    # flake8-pytest-style, pytest best practices
+    "S",     # flake8-bandit, security checks
+    "DTZ",   # flake8-datetimez, enforce timezone-aware datetimes
+    "PIE",   # flake8-pie, miscellaneous lints
+    "T20",   # flake8-print, catch print statements
+    "RSE",   # flake8-raise, raise improvements
+    "RET",   # flake8-return, return statement checks
     "ARG",   # flake8-unused-arguments
-    "ERA",   # eradicate — find commented-out code
+    "ERA",   # eradicate, find commented-out code
     "PL",    # pylint subset
 ]
 
 # Rules to ignore (with reasons)
 ignore = [
-    "E501",   # Line too long — handled by formatter
-    "S101",   # assert used — fine in tests, caught by bandit in prod
-    "PLR0913", # Too many arguments — sometimes unavoidable
-    "PLR2004", # Magic value comparison — too noisy
+    "E501",   # Line too long, handled by formatter
+    "S101",   # assert used, fine in tests, caught by bandit in prod
+    "PLR0913", # Too many arguments, sometimes unavoidable
+    "PLR2004", # Magic value comparison, too noisy
 ]
 
 # Per-file rule overrides
@@ -836,7 +836,7 @@ wildcard_imports = "warn"       # Avoid glob imports
 ### rustfmt.toml
 
 ```toml
-# Rust edition — must match Cargo.toml
+# Rust edition, must match Cargo.toml
 edition = "2021"
 # Maximum line width
 max_width = 100
@@ -866,7 +866,7 @@ fn_params_layout = "Tall"
 opt-level = 0
 debug = true
 
-# CI profile — like release but with debug info for backtraces
+# CI profile, like release but with debug info for backtraces
 [profile.ci]
 inherits = "release"
 debug = 1
@@ -1225,7 +1225,7 @@ Metrics/CyclomaticComplexity:
 
 # --- Naming ---
 Naming/PredicateName:
-  # Allow 'has_' prefix — common in Rails
+  # Allow 'has_' prefix, common in Rails
   ForbiddenPrefixes: []
 
 # --- Style ---
@@ -1297,7 +1297,7 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 
-  # Filter run — focus on tagged examples
+  # Filter run, focus on tagged examples
   config.filter_run_when_matching :focus
 
   # Disable monkey patching (no should syntax)
@@ -1316,11 +1316,11 @@ end
 
 ## 7. Zig
 
-Zig ships compiler, build system, formatter, and test runner in one binary. There is no separate linter — `zig build` performs semantic and safety checks during compilation. Pin examples to **Zig 0.13.0**; the language is pre-1.0 and semantics change between minor releases, so never float to `latest`.
+Zig ships compiler, build system, formatter, and test runner in one binary. There is no separate linter, `zig build` performs semantic and safety checks during compilation. Pin examples to **Zig 0.13.0**; the language is pre-1.0 and semantics change between minor releases, so never float to `latest`.
 
 ### Package manager
 
-Zig uses `build.zig.zon` (introduced in Zig 0.11) as both manifest and lockfile. Dependencies are declared with content hashes; there is no separate package index in 0.13 — deps are fetched by URL (tarball or git) and verified against the committed hash.
+Zig uses `build.zig.zon` (introduced in Zig 0.11) as both manifest and lockfile. Dependencies are declared with content hashes; there is no separate package index in 0.13, deps are fetched by URL (tarball or git) and verified against the committed hash.
 
 ```zig
 // build.zig.zon
@@ -1346,11 +1346,11 @@ Zig uses `build.zig.zon` (introduced in Zig 0.11) as both manifest and lockfile.
 }
 ```
 
-Commit `build.zig.zon` — it is both manifest and lockfile. A hash mismatch will fail CI; document how to regenerate (delete hash field, rerun `zig build`, paste new hash).
+Commit `build.zig.zon`, it is both manifest and lockfile. A hash mismatch will fail CI; document how to regenerate (delete hash field, rerun `zig build`, paste new hash).
 
 ### Formatter
 
-`zig fmt` is built into the compiler. No config file, no flags. Opinionated — 4-space indent, 100-column soft wrap, no configuration knobs by design.
+`zig fmt` is built into the compiler. No config file, no flags. Opinionated, 4-space indent, 100-column soft wrap, no configuration knobs by design.
 
 ```bash
 # Format in place
@@ -1362,7 +1362,7 @@ zig fmt --check src/ build.zig
 
 ### Linter
 
-**N/A as a separate tool.** Do not install ESLint, clippy, or a Zig equivalent — none exists. Semantic, type, and safety checks run during `zig build` and `zig build test`. Treat `zig build test` as your lint + test pipeline.
+**N/A as a separate tool.** Do not install ESLint, clippy, or a Zig equivalent, none exists. Semantic, type, and safety checks run during `zig build` and `zig build test`. Treat `zig build test` as your lint + test pipeline.
 
 ### Test runner
 
@@ -1419,14 +1419,14 @@ zig test src/main.zig
 
 - **Version drift.** Zig 0.x releases break. Pin `minimum_zig_version` in `build.zig.zon`, pin the CI action version, and pin your local toolchain (zigup / asdf / mise).
 - **Hash mismatches brick CI.** `build.zig.zon` hashes are content-addressed. If upstream re-tags or a mirror changes, the hash fails. Commit hashes, document regeneration, and prefer stable tarballs over moving git refs.
-- **Don't hunt for a linter.** Several agents (and humans) try to install ESLint-equivalents for Zig. There isn't one and doesn't need to be — `zig build` is the check.
+- **Don't hunt for a linter.** Several agents (and humans) try to install ESLint-equivalents for Zig. There isn't one and doesn't need to be, `zig build` is the check.
 - **Allocator hygiene.** Every allocation is explicit; every test block should defer its `deinit()`. The compiler won't warn you about a leaked `ArenaAllocator`.
 
 ---
 
 ## 8. Gleam
 
-Gleam is a statically-typed functional language on the BEAM (Erlang VM). Its toolchain ships formatter, type checker, and test runner; there is no separate linter — the type system fills that role. Pin examples to **Gleam 1.4+** on **OTP 27.x**.
+Gleam is a statically-typed functional language on the BEAM (Erlang VM). Its toolchain ships formatter, type checker, and test runner; there is no separate linter, the type system fills that role. Pin examples to **Gleam 1.4+** on **OTP 27.x**.
 
 ### Package manager
 
@@ -1456,7 +1456,7 @@ gleam_stdlib = ">= 0.40.0 and < 2.0.0"
 gleeunit = ">= 1.0.0 and < 2.0.0"
 ```
 
-Commit `manifest.toml` (the lockfile) — `gleam deps download` reads it for reproducible builds.
+Commit `manifest.toml` (the lockfile), `gleam deps download` reads it for reproducible builds.
 
 ### Formatter
 
@@ -1472,7 +1472,7 @@ gleam format --check src test
 
 ### Type checker / linter
 
-`gleam check` runs the full type checker without compiling. There is no separate linter — the type system catches what linters would in dynamically-typed languages. For additional rigor, treat unused-import warnings as errors in CI.
+`gleam check` runs the full type checker without compiling. There is no separate linter, the type system catches what linters would in dynamically-typed languages. For additional rigor, treat unused-import warnings as errors in CI.
 
 ```bash
 gleam check
@@ -1515,15 +1515,15 @@ gleam test
 ### Common pitfalls
 
 - **Young ecosystem.** Gleam 1.x is stable, but Hex packages for pure Gleam are fewer than for Elixir/Erlang. Prefer stdlib + gleeunit before reaching for a dep; fall back to Erlang/Elixir interop when needed.
-- **OTP version matters.** Gleam compiles to BEAM bytecode; the OTP version at build AND runtime must be compatible. Pin `otp-version: "27.0"` in CI explicitly — `erlef/setup-beam` handles this.
+- **OTP version matters.** Gleam compiles to BEAM bytecode; the OTP version at build AND runtime must be compatible. Pin `otp-version: "27.0"` in CI explicitly, `erlef/setup-beam` handles this.
 - **No `rebar3-version` needed for pure Gleam.** Some examples in the wild include it; you only need it if your project has Erlang deps that rely on rebar3.
-- **Compiled to Erlang or JS.** `target = "erlang"` is default; `target = "javascript"` emits ES modules. Decide up front — mixed targets need per-target tests.
+- **Compiled to Erlang or JS.** `target = "erlang"` is default; `target = "javascript"` emits ES modules. Decide up front, mixed targets need per-target tests.
 
 ---
 
 ## 9. Deno
 
-Deno 2.x is the JavaScript/TypeScript runtime that ships everything: formatter, linter, type checker, test runner, task runner, and publisher. No `node_modules/` required, no `package.json` — `deno.json` is the single config surface. Pin examples to **Deno 2.x**.
+Deno 2.x is the JavaScript/TypeScript runtime that ships everything: formatter, linter, type checker, test runner, task runner, and publisher. No `node_modules/` required, no `package.json`, `deno.json` is the single config surface. Pin examples to **Deno 2.x**.
 
 ### Package manager / runtime
 
@@ -1598,7 +1598,7 @@ deno lint
 
 ### Type checker
 
-TypeScript is integrated — no separate `tsc`. Runtime strips types; `deno check` runs the full checker statically.
+TypeScript is integrated, no separate `tsc`. Runtime strips types; `deno check` runs the full checker statically.
 
 ```bash
 deno check **/*.ts
@@ -1654,7 +1654,7 @@ deno compile --output bin/mycli src/main.ts
 
 ### Common pitfalls
 
-- **Don't mix `node_modules/` with Deno unless intentional.** The `"nodeModulesDir"` flag in `deno.json` turns on npm compatibility with a real `node_modules/` folder — opt in deliberately.
+- **Don't mix `node_modules/` with Deno unless intentional.** The `"nodeModulesDir"` flag in `deno.json` turns on npm compatibility with a real `node_modules/` folder, opt in deliberately.
 - **`import_map.json` is legacy.** Modern Deno uses the `"imports"` field in `deno.json`. Don't add `import_map.json` to new projects.
 - **Permissions.** `deno run` refuses network/file access by default. Document required `--allow-*` flags in README and set them in tasks; don't use `--allow-all`.
 - **JSR vs deno.land/std.** `https://deno.land/std/...` imports are frozen at stdlib 0.224; new code should use `jsr:@std/...` (actively versioned).
@@ -1663,19 +1663,19 @@ deno compile --output bin/mycli src/main.ts
 
 ## 10. Bun
 
-Bun 1.1+ is a Node-compatible runtime, package manager, and test runner in a single binary. It does NOT ship a formatter or linter — use **Biome** for both (same tool recommended for JS/TS in §1, matches the ecosystem pattern and avoids the ESLint+Prettier dance).
+Bun 1.1+ is a Node-compatible runtime, package manager, and test runner in a single binary. It does NOT ship a formatter or linter, use **Biome** for both (same tool recommended for JS/TS in §1, matches the ecosystem pattern and avoids the ESLint+Prettier dance).
 
-**Bun-first vs Bun-drop-in — pick one before configuring tooling:**
+**Bun-first vs Bun-drop-in, pick one before configuring tooling:**
 
 - **Bun-first:** `bun` is the runtime. Use `bun run`, `bun test`, `bun install`. Commit `bun.lockb`. All examples below assume this mode.
-- **Bun-drop-in:** Node is still the runtime; Bun is only a faster installer. Use `bun install` only — keep `package-lock.json`, use `npm test` / `node` / etc.
+- **Bun-drop-in:** Node is still the runtime; Bun is only a faster installer. Use `bun install` only, keep `package-lock.json`, use `npm test` / `node` / etc.
 - If you commit `bun.lockb`, you're Bun-first. If you commit `package-lock.json`, you're Bun-drop-in. Don't commit both.
 
 Pin examples to **Bun 1.1+**.
 
 ### Package manager
 
-`bun install` is the fastest of the four JS package managers. Lockfile is `bun.lockb` (binary — faster to parse, smaller on disk, but **unreadable in merge conflicts**).
+`bun install` is the fastest of the four JS package managers. Lockfile is `bun.lockb` (binary, faster to parse, smaller on disk, but **unreadable in merge conflicts**).
 
 ```bash
 bun install
@@ -1715,7 +1715,7 @@ bun test --watch
 
 ### Formatter: Biome
 
-Bun does not ship a formatter. Use **Biome** (recommended) — matches the JS/TS recommendation in §1, single binary, handles both format and lint in one pass.
+Bun does not ship a formatter. Use **Biome** (recommended), matches the JS/TS recommendation in §1, single binary, handles both format and lint in one pass.
 
 **Minimal `biome.json`:**
 
@@ -1755,7 +1755,7 @@ bunx biome ci .                  # CI: check only, no writes
 
 ### Linter: Biome
 
-Same tool, same config — `"linter"` block in `biome.json` above. No separate ESLint install needed.
+Same tool, same config, `"linter"` block in `biome.json` above. No separate ESLint install needed.
 
 ### Type checker
 
@@ -1782,12 +1782,12 @@ bail = 5
 coverage = false
 ```
 
-Only add `bunfig.toml` when defaults don't fit — most projects don't need it.
+Only add `bunfig.toml` when defaults don't fit, most projects don't need it.
 
 ### Common pitfalls
 
 - **`bun.lockb` is binary.** Merge conflicts cannot be hand-resolved. Accept one side, run `bun install`, commit the fresh binary. If PRs frequently clash, consider a merge-queue or a CODEOWNER on the lockfile.
-- **`"type": "module"` must match the runtime.** When migrating a Node project to Bun, check `package.json` `"type"` — some Bun APIs only work in ESM, and mixed CJS/ESM files will surprise you.
+- **`"type": "module"` must match the runtime.** When migrating a Node project to Bun, check `package.json` `"type"`, some Bun APIs only work in ESM, and mixed CJS/ESM files will surprise you.
 - **Don't confuse `bun test` with `bun run test`.** `bun test` runs Bun's built-in runner; `bun run test` executes the `"test"` script in `package.json` (which may invoke Jest, Vitest, or anything else).
 - **Biome is not Prettier.** Biome prints slightly different output (trailing commas, quote style); pick one and don't flip back to Prettier mid-project.
 
@@ -1919,7 +1919,7 @@ pre-commit:
       glob: "*.rb"
       run: bundle exec rubocop --force-exclusion {staged_files}
 
-    # Universal — prevent secrets from being committed
+    # Universal, prevent secrets from being committed
     secrets:
       run: |
         if command -v gitleaks &> /dev/null; then
@@ -1986,7 +1986,7 @@ repos:
       - id: no-commit-to-branch
         args: ['--branch', 'main', '--branch', 'master']
 
-  # Python — Ruff for linting and formatting
+  # Python, Ruff for linting and formatting
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.4.4
     hooks:
@@ -1994,7 +1994,7 @@ repos:
         args: ['--fix']
       - id: ruff-format
 
-  # Python — type checking
+  # Python, type checking
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.10.0
     hooks:
@@ -2033,15 +2033,15 @@ repos:
 
 ## 12. Secret scanning (pre-commit)
 
-Snyk's 2025 state-of-secrets report counted **28.65M secrets leaked to public GitHub**, roughly a 34% year-over-year increase (<https://snyk.io/articles/state-of-secrets/>). Analysis at toxsec.com found AI-assisted commits leak at ~**2× the baseline rate** — larger, faster commits slip past review (<https://www.toxsec.com/p/why-vibe-coding-leaks-your-secrets>). Pre-commit scanning catches leaks at the staging index, before the secret reaches anyone else's clone.
+Snyk's 2025 state-of-secrets report counted **28.65M secrets leaked to public GitHub**, roughly a 34% year-over-year increase (<https://snyk.io/articles/state-of-secrets/>). Analysis at toxsec.com found AI-assisted commits leak at ~**2× the baseline rate**, larger, faster commits slip past review (<https://www.toxsec.com/p/why-vibe-coding-leaks-your-secrets>). Pre-commit scanning catches leaks at the staging index, before the secret reaches anyone else's clone.
 
 ### Tool tradeoff
 
 **gitleaks (recommended).** Single Go binary, fastest scanner, widest default detector set, most ecosystem adoption. Single-TOML config. <https://github.com/gitleaks/gitleaks>.
 
-**trufflehog.** Best for *verified* secret detection — optionally probes live APIs to confirm a leaked key is active, reducing false-positive noise. Heavier runtime; most teams run it in CI. <https://github.com/trufflesecurity/trufflehog>.
+**trufflehog.** Best for *verified* secret detection, optionally probes live APIs to confirm a leaked key is active, reducing false-positive noise. Heavier runtime; most teams run it in CI. <https://github.com/trufflesecurity/trufflehog>.
 
-**detect-secrets.** Python-native tool from Yelp with a distinctive "baseline" workflow — commit a `.secrets.baseline`; new findings report as diffs against it. Preferred by Python-heavy shops. <https://github.com/Yelp/detect-secrets>.
+**detect-secrets.** Python-native tool from Yelp with a distinctive "baseline" workflow, commit a `.secrets.baseline`; new findings report as diffs against it. Preferred by Python-heavy shops. <https://github.com/Yelp/detect-secrets>.
 
 | Tool | Install | Default ruleset | Verified-secret mode | Best fit |
 |---|---|---|---|---|
@@ -2052,7 +2052,7 @@ Snyk's 2025 state-of-secrets report counted **28.65M secrets leaked to public Gi
 ### Paste-ready `.gitleaks.toml`
 
 ```toml
-# .gitleaks.toml — secret-scanning configuration for my-project
+# .gitleaks.toml, secret-scanning configuration for my-project
 # Schema: https://github.com/gitleaks/gitleaks
 
 [extend]
@@ -2069,7 +2069,7 @@ tags = ["api", "internal"]
 [allowlist]
 description = "Allowlisted false positives for my-project"
 
-# 1. example.com URLs in docs and templates — gitleaks' default rules can
+# 1. example.com URLs in docs and templates, gitleaks' default rules can
 #    fire on these; documentation uses them intentionally.
 regexes = [
     '''example\.com''',
@@ -2087,7 +2087,7 @@ paths = [
 # ]
 ```
 
-**False-positive note.** Gitleaks' default rules will fire on `example.com` URLs in documentation and on obviously-fake placeholder keys in template fixtures. The `[allowlist]` regex and paths above handle both without disabling the underlying rule — prefer scoped allowlisting to rule deletion so a real key in the same path still trips the scanner.
+**False-positive note.** Gitleaks' default rules will fire on `example.com` URLs in documentation and on obviously-fake placeholder keys in template fixtures. The `[allowlist]` regex and paths above handle both without disabling the underlying rule, prefer scoped allowlisting to rule deletion so a real key in the same path still trips the scanner.
 
 ### Pre-commit integration
 
@@ -2123,7 +2123,7 @@ Then `chmod +x .git/hooks/pre-commit`. `--staged` scans only the staging index; 
 
 ### CI backstop
 
-In CI, run `gitleaks detect --redact --verbose` on every PR as a backstop for commits that arrived without the pre-commit hook. Full CI YAML lives in `references/ci-cd-workflows.md` and `references/security-setup.md` §4d — this file keeps the pre-commit scope.
+In CI, run `gitleaks detect --redact --verbose` on every PR as a backstop for commits that arrived without the pre-commit hook. Full CI YAML lives in `references/ci-cd-workflows.md` and `references/security-setup.md` §4d, this file keeps the pre-commit scope.
 
 ---
 
@@ -2151,17 +2151,17 @@ indent_size = 2
 [*.{js,jsx,ts,tsx,json,yml,yaml,css,scss,html,vue,svelte}]
 indent_size = 2
 
-# Python — PEP 8 mandates 4 spaces
+# Python, PEP 8 mandates 4 spaces
 [*.py]
 indent_size = 4
 max_line_length = 88
 
-# Go — tabs, not spaces
+# Go, tabs, not spaces
 [*.go]
 indent_style = tab
 indent_size = 4
 
-# Rust — 4 spaces
+# Rust, 4 spaces
 [*.rs]
 indent_size = 4
 
@@ -2188,7 +2188,7 @@ indent_style = tab
 [*.{sh,bash,zsh}]
 indent_size = 2
 
-# Markdown — trailing spaces are significant (line breaks)
+# Markdown, trailing spaces are significant (line breaks)
 [*.md]
 trim_trailing_whitespace = false
 
@@ -2269,7 +2269,7 @@ Controls line endings, binary handling, LFS tracking, and GitHub language statis
 # Documents
 *.pdf   binary
 
-# Lock files — do not diff, treat as generated
+# Lock files, do not diff, treat as generated
 package-lock.json  text eol=lf linguist-generated=true
 pnpm-lock.yaml     text eol=lf linguist-generated=true
 yarn.lock          text eol=lf linguist-generated=true
@@ -2293,7 +2293,7 @@ docs/**            linguist-documentation
 vendor/**          linguist-vendored
 third_party/**     linguist-vendored
 
-# Generated code — exclude from stats and diffs
+# Generated code, exclude from stats and diffs
 *.generated.*     linguist-generated=true
 *.gen.go          linguist-generated=true
 *_pb2.py          linguist-generated=true
@@ -2436,7 +2436,7 @@ export default {
         'feat',     // New feature
         'fix',      // Bug fix
         'docs',     // Documentation only
-        'style',    // Formatting, missing semicolons — no code change
+        'style',    // Formatting, missing semicolons, no code change
         'refactor', // Code change that neither fixes a bug nor adds a feature
         'perf',     // Performance improvement
         'test',     // Adding or updating tests
@@ -2488,7 +2488,7 @@ The format is:
 | `chore` | Maintenance, tooling | `chore: update dev dependencies` |
 | `revert` | Revert a commit | `revert: feat(auth): add OAuth2 login` |
 
-**Breaking changes** — append `!` after type or add `BREAKING CHANGE:` footer:
+**Breaking changes**, append `!` after type or add `BREAKING CHANGE:` footer:
 
 ```
 feat(api)!: change /users response format
@@ -2497,7 +2497,7 @@ BREAKING CHANGE: The /users endpoint now returns { data: User[] }
 instead of User[]. All clients must update their parsing logic.
 ```
 
-**Scopes** — use the module, component, or area affected:
+**Scopes**, use the module, component, or area affected:
 
 ```
 feat(auth): ...
@@ -2570,7 +2570,7 @@ jobs:
 | **Kotlin** | detekt + ktlint | ktlint | (built-in) | JUnit 5 | Lefthook |
 | **Java** | Checkstyle + SpotBugs | Checkstyle | (built-in) | JUnit 5 | Lefthook |
 | **Ruby** | RuboCop | RuboCop | Sorbet (opt.) | RSpec | Lefthook |
-| **Zig** | (none — `zig build`) | `zig fmt` | (built-in) | `zig build test` | Lefthook |
+| **Zig** | (none, `zig build`) | `zig fmt` | (built-in) | `zig build test` | Lefthook |
 | **Gleam** | `gleam check` | `gleam format` | `gleam check` | `gleam test` (gleeunit) | Lefthook |
 | **Deno** | `deno lint` | `deno fmt` | `deno check` | `deno test` | Lefthook |
 | **Bun** | Biome | Biome | `tsc --noEmit` | `bun test` | Lefthook |
@@ -2578,7 +2578,7 @@ jobs:
 
 ### What to add at each project stage
 
-**MVP / Side project** — get these working before your first PR:
+**MVP / Side project**, get these working before your first PR:
 
 - Linter + formatter (one command, auto-fix on save)
 - .editorconfig
@@ -2586,7 +2586,7 @@ jobs:
 - Basic CI: lint + test on push
 - That is it. Do not over-engineer a weekend project.
 
-**Growth / Team project** — add when you have 2+ contributors:
+**Growth / Team project**, add when you have 2+ contributors:
 
 - Git hooks (Husky/Lefthook/pre-commit) for pre-commit linting
 - Commit linting (Conventional Commits)
@@ -2595,7 +2595,7 @@ jobs:
 - .gitattributes (line endings matter now)
 - PR template mentioning quality checks
 
-**Enterprise / Open source** — add when reliability and trust matter:
+**Enterprise / Open source**, add when reliability and trust matter:
 
 - All of the above, strictly enforced
 - Security scanning (gitleaks, Snyk/Dependabot, CodeQL)

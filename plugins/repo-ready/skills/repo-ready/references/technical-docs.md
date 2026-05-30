@@ -1,6 +1,6 @@
 # Technical Documentation Reference
 
-Reference for architecture decisions, design proposals, API documentation, runbooks, and diagrams-as-code. This covers Tier 4 documentation — load this reference when the project needs architecture records, operational documentation, or technical design artifacts.
+Reference for architecture decisions, design proposals, API documentation, runbooks, and diagrams-as-code. This covers Tier 4 documentation, load this reference when the project needs architecture records, operational documentation, or technical design artifacts.
 
 ## When to use what
 
@@ -37,14 +37,14 @@ docs/
 ### Numbering rules
 
 - Sequential integers, zero-padded to 4 digits: `0001`, `0002`, `0003`
-- **Never reuse a number.** If ADR 0005 is superseded, create 0012 (or whatever is next) — do not overwrite 0005
+- **Never reuse a number.** If ADR 0005 is superseded, create 0012 (or whatever is next), do not overwrite 0005
 - Gaps are fine. Deleted drafts leave gaps. This is expected
 - File names: `NNNN-lowercase-title-with-hyphens.md`
 
 ### Status lifecycle
 
 ```
-proposed → accepted → [deprecated | superseded by NNNN]
+proposed -> accepted -> [deprecated | superseded by NNNN]
 ```
 
 - **Proposed:** Under discussion, not yet binding
@@ -151,7 +151,7 @@ Michael Nygard in his article "Documenting Architecture Decisions."
 We will follow the MADR (Markdown Any Decision Record) 4.0 format.
 
 ADRs will be stored in `docs/adr/` and numbered sequentially. Numbers
-are never reused. Each ADR is immutable once accepted — if a decision
+are never reused. Each ADR is immutable once accepted, if a decision
 changes, a new ADR supersedes the old one.
 
 ## Consequences
@@ -177,7 +177,7 @@ changes, a new ADR supersedes the old one.
 | **log4brains** | ADR management + static site for browsing ADRs | `npm install -g log4brains` |
 | **adr-log** | Generates an ADR index/table of contents | `npm install -g adr-log` |
 
-For most projects, no tooling is needed — just create Markdown files in the ADR directory. Tooling helps when the ADR count exceeds ~20.
+For most projects, no tooling is needed, just create Markdown files in the ADR directory. Tooling helps when the ADR count exceeds ~20.
 
 ---
 
@@ -185,14 +185,14 @@ For most projects, no tooling is needed — just create Markdown files in the AD
 
 ### C4 model
 
-The C4 model provides four zoom levels for architecture diagrams. Use only the levels you need — most projects need levels 1 and 2. Level 4 is almost never worth maintaining manually.
+The C4 model provides four zoom levels for architecture diagrams. Use only the levels you need, most projects need levels 1 and 2. Level 4 is almost never worth maintaining manually.
 
 | Level | Name | Shows | When to create |
 |---|---|---|---|
 | **1** | System Context | Your system as a box, surrounded by users and external systems | Every project with external dependencies |
 | **2** | Container | Major runtime units: web app, API, database, message queue | Projects with >1 deployable unit |
 | **3** | Component | Internal building blocks within a single container | Complex services where internal structure matters |
-| **4** | Code | Classes, interfaces, modules | Almost never — use IDE tools instead |
+| **4** | Code | Classes, interfaces, modules | Almost never, use IDE tools instead |
 
 ### Architecture overview template
 
@@ -285,8 +285,8 @@ How data moves through the system for key operations.
 
 ### Authentication & Authorization
 
-- Authentication: [mechanism — JWT, session, OAuth2]
-- Authorization: [model — RBAC, ABAC, per-resource]
+- Authentication: [mechanism, JWT, session, OAuth2]
+- Authorization: [model, RBAC, ABAC, per-resource]
 - API keys: [how managed, rotation policy]
 
 ### Data Classification
@@ -301,7 +301,7 @@ How data moves through the system for key operations.
 
 ### Mermaid diagrams for C4 levels
 
-**Level 1 — System Context:**
+**Level 1, System Context:**
 
 ```mermaid
 C4Context
@@ -323,7 +323,7 @@ C4Context
     Rel(app, sendgrid, "Sends emails", "REST/HTTPS")
 ```
 
-**Level 2 — Container:**
+**Level 2, Container:**
 
 ```mermaid
 C4Container
@@ -350,7 +350,7 @@ C4Container
     Rel(worker, stripe, "Processes payments", "REST/HTTPS")
 ```
 
-**Level 3 — Component:**
+**Level 3, Component:**
 
 ```mermaid
 C4Component
@@ -474,7 +474,7 @@ docs/
 ### Process
 
 ```
-Draft → Proposed → Discussion → Accepted | Rejected | Withdrawn
+Draft -> Proposed -> Discussion -> Accepted | Rejected | Withdrawn
 ```
 
 - **Draft:** Author is still writing, not ready for review
@@ -566,12 +566,12 @@ and that's a valid reason to reject the RFC.
 
 ## Implementation Plan
 
-High-level phases and rough timeline. Not a project plan — just enough
+High-level phases and rough timeline. Not a project plan, just enough
 to show that the work is tractable.
 
-1. Phase 1: [Description] — estimated [timeframe]
-2. Phase 2: [Description] — estimated [timeframe]
-3. Phase 3: [Description] — estimated [timeframe]
+1. Phase 1: [Description], estimated [timeframe]
+2. Phase 2: [Description], estimated [timeframe]
+3. Phase 3: [Description], estimated [timeframe]
 ```
 
 ---
@@ -932,7 +932,7 @@ All times in UTC.
 ## Root Cause
 
 Technical explanation of what went wrong. Be specific. This is not about
-who made a mistake — it's about what systemic issue allowed the failure.
+who made a mistake, it's about what systemic issue allowed the failure.
 
 Example: "The database migration in PR #456 dropped and recreated an index
 on the `orders` table. During the recreation window (~10 minutes), queries
@@ -942,8 +942,8 @@ exceed the 5-second timeout."
 ## Contributing Factors
 
 - [Factor 1: e.g., "Migration was not tested against production-size data"]
-- [Factor 2: e.g., "No canary deployment — 100% traffic hit immediately"]
-- [Factor 3: e.g., "Alert threshold was too high — 5% error rate means
+- [Factor 2: e.g., "No canary deployment, 100% traffic hit immediately"]
+- [Factor 3: e.g., "Alert threshold was too high, 5% error rate means
   thousands of failed requests before detection"]
 
 ## What Went Well
@@ -998,8 +998,8 @@ Store in `docs/slo.md` or `docs/operations/slo.md`:
 | SLI | Target | Window | Error Budget |
 |---|---|---|---|
 | Availability | 99.9% | 28 days | 40.3 minutes of downtime |
-| Latency (p50) | < 200ms | 28 days | — |
-| Latency (p99) | < 1000ms | 28 days | — |
+| Latency (p50) | < 200ms | 28 days |, |
+| Latency (p99) | < 1000ms | 28 days |, |
 
 ## Error Budget Policy
 
@@ -1095,22 +1095,22 @@ User accounts in the system.
 | Column | Type | Nullable | Default | Description |
 |---|---|---|---|---|
 | id | uuid | No | gen_random_uuid() | Primary key |
-| email | varchar(255) | No | — | Login email, unique |
+| email | varchar(255) | No |, | Login email, unique |
 | name | varchar(100) | Yes | NULL | Display name |
-| password_hash | varchar(255) | No | — | bcrypt hash, never exposed via API |
+| password_hash | varchar(255) | No |, | bcrypt hash, never exposed via API |
 | role | enum('user','admin') | No | 'user' | Authorization role |
 | created_at | timestamptz | No | now() | Account creation timestamp |
 | updated_at | timestamptz | No | now() | Last modification timestamp |
 | deleted_at | timestamptz | Yes | NULL | Soft delete timestamp |
 
 **Indexes:**
-- `users_pkey` — Primary key on `id`
-- `users_email_key` — Unique index on `email`
-- `users_created_at_idx` — B-tree on `created_at` (for listing/pagination)
+- `users_pkey`, Primary key on `id`
+- `users_email_key`, Unique index on `email`
+- `users_created_at_idx`, B-tree on `created_at` (for listing/pagination)
 
 **Relationships:**
-- `orders.user_id` → `users.id` (one-to-many)
-- `sessions.user_id` → `users.id` (one-to-many)
+- `orders.user_id` -> `users.id` (one-to-many)
+- `sessions.user_id` -> `users.id` (one-to-many)
 ```
 
 ### ERD diagram (Mermaid)
@@ -1197,10 +1197,10 @@ Store in `docs/model-cards/` or alongside model artifacts:
 | Metric | Value | Benchmark |
 |---|---|---|
 | Accuracy | X% | Y% (baseline) |
-| Precision | X% | — |
-| Recall | X% | — |
-| F1 Score | X.XX | — |
-| AUC-ROC | X.XX | — |
+| Precision | X% |, |
+| Recall | X% |, |
+| F1 Score | X.XX |, |
+| AUC-ROC | X.XX |, |
 
 ## Limitations
 
@@ -1441,7 +1441,7 @@ docs/
     deployment.md
   postmortems/                  # Incident post-mortems
     YYYY-MM-DD-description.md
-  whitepapers/                  # (rare — external-facing projects only)
+  whitepapers/                  # (rare, external-facing projects only)
     paper-name.md
   diagrams/                     # Diagram source files and exports
     system-context.mmd
@@ -1454,4 +1454,4 @@ docs/
     model-card-name.md          # (ML projects only)
 ```
 
-Not every project needs every directory. Match the documentation to the project's type, stage, and audience — the same principle that governs the rest of the repo-ready skill.
+Not every project needs every directory. Match the documentation to the project's type, stage, and audience, the same principle that governs the rest of the repo-ready skill.

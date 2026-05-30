@@ -1,3 +1,16 @@
+## v3.0.2 (2026-05-30)
+
+Suite-wide release train alignment. This patch release moves every skill, the ready-suite meta plugin, and the marketplace metadata to the 3.0.2 train together, keeping each skill's artifact paths and trigger ownership intact.
+
+### Changed
+- Aligns this skill with the ready-suite 3.0.2 release train.
+- Keeps the skill's existing artifact paths and trigger ownership intact while publishing the shared version.
+
+### Why a patch
+This is a coordinated suite release: all eleven skills, the ready-suite meta plugin, and the marketplace metadata move together for the 3.0.2 train.
+
+---
+
 ## v3.0.1 (2026-05-30)
 
 Suite-wide release train alignment. This patch release moves every skill, the ready-suite meta plugin, and the marketplace metadata to the 3.0.1 train together, keeping each skill's artifact paths and trigger ownership intact.
@@ -406,7 +419,7 @@ Retrofits production-ready to the **ready-suite interop standard**. Declares sui
 
 - **Frontmatter suite fields.** New required fields: `suite: ready-suite`, `tier: building`, `upstream: [prd-ready, architecture-ready, roadmap-ready, stack-ready]`, `downstream: [deploy-ready, observe-ready]`. `pairs_with` retained for same-tier siblings (`repo-ready`). Makes the skill's suite position machine-readable for skill-aware harnesses.
 - **Suite membership section in SKILL.md.** One-line summary of all nine sibling skills organized by tier. Same content in every skill (loosely, via `SUITE.md`) so any entry point into the suite surfaces the whole map.
-- **Consumes from upstream section.** Documents which upstream artifacts production-ready reads and where: `.prd-ready/PRD.md` at Step 1, `.architecture-ready/ARCH.md` at Step 2, `.roadmap-ready/ROADMAP.md` at Steps 1 and 5, `.stack-ready/STACK.md` at Step 2. Absence is fine; the skill falls back to its own defaults.
+- **Consumes from upstream section.** Documents which upstream artifacts production-ready reads and where: `.prd-ready/PRD.md` at Step 1, `.architecture-ready/ARCH.md` at Step 2, `.roadmap-ready/ROADMAP.md` at Steps 1 and 5, `.stack-ready/DECISION.md` at Step 2. Absence is fine; the skill falls back to its own defaults.
 - **Produces for downstream section.** Documents the artifacts production-ready emits that deploy-ready and observe-ready consume: `.production-ready/STATE.md`, ADRs, route map, audit log schema, deferred-cta.md, open-questions block. Produced whether or not downstream skills are installed. Makes the suite extensible: install a downstream skill later and it already has its inputs.
 - **`SUITE.md` at repo root.** Single-page map of the nine-skill ready-suite: tier organization, dependency flow, install locations, composition principles, known-good version table. Intended to be byte-identical across every skill in the suite so users discover the whole suite through any entry point.
 

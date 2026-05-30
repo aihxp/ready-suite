@@ -1,6 +1,6 @@
 # Animation & Motion
 
-Deep reference for animation in dashboards and SaaS applications. The summary table lives in `ui-design-patterns.md` (motion section). This file is the implementation manual — timing values, CSS keyframes, library choices, and code patterns for every animation surface in a dashboard.
+Deep reference for animation in dashboards and SaaS applications. The summary table lives in `ui-design-patterns.md` (motion section). This file is the implementation manual, timing values, CSS keyframes, library choices, and code patterns for every animation surface in a dashboard.
 
 The core rule: **animation in a dashboard serves function, not decoration.** Every motion must communicate state change, provide feedback, or orient the user spatially. If it doesn't do one of those three things, cut it.
 
@@ -15,15 +15,15 @@ The browser rendering pipeline: Style > Layout > Paint > Composite. Animating `w
 **Animate only these properties:**
 - `transform` (translate, scale, rotate)
 - `opacity`
-- `filter` (with care — can be expensive on large elements)
+- `filter` (with care, can be expensive on large elements)
 
 Everything else is off-limits for animation in a data-dense dashboard.
 
 ```css
-/* WRONG — triggers layout on every frame */
+/* WRONG, triggers layout on every frame */
 .drawer { transition: width 250ms ease; }
 
-/* RIGHT — compositor only, GPU-accelerated */
+/* RIGHT, compositor only, GPU-accelerated */
 .drawer { transition: transform 250ms ease; }
 ```
 
@@ -41,7 +41,7 @@ Force GPU compositing when you know an element will animate:
 - Apply it *before* the animation starts (e.g., on hover of a parent, or when a class is added).
 - Remove it after the animation completes. Leaving `will-change` on permanently wastes GPU memory.
 - Never put `will-change` on more than ~10 elements simultaneously. Each one creates a new compositor layer.
-- Never use `will-change: auto` — it does nothing.
+- Never use `will-change: auto`, it does nothing.
 
 ```js
 // Apply before, remove after
@@ -74,19 +74,19 @@ Easing determines how an animation accelerates and decelerates. Wrong easing mak
 
 ```css
 :root {
-  /* Enters — fast start, gentle landing */
+  /* Enters, fast start, gentle landing */
   --ease-out: cubic-bezier(0, 0, 0.2, 1);
 
-  /* Exits — gentle start, fast departure */
+  /* Exits, gentle start, fast departure */
   --ease-in: cubic-bezier(0.4, 0, 1, 1);
 
-  /* Symmetric — for looping or bidirectional */
+  /* Symmetric, for looping or bidirectional */
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* Overshoot — for modals, popovers (slight bounce at end) */
+  /* Overshoot, for modals, popovers (slight bounce at end) */
   --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
 
-  /* Snappy — for drawers, panels */
+  /* Snappy, for drawers, panels */
   --ease-snappy: cubic-bezier(0.32, 0.72, 0, 1);
 }
 ```
@@ -106,13 +106,13 @@ Same-document view transitions are Baseline Newly Available as of late 2025: Chr
 ```js
 // Wrap your DOM update in startViewTransition
 document.startViewTransition(() => {
-  // Update the DOM — swap route content, update state, etc.
+  // Update the DOM, swap route content, update state, etc.
   updateRoute(newPath);
 });
 ```
 
 ```css
-/* Default crossfade — works out of the box */
+/* Default crossfade, works out of the box */
 ::view-transition-old(root) {
   animation: fade-out 200ms ease-in forwards;
 }
@@ -131,12 +131,12 @@ document.startViewTransition(() => {
 **Shared element transitions (morph between list item and detail page):**
 
 ```css
-/* On the list page — tag the card */
+/* On the list page, tag the card */
 .project-card {
   view-transition-name: project-hero;
 }
 
-/* On the detail page — tag the hero */
+/* On the detail page, tag the hero */
 .project-detail-header {
   view-transition-name: project-hero;
 }
@@ -149,14 +149,14 @@ document.startViewTransition(() => {
 ```
 
 **When to use in dashboards:**
-- Route changes (settings > billing, overview > detail) — crossfade, 200-300ms.
-- List-to-detail navigation — shared element morph on the card/row that was clicked.
-- Tab switching within a page — slide left/right based on tab direction.
+- Route changes (settings > billing, overview > detail), crossfade, 200-300ms.
+- List-to-detail navigation, shared element morph on the card/row that was clicked.
+- Tab switching within a page, slide left/right based on tab direction.
 
 **When NOT to use:**
-- Real-time data updates (live metrics, WebSocket pushes) — swap instantly.
-- Pagination — just replace content.
-- Filter/sort results — re-render without transition.
+- Real-time data updates (live metrics, WebSocket pushes), swap instantly.
+- Pagination, just replace content.
+- Filter/sort results, re-render without transition.
 
 ### Skeleton-to-content transitions
 
@@ -192,7 +192,7 @@ The 50ms overlap creates a smooth crossfade rather than a flash of empty space b
 
 ## Micro-interactions
 
-Micro-interactions are the fastest animations in the system — 100-200ms, always triggered by direct user action. They provide immediate tactile feedback.
+Micro-interactions are the fastest animations in the system, 100-200ms, always triggered by direct user action. They provide immediate tactile feedback.
 
 ### Button press
 
@@ -211,7 +211,7 @@ Micro-interactions are the fastest animations in the system — 100-200ms, alway
 }
 ```
 
-Scale 0.97-0.98 on press. Not 0.95 (too dramatic) or 0.99 (imperceptible). Return is handled by the transition — no explicit "release" animation needed.
+Scale 0.97-0.98 on press. Not 0.95 (too dramatic) or 0.99 (imperceptible). Return is handled by the transition, no explicit "release" animation needed.
 
 ### Toggle / switch
 
@@ -228,7 +228,7 @@ Scale 0.97-0.98 on press. Not 0.95 (too dramatic) or 0.99 (imperceptible). Retur
 }
 ```
 
-Use `transform: translateX()` — never animate `left` or `margin-left`. The slight overshoot from `--ease-spring` makes the toggle feel physical.
+Use `transform: translateX()`, never animate `left` or `margin-left`. The slight overshoot from `--ease-spring` makes the toggle feel physical.
 
 ### Checkbox
 
@@ -353,7 +353,7 @@ Don't show all skeleton elements at once. Stagger them top-to-bottom to create a
 }
 ```
 
-Stagger interval: 30-50ms per item. More than 50ms and the page feels slow. Fewer than 30ms and the stagger is imperceptible. Cap at 5-8 items — beyond that, stagger the first 5 and show the rest simultaneously.
+Stagger interval: 30-50ms per item. More than 50ms and the page feels slow. Fewer than 30ms and the stagger is imperceptible. Cap at 5-8 items, beyond that, stagger the first 5 and show the rest simultaneously.
 
 ### Shimmer effect (synchronized)
 
@@ -386,23 +386,23 @@ For dark mode, use `hsl(0 0% 15%)` as base and `hsl(0 0% 20%)` as shimmer highli
 
 ```
 Is this the first load of this content?
-  YES → Skeleton (matches final layout shape)
-  NO → Is existing data visible?
-    YES → Inline indicator (spinning icon, thin progress bar)
-    NO → Skeleton again (content was removed from DOM)
+  YES -> Skeleton (matches final layout shape)
+  NO -> Is existing data visible?
+    YES -> Inline indicator (spinning icon, thin progress bar)
+    NO -> Skeleton again (content was removed from DOM)
 
 Is the wait expected to be < 200ms?
-  YES → Show nothing. Delay skeleton render by 200ms.
-  NO → Show skeleton immediately.
+  YES -> Show nothing. Delay skeleton render by 200ms.
+  NO -> Show skeleton immediately.
 
 Is the loading area < 48px in any dimension?
-  YES → Use spinner (skeleton won't read at that size)
-  NO → Use skeleton
+  YES -> Use spinner (skeleton won't read at that size)
+  NO -> Use skeleton
 ```
 
 ### Top-of-page progress bar (NProgress-style)
 
-For route transitions and background fetches — a thin bar at the very top of the viewport:
+For route transitions and background fetches, a thin bar at the very top of the viewport:
 
 ```css
 .nprogress-bar {
@@ -490,28 +490,28 @@ FLIP: **F**irst, **L**ast, **I**nvert, **P**lay. The only reliable way to animat
 function animateReorder(container) {
   const items = [...container.children];
 
-  // FIRST — record current positions
+  // FIRST, record current positions
   const firstRects = new Map();
   items.forEach(item => {
     firstRects.set(item, item.getBoundingClientRect());
   });
 
-  // (DOM change happens here — sort, filter, reorder)
+  // (DOM change happens here, sort, filter, reorder)
   reorderDOM(container);
 
-  // LAST — record new positions
+  // LAST, record new positions
   items.forEach(item => {
     const first = firstRects.get(item);
     const last = item.getBoundingClientRect();
 
-    // INVERT — apply transform to put element back at old position
+    // INVERT, apply transform to put element back at old position
     const dx = first.left - last.left;
     const dy = first.top - last.top;
 
     item.style.transform = `translate(${dx}px, ${dy}px)`;
     item.style.transition = 'none';
 
-    // PLAY — remove transform and let transition animate it
+    // PLAY, remove transform and let transition animate it
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         item.style.transition = 'transform 250ms cubic-bezier(0.32, 0.72, 0, 1)';
@@ -522,7 +522,7 @@ function animateReorder(container) {
 }
 ```
 
-The double `requestAnimationFrame` is intentional — it ensures the browser has painted the inverted state before starting the transition.
+The double `requestAnimationFrame` is intentional, it ensures the browser has painted the inverted state before starting the transition.
 
 ### Filtering (exit then enter)
 
@@ -532,7 +532,7 @@ When a filter changes the visible set of items:
 2. **Layout**: remaining items move to fill gaps (FLIP, 200ms).
 3. **Enter**: new items that now match fade in (opacity 0 to 1, 150ms ease-out, 50ms delay after layout).
 
-Orchestrate with CSS classes and short delays. Do not try to run all three simultaneously — the visual result is chaos.
+Orchestrate with CSS classes and short delays. Do not try to run all three simultaneously, the visual result is chaos.
 
 ### Drag-and-drop visual feedback
 
@@ -596,7 +596,7 @@ Orchestrate with CSS classes and short delays. Do not try to run all three simul
   opacity: 1;
 }
 
-/* Exit — faster, ease-in */
+/* Exit, faster, ease-in */
 .modal-content[data-state="closed"] {
   transform: scale(0.97);
   opacity: 0;
@@ -633,7 +633,7 @@ Left drawers use `translateX(-100%)`. Bottom sheets use `translateY(100%)`.
 
 ### Popover with `@starting-style`
 
-Modern CSS approach — no JavaScript animation library needed:
+Modern CSS approach, no JavaScript animation library needed:
 
 ```css
 .popover {
@@ -785,7 +785,7 @@ For simpler cases using CSS `@property` (Chrome 85+, Safari 16.4+, Firefox 128+)
 
 ### Chart draw-in on first load
 
-For bar charts — grow bars from zero height:
+For bar charts, grow bars from zero height:
 
 ```css
 .bar {
@@ -804,7 +804,7 @@ For bar charts — grow bars from zero height:
 }
 ```
 
-For line charts — draw the path with stroke-dasharray:
+For line charts, draw the path with stroke-dasharray:
 
 ```css
 .chart-line {
@@ -830,7 +830,7 @@ When a chart's data changes (new time period selected, real-time update):
 }
 
 .chart-line {
-  transition: d 300ms ease-out; /* SVG path morphing — requires a library or SMIL */
+  transition: d 300ms ease-out; /* SVG path morphing, requires a library or SMIL */
 }
 
 .pie-slice {
@@ -867,7 +867,7 @@ When a KPI value updates, briefly flash the background to draw attention:
 }
 ```
 
-Flash once. Do not repeat or pulse. For dashboards with many KPIs updating simultaneously, skip the flash entirely — it becomes visual noise.
+Flash once. Do not repeat or pulse. For dashboards with many KPIs updating simultaneously, skip the flash entirely, it becomes visual noise.
 
 ---
 
@@ -875,7 +875,7 @@ Flash once. Do not repeat or pulse. For dashboards with many KPIs updating simul
 
 ### Why springs beat durations
 
-Duration-based animations have a fixed end time. They cannot incorporate the velocity of a user's gesture, so a fast flick and a slow drag both resolve in the same number of milliseconds. Springs solve this — they model physical motion with mass, stiffness, and damping, and naturally incorporate input velocity.
+Duration-based animations have a fixed end time. They cannot incorporate the velocity of a user's gesture, so a fast flick and a slow drag both resolve in the same number of milliseconds. Springs solve this, they model physical motion with mass, stiffness, and damping, and naturally incorporate input velocity.
 
 ### Spring parameters
 
@@ -939,7 +939,7 @@ Use a generator like `spring-easing` (npm) to compute these values from physics 
 For drag-to-dismiss, swipe actions, pull-to-refresh:
 
 ```jsx
-// Motion for React — drag gesture
+// Motion for React, drag gesture
 <motion.div
   drag="x"
   dragConstraints={{ left: 0, right: 0 }}
@@ -968,7 +968,7 @@ They are NOT useful for:
 
 ---
 
-## Animation libraries — when to use each
+## Animation libraries, when to use each
 
 ### CSS-only (transitions + keyframes + `@starting-style`)
 
@@ -978,7 +978,7 @@ They are NOT useful for:
 
 **Limits:** No spring physics, no gesture support, no orchestration (stagger requires manual `animation-delay`), no FLIP, no value interpolation.
 
-### Motion (formerly Framer Motion) — React
+### Motion (formerly Framer Motion), React
 
 **Use for:** React SPAs and dashboards. Spring-based transitions, layout animations (automatic FLIP), gesture handling, AnimatePresence for exit animations, shared layout animations.
 
@@ -1018,7 +1018,7 @@ function NotificationList({ items }) {
 
 **Use for:** Route transitions in SPAs and MPAs, shared element morphs between pages. Works with any framework or vanilla JS.
 
-**Bundle:** Zero — it's a browser API.
+**Bundle:** Zero, it's a browser API.
 
 **Dashboard fit:** Use for page/route transitions as a progressive enhancement. Always provide a fallback (instant swap) for browsers that don't support it. Do not build critical UX on it until Firefox cross-document support ships.
 
@@ -1040,7 +1040,7 @@ function NotificationList({ items }) {
 
 ## Accessibility and motion
 
-### `prefers-reduced-motion` — do it right
+### `prefers-reduced-motion`, do it right
 
 The nuclear approach (set all durations to 0) is common but wrong. It removes *all* motion, including essential state indicators. The correct approach: **reduce to essential, don't eliminate.**
 
@@ -1124,7 +1124,7 @@ WCAG 2.3.1: nothing flashes more than 3 times per second. This is a hard accessi
 
 ### Vestibular disorder triggers
 
-Large-scale motion is the primary trigger — not small micro-interactions. Specifically:
+Large-scale motion is the primary trigger, not small micro-interactions. Specifically:
 - Full-page slides or zooms (zoom transitions between views).
 - Parallax scrolling with large displacement.
 - Elements that move when the user is not interacting (auto-rotating carousels, auto-scrolling banners).
@@ -1165,7 +1165,7 @@ sessionStorage.setItem('dashboard-seen', 'true');
 
 Before adding any animation, ask: **"Would this dashboard feel broken without this animation?"**
 
-- If yes (toggle has no visual response, modal appears with no transition, element disappears with no feedback) — add the animation.
-- If no (chart bars could just appear at full height, page content could just swap, list could just re-render) — skip it or make it so subtle and fast that it's subliminal.
+- If yes (toggle has no visual response, modal appears with no transition, element disappears with no feedback), add the animation.
+- If no (chart bars could just appear at full height, page content could just swap, list could just re-render), skip it or make it so subtle and fast that it's subliminal.
 
 The best dashboard animations are the ones users never consciously notice but would miss if they were gone.

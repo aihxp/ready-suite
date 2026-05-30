@@ -1,6 +1,6 @@
 # Email Template Design
 
-This file covers the visual and structural layer of transactional and marketing email — the HTML, CSS, responsive techniques, dark mode handling, CTA buttons, accessibility, testing, and tooling that make emails render correctly across every client. The notification pipeline, delivery tracking, and preference architecture are in `notifications-and-email.md`; this file is about what the email looks like and how to build it.
+This file covers the visual and structural layer of transactional and marketing email, the HTML, CSS, responsive techniques, dark mode handling, CTA buttons, accessibility, testing, and tooling that make emails render correctly across every client. The notification pipeline, delivery tracking, and preference architecture are in `notifications-and-email.md`; this file is about what the email looks like and how to build it.
 
 Email is not the web. You're writing HTML for 30+ rendering engines, several of which are from 2007. Every technique here exists because something is broken somewhere.
 
@@ -12,13 +12,13 @@ Email is not the web. You're writing HTML for 30+ rendering engines, several of 
 
 Outlook (2016, 2019, 2021, Microsoft 365 desktop for Windows) uses Microsoft Word's rendering engine. Word has zero support for CSS flexbox, grid, or float-based layouts. Tables are the only layout mechanism that works everywhere.
 
-Use `<table>` for structure. Use `<div>` only for non-layout content blocks that don't need to sit side-by-side. Never nest deeper than 3-4 table levels — rendering becomes unreliable and debugging is miserable.
+Use `<table>` for structure. Use `<div>` only for non-layout content blocks that don't need to sit side-by-side. Never nest deeper than 3-4 table levels, rendering becomes unreliable and debugging is miserable.
 
 ### Inline styles are mandatory
 
 Gmail (web and mobile) strips `<style>` blocks from the `<head>` entirely. The only reliable way to style elements is inline `style` attributes on every element.
 
-Use `<style>` in `<head>` only for media queries and progressive enhancement — clients that strip it will still get the inline-styled version.
+Use `<style>` in `<head>` only for media queries and progressive enhancement, clients that strip it will still get the inline-styled version.
 
 ### CSS support matrix
 
@@ -44,7 +44,7 @@ Use `<style>` in `<head>` only for media queries and progressive enhancement —
 
 ### HTML attributes over CSS
 
-Use HTML attributes where supported — they have better compatibility than CSS equivalents:
+Use HTML attributes where supported, they have better compatibility than CSS equivalents:
 
 ```html
 <!-- Prefer this -->
@@ -151,7 +151,7 @@ Use both for safety. The HTML attribute is the floor; the inline style is the up
 
 ### Widths
 
-- **Container:** 600px max. This is the standard — fits all clients without horizontal scroll.
+- **Container:** 600px max. This is the standard, fits all clients without horizontal scroll.
 - **Content padding:** 40px sides on desktop (520px content), 20px on mobile (shrink via media query or fluid technique).
 - **Mobile:** 480px design target, but use 100% width so it fills any screen.
 - **Images:** Always set explicit `width` and `height` attributes. Use `style="display:block; max-width:100%; height:auto;"` for fluid scaling.
@@ -169,7 +169,7 @@ The preview text shown after the subject line in inbox views. Place immediately 
 </div>
 ```
 
-**Length:** 40-100 characters. Front-load the message — mobile shows ~40 chars, desktop ~100.
+**Length:** 40-100 characters. Front-load the message, mobile shows ~40 chars, desktop ~100.
 
 **Note:** Apple Mail iOS 18.2+ replaces preheaders with AI-generated summaries. Preheaders still matter for Gmail, Outlook, Yahoo, and older Apple Mail. Write good opening sentences as a fallback.
 
@@ -179,7 +179,7 @@ The preview text shown after the subject line in inbox views. Place immediately 
 
 ### Fluid hybrid approach
 
-The recommended technique for 2025-2026. Combines fluid percentage widths with `max-width` constraints. Works without media queries — meaning it works in Gmail (web), which strips `<style>` blocks.
+The recommended technique for 2025-2026. Combines fluid percentage widths with `max-width` constraints. Works without media queries, meaning it works in Gmail (web), which strips `<style>` blocks.
 
 **Principle:** Elements flow at 100% width by default (mobile). `max-width` constrains them on desktop. Outlook ignores `max-width`, so you wrap with conditional comments for a fixed-width fallback.
 
@@ -345,7 +345,7 @@ Gmail (Android/iOS in dark mode), Outlook (Windows desktop). Applies aggressive 
 ```
 The border is barely visible on light backgrounds but provides definition on dark.
 
-4. **Avoid pure white (#ffffff) backgrounds in images.** Use near-white (#fafafa or #f5f5f5) — forced inversion often skips near-white values, producing less jarring results.
+4. **Avoid pure white (#ffffff) backgrounds in images.** Use near-white (#fafafa or #f5f5f5), forced inversion often skips near-white values, producing less jarring results.
 
 ### Dark mode CTA button colors
 
@@ -446,7 +446,7 @@ Padding-based, not image-based. Works in all clients including Outlook with VML 
 ### Button rules
 
 - **One primary CTA per email.** If you need a secondary action, use a text link below the button.
-- **Action-oriented label.** "Get Started," "View Invoice," "Reset Password" — not "Click Here" or "Submit."
+- **Action-oriented label.** "Get Started," "View Invoice," "Reset Password", not "Click Here" or "Submit."
 - **Full-width on mobile.** Add a media query class to make buttons 100% width on small screens.
 - **Dark mode caution.** Some clients invert button colors. Test with mid-range brand colors. Avoid very dark button backgrounds that become invisible on forced dark mode.
 
@@ -469,19 +469,19 @@ Padding-based, not image-based. Works in all clients including Outlook with VML 
 |---|---|---|
 | **Litmus** | Preview in 90+ clients, spam testing, analytics, accessibility checks | $500+/mo (enterprise positioning after 2025 price increase) |
 | **Email on Acid** | Preview in 70+ clients, spam testing, accessibility checks | ~$74-134/mo (remained affordable) |
-| **mail-tester.com** | Free spam score check — send an email to their address, get a score | Free (10 tests/day) |
+| **mail-tester.com** | Free spam score check, send an email to their address, get a score | Free (10 tests/day) |
 | **Mailtrap** | Email testing sandbox, preview, spam analysis | Free tier + paid |
 | **Postmark DMARC Digests** | Free weekly DMARC reports | Free |
 
 ### Testing checklist
 
 **Per-client rendering (minimum set):**
-- Gmail (web) — strips `<style>`, inline only
-- Gmail (Android/iOS app) — supports `<style>`, media queries
-- Outlook 2019/365 (Windows) — Word rendering engine
-- Outlook.com (web) — modern renderer, partial dark mode
-- Apple Mail (macOS/iOS) — best CSS support, full dark mode
-- Yahoo Mail — strips some CSS, partial media query support
+- Gmail (web), strips `<style>`, inline only
+- Gmail (Android/iOS app), supports `<style>`, media queries
+- Outlook 2019/365 (Windows), Word rendering engine
+- Outlook.com (web), modern renderer, partial dark mode
+- Apple Mail (macOS/iOS), best CSS support, full dark mode
+- Yahoo Mail, strips some CSS, partial media query support
 
 **Per-email checks:**
 - [ ] Subject line and preheader display correctly
@@ -513,9 +513,9 @@ Run every template through mail-tester.com before production use. Target a score
 
 | Framework | Syntax | Best for | Output quality |
 |---|---|---|---|
-| **MJML** | Custom XML (`<mj-section>`, `<mj-column>`) | Broadest client compatibility, non-React teams | Excellent — battle-tested table output |
-| **React Email** | React/JSX components | React/TypeScript teams, programmatic templates | Good — improving, not as battle-tested as MJML |
-| **Maizzle** | HTML + Tailwind classes | Tailwind teams, hand-tuned control | Excellent — compiles Tailwind to inline styles |
+| **MJML** | Custom XML (`<mj-section>`, `<mj-column>`) | Broadest client compatibility, non-React teams | Excellent, battle-tested table output |
+| **React Email** | React/JSX components | React/TypeScript teams, programmatic templates | Good, improving, not as battle-tested as MJML |
+| **Maizzle** | HTML + Tailwind classes | Tailwind teams, hand-tuned control | Excellent, compiles Tailwind to inline styles |
 
 ### MJML example
 
@@ -603,11 +603,11 @@ React Email has a dev server (`npx email dev`) with hot reload and per-client pr
 
 ### Requirements
 
-These are not optional. 99.89% of HTML emails have serious accessibility issues — don't be in that statistic.
+These are not optional. 99.89% of HTML emails have serious accessibility issues, don't be in that statistic.
 
 **Images:**
 - Every `<img>` needs an `alt` attribute. Informative images get descriptive alt text. Decorative images (spacers, dividers) get `alt=""` (empty, not omitted).
-- Don't use "image of" or "picture of" — screen readers already announce it's an image.
+- Don't use "image of" or "picture of", screen readers already announce it's an image.
 - Always set `width` and `height` attributes so layout doesn't shift when images are blocked.
 
 **Headings:**
@@ -615,7 +615,7 @@ These are not optional. 99.89% of HTML emails have serious accessibility issues 
 - Don't skip levels (h1 > h3). Screen readers use headings to navigate.
 
 **Links:**
-- Descriptive link text. "View your invoice" — not "Click here" or "Read more."
+- Descriptive link text. "View your invoice", not "Click here" or "Read more."
 - Underline links in body text (don't rely on color alone).
 - Ensure links have sufficient color contrast against surrounding text.
 
@@ -632,13 +632,13 @@ These are not optional. 99.89% of HTML emails have serious accessibility issues 
 **Structure:**
 - Use `role="presentation"` on all layout tables so screen readers don't announce them as data tables.
 - Use `lang` attribute on `<html>` tag.
-- Logical reading order — the source order should match visual order.
+- Logical reading order, the source order should match visual order.
 
 ---
 
 ## Deliverability basics
 
-### Authentication (required — not optional)
+### Authentication (required, not optional)
 
 **SPF (Sender Policy Framework):**
 DNS TXT record listing which servers can send email for your domain. Without it, any server can forge your domain.
@@ -654,13 +654,13 @@ Cryptographic signature on every email. Receiving servers verify the signature a
 Policy telling receivers what to do when SPF/DKIM fail. Start with monitoring, then tighten.
 
 ```
-# Start here — monitor only
+# Start here, monitor only
 v=DMARC1; p=none; rua=mailto:dmarc@yourdomain.com;
 
-# After verification — quarantine failures
+# After verification, quarantine failures
 v=DMARC1; p=quarantine; rua=mailto:dmarc@yourdomain.com;
 
-# Full protection — reject failures
+# Full protection, reject failures
 v=DMARC1; p=reject; rua=mailto:dmarc@yourdomain.com;
 ```
 
@@ -696,7 +696,7 @@ New domains or IPs have no sender reputation. ISPs throttle unknown senders.
 
 - Remove hard bounces immediately (first occurrence).
 - Suppress soft bounces after 3 consecutive failures.
-- Sunset unengaged subscribers (no opens in 90 days) — move to re-engagement campaign or remove.
+- Sunset unengaged subscribers (no opens in 90 days), move to re-engagement campaign or remove.
 - Validate email addresses at signup (syntax + MX record check). Libraries: `email-validator` (Python), `deep-email-validator` (Node).
 - Never buy or rent email lists.
 
@@ -709,8 +709,8 @@ New domains or IPs have no sender reputation. ISPs throttle unknown senders.
 - **Don't use CSS custom properties (variables).** Zero support across email clients.
 - **Don't skip the Outlook VML fallback for CTA buttons.** Padding-based buttons break in Word rendering. VML is ugly to write but necessary.
 - **Don't use images for text.** Unscalable, invisible when images are blocked, not accessible.
-- **Don't exceed 102KB HTML size.** Gmail clips larger emails with a "View entire message" link — most users won't click it.
+- **Don't exceed 102KB HTML size.** Gmail clips larger emails with a "View entire message" link, most users won't click it.
 - **Don't send without testing in at least Gmail, Outlook, and Apple Mail.** These three cover the major rendering engines.
 - **Don't use URL shorteners in emails.** Spam filters flag them aggressively.
-- **Don't skip preheader text.** Without it, email clients pull the first text they find — often "View in browser" or alt text.
+- **Don't skip preheader text.** Without it, email clients pull the first text they find, often "View in browser" or alt text.
 - **Don't use a pure black background for dark mode email styles.** Use #1a1a1a or similar. Matches how dark mode apps actually look.

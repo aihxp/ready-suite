@@ -10,7 +10,7 @@ This file is the rules for keeping everything connected.
 
 ### Why every mutation goes through a service function
 
-The fundamental problem: mutations happen in multiple places — the API route, the background job, the webhook handler, the admin bulk action. Each place independently touches the database, and each must independently remember to write audit logs, invalidate caches, send notifications, and enforce permissions. They inevitably diverge.
+The fundamental problem: mutations happen in multiple places, the API route, the background job, the webhook handler, the admin bulk action. Each place independently touches the database, and each must independently remember to write audit logs, invalidate caches, send notifications, and enforce permissions. They inevitably diverge.
 
 The fix: every entity mutation is a single service function. The API route, the webhook handler, the background job, and the admin action all call the same function. None of them touch the database directly.
 
@@ -52,9 +52,9 @@ This prevents "I added audit logging to the API route but forgot the background 
 
 ### Service layer vs repository vs domain events
 
-- **Repository** — solves data access abstraction (how you talk to the DB). Useful underneath the service layer, but a `userRepo.update()` still leaves the caller responsible for side effects. Not a substitute for services.
-- **Service layer** — solves operation coordination (what happens when a mutation occurs). The right default for dashboards. Each function is the canonical way to perform an operation.
-- **Domain events** — solves complex choreography across bounded contexts. At dashboard scale, in-process events emitted by service functions are sufficient. You don't need a separate event infrastructure.
+- **Repository**, solves data access abstraction (how you talk to the DB). Useful underneath the service layer, but a `userRepo.update()` still leaves the caller responsible for side effects. Not a substitute for services.
+- **Service layer**, solves operation coordination (what happens when a mutation occurs). The right default for dashboards. Each function is the canonical way to perform an operation.
+- **Domain events**, solves complex choreography across bounded contexts. At dashboard scale, in-process events emitted by service functions are sufficient. You don't need a separate event infrastructure.
 
 Start with service functions that emit in-process events. Graduate to a message queue only when you have background processing that must survive process restarts.
 
@@ -121,7 +121,7 @@ One subscriber failing must not break the primary operation or other subscribers
 
 ### Idempotency
 
-Events may be delivered more than once (especially with queues). Every handler must be idempotent — processing the same event twice produces the same result. Use the event's entity ID + action + timestamp as a deduplication key. For database writes, use upserts. For emails, check if already sent for this event.
+Events may be delivered more than once (especially with queues). Every handler must be idempotent, processing the same event twice produces the same result. Use the event's entity ID + action + timestamp as a deduplication key. For database writes, use upserts. For emails, check if already sent for this event.
 
 ---
 
@@ -159,7 +159,7 @@ export function invalidateForEvent(queryClient: QueryClient, event: string, enti
 }
 ```
 
-This replaces ad-hoc `invalidateQueries` sprinkled across mutation handlers — the exact same "forgot to update this other place" problem the service layer solves on the backend.
+This replaces ad-hoc `invalidateQueries` sprinkled across mutation handlers, the exact same "forgot to update this other place" problem the service layer solves on the backend.
 
 ### Broad vs narrow invalidation
 
@@ -171,7 +171,7 @@ This replaces ad-hoc `invalidateQueries` sprinkled across mutation handlers — 
 
 ### Cross-entity invalidation
 
-Deleting a customer should also invalidate their orders, invoices, and activity. The invalidation map handles this — one entry per event type, listing all affected query prefixes.
+Deleting a customer should also invalidate their orders, invoices, and activity. The invalidation map handles this, one entry per event type, listing all affected query prefixes.
 
 ### Optimistic updates spanning multiple caches
 
@@ -248,7 +248,7 @@ Use this everywhere: table cells, audit logs, activity feeds, notifications, sea
 
 ### Hover preview cards
 
-On hovering an entity link, fetch a lightweight preview (not the full detail) and display in a popover. Use Radix HoverCard or shadcn/ui hover-card. Set `staleTime: 30_000` on preview queries — they can be slightly stale.
+On hovering an entity link, fetch a lightweight preview (not the full detail) and display in a popover. Use Radix HoverCard or shadcn/ui hover-card. Set `staleTime: 30_000` on preview queries, they can be slightly stale.
 
 ### Backlinks
 
@@ -506,7 +506,7 @@ One shape per entity, used everywhere. This prevents the "the user list returns 
 
 **Rule: database writes are transactional; external side effects are not.**
 
-Wrap the mutation and audit log in a database transaction. Side effects that call external services (email, webhook) happen outside the transaction. If they fail, they go to a retry queue — not into the void.
+Wrap the mutation and audit log in a database transaction. Side effects that call external services (email, webhook) happen outside the transaction. If they fail, they go to a retry queue, not into the void.
 
 ### Saga / compensation for multi-step operations
 
@@ -538,7 +538,7 @@ async function provisionTenant(data) {
 
 ### Dead letter queue
 
-Side effects that fail go to a retry queue. After exhausting retries, they move to a dead letter state — inspectable and manually retryable from the admin UI. Never into the void.
+Side effects that fail go to a retry queue. After exhausting retries, they move to a dead letter state, inspectable and manually retryable from the admin UI. Never into the void.
 
 ### Error correlation via request ID
 
@@ -591,7 +591,7 @@ Stale flags are tech debt. Each one adds two code paths that both need testing.
 
 ---
 
-## The integration layer — how it all connects
+## The integration layer, how it all connects
 
 ```
 Feature Flag Gate
@@ -622,7 +622,7 @@ Client    Service
 
 Every mutation flows through the service layer. The service emits events. Events trigger cache invalidation, real-time push, notifications, and background jobs. Jobs report progress. The health check monitors all dependencies. Feature flags gate the entire flow.
 
-The entity registry connects the other axis — horizontal linking between features. Every entity reference is resolvable to a URL, a label, and an icon. Audit logs, activity feeds, notifications, search results, and table cells all use the same resolution mechanism. Nothing is a dead end.
+The entity registry connects the other axis, horizontal linking between features. Every entity reference is resolvable to a URL, a label, and an icon. Audit logs, activity feeds, notifications, search results, and table cells all use the same resolution mechanism. Nothing is a dead end.
 
 ---
 

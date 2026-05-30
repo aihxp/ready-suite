@@ -1,6 +1,6 @@
 # SEO & Web Standards
 
-This file covers everything a SaaS product needs to be discoverable by search engines, readable by AI models, and compliant with web standards. Not "SEO tips" — the actual files, tags, and configurations you ship.
+This file covers everything a SaaS product needs to be discoverable by search engines, readable by AI models, and compliant with web standards. Not "SEO tips", the actual files, tags, and configurations you ship.
 
 Dashboard UIs are mostly behind auth and should not be indexed. Marketing pages, docs, blog, and changelog are your SEO surface. This file covers that surface.
 
@@ -26,7 +26,7 @@ Rules:
 
 ### Meta description
 
-150-160 characters. Not a ranking signal, but controls the snippet users see. Write it like ad copy — address intent, highlight value.
+150-160 characters. Not a ranking signal, but controls the snippet users see. Write it like ad copy, address intent, highlight value.
 
 ```html
 <meta name="description" content="Send professional invoices in 30 seconds. Track payments, automate reminders, get paid faster. Free for your first 5 clients." />
@@ -34,7 +34,7 @@ Rules:
 
 Rules:
 - Unique per page. Shared descriptions across pages are worse than no description.
-- Google rewrites ~70% of descriptions anyway. Still write them — the 30% matters.
+- Google rewrites ~70% of descriptions anyway. Still write them, the 30% matters.
 - Include a call-to-action or value proposition, not a summary.
 
 ### Canonical URL
@@ -64,7 +64,7 @@ Always present. Not negotiable.
 
 ## Open Graph tags
 
-Control how your pages look when shared on social platforms. Without these, platforms scrape whatever they find — usually garbage.
+Control how your pages look when shared on social platforms. Without these, platforms scrape whatever they find, usually garbage.
 
 ```html
 <meta property="og:type" content="website" />
@@ -103,8 +103,8 @@ That's it. If you have OG tags set, Twitter uses `og:title`, `og:description`, a
 ```
 
 Card types:
-- `summary_large_image` — large image preview. Use this for everything.
-- `summary` — small square image. Only if your image is a logo/icon, not a scene.
+- `summary_large_image`, large image preview. Use this for everything.
+- `summary`, small square image. Only if your image is a logo/icon, not a scene.
 
 ---
 
@@ -163,7 +163,7 @@ Google's preferred format. Lives in a `<script>` tag, separate from HTML. Doesn'
     "@type": "Offer",
     "price": "0",
     "priceCurrency": "USD",
-    "description": "Free tier — up to 5 clients"
+    "description": "Free tier, up to 5 clients"
   },
   "aggregateRating": {
     "@type": "AggregateRating",
@@ -292,7 +292,7 @@ Tells search engines what pages exist and when they changed.
 Rules:
 - Max 50,000 URLs or 50MB per sitemap file. Use a sitemap index to split.
 - Split by content type (blog, docs, marketing pages), not randomly.
-- `<lastmod>` must be accurate — the date of the last *significant* content change, not the deploy date. Google uses this to prioritize crawling.
+- `<lastmod>` must be accurate, the date of the last *significant* content change, not the deploy date. Google uses this to prioritize crawling.
 - `<changefreq>` is a hint, not a directive. Google mostly ignores it. Include it anyway.
 - `<priority>` is relative within your site. Homepage = 1.0, main sections = 0.8, individual pages = 0.6, archive = 0.4.
 - Only include pages you actually want indexed. No admin URLs, no auth pages, no search result pages, no duplicates.
@@ -308,13 +308,13 @@ Google uses these as ranking signals. Pass all three at the 75th percentile of r
 
 | Metric | What it measures | Good | Needs improvement | Poor |
 |---|---|---|---|---|
-| **LCP** (Largest Contentful Paint) | Time for the largest visible element to render | < 2.5s | 2.5–4.0s | > 4.0s |
-| **INP** (Interaction to Next Paint) | Latency from user input to visual response | < 200ms | 200–500ms | > 500ms |
-| **CLS** (Cumulative Layout Shift) | Visual stability — how much the page shifts during load | < 0.1 | 0.1–0.25 | > 0.25 |
+| **LCP** (Largest Contentful Paint) | Time for the largest visible element to render | < 2.5s | 2.5-4.0s | > 4.0s |
+| **INP** (Interaction to Next Paint) | Latency from user input to visual response | < 200ms | 200-500ms | > 500ms |
+| **CLS** (Cumulative Layout Shift) | Visual stability, how much the page shifts during load | < 0.1 | 0.1-0.25 | > 0.25 |
 
-Impact: Core Web Vitals account for roughly 10-15% of ranking signals. They function as a tiebreaker — when content quality is comparable, better vitals win. As of the March 2026 core update, Google strengthened the weight of performance signals.
+Impact: Core Web Vitals account for roughly 10-15% of ranking signals. They function as a tiebreaker, when content quality is comparable, better vitals win. As of the March 2026 core update, Google strengthened the weight of performance signals.
 
-Only 48% of mobile pages pass all three metrics. LCP is the hardest — only 62% of mobile pages achieve "good."
+Only 48% of mobile pages pass all three metrics. LCP is the hardest, only 62% of mobile pages achieve "good."
 
 ### What to do
 
@@ -354,7 +354,7 @@ Only 48% of mobile pages pass all three metrics. LCP is the hardest — only 62%
 Rules:
 - Exactly one `<h1>` per page. It should match or closely match the `<title>` tag.
 - Do not skip levels. No `<h1>` to `<h3>` without an `<h2>`.
-- Headings are for document structure, not visual sizing. Use CSS for sizing. An `<h3>` that's larger than an `<h2>` is a styling choice — the HTML hierarchy must still be correct.
+- Headings are for document structure, not visual sizing. Use CSS for sizing. An `<h3>` that's larger than an `<h2>` is a styling choice, the HTML hierarchy must still be correct.
 
 ---
 
@@ -366,7 +366,7 @@ Use **WebP** as the default. WebP is 25-35% smaller than JPEG at equivalent qual
 
 Use **AVIF** for even better compression (40-50% smaller than JPEG) where build tooling supports it. AVIF is more CPU-intensive to decode, so use it for large hero images, not small icons.
 
-Use **SVG** for icons, logos, and illustrations — anything that's geometric or flat.
+Use **SVG** for icons, logos, and illustrations, anything that's geometric or flat.
 
 Use **PNG** only for images requiring transparency where SVG isn't suitable.
 
@@ -406,7 +406,7 @@ Use **PNG** only for images requiring transparency where SVG isn't suitable.
 
 - **Every image gets `alt` text.** Descriptive, concise, no "image of" prefix. Decorative images get `alt=""`.
 - **Every image gets `width` and `height` attributes** (or CSS `aspect-ratio`). This prevents CLS.
-- **Lazy load everything below the fold:** `loading="lazy"`. Above-the-fold hero images: do NOT lazy load — they are your LCP element.
+- **Lazy load everything below the fold:** `loading="lazy"`. Above-the-fold hero images: do NOT lazy load, they are your LCP element.
 - **Add `decoding="async"`** to all images. Lets the browser decode off the main thread.
 - **Preload the LCP image** in the `<head>`: `<link rel="preload" as="image" href="/hero.webp" fetchpriority="high" />`
 - **Use a CDN with auto-format.** Cloudflare, Vercel, Imgix, and Cloudinary can serve AVIF/WebP automatically based on the `Accept` header.
@@ -419,7 +419,7 @@ Use **PNG** only for images requiring transparency where SVG isn't suitable.
 - **Flat hierarchy:** `/docs/api-reference` not `/docs/section/subsection/api/reference/v2`.
 - **Lowercase, hyphens:** `/pricing` not `/Pricing` or `/pricing_page`.
 - **No query params for content pages.** Use path segments. Query params are for filters, sorts, search.
-- **No trailing slashes** (or always trailing slashes — pick one and enforce it with redirects).
+- **No trailing slashes** (or always trailing slashes, pick one and enforce it with redirects).
 - **No file extensions in URLs:** `/about` not `/about.html`.
 - **Consistent scheme:** Always HTTPS, always redirect HTTP to HTTPS.
 
@@ -462,11 +462,11 @@ Sitemap: https://billflow.com/sitemap.xml
 
 | Block | Why |
 |---|---|
-| `/app/`, `/dashboard/` | Authenticated app pages — no public value |
-| `/admin/` | Admin panel — never index |
-| `/api/` | API endpoints — not pages |
-| `/auth/`, `/login`, `/signup`, `/reset-password` | Auth flows — no SEO value |
-| `/search?` | Search result pages — duplicate/thin content |
+| `/app/`, `/dashboard/` | Authenticated app pages, no public value |
+| `/admin/` | Admin panel, never index |
+| `/api/` | API endpoints, not pages |
+| `/auth/`, `/login`, `/signup`, `/reset-password` | Auth flows, no SEO value |
+| `/search?` | Search result pages, duplicate/thin content |
 | `/internal/`, `/staging/`, `/preview/` | Non-production content |
 | `/_next/data/` (Next.js) | JSON data routes, not pages |
 
@@ -478,7 +478,7 @@ Sitemap: https://billflow.com/sitemap.xml
 
 ### SaaS multi-tenant considerations
 
-If you use tenant subdomains (`acme.billflow.com`), block them from indexing — tenant-specific content is private:
+If you use tenant subdomains (`acme.billflow.com`), block them from indexing, tenant-specific content is private:
 
 ```txt
 # On *.billflow.com (tenant subdomains)
@@ -495,7 +495,7 @@ User-agent: Bingbot
 Crawl-delay: 5
 ```
 
-Supported by Bing, Yandex, and some others. **Not supported by Google** — Google ignores it entirely. Use Google Search Console's crawl rate settings instead.
+Supported by Bing, Yandex, and some others. **Not supported by Google**, Google ignores it entirely. Use Google Search Console's crawl rate settings instead.
 
 ### Common mistakes
 
@@ -535,7 +535,7 @@ Collect content at scale for model training. You may want to block these if your
 Most SaaS companies should: allow search-related AI crawlers (they drive traffic), make a deliberate choice about training crawlers.
 
 ```txt
-# AI search bots — allow (they send traffic)
+# AI search bots, allow (they send traffic)
 User-agent: ChatGPT-User
 Allow: /
 
@@ -551,7 +551,7 @@ Allow: /
 User-agent: PerplexityBot
 Allow: /
 
-# AI training bots — block if your content is proprietary
+# AI training bots, block if your content is proprietary
 User-agent: GPTBot
 Disallow: /
 
@@ -571,14 +571,14 @@ User-agent: meta-externalagent
 Disallow: /
 ```
 
-Important: Anthropic's three bots are independent — blocking `ClaudeBot` does not block `Claude-User` or `Claude-SearchBot`. Same pattern with OpenAI's `GPTBot` vs `ChatGPT-User` vs `OAI-SearchBot`.
+Important: Anthropic's three bots are independent, blocking `ClaudeBot` does not block `Claude-User` or `Claude-SearchBot`. Same pattern with OpenAI's `GPTBot` vs `ChatGPT-User` vs `OAI-SearchBot`.
 
 ### Aggressive crawlers
 
 Some crawlers (Bytespider, 360Spider, ChatGLM-Spider) ignore `robots.txt`. For those, you need server-level blocking:
 
 ```nginx
-# nginx — block by user-agent
+# nginx, block by user-agent
 if ($http_user_agent ~* "(Bytespider|360Spider|ChatGLM-Spider)") {
     return 403;
 }
@@ -594,7 +594,7 @@ A proposed standard (created by Jeremy Howard at Answer.AI, September 2024) for 
 
 ### Current status
 
-As of 2025-2026, major AI providers (OpenAI, Google, Anthropic) have **not yet implemented native support** for llms.txt in their primary products. Adoption is growing among documentation platforms (Mintlify, GitBook, Fern, Read the Docs) but mainstream AI integration remains limited. Implement it anyway — it's low-cost, forward-looking, and documentation tools already use it.
+As of 2025-2026, major AI providers (OpenAI, Google, Anthropic) have **not yet implemented native support** for llms.txt in their primary products. Adoption is growing among documentation platforms (Mintlify, GitBook, Fern, Read the Docs) but mainstream AI integration remains limited. Implement it anyway, it's low-cost, forward-looking, and documentation tools already use it.
 
 ### Format
 
@@ -607,7 +607,7 @@ The file is Markdown, served at `/llms.txt`. The structure is strict:
 
 ## Docs
 
-- [Getting Started](https://billflow.com/docs/getting-started): Quick setup guide — create account, send first invoice
+- [Getting Started](https://billflow.com/docs/getting-started): Quick setup guide, create account, send first invoice
 - [API Reference](https://billflow.com/docs/api): REST API docs with authentication, endpoints, and webhooks
 - [Integrations](https://billflow.com/docs/integrations): Connect with Stripe, QuickBooks, Slack, Zapier
 
@@ -624,10 +624,10 @@ The file is Markdown, served at `/llms.txt`. The structure is strict:
 
 ### Structure rules
 
-1. **H1** — project/site name (required, exactly one)
-2. **Blockquote** — short summary with key information (strongly recommended)
-3. **H2 sections** — categories of links. Section titled "Optional" marks less critical resources.
-4. **Link lists** — `[Title](URL): Description` format, one per line with a dash prefix
+1. **H1**, project/site name (required, exactly one)
+2. **Blockquote**, short summary with key information (strongly recommended)
+3. **H2 sections**, categories of links. Section titled "Optional" marks less critical resources.
+4. **Link lists**, `[Title](URL): Description` format, one per line with a dash prefix
 
 ### llms-full.txt
 
@@ -721,7 +721,7 @@ This enables auto-discovery in feed readers and browsers.
 
 | Feed | Content | URL |
 |---|---|---|
-| Blog feed | Blog posts — full or summary HTML in `<description>` | `/feed.xml` |
+| Blog feed | Blog posts, full or summary HTML in `<description>` | `/feed.xml` |
 | Changelog feed | Product updates, new features, fixes | `/changelog/feed.xml` |
 | Docs updates | Major documentation changes (optional) | `/docs/feed.xml` |
 
@@ -747,7 +747,7 @@ Generate feeds from the same content source as your pages. In Next.js, generate 
 
 ---
 
-## Favicon — modern approach
+## Favicon, modern approach
 
 You need five files, not thirty. This covers every browser and device.
 
@@ -756,7 +756,7 @@ You need five files, not thirty. This covers every browser and device.
 | File | Size | Purpose |
 |---|---|---|
 | `favicon.ico` | 32x32 | Legacy browsers, bookmark bars |
-| `favicon.svg` | scalable | Modern browsers — supports dark mode |
+| `favicon.svg` | scalable | Modern browsers, supports dark mode |
 | `apple-touch-icon.png` | 180x180 | iOS home screen, Safari |
 | `icon-192.png` | 192x192 | Android Chrome, PWA |
 | `icon-512.png` | 512x512 | PWA splash screen, install dialog |
@@ -836,7 +836,7 @@ Policy: https://billflow.com/security/policy
 
 | Field | Description |
 |---|---|
-| `Contact` | How to report vulnerabilities — email (mailto:) or URL. At least one required. |
+| `Contact` | How to report vulnerabilities, email (mailto:) or URL. At least one required. |
 | `Expires` | When this file should be considered stale. Required. Use ISO 8601 datetime. Set it 1 year out and update annually. |
 
 ### Optional fields
@@ -915,7 +915,7 @@ If you must support it for legacy Windows users pinning your site:
 </browserconfig>
 ```
 
-But again — skip it unless you have analytics proving IE/Legacy Edge users.
+But again, skip it unless you have analytics proving IE/Legacy Edge users.
 
 ---
 
@@ -932,11 +932,11 @@ The `/.well-known/` path prefix is reserved by RFC 8615 for standardized metadat
 | `/.well-known/assetlinks.json` | Android App Links | Google |
 | `/.well-known/acme-challenge/` | SSL certificate validation | Let's Encrypt |
 
-For SaaS, you'll most commonly need `security.txt` and possibly `change-password` (which is just a 302 redirect to your actual password change URL — password managers use it).
+For SaaS, you'll most commonly need `security.txt` and possibly `change-password` (which is just a 302 redirect to your actual password change URL, password managers use it).
 
 ---
 
-## SEO for SaaS — what to index vs. what to hide
+## SEO for SaaS, what to index vs. what to hide
 
 ### The rule
 
@@ -948,7 +948,7 @@ For SaaS, you'll most commonly need `security.txt` and possibly `change-password
 <meta name="robots" content="noindex, nofollow" />
 ```
 
-Plus the `robots.txt` rules from earlier. Belt and suspenders — use both.
+Plus the `robots.txt` rules from earlier. Belt and suspenders, use both.
 
 ### Marketing pages vs. app pages
 
@@ -969,9 +969,9 @@ If your marketing site and app share a domain (common with Next.js), use path-ba
 
 Search engines can render JavaScript, but they do it slowly and unreliably. For marketing pages and blog content:
 
-- **Static Site Generation (SSG)** — best for SEO. Pre-rendered at build time, instant TTFB, cacheable at the edge. Use for blog posts, docs, changelog, landing pages.
-- **Server-Side Rendering (SSR)** — use when content changes frequently or is personalized per request (pricing with geo-detection, localized content). Still sends full HTML to crawlers.
-- **Client-Side Rendering (CSR)** — acceptable for authenticated app pages only. Do not use for any page you want indexed.
+- **Static Site Generation (SSG)**, best for SEO. Pre-rendered at build time, instant TTFB, cacheable at the edge. Use for blog posts, docs, changelog, landing pages.
+- **Server-Side Rendering (SSR)**, use when content changes frequently or is personalized per request (pricing with geo-detection, localized content). Still sends full HTML to crawlers.
+- **Client-Side Rendering (CSR)**, acceptable for authenticated app pages only. Do not use for any page you want indexed.
 
 ### Documentation as SEO strategy
 
@@ -979,14 +979,14 @@ Documentation is the highest-ROI SEO investment for SaaS. Developers search for 
 
 - Every docs page is a potential landing page. Treat them as first-class content.
 - Structure docs with clear heading hierarchy (`h1` = page title, `h2` = sections, `h3` = subsections).
-- Include code examples — Google indexes code blocks and they appear in search.
+- Include code examples, Google indexes code blocks and they appear in search.
 - Add `Article` or `TechArticle` schema to docs pages.
 - Cross-link heavily: every concept mentioned should link to its reference page.
 - Keep docs on your domain (`billflow.com/docs`), not a separate domain. The SEO authority flows to your main domain.
 
 ### Blog strategy
 
-Blog content targets informational search intent — people looking for answers, not products. The funnel: search -> article -> awareness -> conversion.
+Blog content targets informational search intent, people looking for answers, not products. The funnel: search -> article -> awareness -> conversion.
 
 - **Hub-and-spoke model:** Create pillar pages ("Complete Guide to Freelance Invoicing") that link to 10-30 supporting articles ("How to Handle Late Payments", "Invoice Template for Designers"). This builds topical authority.
 - **Update old posts.** A 2024 post updated in 2026 with current data outranks a new 2026 post on the same topic. Update the `dateModified` in schema.
@@ -1007,7 +1007,7 @@ Product changelogs are underrated for SEO:
 - Use `SoftwareApplication` schema with `Offer` details.
 - Include FAQ schema for common pricing questions.
 - Use clear heading hierarchy: `h1` = "Pricing", `h2` = plan names, `h3` = feature categories.
-- Include pricing in the meta description — it's a differentiator in search results.
+- Include pricing in the meta description, it's a differentiator in search results.
 - Don't hide pricing behind "Contact Sales" if you have public plans. Google can't index what isn't on the page.
 
 ---
@@ -1085,4 +1085,4 @@ Every SaaS product should ship these files at the domain root:
 | `/.well-known/security.txt` | Recommended | Vulnerability disclosure |
 | `humans.txt` | Optional | Team credits |
 | `ads.txt` | Skip | Only for ad-supported sites |
-| `browserconfig.xml` | Skip | Legacy Windows — PWA manifest replaces it |
+| `browserconfig.xml` | Skip | Legacy Windows, PWA manifest replaces it |

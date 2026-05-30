@@ -8,13 +8,13 @@ Everything GitHub-specific for repository setup. Complete templates, exact file 
 
 Configure via Settings > General or `gh repo edit`.
 
-**Description** — one sentence, no period, under 350 characters. Appears in search results, social cards, and `gh repo list` output.
+**Description**, one sentence, no period, under 350 characters. Appears in search results, social cards, and `gh repo list` output.
 
 ```bash
 gh repo edit --description "Fast, type-safe ORM for TypeScript and PostgreSQL"
 ```
 
-**Topics** — max 20, lowercase, hyphens only. GitHub indexes these for Explore and search. Strategy:
+**Topics**, max 20, lowercase, hyphens only. GitHub indexes these for Explore and search. Strategy:
 
 | Category | Examples | Purpose |
 |---|---|---|
@@ -30,15 +30,15 @@ gh repo edit --add-topic typescript,orm,postgresql,database,developer-tools
 
 Pick topics that real humans search for. Don't waste slots on `awesome` or `cool-project`.
 
-**Website URL** — documentation site, landing page, or npm/PyPI package page.
+**Website URL**, documentation site, landing page, or npm/PyPI package page.
 
 ```bash
 gh repo edit --homepage "https://docs.example.com"
 ```
 
-**Social preview** — 1280x640px PNG or JPG. Displayed on social media shares, Slack unfurls, and GitHub link previews. Upload via Settings > General > Social preview. Use a branded image with the project name and a one-line description — not a screenshot of code.
+**Social preview**, 1280x640px PNG or JPG. Displayed on social media shares, Slack unfurls, and GitHub link previews. Upload via Settings > General > Social preview. Use a branded image with the project name and a one-line description, not a screenshot of code.
 
-**Default branch** — `main` (GitHub's default since 2020). Change via Settings > General > Default branch, or:
+**Default branch**, `main` (GitHub's default since 2020). Change via Settings > General > Default branch, or:
 
 ```bash
 gh api repos/{owner}/{repo} -X PATCH -f default_branch=main
@@ -48,7 +48,7 @@ gh api repos/{owner}/{repo} -X PATCH -f default_branch=main
 
 ## Issue Templates (YAML Form Syntax)
 
-GitHub supports two formats: legacy Markdown templates and modern YAML form-based templates. Use YAML forms — they produce structured data, enforce required fields, and render as proper form elements instead of a blank textarea.
+GitHub supports two formats: legacy Markdown templates and modern YAML form-based templates. Use YAML forms, they produce structured data, enforce required fields, and render as proper form elements instead of a blank textarea.
 
 All templates go in `.github/ISSUE_TEMPLATE/`.
 
@@ -220,8 +220,8 @@ body:
       label: How important is this feature?
       options:
         - Nice to have
-        - Important — affects my workflow
-        - Critical — blocking my use case
+        - Important, affects my workflow
+        - Critical, blocking my use case
     validations:
       required: true
 
@@ -251,7 +251,7 @@ blank_issues_enabled: false
 contact_links:
   - name: Questions & Support
     url: https://github.com/{owner}/{repo}/discussions/categories/q-a
-    about: Ask questions in GitHub Discussions — don't open an issue for support.
+    about: Ask questions in GitHub Discussions, don't open an issue for support.
   - name: Security Vulnerability
     url: https://github.com/{owner}/{repo}/security/advisories/new
     about: Report security vulnerabilities privately via GitHub Security Advisories.
@@ -310,7 +310,7 @@ You can have multiple PR templates. Place them in `.github/PULL_REQUEST_TEMPLATE
 Controls the "Sponsor" button on the repository page. Supports these platforms:
 
 ```yaml
-# GitHub Sponsors — accepts up to 4 usernames
+# GitHub Sponsors, accepts up to 4 usernames
 github: [username]
 # github: [user1, user2]
 
@@ -327,7 +327,7 @@ ko_fi: creator-name
 tidelift: npm/package-name
 # tidelift: pypi/package-name
 
-# Community Bridge (deprecated — use LFX Mentorship)
+# Community Bridge (deprecated, use LFX Mentorship)
 community_bridge: project-name
 
 # Liberapay
@@ -345,7 +345,7 @@ buy_me_a_coffee: username
 # Thanks.dev
 thanks_dev: gh/username
 
-# Custom URLs — up to 4
+# Custom URLs, up to 4
 custom: ["https://donate.example.com"]
 # custom: ["https://link1.com", "https://link2.com"]
 ```
@@ -415,7 +415,7 @@ requirements*.txt @techleaduser
 - Teams must have explicit read access to the repository.
 - A pattern with no owner disables ownership for matching files.
 - Directories need trailing `/` to match all contents.
-- `*` at root matches everything. Use it sparingly — it means every PR requires that owner's review.
+- `*` at root matches everything. Use it sparingly, it means every PR requires that owner's review.
 - Empty lines and `#` comments are ignored.
 
 ---
@@ -704,7 +704,7 @@ gh release create v1.2.0 --draft --generate-notes
 gh release create v2.0.0-beta.1 --prerelease --generate-notes
 
 # With a custom title and notes
-gh release create v1.2.0 --title "v1.2.0 — Performance Release" --notes-file RELEASE_NOTES.md
+gh release create v1.2.0 --title "v1.2.0, Performance Release" --notes-file RELEASE_NOTES.md
 
 # Attach binary assets
 gh release create v1.2.0 --generate-notes \
@@ -722,7 +722,7 @@ Attach build artifacts to releases. Common assets:
 | CLI tool | Platform-specific binaries (`linux-amd64`, `darwin-arm64`, `windows-amd64.exe`), checksums file |
 | Desktop app | `.dmg`, `.AppImage`, `.exe`, `.msi` |
 | Library | Source archive (auto-generated), SBOM |
-| Container | No assets — push to GHCR instead |
+| Container | No assets, push to GHCR instead |
 
 ```bash
 # Upload assets to an existing release
@@ -765,7 +765,7 @@ jobs:
 Use pre-releases for testing before stable release:
 
 ```
-v2.0.0-alpha.1  →  v2.0.0-alpha.2  →  v2.0.0-beta.1  →  v2.0.0-rc.1  →  v2.0.0
+v2.0.0-alpha.1  ->  v2.0.0-alpha.2  ->  v2.0.0-beta.1  ->  v2.0.0-rc.1  ->  v2.0.0
 ```
 
 Pre-releases are shown on the Releases page but are not marked as "Latest." Users won't accidentally install them unless they explicitly opt in.
@@ -820,7 +820,7 @@ jobs:
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist  # or ./build, ./out — wherever your SSG outputs
+          path: ./dist  # or ./build, ./out, wherever your SSG outputs
 
   deploy:
     needs: build
@@ -862,7 +862,7 @@ And an AAAA record for IPv6:
 
 ## Repository Settings
 
-Settings that cannot be configured via files in the repo — configure via GitHub UI or API.
+Settings that cannot be configured via files in the repo, configure via GitHub UI or API.
 
 ### Feature Toggles
 
@@ -889,9 +889,9 @@ Settings > General > Pull Requests:
 Recommended: enable "Squash and merge" as default, disable "Rebase and merge," keep "Merge commit" as fallback. Check "Automatically delete head branches" to clean up merged branches.
 
 ```
-[x] Allow squash merging        — Default commit message: PR title
-[x] Allow merge commits          — (fallback)
-[ ] Allow rebase merging          — (disabled)
+[x] Allow squash merging        - Default commit message: PR title
+[x] Allow merge commits          - (fallback)
+[ ] Allow rebase merging          - (disabled)
 [x] Always suggest updating PR branches
 [x] Automatically delete head branches
 ```
@@ -900,7 +900,7 @@ Recommended: enable "Squash and merge" as default, disable "Rebase and merge," k
 
 GitHub offers two systems. **Rulesets** are the modern replacement and should be preferred for new repos.
 
-#### Rulesets (Modern — Recommended)
+#### Rulesets (Modern, Recommended)
 
 Settings > Rules > Rulesets > New ruleset
 
@@ -997,7 +997,7 @@ Configure via Discussions > Categories (pencil icon):
 | Category | Format | Description | Who can post |
 |---|---|---|---|
 | **Announcements** | Announcement | Release notes, breaking changes, project updates | Maintainers only |
-| **Q&A** | Question/Answer | Support questions — mark accepted answers | Anyone |
+| **Q&A** | Question/Answer | Support questions, mark accepted answers | Anyone |
 | **Ideas** | Open-ended | Feature ideas and proposals before they become issues | Anyone |
 | **Show and Tell** | Open-ended | Share projects, integrations, and use cases built with this project | Anyone |
 | **General** | Open-ended | Anything that doesn't fit the other categories | Anyone |
@@ -1146,4 +1146,4 @@ Most open source projects should publish to npmjs.com instead. Use GitHub npm re
     pages.yml
 ```
 
-All paths are relative to the repository root. GitHub only recognizes these exact paths — no variations.
+All paths are relative to the repository root. GitHub only recognizes these exact paths, no variations.

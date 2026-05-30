@@ -1,8 +1,8 @@
 # File Management & Uploads
 
-File uploads are one of the highest-friction interactions in any SaaS product. A drag-and-drop zone that doesn't respond, a progress bar that lies, a failed upload with no retry — any of these kills user trust. This file covers every surface from the drop zone to the file manager, with specific measurements and implementation patterns.
+File uploads are one of the highest-friction interactions in any SaaS product. A drag-and-drop zone that doesn't respond, a progress bar that lies, a failed upload with no retry, any of these kills user trust. This file covers every surface from the drop zone to the file manager, with specific measurements and implementation patterns.
 
-See `migration-and-data-import.md` for CSV import pipelines (column mapping, validation, the four-stage import flow). This file covers the upload UX layer — the drop zone, progress indicators, previews, and file management that wraps around any import flow.
+See `migration-and-data-import.md` for CSV import pipelines (column mapping, validation, the four-stage import flow). This file covers the upload UX layer, the drop zone, progress indicators, previews, and file management that wraps around any import flow.
 
 ---
 
@@ -17,22 +17,22 @@ The drop zone is the primary upload surface. It must support three input methods
 ```
 ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┐
 │                                           │
-│    [Upload cloud icon — 40px]             │
+│    [Upload cloud icon, 40px]             │
 │                                           │
 │    Drag files here, or browse             │
 │                                           │
-│    PNG, JPG, PDF — up to 10MB each        │
+│    PNG, JPG, PDF, up to 10MB each        │
 │                                           │
 └ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘
 ```
 
-- **Minimum size:** 200px wide x 150px tall. Larger is better — 100% width of the container for full-width zones.
-- **Border:** 2px dashed, `border-muted-foreground/30` at rest. Don't use a solid border — the dashed pattern is a universal visual signal for "drop here."
-- **Border radius:** 8–12px (match your design system's `rounded-lg`)
+- **Minimum size:** 200px wide x 150px tall. Larger is better, 100% width of the container for full-width zones.
+- **Border:** 2px dashed, `border-muted-foreground/30` at rest. Don't use a solid border, the dashed pattern is a universal visual signal for "drop here."
+- **Border radius:** 8-12px (match your design system's `rounded-lg`)
 - **Background:** transparent or `bg-muted/30` at rest
 - **Icon:** upload/cloud icon, 40px, centered above the text, muted color
-- **Primary text:** "Drag files here, or browse" — 14px, medium weight. "Browse" is a clickable link (underlined or primary color).
-- **Secondary text:** accepted formats and size limit — 12px, muted. Be specific: "PNG, JPG, PDF — up to 10MB each" not "Upload files."
+- **Primary text:** "Drag files here, or browse", 14px, medium weight. "Browse" is a clickable link (underlined or primary color).
+- **Secondary text:** accepted formats and size limit, 12px, muted. Be specific: "PNG, JPG, PDF, up to 10MB each" not "Upload files."
 - **Padding:** 32px all sides minimum
 
 **Drop zone states:**
@@ -94,7 +94,7 @@ function DropZone({ accept, maxSize, onFiles }: DropZoneProps) {
         Drag files here, or <span className="text-primary underline">browse</span>
       </p>
       <p className="text-xs text-muted-foreground">
-        {formatAcceptTypes(accept)} — up to {formatBytes(maxSize)} each
+        {formatAcceptTypes(accept)}, up to {formatBytes(maxSize)} each
       </p>
       <input
         ref={inputRef}
@@ -145,7 +145,7 @@ Standard limits by context:
 | Document attachment | 25MB | 100MB | Plan-dependent |
 | Image upload (general) | 10MB | 50MB | Plan-dependent |
 | CSV/data import | 100MB | 100MB | N/A |
-| Video upload | 500MB–2GB | Plan-dependent | Plan-dependent |
+| Video upload | 500MB, 2GB | Plan-dependent | Plan-dependent |
 
 **Show the limit in the drop zone UI.** Show it again as a validation error when exceeded: "logo.png is 12MB. Maximum file size is 10MB."
 
@@ -154,7 +154,7 @@ Standard limits by context:
 - Allow `multiple` on the file input by default unless the context demands a single file (avatar upload)
 - Show selected files as a list below the drop zone before upload starts
 - Each file in the list shows: file name (truncated with ellipsis at 40 chars), file size, a remove button (X icon)
-- The upload button is separate from the drop zone — don't auto-upload on drop unless the UX explicitly calls for it (avatar uploads can auto-upload)
+- The upload button is separate from the drop zone, don't auto-upload on drop unless the UX explicitly calls for it (avatar uploads can auto-upload)
 
 ---
 
@@ -162,7 +162,7 @@ Standard limits by context:
 
 ### Progress bar implementation
 
-For files under 5MB on a fast connection, the upload finishes so quickly that a progress bar is unnecessary — show a spinner or brief loading state. For anything larger, show a determinate progress bar.
+For files under 5MB on a fast connection, the upload finishes so quickly that a progress bar is unnecessary, show a spinner or brief loading state. For anything larger, show a determinate progress bar.
 
 **Progress bar specs:**
 - Height: 8px (4px for compact/inline)
@@ -194,18 +194,18 @@ For files under 5MB on a fast connection, the upload finishes so quickly that a 
 - Progress bar
 - Percentage
 - Bytes uploaded / total bytes (e.g., "2.1MB / 3.3MB")
-- Estimated time remaining (calculate from average speed of last 3 seconds, update every 2 seconds — don't update every tick or it jitters)
-- Cancel button (X) — available during upload
-- Retry button — on failure, replaces the cancel button
+- Estimated time remaining (calculate from average speed of last 3 seconds, update every 2 seconds, don't update every tick or it jitters)
+- Cancel button (X), available during upload
+- Retry button, on failure, replaces the cancel button
 
 ### Chunked uploads for large files
 
 Files over 10MB should use chunked uploads. This enables:
-- **Resume on failure** — only re-upload the failed chunk, not the whole file
-- **Real progress** — progress is per-chunk, not per-request
-- **Timeout prevention** — individual chunks complete in seconds, not minutes
+- **Resume on failure**, only re-upload the failed chunk, not the whole file
+- **Real progress**, progress is per-chunk, not per-request
+- **Timeout prevention**, individual chunks complete in seconds, not minutes
 
-**Chunk size:** 5MB is the standard. Smaller chunks (1–2MB) for mobile/slow connections, larger (10MB) for guaranteed fast connections.
+**Chunk size:** 5MB is the standard. Smaller chunks (1-2MB) for mobile/slow connections, larger (10MB) for guaranteed fast connections.
 
 **The TUS protocol** is the industry standard for resumable uploads. Use `tus-js-client` in the browser with a TUS server (tusd, or built into Supabase, Cloudflare, Transloadit).
 
@@ -268,12 +268,12 @@ async function uploadChunked(
 When the user navigates away from the upload page, the upload should continue. This is critical for large files.
 
 **Implementation approaches:**
-1. **Upload in a shared context** (React context, Zustand/Jotai store, or a singleton service) that lives above the router — not inside the page component. The upload state persists across route changes.
+1. **Upload in a shared context** (React context, Zustand/Jotai store, or a singleton service) that lives above the router, not inside the page component. The upload state persists across route changes.
 2. **Show a global upload indicator** in the header or a floating widget: "Uploading 2 files..." with a mini progress bar. Clicking it expands to show per-file progress.
 3. **Use the `beforeunload` event** to warn if the user tries to close the tab during upload: "Files are still uploading. Leave anyway?"
 
 ```typescript
-// Global upload manager — lives outside of route components
+// Global upload manager, lives outside of route components
 const uploadStore = create<UploadStore>((set, get) => ({
   uploads: new Map<string, UploadState>(),
   
@@ -314,7 +314,7 @@ const uploadStore = create<UploadStore>((set, get) => ({
 
 ### Preview thumbnails
 
-Show a thumbnail preview immediately after the user selects a file — before the upload even starts. Generate it client-side using `URL.createObjectURL()` or the Canvas API.
+Show a thumbnail preview immediately after the user selects a file, before the upload even starts. Generate it client-side using `URL.createObjectURL()` or the Canvas API.
 
 ```typescript
 function createThumbnail(file: File, maxSize = 200): Promise<string> {
@@ -340,7 +340,7 @@ function createThumbnail(file: File, maxSize = 200): Promise<string> {
 **Thumbnail specs:**
 - Size: 80x80px (inline/list), 120x120px (grid), 200x200px (detail)
 - Object-fit: `cover` for square thumbnails, `contain` for maintaining aspect ratio
-- Border radius: 4–8px
+- Border radius: 4-8px
 - Background: `bg-muted` (visible while loading or for transparent images)
 - Show a loading shimmer until the thumbnail generates (typically < 100ms for local files)
 
@@ -352,7 +352,7 @@ For profile photos, cover images, and other constrained formats, provide a crop 
 - **Crop area:** a draggable, resizable rectangle overlaid on the image
 - **Outside area:** darkened to 40% opacity
 - **Drag handles:** 8px squares at corners (and optionally at midpoints) for resizing
-- **Aspect ratio presets:** buttons for common ratios — 1:1 (square), 16:9 (cover), 4:3 (photo). Show which is selected.
+- **Aspect ratio presets:** buttons for common ratios, 1:1 (square), 16:9 (cover), 4:3 (photo). Show which is selected.
 - **Free crop:** optional, for when no ratio is required
 - **Zoom slider:** 0.5x to 3x range, logarithmic scale, step 0.1
 - **Preview:** show the cropped result at the target dimensions next to the crop area
@@ -386,13 +386,13 @@ function ImageCropper({ src, aspect, onCrop }: CropperProps) {
 
 ### Client-side compression
 
-Compress images before upload to reduce upload time and storage costs. Do this transparently — the user doesn't need to know.
+Compress images before upload to reduce upload time and storage costs. Do this transparently, the user doesn't need to know.
 
 **Compression rules:**
-- **Target:** reduce JPEG quality to 80–85% (visually indistinguishable for photos)
+- **Target:** reduce JPEG quality to 80-85% (visually indistinguishable for photos)
 - **Max dimensions:** resize to 2048px on the longest side for general uploads, 512px for avatars, 1920px for cover images
 - **Format conversion:** convert PNG screenshots to JPEG if they have no transparency (much smaller). Convert to WebP if the backend supports it.
-- **Skip compression** for files already under 200KB — the savings aren't worth the processing time.
+- **Skip compression** for files already under 200KB, the savings aren't worth the processing time.
 
 ```typescript
 async function compressImage(
@@ -417,7 +417,7 @@ async function compressImage(
 
 ### EXIF data handling
 
-Photos from cameras and phones contain EXIF metadata: GPS coordinates, device model, timestamps, camera settings. **Strip EXIF data before upload** for privacy. The exception is orientation data — apply it to the canvas rotation, then strip.
+Photos from cameras and phones contain EXIF metadata: GPS coordinates, device model, timestamps, camera settings. **Strip EXIF data before upload** for privacy. The exception is orientation data, apply it to the canvas rotation, then strip.
 
 - **GPS data:** always strip. Never store user location metadata from uploaded photos.
 - **Orientation:** read, apply to canvas, then strip. Without this, photos from phones display rotated.
@@ -440,12 +440,12 @@ Use `exif-js` or `piexifjs` to read, then strip by re-encoding through Canvas (w
 | Audio (MP3, WAV, OGG) | `<audio>` tag, native | Waveform visualization optional, always show duration |
 | Office docs (DOCX, XLSX, PPTX) | Microsoft Office Online viewer or Google Docs Viewer | Use `https://view.officeapps.live.com/op/embed.aspx?src={url}` |
 | Text/code (TXT, JSON, MD, CSV) | Syntax-highlighted code block | Use Monaco editor (read-only) or Prism.js |
-| All other types | File type icon + metadata | No preview — show icon, filename, size, download button |
+| All other types | File type icon + metadata | No preview, show icon, filename, size, download button |
 
 ### Preview placement: modal vs inline vs new tab
 
 - **Modal (lightbox):** best for images and short documents. User stays on the current page. Close with Escape or click outside. Navigate between files with arrow keys. Common for galleries and attachment lists.
-- **Inline:** best for small previews within a file list — thumbnail + expand on hover or click. Good for image-heavy contexts.
+- **Inline:** best for small previews within a file list, thumbnail + expand on hover or click. Good for image-heavy contexts.
 - **New tab / dedicated page:** best for long documents (PDFs, spreadsheets) that need full viewport. Open with middle-click or Ctrl+click for power users.
 
 **Default behavior by type:**
@@ -513,7 +513,7 @@ Offer both. Table view is the default for document-heavy products (Google Drive,
 └────────────────────┘
 ```
 
-- Card width: 180–220px, responsive grid with `auto-fill, minmax(180px, 1fr)`
+- Card width: 180-220px, responsive grid with `auto-fill, minmax(180px, 1fr)`
 - Gap: 16px
 - Border radius: 8px
 - Hover: subtle shadow or border highlight, show quick-action overlay (download, delete)
@@ -535,7 +535,7 @@ Default sort: **Modified date, descending** (newest first). Provide sort control
 ### Bulk selection
 
 - **Checkbox in table header:** toggles all visible files
-- **Individual checkboxes:** per row, visible at all times (don't hide until hover — that breaks keyboard users)
+- **Individual checkboxes:** per row, visible at all times (don't hide until hover, that breaks keyboard users)
 - **Shift+click:** select a range
 - **Bulk action bar:** appears when 1+ files selected, floats above the list or replaces the toolbar
 
@@ -559,8 +559,8 @@ If the file system supports folders:
 │                                                  │
 │  [New Folder]  [Upload Files]   🔍 Search        │
 ├──────────────────────────────────────────────────┤
-│  📁 Drafts           —    —       Apr 10         │
-│  📁 Final            —    —       Apr 8          │
+│  📁 Drafts           -    -       Apr 10         │
+│  📁 Final            -    -       Apr 8          │
 │  📄 summary.pdf    2.4MB  PDF     Apr 10         │
 │  📄 data.xlsx      1.1MB  XLSX    Apr 9          │
 └──────────────────────────────────────────────────┘
@@ -594,7 +594,7 @@ Avatar upload is a special case: single file, circular crop, small dimensions, i
 - **Target output:** 256x256px for standard, 512x512px for high-DPI
 - **Max file size before crop:** 5MB
 - **Max file size after crop+compress:** target < 100KB (JPEG at 85% quality)
-- **Zoom control:** slider below the image, 1x–3x range
+- **Zoom control:** slider below the image, 1x, 3x range
 
 ```
 ┌──────────────────────────────────────────┐
@@ -624,7 +624,7 @@ When no photo is uploaded, generate a default:
 3. Generic user icon (silhouette)
 
 **Initials avatar rules:**
-- **Background color:** derive deterministically from the user's name or ID using a hash. The same user always gets the same color. Choose from a palette of 8–10 distinct, medium-saturation colors.
+- **Background color:** derive deterministically from the user's name or ID using a hash. The same user always gets the same color. Choose from a palette of 8-10 distinct, medium-saturation colors.
 - **Text:** initials in white, centered, font-weight 600
 - **Text size relative to avatar:** 40% of avatar diameter (e.g., 13px text in a 32px avatar)
 
@@ -690,12 +690,12 @@ After upload, immediately parse and display the first 10 rows so the user can ve
 │                                                          │
 │  ⚠ 12 rows have validation errors  [View errors]         │
 │                                                          │
-│  [Cancel]                            [Continue to Map →] │
+│  [Cancel]                            [Continue to Map -> ] │
 └──────────────────────────────────────────────────────────┘
 ```
 
 - Parse CSV client-side using PapaParse (handles encoding, delimiters, quoted fields)
-- Show only the first 10 rows — don't render 50,000 rows in the browser
+- Show only the first 10 rows, don't render 50,000 rows in the browser
 - Show total row count: "2,847 rows detected"
 - Flag obvious issues early: "12 rows have empty email fields"
 
@@ -704,7 +704,7 @@ After upload, immediately parse and display the first 10 rows so the user can ve
 Show a two-column mapping interface: source columns on the left, target fields on the right.
 
 - **Auto-detect mappings** using header similarity (Levenshtein distance, common synonyms)
-- **Confidence indicators:** checkmark for high confidence (>90%), yellow dot for medium (60–90%), red X for unmapped
+- **Confidence indicators:** checkmark for high confidence (>90%), yellow dot for medium (60-90%), red X for unmapped
 - **Dropdown per source column:** user selects which target field it maps to, or "Skip this column"
 - **Required fields indicator:** mark required target fields with an asterisk. Show error if unmapped.
 
@@ -714,7 +714,7 @@ After mapping, validate all rows and show errors:
 
 - **Summary:** "2,835 rows valid, 12 rows have errors"
 - **Error table:** show only the error rows with the problematic cells highlighted in red
-- **Per-cell error message:** tooltip or inline — "Invalid email format," "Phone number too long," "Required field missing"
+- **Per-cell error message:** tooltip or inline, "Invalid email format," "Phone number too long," "Required field missing"
 - **Options:** "Import valid rows only" (skip errors) or "Download error report" (CSV of failed rows with error descriptions) or "Fix and re-upload"
 
 ### Progress for large files
@@ -734,11 +734,11 @@ File uploads are a major attack surface. Every file from the internet is hostile
 
 ### File type validation (defense in depth)
 
-**Layer 1 — Client-side extension check:** fast feedback, easy to bypass. Do it for UX, not security.
+**Layer 1, Client-side extension check:** fast feedback, easy to bypass. Do it for UX, not security.
 
-**Layer 2 — MIME type from Content-Type header:** unreliable. Browsers set this from the extension.
+**Layer 2, MIME type from Content-Type header:** unreliable. Browsers set this from the extension.
 
-**Layer 3 — Magic bytes (file signature):** read the first 4–8 bytes and verify the file signature. This is the real check.
+**Layer 3, Magic bytes (file signature):** read the first 4-8 bytes and verify the file signature. This is the real check.
 
 ```typescript
 // Common magic bytes
@@ -761,9 +761,9 @@ async function validateMagicBytes(file: File, expectedType: string): Promise<boo
 }
 ```
 
-**Layer 4 — Server-side re-validation:** repeat magic byte check on the server. Never trust client-side validation alone.
+**Layer 4, Server-side re-validation:** repeat magic byte check on the server. Never trust client-side validation alone.
 
-**Layer 5 — Virus scanning:** scan uploaded files with ClamAV or a cloud scanning service (AWS Malware Protection for S3, Google Cloud DLP). Quarantine files until scan completes. Don't serve unscanned files to other users.
+**Layer 5, Virus scanning:** scan uploaded files with ClamAV or a cloud scanning service (AWS Malware Protection for S3, Google Cloud DLP). Quarantine files until scan completes. Don't serve unscanned files to other users.
 
 ### Presigned URLs for direct-to-S3 uploads
 
@@ -779,7 +779,7 @@ Never route large files through your application server. Use presigned URLs to u
 7. API is notified, updates the database with the file reference
 
 ```typescript
-// Server — generate presigned URL
+// Server, generate presigned URL
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
@@ -846,7 +846,7 @@ Enforce at every layer:
 | Reverse proxy | `client_max_body_size` (Nginx) | Prevents oversized requests hitting app |
 | Application server | Request body size limit | Defense in depth |
 
-Set limits slightly above the advertised max to account for multipart encoding overhead (add 5–10%).
+Set limits slightly above the advertised max to account for multipart encoding overhead (add 5-10%).
 
 ---
 
@@ -861,4 +861,4 @@ Set limits slightly above the advertised max to account for multipart encoding o
 - **Don't allow executable file uploads** (.exe, .bat, .sh, .cmd, .ps1, .msi) unless your product specifically requires it.
 - **Don't expose the internal storage path or key** to end users. Use signed, time-limited download URLs.
 - **Don't silently ignore failed uploads.** Every failure must surface to the user with a retry option.
-- **Don't delete uploaded files immediately** on "delete" — soft-delete with a 30-day retention window, or use undo-toast pattern.
+- **Don't delete uploaded files immediately** on "delete", soft-delete with a 30-day retention window, or use undo-toast pattern.

@@ -1,7 +1,7 @@
 ---
 name: stack-ready
 description: "Choose the right stack for a project before building it. Triggers on 'what stack should I use,' 'Next.js vs. Remix,' 'pick a database,' 'Postgres or Mongo,' 'which auth provider,' 'should I use Convex,' 'hosting recommendation,' 'move from Firebase to Supabase,' or any request to evaluate tech choices for a specific job. Outputs a ranked, scored shortlist with tradeoffs, pairing compatibility checks, and bundle recommendations tailored to domain, team size, budget, and time-to-ship. Stops at the recommendation: does not build the app (that's production-ready) or configure the repo (that's repo-ready). Not for purely abstract language debates with no project attached. Full trigger list in README."
-version: 3.0.1
+version: 3.0.2
 updated: 2026-05-30
 changelog: CHANGELOG.md
 suite: ready-suite
@@ -18,6 +18,7 @@ compatible_with:
   - codex
   - cursor
   - windsurf
+  - antigravity
   - pi
   - openclaw
   - any-agentskills-compatible-harness
@@ -368,6 +369,38 @@ The body above is enough to start. Load each reference *before* the step that us
 | `EXAMPLE-STACK.md` | **On demand.** A complete worked example stack decision for a fictional B2B SaaS pilot (Pulse, a Customer Success ops platform). Demonstrates a constraint map sourced from upstream PRD and architecture, nine ranked-shortlist categories with scoring rationale per candidate, pairing compatibility checks, an itemized bundle summary against the cost ceiling ($50/mo of a $400/mo cap), and eight stack-level ADRs naming alternatives and migration paths. Passes the skill's grep tests for vibe-stack / resume-driven / premature-scale / decoupled-from-architecture / cost-blind failure modes. Consumes the worked PRD, architecture, and roadmap from their respective sibling repos. | ~14K |
 
 Skill version and change history live in `CHANGELOG.md`. When resuming a project, confirm the skill version your session loaded matches the version recorded in `.stack-ready/STATE.md` if one exists. A skill update between sessions can move scores, add candidates (Convex released a new tier, Cloudflare acquired a vendor, Prisma published a major version), or change anti-pairings. If versions differ, re-run the scoring pass on the shortlisted bundles before continuing.
+
+## Suite membership
+
+stack-ready is the planning-tier skill that picks the technology bundle. See `SUITE.md` at the repo root for the full map. The relevant siblings at a glance:
+
+- **Planning tier:** `prd-ready` (what), `architecture-ready` (how), `roadmap-ready` (when), `stack-ready` (this skill, with what tools).
+- **Building tier:** `production-ready` (the app), `repo-ready` (the repo scaffolding).
+- **Shipping tier:** `deploy-ready` (ship it), `observe-ready` (keep it healthy), `launch-ready` (tell the world), `harden-ready` (survive adversarial attention).
+
+Skills are loosely coupled: each stands alone, each composes with the others via well-defined artifacts. No skill routes through another; the harness is the router. Install what you need.
+
+## Consumes from upstream
+
+When the agent starts, it checks for upstream artifacts and pre-fills the pre-flight from them rather than asking the user to repeat decisions already made. Absence is fine; the skill runs standalone on its own defaults.
+
+| If present | stack-ready reads it during | To pre-fill |
+|---|---|---|
+| `.prd-ready/PRD.md` | Step 1 (pre-flight) and Step 2 (constraint map) | Domain, target users, non-functional requirements, budget posture, team size, time-to-ship, and any compliance or data-residency constraints that rule out candidates. |
+| `.architecture-ready/ARCH.md` | Step 1 and Step 2 | System shape (monolith vs. services, sync vs. async), the component breakdown, and the non-functional targets the stack must satisfy (a relational store with tenant scope, a worker entry point, structured logging). |
+
+If neither is present, the skill states its assumptions in one paragraph and proceeds. If an upstream artifact *contradicts* the running code (Mode B or C), trust the code and note the drift. Upstream artifacts are historical records, not current-state overrides.
+
+## Produces for downstream
+
+stack-ready emits the stack decision for downstream skills and future sessions to consume. Writing it is the skill's definition of done.
+
+| Artifact | Path | Consumed by |
+|---|---|---|
+| **Stack decision** | `.stack-ready/DECISION.md` | `production-ready` reads the locked-in technology set to build slices against without re-litigating the choice. `repo-ready` reads it to scaffold the matching CI matrix, linter, and platform configs. `deploy-ready` reads the hosting and database picks for the topology note. |
+| **Session state** | `.stack-ready/STATE.md` | The next stack session (Mode C audit or Mode D migration) reads to resume scoring without re-deriving the shortlist. |
+
+If a downstream skill is not installed, stack-ready still produces these artifacts. They cost nothing to emit and make the suite extensible.
 
 ## Session state and handoff
 

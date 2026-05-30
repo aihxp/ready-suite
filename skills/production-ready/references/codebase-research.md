@@ -34,7 +34,7 @@ glob **/models/**/*.{rb,py}
 count of .tsx/.vue/.svelte files in src/ or app/ directories
 ```
 
-**Threshold:** Fewer than 5 source files containing fewer than 50 total lines of non-config code = greenfield. When in doubt, treat as greenfield — the cost of a quick scaffold is lower than the cost of a bad assessment.
+**Threshold:** Fewer than 5 source files containing fewer than 50 total lines of non-config code = greenfield. When in doubt, treat as greenfield, the cost of a quick scaffold is lower than the cost of a bad assessment.
 
 ## Mode A: Greenfield research
 
@@ -44,9 +44,9 @@ Even an empty project may have constraints. A 60-second scan prevents the agent 
 
 | What | Where to look |
 |---|---|
-| Pre-chosen dependencies | `package.json`, `Gemfile`, `requirements.txt`, `go.mod` — anything already installed? |
-| Config locked in | `tsconfig.json`, `.eslintrc`, `tailwind.config`, `prettier.config` — conventions already set? |
-| Deployment target | `vercel.json`, `fly.toml`, `Dockerfile`, `netlify.toml`, `render.yaml` — hosting decided? |
+| Pre-chosen dependencies | `package.json`, `Gemfile`, `requirements.txt`, `go.mod`, anything already installed? |
+| Config locked in | `tsconfig.json`, `.eslintrc`, `tailwind.config`, `prettier.config`, conventions already set? |
+| Deployment target | `vercel.json`, `fly.toml`, `Dockerfile`, `netlify.toml`, `render.yaml`, hosting decided? |
 | External API | `.env.example` or `.env.local` referencing `API_URL`, `BACKEND_URL`, `SUPABASE_URL` |
 | Design assets | `README.md` or `/docs` mentioning Figma links, brand guides, color specs |
 | Existing data source | Database URL in env, or API docs linked in README |
@@ -92,7 +92,7 @@ The agent needs to know exactly what's in place before making any decisions.
 | **Charts** | deps: `recharts`, `chart.js`, `react-chartjs-2`, `apexcharts`, `@nivo/*`, `d3`, `visx` |
 | **Testing** | deps: `vitest`, `jest`, `@testing-library/*`, `playwright`, `cypress` |
 
-Also read `.env.example` or `.env.local` — list every variable and whether it has a value or is a placeholder.
+Also read `.env.example` or `.env.local`, list every variable and whether it has a value or is a placeholder.
 
 **Output format:**
 
@@ -104,11 +104,11 @@ Also read `.env.example` or `.env.local` — list every variable and whether it 
 | Language | TypeScript | 5.6 | tsconfig.json |
 | ORM | Prisma | 6.2 | prisma/schema.prisma |
 | Auth | Auth.js | 5.0 | auth.ts |
-| UI | shadcn/ui + Radix | — | components/ui/ |
+| UI | shadcn/ui + Radix |, | components/ui/ |
 | Styling | Tailwind CSS | 4.0 | tailwind.config.ts |
-| State | TanStack Query | 5.62 | — |
-| Charts | Recharts | 2.15 | — |
-| Testing | Vitest + Playwright | — | vitest.config.ts |
+| State | TanStack Query | 5.62 |, |
+| Charts | Recharts | 2.15 |, |
+| Testing | Vitest + Playwright |, | vitest.config.ts |
 ```
 
 ### B2: Route and page map
@@ -149,7 +149,7 @@ How to classify: search the file for query hooks (`useQuery`, `useSWR`, `loader`
 | /users | app/users/page.tsx | real | TanStack Query, pagination |
 | /settings | app/settings/page.tsx | skeleton | Form renders but save does nothing |
 | /reports | app/reports/page.tsx | placeholder | "Coming soon" text only |
-| /billing | — | missing | In sidebar nav but no page exists |
+| /billing |, | missing | In sidebar nav but no page exists |
 ```
 
 ### B3: Data layer state
@@ -157,8 +157,8 @@ How to classify: search the file for query hooks (`useQuery`, `useSWR`, `loader`
 What persistence exists, what schema is defined, what's real vs. mock.
 
 **Schema detection:**
-- Read `schema.prisma` or equivalent — list every model with field count and relationships
-- Read migration files — are they applied? Is there a migration history?
+- Read `schema.prisma` or equivalent, list every model with field count and relationships
+- Read migration files, are they applied? Is there a migration history?
 - Check for seed script: `seed.ts`, `seed.js`, `seeds.rb`, `db/seeds/`, `fixtures/`
   - If found: is the data realistic ("Jane Smith, jane@acme.com") or generic ("User 1, test@test.com")?
 
@@ -187,12 +187,12 @@ grep -rn "const.*=.*\[" src/ --include="*.tsx" | head -20       # hardcoded arra
 |---|---|---|---|
 | /api/users | GET, POST | real | Pagination, filtering |
 | /api/users/[id] | GET, PATCH, DELETE | real | Permission checks present |
-| /api/projects | GET, POST | real | — |
+| /api/projects | GET, POST | real |, |
 | /api/reports/generate | POST | stub | Returns hardcoded JSON |
 
 **Mock data locations:**
-- src/app/dashboard/page.tsx:14 — `const stats = [...]` hardcoded array
-- src/components/RevenueChart.tsx:8 — `Math.random()` generating chart data
+- src/app/dashboard/page.tsx:14, `const stats = [...]` hardcoded array
+- src/components/RevenueChart.tsx:8, `Math.random()` generating chart data
 ```
 
 ### B4: Auth state
@@ -215,7 +215,7 @@ grep -rn "session.*strategy\|session.*maxAge\|SESSION_\|cookie.*httpOnly\|jwt.*s
   --include="*.ts" --include="*.js" --include="*.py"
 ```
 
-**Read the user model** — what fields exist? Email? Password hash? Role? Organization? Profile fields?
+**Read the user model**, what fields exist? Email? Password hash? Role? Organization? Profile fields?
 
 Count protected vs. unprotected routes. If 12 of 15 routes are protected, the 3 unprotected ones are gaps worth flagging.
 
@@ -270,7 +270,7 @@ Pages that appear in this list are wired. Pages that don't are likely decorative
 - **Total components:** 42
 - **Shared (ui/):** 18 (Button, Input, Card, Table, Dialog, etc.)
 - **Feature components:** 24
-- **Design tokens:** Yes — globals.css defines 28 CSS variables (colors: 12, spacing: 4, radius: 4, fonts: 3, semantic: 5)
+- **Design tokens:** Yes, globals.css defines 28 CSS variables (colors: 12, spacing: 4, radius: 4, fonts: 3, semantic: 5)
 - **Token gaps:** Animation/motion tokens not defined. Dark mode tokens not present.
 - **Wired pages:** 8 of 12 use query hooks
 - **Decorative pages:** 4 use hardcoded data or render static content
@@ -284,12 +284,12 @@ An existing codebase has established patterns. Violating them creates inconsiste
 
 | Convention | How to detect | Example output |
 |---|---|---|
-| **File structure** | `ls -R src/` — feature-based (files grouped by feature) or layer-based (files grouped by type)? | "Feature-based: src/app/users/, src/app/projects/" |
-| **File naming** | Scan filenames — kebab-case? camelCase? PascalCase? | "Components: PascalCase. Hooks: camelCase with `use` prefix. Files: kebab-case." |
-| **Import style** | `grep -m5 "from ['\"]@/" src/` — absolute paths with `@/`? Relative? Barrel exports? | "Absolute imports via @/ alias" |
-| **Error handling** | Read 2-3 pages — try-catch? Error boundaries? Both? | "Error boundaries at layout level, try-catch in server actions" |
-| **API patterns** | Read 2-3 API routes — consistent response shape? Error format? | "All routes return { data, error, meta } shape" |
-| **Commit style** | `git log --oneline -10` — conventional commits? Free-form? | "Conventional commits: feat:, fix:, chore:" |
+| **File structure** | `ls -R src/`, feature-based (files grouped by feature) or layer-based (files grouped by type)? | "Feature-based: src/app/users/, src/app/projects/" |
+| **File naming** | Scan filenames, kebab-case? camelCase? PascalCase? | "Components: PascalCase. Hooks: camelCase with `use` prefix. Files: kebab-case." |
+| **Import style** | `grep -m5 "from ['\"]@/" src/`, absolute paths with `@/`? Relative? Barrel exports? | "Absolute imports via @/ alias" |
+| **Error handling** | Read 2-3 pages, try-catch? Error boundaries? Both? | "Error boundaries at layout level, try-catch in server actions" |
+| **API patterns** | Read 2-3 API routes, consistent response shape? Error format? | "All routes return { data, error, meta } shape" |
+| **Commit style** | `git log --oneline -10`, conventional commits? Free-form? | "Conventional commits: feat:, fix:, chore:" |
 
 **Output format:**
 
@@ -306,7 +306,7 @@ An existing codebase has established patterns. Violating them creates inconsiste
 
 ### B7: Hollow indicators
 
-The core Production Ready concern — identifying what looks done but is not.
+The core Production Ready concern, identifying what looks done but is not.
 
 **Run these searches:**
 
@@ -340,7 +340,7 @@ grep -rn "onSubmit.*prevent\|handleSubmit" src/ --include="*.tsx"
 | Hardcoded data array in a page | **High** | Wire to real data layer |
 | Empty onClick handler | **High** | Implement the real action |
 | "Coming soon" text | **High** | Build the feature or remove the nav link |
-| console.error in a catch block | **None** | Intentional error logging — skip |
+| console.error in a catch block | **None** | Intentional error logging, skip |
 
 **Output format:**
 
@@ -360,7 +360,7 @@ grep -rn "onSubmit.*prevent\|handleSubmit" src/ --include="*.tsx"
 
 ### Assessment output format
 
-Roll up B1–B7 into a single document. This is the complete output that any agent's planner consumes.
+Roll up B1, B7 into a single document. This is the complete output that any agent's planner consumes.
 
 ```markdown
 ## Research output: Assessment
@@ -375,16 +375,16 @@ Roll up B1–B7 into a single document. This is the complete output that any age
 [B2 output table]
 
 ### Data layer
-[B3 output — schema summary, API inventory, mock locations]
+[B3 output, schema summary, API inventory, mock locations]
 
 ### Auth
-[B4 output — provider, session, roles, protected routes]
+[B4 output, provider, session, roles, protected routes]
 
 ### UI
-[B5 output — component count, tokens, wired vs decorative]
+[B5 output, component count, tokens, wired vs decorative]
 
 ### Conventions
-[B6 output — file structure, naming, imports, error handling]
+[B6 output, file structure, naming, imports, error handling]
 
 ### Hollow indicators
 [B7 output table + summary]
@@ -400,7 +400,7 @@ Evaluate the codebase against the completion tiers defined in SKILL.md:
 State the highest tier fully satisfied and what's blocking the next tier.
 
 ```
-**Current tier:** Tier 1 (Foundation) — complete
+**Current tier:** Tier 1 (Foundation), complete
 **Blocking Tier 2:** RBAC not enforced server-side, settings page doesn't persist, no empty/error states
 ```
 
@@ -414,26 +414,26 @@ From the assessment and tier evaluation above, derive the gaps. Each gap becomes
 Order gaps by tier, then by severity within each tier: high-severity hollows first (broken features), then missing features, then polish items.
 ```
 
-The gap analysis section is what a planner converts directly into a todo list. Each checkbox maps to one task. The agent does not need to re-discover the gaps — they are already enumerated with file paths and evidence.
+The gap analysis section is what a planner converts directly into a todo list. Each checkbox maps to one task. The agent does not need to re-discover the gaps, they are already enumerated with file paths and evidence.
 
 ## Mode C: Audit research
 
-The user has a dashboard they believe is done and wants verification. This is not about building new features — it's about catching what's broken or hollow.
+The user has a dashboard they believe is done and wants verification. This is not about building new features, it's about catching what's broken or hollow.
 
 **Process:**
-1. Run the same scans as Mode B (B1–B7) to produce the assessment
+1. Run the same scans as Mode B (B1, B7) to produce the assessment
 2. Additionally, walk the full verification checklist from `references/preflight-and-verification.md`
 3. For each checklist item, test it and record pass/fail with evidence
 
 **What to test beyond Mode B scans:**
-- Start the app with a single command — does it work?
-- Log in as admin — does auth work end-to-end?
-- Log in as non-admin — is the experience correctly restricted?
-- Click every nav link — any 404s?
-- Create, edit, delete a record — does the full CRUD cycle work?
-- Check browser DevTools — any red errors or failed requests?
-- Resize to mobile — does the layout hold?
-- Tab through the page — is everything keyboard-accessible?
+- Start the app with a single command, does it work?
+- Log in as admin, does auth work end-to-end?
+- Log in as non-admin, is the experience correctly restricted?
+- Click every nav link, any 404s?
+- Create, edit, delete a record, does the full CRUD cycle work?
+- Check browser DevTools, any red errors or failed requests?
+- Resize to mobile, does the layout hold?
+- Tab through the page, is everything keyboard-accessible?
 
 ### Audit output format
 
@@ -444,7 +444,7 @@ The user has a dashboard they believe is done and wants verification. This is no
 **Scanned at:** [timestamp]
 
 ### Assessment
-[Full Mode B output — stack, routes, data, auth, UI, conventions, hollows]
+[Full Mode B output, stack, routes, data, auth, UI, conventions, hollows]
 
 ### Verification checklist
 | # | Check | Status | Evidence |
@@ -458,29 +458,29 @@ The user has a dashboard they believe is done and wants verification. This is no
 | ... | ... | ... | ... |
 
 ### Current tier
-**Current tier:** Tier 1 (Foundation) — partial (auth works, RBAC not enforced)
+**Current tier:** Tier 1 (Foundation), partial (auth works, RBAC not enforced)
 **Blocking Tier 2:** RBAC middleware missing, settings doesn't persist, no empty/error states
 **Blocking Tier 3:** No audit log, responsive untested, no keyboard accessibility pass
 **Blocking Tier 4:** No tests, no security headers, 3 TODOs remain
 
 ### Fix-it list (sorted by tier, then severity)
 **Tier 1 gaps (Foundation):**
-1. **Critical:** Passwords stored as SHA-256 — migrate to argon2id or bcrypt
-2. **High:** /reports nav link 404s — build the page or remove from nav
+1. **Critical:** Passwords stored as SHA-256, migrate to argon2id or bcrypt
+2. **High:** /reports nav link 404s, build the page or remove from nav
 
 **Tier 2 gaps (Functional):**
-3. **Critical:** Non-admin can access all routes — add RBAC middleware
-4. **High:** Settings page save handler is empty — wire to PATCH /api/settings
-5. **Medium:** Dashboard chart uses Math.random() — wire to real data
+3. **Critical:** Non-admin can access all routes, add RBAC middleware
+4. **High:** Settings page save handler is empty, wire to PATCH /api/settings
+5. **Medium:** Dashboard chart uses Math.random(), wire to real data
 
 **Tier 3 gaps (Polished):**
 6. **Medium:** 3 TODO comments remain in production paths
 
 **Tier 4 gaps (Hardened):**
-7. **Low:** Favicon is default framework icon — replace with product logo
+7. **Low:** Favicon is default framework icon, replace with product logo
 ```
 
-The fix-it list is the todo. Each item maps to a tier and has enough context to implement without re-investigation. Work through tiers in order — don't start Tier 3 fixes while Tier 2 has critical gaps.
+The fix-it list is the todo. Each item maps to a tier and has enough context to implement without re-investigation. Work through tiers in order, don't start Tier 3 fixes while Tier 2 has critical gaps.
 
 ## Mode D: Migration research
 
@@ -512,7 +512,7 @@ The failure this mode prevents: adopting hollow patterns because they are alread
 **Origin:** [Retool export | shadcn admin kit v1.2 | prior agent work (last touched 2026-03-15) | Vue 3 admin, porting to Next.js]
 **Scanned at:** [timestamp]
 
-### B1–B7 assessment
+### B1, B7 assessment
 [Same structure as Mode B output.]
 
 ### Hollow-check results
@@ -555,22 +555,22 @@ The disposition inventory has the same graveyard risk as `.production-ready/defe
 
 The research output feeds the next step in the workflow differently per mode.
 
-**Greenfield → Step 1 (pre-flight):** Research confirmed the project is empty. Proceed with full pre-flight, full architecture decisions, full scaffolding. Respect any external constraints found (deployment target, pre-chosen deps, existing API).
+**Greenfield -> Step 1 (pre-flight):** Research confirmed the project is empty. Proceed with full pre-flight, full architecture decisions, full scaffolding. Respect any external constraints found (deployment target, pre-chosen deps, existing API).
 
-**Assessment → Step 1 (pre-flight), then Step 2 (architecture):** The research pre-fills most pre-flight answers. The stack is decided (don't re-decide it). The auth model is in place (don't install a second auth library). The route map exists (extend it, don't replace it). The architecture step becomes: "Existing: [what the research found]. Adding: [what the gap analysis identified]." Feature slice order comes from the gap analysis — fix hollows first, then build new features.
+**Assessment -> Step 1 (pre-flight), then Step 2 (architecture):** The research pre-fills most pre-flight answers. The stack is decided (don't re-decide it). The auth model is in place (don't install a second auth library). The route map exists (extend it, don't replace it). The architecture step becomes: "Existing: [what the research found]. Adding: [what the gap analysis identified]." Feature slice order comes from the gap analysis, fix hollows first, then build new features.
 
-**Audit → Fix-it list:** Skip the pre-flight and architecture steps. The dashboard already exists. Go directly to the fix-it list and work through it by severity. Each fix is a vertical slice: identify the hollow → implement the real version → verify it works.
+**Audit -> Fix-it list:** Skip the pre-flight and architecture steps. The dashboard already exists. Go directly to the fix-it list and work through it by severity. Each fix is a vertical slice: identify the hollow -> implement the real version -> verify it works.
 
-**Migration → Step 1 (pre-flight), then disposition-driven execution:** The research produced a keep/rewrite/discard inventory plus a phased migration plan. Walk the pre-flight using the inventory: stack is inherited (question 3 is whatever the template shipped with, unless you are porting frameworks), domain entities are whatever is in the keep/rewrite lists after discarding dead ones. Architecture note (Step 2) adopts the keep items and documents the rewrites as planned work. Work the migration plan phase by phase; each rewrite item is a vertical slice.
+**Migration -> Step 1 (pre-flight), then disposition-driven execution:** The research produced a keep/rewrite/discard inventory plus a phased migration plan. Walk the pre-flight using the inventory: stack is inherited (question 3 is whatever the template shipped with, unless you are porting frameworks), domain entities are whatever is in the keep/rewrite lists after discarding dead ones. Architecture note (Step 2) adopts the keep items and documents the rewrites as planned work. Work the migration plan phase by phase; each rewrite item is a vertical slice.
 
 ### Rules for working with existing codebases
 
 These are non-negotiable when Mode B, C, or D is active:
 
-1. **Never install a second auth library** when one already exists. Extend it, configure it, fix it — don't replace it.
+1. **Never install a second auth library** when one already exists. Extend it, configure it, fix it, don't replace it.
 2. **Never introduce a different CSS methodology** when tokens or a design system exist. If the project uses Tailwind + CSS variables, you use Tailwind + CSS variables.
 3. **Never change file naming conventions** mid-project. If existing files are kebab-case, new files are kebab-case.
-4. **Never rebuild a route that already works.** Extend it, fix its hollows, add missing states — but don't rewrite a working page.
+4. **Never rebuild a route that already works.** Extend it, fix its hollows, add missing states, but don't rewrite a working page.
 5. **Never change the API response shape.** If existing routes return `{ data, error }`, new routes return `{ data, error }`.
 6. **Never swap the state management library.** If the project uses Zustand for client state, you use Zustand for client state, even if you would have chosen differently.
 7. **Adopt the existing commit style.** If the project uses conventional commits, your commits use conventional commits.

@@ -4,6 +4,22 @@ Curated change history for the [aihxp/ready-suite](https://github.com/aihxp/read
 
 For per-skill changelogs, see each skill's `CHANGELOG.md` under [`skills/<skill>/CHANGELOG.md`](skills/) (e.g., [`skills/prd-ready/CHANGELOG.md`](skills/prd-ready/CHANGELOG.md)). For the full audit trail, see `git log` on this hub.
 
+## 2026-05-30 - 3.0.2 release train: forbidden-unicode purge and structural alignment
+
+Patch release across all eleven skills, the meta plugin, and marketplace metadata. Completes the unicode discipline (the 3.0.1 train still grandfathered the skill-body backlog) and squares away the last structural inconsistencies.
+
+### Changed
+
+- **Forbidden-unicode purge.** Removed every em-dash, en-dash, and arrow from all `SKILL.md` bodies and `references/*.md` (about 3,200 characters across 56 files). Em-dashes used as prose pauses became commas; em-dashes used as alignment separators or empty-cell placeholders became hyphens; arrows became ASCII (`->`, `<-`, `^`, `v`). The change was verified character-preserving: only punctuation moved, no words were added, removed, or altered.
+- **unicode-clean lint extended** to cover `SKILL.md` bodies and `references/*.md` whole-file, so the backlog cannot return. Sibling READMEs and CHANGELOG history remain grandfathered.
+- **stack-ready and repo-ready structural alignment.** Both gained the standard `## Suite membership`, `## Consumes from upstream`, and `## Produces for downstream` sections the other nine skills carry; they were the only two missing them.
+- **antigravity** added to every skill's `compatible_with` (all eleven now declare it; Antigravity reads the Agent Skills standard). Previously only kickoff-ready listed it.
+- **Residual `.stack-ready/STACK.md` references** corrected to `.stack-ready/DECISION.md` in production-ready's changelog history and a roadmap-ready reference (the 3.0.1 train fixed the primary ones).
+
+The linter still runs ten checks; `unicode-clean` simply covers more files now.
+
+---
+
 ## 2026-05-30 - 3.0.1 release train: drift fixes and three new lint checks
 
 Patch release across all eleven skills, the meta plugin, and marketplace metadata. A whole-suite markdown drift audit, the fixes it surfaced, and three new lint checks that make previously-unenforced invariants mechanical.

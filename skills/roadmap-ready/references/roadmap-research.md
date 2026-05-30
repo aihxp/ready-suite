@@ -91,7 +91,7 @@ Before declaring a mode and proceeding, check each upstream signal. The skill is
 | ARCH tier | frontmatter version or tier heading | Tier 1 Sketch unlocks Tier 3 Committed |
 | ARCH dependency graph | component-breakdown table, integration list, or Mermaid C4 | Feeds Step 4 topological sort |
 | `.architecture-ready/HANDOFF.md` "Roadmap-ready inputs" | section present, non-empty | Pre-fills load-bearing-first ordering |
-| `.stack-ready/DECISION.md` or STACK.md | file present | Confirms stack is settled |
+| `.stack-ready/DECISION.md` | file present | Confirms stack is settled |
 | `.production-ready/STATE.md` | file present (Mode C/E) | Shows what has already shipped; informs archive |
 | Prior ROADMAP.md | file present (Mode B/C/D/E/F) | Shapes mode detection |
 

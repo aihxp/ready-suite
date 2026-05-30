@@ -32,7 +32,7 @@ Every project at growth stage or above needs a SECURITY.md. It tells security re
 
 To report a vulnerability, use one of these channels:
 
-<!-- REPLACE: Use your real security contact. Options below — pick one or both. -->
+<!-- REPLACE: Use your real security contact. Options below, pick one or both. -->
 
 - **GitHub Security Advisories (preferred):** Use the "Report a vulnerability" button on the [Security tab](../../security/advisories/new) of this repository. This creates a private discussion between you and the maintainers.
 - **Email:** Send details to **security@YOUR_DOMAIN.com** <!-- REPLACE with real email -->
@@ -189,7 +189,7 @@ updates:
         patterns:
           - "@types/*"
     ignore:
-      # Ignore major versions — review those manually
+      # Ignore major versions, review those manually
       - dependency-name: "*"
         update-types:
           - "version-update:semver-major"
@@ -300,7 +300,7 @@ updates:
 |-----------|---------------------|-----------|
 | github-actions | Weekly (Monday) | Actions updates are low-risk, process first |
 | Application deps | Weekly (Tuesday) | Stagger after actions to avoid PR floods |
-| Docker | Weekly (Wednesday) | Base image updates can break builds — review separately |
+| Docker | Weekly (Wednesday) | Base image updates can break builds, review separately |
 | Security-only | Daily | Use `open-pull-requests-limit: 0` with security alerts enabled for immediate patches |
 
 ### Grouping strategy
@@ -309,7 +309,7 @@ Grouping is essential. Without it, a project with 80 dependencies generates 80 P
 
 1. **Group minor + patch by type** (production vs dev). One PR for all non-breaking production updates, one for dev.
 2. **Group related tools** (linting, testing, types). These move in lockstep.
-3. **Never group major versions.** Review each major bump individually — they have breaking changes.
+3. **Never group major versions.** Review each major bump individually, they have breaking changes.
 4. **Never group security patches with regular updates.** Security patches should merge fast; don't delay them behind a large batch.
 
 ---
@@ -454,7 +454,7 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    # Run weekly on Monday at 6 AM UTC — catches vulnerabilities
+    # Run weekly on Monday at 6 AM UTC, catches vulnerabilities
     # introduced by dependency updates between PRs
     - cron: "0 6 * * 1"
 
@@ -587,7 +587,7 @@ jobs:
           format: "sarif"
           output: "trivy-results.sarif"
           severity: "CRITICAL,HIGH"
-          # Ignore unfixed vulnerabilities — you can't do anything about them
+          # Ignore unfixed vulnerabilities, you can't do anything about them
           ignore-unfixed: true
 
       - name: Upload Trivy scan results to GitHub Security tab
@@ -727,7 +727,7 @@ paths = [
 
 ## 5. Branch protection and rulesets
 
-### Branch protection (legacy — still widely used)
+### Branch protection (legacy, still widely used)
 
 Apply to `main` (or `master`) via Settings > Branches > Branch protection rules.
 
@@ -749,7 +749,7 @@ Apply to `main` (or `master`) via Settings > Branches > Branch protection rules.
 | Allow force pushes | Never | Protect history |
 | Allow deletions | Never | Protect the branch |
 
-### Rulesets (modern GitHub — recommended for new repos)
+### Rulesets (modern GitHub, recommended for new repos)
 
 Rulesets replace branch protection rules with more flexibility: they can target multiple branches, tags, apply to specific teams, and support bypass lists. Available on all GitHub plans since 2024.
 
@@ -793,10 +793,10 @@ Rules:
 | Scope | One branch pattern per rule | Multiple branch/tag patterns per ruleset |
 | Bypass | Admins exempt by default | Explicit bypass list with audit trail |
 | Stacking | Rules don't compose | Multiple rulesets can layer |
-| Organization level | No | Yes — apply across all repos |
+| Organization level | No | Yes, apply across all repos |
 | API management | Mature | Newer API, well-documented |
 | Tag protection | Separate feature | Included in rulesets |
-| **Recommendation** | Use if you need simplicity or are on an older plan | Use for new projects — more flexible and auditable |
+| **Recommendation** | Use if you need simplicity or are on an older plan | Use for new projects, more flexible and auditable |
 
 ---
 
@@ -804,7 +804,7 @@ Rules:
 
 Signing commits proves the commit was made by the person who claims to have made it. Without signing, anyone can set `git config user.email` to your email and forge commits.
 
-### SSH signing (recommended — simpler setup)
+### SSH signing (recommended, simpler setup)
 
 SSH signing was added in Git 2.34. It reuses your existing SSH key. No GPG keychain, no key servers, no expiration hassles.
 
@@ -842,7 +842,7 @@ git config --global gpg.ssh.allowedSignersFile ~/.ssh/allowed_signers
 git log --show-signature -1
 ```
 
-### GPG signing (traditional — required by some organizations)
+### GPG signing (traditional, required by some organizations)
 
 ```bash
 # 1. Generate a GPG key
@@ -951,7 +951,7 @@ jobs:
 
 ### Sigstore / cosign (artifact signing)
 
-Sigstore provides keyless signing using OIDC identity. No key management required — your GitHub Actions identity is your signing identity.
+Sigstore provides keyless signing using OIDC identity. No key management required, your GitHub Actions identity is your signing identity.
 
 ```yaml
 # Sign a container image in CI
@@ -1000,7 +1000,7 @@ Requirements:
 - Workflow must have `id-token: write` permission
 - npm 9.5.0+ or Node.js 20+
 
-Consumers verify provenance on npmjs.com — a "Provenance" badge appears on the package page.
+Consumers verify provenance on npmjs.com, a "Provenance" badge appears on the package page.
 
 ### PyPI attestations and trusted publishing
 
@@ -1040,7 +1040,7 @@ jobs:
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
-        # No token needed — OIDC handles authentication
+        # No token needed, OIDC handles authentication
 ```
 
 #### PyPI attestations (since 2024)
@@ -1174,14 +1174,14 @@ jobs:
 
 ```
 # What gets committed:
-.env.example      ← Template with placeholder values, committed to repo
-.env.test         ← Test environment config (no real secrets), committed
+.env.example      <- Template with placeholder values, committed to repo
+.env.test         <- Test environment config (no real secrets), committed
 
 # What NEVER gets committed:
-.env              ← Local development secrets, NEVER committed
-.env.local        ← Local overrides, NEVER committed
-.env.production   ← Production secrets, NEVER committed
-.env.*.local      ← Any local override, NEVER committed
+.env              <- Local development secrets, NEVER committed
+.env.local        <- Local overrides, NEVER committed
+.env.production   <- Production secrets, NEVER committed
+.env.*.local      <- Any local override, NEVER committed
 ```
 
 #### .gitignore entries (non-negotiable)
@@ -1285,9 +1285,9 @@ Configure in Settings > Environments:
 
 | Secret type | Rotation frequency | Automated? |
 |-------------|-------------------|-----------|
-| API keys (external services) | 90 days | Manual — set calendar reminders |
+| API keys (external services) | 90 days | Manual, set calendar reminders |
 | Database passwords | 90 days | Automate via cloud provider |
-| JWT / session secrets | 180 days | Manual — requires coordinated deploy |
+| JWT / session secrets | 180 days | Manual, requires coordinated deploy |
 | SSH deploy keys | Annually | Manual |
 | Personal access tokens | 90 days (use fine-grained tokens with expiry) | GitHub enforces expiration |
 | Service account credentials | 90 days | Automate via cloud IAM |
@@ -1312,17 +1312,17 @@ Configure in Settings > Environments:
 ### After rotation
 - [ ] Update rotation date in team documentation
 - [ ] Set reminder for next rotation
-- [ ] Verify old secret is fully invalidated (try using it — should fail)
+- [ ] Verify old secret is fully invalidated (try using it, should fail)
 ```
 
 #### Preventing secrets in code
 
 Layer these defenses:
 
-1. **Pre-commit hook** — Gitleaks catches secrets before they leave the developer's machine (see section 4d).
-2. **CI scan** — Gitleaks in CI catches anything the pre-commit hook missed.
-3. **GitHub secret scanning** — Automatic scanning of push events. Enable in Settings > Code security and analysis > Secret scanning.
-4. **GitHub push protection** — Blocks pushes containing detected secrets. Enable in Settings > Code security and analysis > Push protection.
+1. **Pre-commit hook**, Gitleaks catches secrets before they leave the developer's machine (see section 4d).
+2. **CI scan**, Gitleaks in CI catches anything the pre-commit hook missed.
+3. **GitHub secret scanning**, Automatic scanning of push events. Enable in Settings > Code security and analysis > Secret scanning.
+4. **GitHub push protection**, Blocks pushes containing detected secrets. Enable in Settings > Code security and analysis > Push protection.
 
 Enable both secret scanning and push protection. They are free for public repos and included in GitHub Advanced Security for private repos.
 
@@ -1355,7 +1355,7 @@ Most open source projects are solo-run and don't have `security@example.com`. Th
 
 **Recommended for any public GitHub repository.** Zero setup, zero cost, no email infrastructure required. The reporter gets a structured form, the disclosure thread stays private until you publish an advisory, and GitHub handles CVE request coordination.
 
-**Enable it:** Settings → Code security and analysis → Private vulnerability reporting → Enable. Takes about 10 seconds.
+**Enable it:** Settings -> Code security and analysis -> Private vulnerability reporting -> Enable. Takes about 10 seconds.
 
 **Wire it into SECURITY.md:**
 
@@ -1363,7 +1363,7 @@ Most open source projects are solo-run and don't have `security@example.com`. Th
 ## Reporting a vulnerability
 
 Report vulnerabilities privately via GitHub's Private Vulnerability Reporting:
-**Security tab → Report a vulnerability** (or https://github.com/OWNER/REPO/security/advisories/new).
+**Security tab -> Report a vulnerability** (or https://github.com/OWNER/REPO/security/advisories/new).
 
 We aim to acknowledge within 72 hours and publish a fix coordinated with an advisory.
 ```
@@ -1376,11 +1376,11 @@ PVR is the default answer for solo maintainers on GitHub. If you only read one o
 
 For projects with funding and an enterprise tier. Tidelift pays the maintainer a subscription fee and provides a coordinated disclosure channel for subscribers. Reporters who are Tidelift customers file through them; you respond through their tooling.
 
-**When it fits:** funded libraries with known enterprise consumers. Not appropriate for unfunded hobby projects — there is no free tier.
+**When it fits:** funded libraries with known enterprise consumers. Not appropriate for unfunded hobby projects, there is no free tier.
 
 ### Option 3: security.txt at the repo root
 
-Per [RFC 9116](https://www.rfc-editor.org/rfc/rfc9116). A well-known file that tells automated scanners and researchers where to report. security.txt is a *redirector*, not a channel — the `Contact:` field points to whichever of the other three options you use.
+Per [RFC 9116](https://www.rfc-editor.org/rfc/rfc9116). A well-known file that tells automated scanners and researchers where to report. security.txt is a *redirector*, not a channel, the `Contact:` field points to whichever of the other three options you use.
 
 **Place it at `/.well-known/security.txt` in web projects, or `/security.txt` in repo-only projects:**
 
@@ -1392,7 +1392,7 @@ Preferred-Languages: en
 Canonical: https://example.com/.well-known/security.txt
 ```
 
-`Expires:` is mandatory per the RFC — set it 12 months out and add a calendar reminder to renew. Expired security.txt is worse than none.
+`Expires:` is mandatory per the RFC, set it 12 months out and add a calendar reminder to renew. Expired security.txt is worse than none.
 
 ### Option 4: Personal email with a dedicated alias
 
@@ -1408,10 +1408,10 @@ Use plus-addressing (Gmail, Fastmail, Proton) or a dedicated alias domain to fil
 
 Don't do any of these:
 
-- **`security@example.com` or any `example.com` address** — fails the no-placeholder rule, signals an unmaintained project, and breaks automated scanners that validate `Contact:` URLs.
-- **Your main personal email address as the primary contact** — security reports get buried among newsletters and personal correspondence. Missed reports become public zero-days.
-- **A Discord or Slack server "for security reports"** — channel access complexity discourages good-faith reporters; real-time chat is a poor fit for written disclosures that need a paper trail; and there is no private DM-only model that scales.
-- **"Open an issue"** — public issues turn security reports into public zero-days the moment they're filed. Never route disclosure through a public tracker.
+- **`security@example.com` or any `example.com` address**, fails the no-placeholder rule, signals an unmaintained project, and breaks automated scanners that validate `Contact:` URLs.
+- **Your main personal email address as the primary contact**, security reports get buried among newsletters and personal correspondence. Missed reports become public zero-days.
+- **A Discord or Slack server "for security reports"**, channel access complexity discourages good-faith reporters; real-time chat is a poor fit for written disclosures that need a paper trail; and there is no private DM-only model that scales.
+- **"Open an issue"**, public issues turn security reports into public zero-days the moment they're filed. Never route disclosure through a public tracker.
 
 ### Summary for solo developers on public GitHub
 
@@ -1421,7 +1421,7 @@ Enable PVR. Add a `security.txt` with `Contact:` pointing to the PVR URL. Docume
 
 ## README, PR comments, and issues as attack surface
 
-In 2026, researchers documented **"Comment-and-Control" (CVSS 9.4)** — a prompt-injection class affecting Claude Code, Gemini CLI, and GitHub Copilot that exfiltrates repo secrets through poisoned PR comments or issue text (<https://venturebeat.com/security/ai-agent-runtime-security-system-card-audit-comment-and-control-2026>, <https://oddguan.com/blog/comment-and-control-prompt-injection-credential-theft-claude-code-gemini-cli-github-copilot/>). An attacker posts crafted text into a thread; when an AI agent reads it as context, the payload hijacks the agent into shipping a repo secret over the network. The **Antigravity `.env` exfiltration** generalized the same technique (<https://www.gnanaguru.com/blog/agent-security-patterns/>).
+In 2026, researchers documented **"Comment-and-Control" (CVSS 9.4)**, a prompt-injection class affecting Claude Code, Gemini CLI, and GitHub Copilot that exfiltrates repo secrets through poisoned PR comments or issue text (<https://venturebeat.com/security/ai-agent-runtime-security-system-card-audit-comment-and-control-2026>, <https://oddguan.com/blog/comment-and-control-prompt-injection-credential-theft-claude-code-gemini-cli-github-copilot/>). An attacker posts crafted text into a thread; when an AI agent reads it as context, the payload hijacks the agent into shipping a repo secret over the network. The **Antigravity `.env` exfiltration** generalized the same technique (<https://www.gnanaguru.com/blog/agent-security-patterns/>).
 
 Any attacker-writable surface an agent reads as trusted context is an injection vector: a dependency's `README.md`, issue bodies, PR comments, merged commit messages, wiki pages. "Detect all injection" is unsolved; the practical defense is **isolation and least privilege**.
 
@@ -1441,7 +1441,7 @@ Any attacker-writable surface an agent reads as trusted context is an injection 
 
 - **`curl SOMEURL | bash` in README install instructions.** Attacker controls SOMEURL; both humans and agents run arbitrary code.
 - **Unpinned Actions (`@main`, `@latest`, `@v1`).** Upstream compromise silently propagates on next run.
-- **Auto-merging Dependabot PRs on `.github/workflows/**` without review.** Workflow files run with elevated permissions — least eligible for auto-merge. Exclude workflow paths from auto-merge (nuances `references/git-workflows.md` §6).
+- **Auto-merging Dependabot PRs on `.github/workflows/**` without review.** Workflow files run with elevated permissions, least eligible for auto-merge. Exclude workflow paths from auto-merge (nuances `references/git-workflows.md` §6).
 - **Running Claude Code / Cursor / Copilot on a repo accepting external PRs without a sandbox or review gate.** Wrong default trust boundary.
 
-A locked-down agent is the first defense — `references/agent-safety.md` §2 documents the `.claude/settings.json` denylist (SAFE-01). For deeper agent-credential patterns (scoped tokens, ephemeral credentials, secrets-manager brokered access), see <https://www.bitwarden.com/blog/secure-ai-agent-access-with-secrets-manager/>.
+A locked-down agent is the first defense, `references/agent-safety.md` §2 documents the `.claude/settings.json` denylist (SAFE-01). For deeper agent-credential patterns (scoped tokens, ephemeral credentials, secrets-manager brokered access), see <https://www.bitwarden.com/blog/secure-ai-agent-access-with-secrets-manager/>.

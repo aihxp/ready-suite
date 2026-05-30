@@ -187,12 +187,12 @@ Do not hand-write license text. Use SPDX-canonical text from https://spdx.org/li
 
 ```
 Is commercial use of your code acceptable?
-├── No → GPL-3.0-only (copyleft, forces derivative works open)
+├── No -> GPL-3.0-only (copyleft, forces derivative works open)
 │         └── Is your project a web service (SaaS)?
-│             └── Yes → AGPL-3.0-only (closes the SaaS loophole)
-└── Yes → Do you need patent protection?
-          ├── Yes → Apache-2.0 (explicit patent grant + retaliation clause)
-          └── No → MIT (maximum permissiveness, simplest terms)
+│             └── Yes -> AGPL-3.0-only (closes the SaaS loophole)
+└── Yes -> Do you need patent protection?
+          ├── Yes -> Apache-2.0 (explicit patent grant + retaliation clause)
+          └── No -> MIT (maximum permissiveness, simplest terms)
 ```
 
 ### License Summary
@@ -814,13 +814,13 @@ Generated files must not reference other files that don't exist yet. Adapt templ
 
 ### CONTRIBUTING.md Adaptations by Tier
 
-**Tier 1 (Essentials):** CONTRIBUTING.md is NOT generated at Tier 1. Don't add a "Contributing" section to README that links to a non-existent file. Instead, add a one-liner: `Contributions welcome — open an issue or PR.`
+**Tier 1 (Essentials):** CONTRIBUTING.md is NOT generated at Tier 1. Don't add a "Contributing" section to README that links to a non-existent file. Instead, add a one-liner: `Contributions welcome, open an issue or PR.`
 
 **Tier 2 (Team Ready):** CONTRIBUTING.md IS generated. It may reference:
-- CODE_OF_CONDUCT.md — **only if CODE_OF_CONDUCT.md is also being generated.** If not, omit the "Code of Conduct" section from CONTRIBUTING.md and remove the license-agreement line that references it.
-- Issue templates — only if `.github/ISSUE_TEMPLATE/` is being generated. Otherwise, say "Open an issue on GitHub" without referencing specific templates.
+- CODE_OF_CONDUCT.md, **only if CODE_OF_CONDUCT.md is also being generated.** If not, omit the "Code of Conduct" section from CONTRIBUTING.md and remove the license-agreement line that references it.
+- Issue templates, only if `.github/ISSUE_TEMPLATE/` is being generated. Otherwise, say "Open an issue on GitHub" without referencing specific templates.
 
-**Tier 3+ (Mature):** All cross-references are safe — SECURITY.md, SUPPORT.md, CODEOWNERS all exist.
+**Tier 3+ (Mature):** All cross-references are safe, SECURITY.md, SUPPORT.md, CODEOWNERS all exist.
 
 ### README.md Adaptations by Tier
 

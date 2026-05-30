@@ -1,6 +1,6 @@
 # Reporting
 
-This file covers report generation, scheduling, and delivery — the structured documents a dashboard produces for sharing, printing, compliance, or archival. Reporting is different from dashboards and analytics: a dashboard is a live screen for the user looking at it; a report is a document for someone else — a manager, a client, an auditor, a regulator.
+This file covers report generation, scheduling, and delivery, the structured documents a dashboard produces for sharing, printing, compliance, or archival. Reporting is different from dashboards and analytics: a dashboard is a live screen for the user looking at it; a report is a document for someone else, a manager, a client, an auditor, a regulator.
 
 ---
 
@@ -20,7 +20,7 @@ This file covers report generation, scheduling, and delivery — the structured 
 
 ### Tabular / data dump
 
-Raw data in rows and columns. Minimal formatting — column headers, consistent types. Use when the consumer wants to do their own analysis, import into another system, or audit individual records.
+Raw data in rows and columns. Minimal formatting, column headers, consistent types. Use when the consumer wants to do their own analysis, import into another system, or audit individual records.
 
 ### Summary / executive
 
@@ -28,7 +28,7 @@ KPIs at the top, 2-3 charts in the middle, optional narrative at the bottom. Ans
 
 ### Compliance / regulatory
 
-Fixed format dictated by regulation — SOX controls, HIPAA access logs, financial statements. The structure is NOT negotiable: specific line items, specific ordering, specific labels. Implement as hard-coded templates that pull data into predetermined slots. Don't let users customize the layout. Validate output against the regulatory schema before delivery.
+Fixed format dictated by regulation, SOX controls, HIPAA access logs, financial statements. The structure is NOT negotiable: specific line items, specific ordering, specific labels. Implement as hard-coded templates that pull data into predetermined slots. Don't let users customize the layout. Validate output against the regulatory schema before delivery.
 
 ### Operational
 
@@ -36,7 +36,7 @@ Daily/weekly summaries for people running the operation. Tables with conditional
 
 ### Ad-hoc / custom
 
-The user selects columns, filters, grouping, and generates a one-off report. This is the "report builder" feature. The UI must be approachable for non-technical users — a visual query builder, not a SQL editor (though an advanced mode with SQL is acceptable for power users).
+The user selects columns, filters, grouping, and generates a one-off report. This is the "report builder" feature. The UI must be approachable for non-technical users, a visual query builder, not a SQL editor (though an advanced mode with SQL is acceptable for power users).
 
 ### Comparative
 
@@ -54,22 +54,22 @@ Summary where every row or metric links to a detail sub-report. The summary rend
 
 A left sidebar or top collapsible section with:
 
-- **Date range** — range picker with presets (Today, Last 7 days, Last 30 days, This month, Last month, This quarter, Custom). Always default to something reasonable. Include timezone handling.
-- **Entity filters** — multi-select dropdowns (region, product, team, segment). Searchable combobox when list exceeds 20 items. Show count ("3 regions selected").
-- **Grouping / pivot** — choose how to group rows. "Group by Region, then by Product" produces a nested table with subtotals at each level.
-- **Sort** — column + direction. Multi-column sort for tabular reports.
-- **Column picker** — checkboxes to include/exclude columns with drag handles for reordering. Default to a sensible set. Persist selection per user.
+- **Date range**, range picker with presets (Today, Last 7 days, Last 30 days, This month, Last month, This quarter, Custom). Always default to something reasonable. Include timezone handling.
+- **Entity filters**, multi-select dropdowns (region, product, team, segment). Searchable combobox when list exceeds 20 items. Show count ("3 regions selected").
+- **Grouping / pivot**, choose how to group rows. "Group by Region, then by Product" produces a nested table with subtotals at each level.
+- **Sort**, column + direction. Multi-column sort for tabular reports.
+- **Column picker**, checkboxes to include/exclude columns with drag handles for reordering. Default to a sensible set. Persist selection per user.
 
 ### Live preview vs generate-then-view
 
-- **Live preview** — report updates as parameters change (with debounce). For small-medium datasets that query in under 2 seconds.
-- **Generate-then-view** — configure parameters, click "Generate Report," wait with progress indicator. For large datasets, PDF rendering, or heavy queries. If >5 seconds, show estimated time.
+- **Live preview**, report updates as parameters change (with debounce). For small-medium datasets that query in under 2 seconds.
+- **Generate-then-view**, configure parameters, click "Generate Report," wait with progress indicator. For large datasets, PDF rendering, or heavy queries. If >5 seconds, show estimated time.
 
 ### Report templates vs saved views
 
-A **saved view** (covered in workflows) is a saved filter on live data — it shows current data every time. A **report template** is a saved configuration that produces a snapshot at generation time. The template defines: report type, fixed parameters, variable parameters (user fills in), and output format.
+A **saved view** (covered in workflows) is a saved filter on live data, it shows current data every time. A **report template** is a saved configuration that produces a snapshot at generation time. The template defines: report type, fixed parameters, variable parameters (user fills in), and output format.
 
-Example: "Monthly Sales by Region" — type fixed (summary), grouping fixed (by region), format fixed (PDF), date range variable (user picks the month).
+Example: "Monthly Sales by Region", type fixed (summary), grouping fixed (by region), format fixed (PDF), date range variable (user picks the month).
 
 ### Grouping and subtotals
 
@@ -113,7 +113,7 @@ tr { break-inside: avoid; }
 thead { display: table-header-group; }  /* repeat headers on each page */
 ```
 
-**Landscape vs portrait per section:** WeasyPrint/PrinceXML support named pages (`@page landscape { size: A4 landscape; }`). Puppeteer doesn't support mixed orientation — generate separate PDFs and merge (Gotenberg has a merge endpoint, or use `pdf-lib`).
+**Landscape vs portrait per section:** WeasyPrint/PrinceXML support named pages (`@page landscape { size: A4 landscape; }`). Puppeteer doesn't support mixed orientation, generate separate PDFs and merge (Gotenberg has a merge endpoint, or use `pdf-lib`).
 
 ### Branded templates
 
@@ -122,9 +122,9 @@ Embed logo as base64 data URI (avoids external resource loading). Set brand colo
 ### Chart rendering in PDFs
 
 Three approaches:
-1. **Screenshot (simplest)** — Puppeteer renders the page with charts and calls `page.pdf()`. Works with any client-side chart library.
-2. **SVG capture** — render chart client-side, extract SVG, embed in PDF HTML. Charts render as vectors (crisp at any scale).
-3. **Server-side chart libraries** — ECharts Node.js server-side mode, `chartjs-node-canvas`, Python `matplotlib`/`plotly` with `kaleido`. For WeasyPrint where JS isn't available.
+1. **Screenshot (simplest)**, Puppeteer renders the page with charts and calls `page.pdf()`. Works with any client-side chart library.
+2. **SVG capture**, render chart client-side, extract SVG, embed in PDF HTML. Charts render as vectors (crisp at any scale).
+3. **Server-side chart libraries**, ECharts Node.js server-side mode, `chartjs-node-canvas`, Python `matplotlib`/`plotly` with `kaleido`. For WeasyPrint where JS isn't available.
 
 ### PDF/A for archival
 
@@ -139,7 +139,7 @@ PDF/A requires: all fonts embedded, no external dependencies, no JavaScript, no 
 
 ### Accessibility
 
-Tagged PDFs with logical structure for screen readers: heading hierarchy, table headers with scope, alt text on images/charts, correct reading order. PrinceXML produces well-tagged PDFs. Puppeteer's tagging is limited — for accessibility-critical reports, post-process or use PrinceXML.
+Tagged PDFs with logical structure for screen readers: heading hierarchy, table headers with scope, alt text on images/charts, correct reading order. PrinceXML produces well-tagged PDFs. Puppeteer's tagging is limited, for accessibility-critical reports, post-process or use PrinceXML.
 
 ---
 
@@ -171,7 +171,7 @@ Structure: "Summary" sheet at position 0 (KPIs, totals), followed by detail shee
 
 ### Formulas
 
-Write formulas as strings — Excel evaluates them when opened:
+Write formulas as strings, Excel evaluates them when opened:
 ```
 SUM(E2:E11)    // total row
 E2/D2          // calculated margin
@@ -189,7 +189,7 @@ Libraries write formulas but don't evaluate them. Values compute when the user o
 
 **CSV gotchas:**
 - **BOM for UTF-8:** Excel requires a BOM (`\uFEFF`) at the start for correct character display.
-- **Commas in values:** use a CSV library (csv-stringify, Python `csv` module) — don't manually concatenate.
+- **Commas in values:** use a CSV library (csv-stringify, Python `csv` module), don't manually concatenate.
 - **Dates:** no standard format. Use ISO 8601 or document the format.
 
 ---
@@ -207,7 +207,7 @@ Libraries write formulas but don't evaluate them. Values compute when the user o
 
 | Channel | When |
 |---|---|
-| **Email with attachment** | Default. PDF or XLSX attached. Subject includes report name + date. Respect 25MB limit — fall back to link for large reports. |
+| **Email with attachment** | Default. PDF or XLSX attached. Subject includes report name + date. Respect 25MB limit, fall back to link for large reports. |
 | **Email with link** | For large reports. Link goes to stored report (requires auth). |
 | **Slack** | Post to channel with key metrics + file upload. |
 | **Webhook** | POST report URL or data as JSON to configured endpoint. |
@@ -326,11 +326,11 @@ The print-optimized view is a separate route without nav, sidebar, or interactiv
 ### Role-based access
 
 ```
-reports:generate           — can run reports
-reports:generate:financial — financial reports (sensitive data)
-reports:generate:hr        — HR reports (salary, PII)
-reports:schedule           — can create scheduled reports
-reports:admin              — can manage all scheduled reports
+reports:generate           - can run reports
+reports:generate:financial, financial reports (sensitive data)
+reports:generate:hr        - HR reports (salary, PII)
+reports:schedule           - can create scheduled reports
+reports:admin              - can manage all scheduled reports
 ```
 
 Check at generation time, not just at the UI level.
@@ -345,7 +345,7 @@ Apply masking in the service layer, not the template. The template should never 
 
 ### Row-level security
 
-A regional manager generating a sales report sees only their region. Enforce at the query level — inject the user's scope into every report query. For defense in depth, use Postgres RLS policies.
+A regional manager generating a sales report sees only their region. Enforce at the query level, inject the user's scope into every report query. For defense in depth, use Postgres RLS policies.
 
 ### Watermarking
 

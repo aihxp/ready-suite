@@ -45,7 +45,8 @@ SKILLS="kickoff-ready prd-ready architecture-ready roadmap-ready stack-ready rep
 ALL_REPOS="$SKILLS ready-suite"
 
 # Standards-level compatible_with values every skill must declare.
-# antigravity is allowed-but-not-required (kickoff-ready has it).
+# antigravity is declared by all skills (Antigravity reads the Agent Skills
+# standard) but kept optional here, since it is not in the verified list.
 EXPECTED_COMPAT="claude-code codex cursor windsurf pi openclaw any-agentskills-compatible-harness"
 
 # Forbidden unicode in suite-authored files.
@@ -312,9 +313,12 @@ check_suite_release() {
 # Top CHANGELOG entry only: legacy entries below the top may have
 #   pre-existing em-dashes from before the rule landed.
 # Hub-only files: install.sh, uninstall.sh, ORCHESTRATORS.md.
+# Skill content whole-file: every SKILL.md body and references/*.md. The
+#   legacy backlog was purged in 3.0.2, so these stay clean from here on.
+#   Sibling READMEs/CHANGELOGs remain out of scope (grandfathered history).
 check_unicode_clean() {
   section "unicode-clean"
-  local fail bad skill s_dir f content
+  local fail bad skill s_dir f content skill_bad
   fail=0
   # SUITE.md (any repo, since they're identical, but check all so we
   # catch a sibling that drifted from a clean hub).
@@ -358,6 +362,23 @@ check_unicode_clean() {
         vok "$skill: top CHANGELOG entry clean"
       fi
     fi
+  done
+  # Skill content: SKILL.md bodies and references/ ship to users. The legacy
+  # backlog was purged in 3.0.2, so these must stay clean from here on.
+  for skill in $SKILLS; do
+    s_dir="$(repo_dir_for "$skill")"
+    skill_bad=0
+    for f in "$s_dir/SKILL.md" "$s_dir"/references/*.md; do
+      [ -f "$f" ] || continue
+      bad="$(grep -nE "$FORBIDDEN_PATTERN" "$f" 2>/dev/null || true)"
+      if [ -n "$bad" ]; then
+        err "$skill: $(basename "$f") has forbidden unicode"
+        echo "$bad" | head -2 | sed 's/^/        /'
+        fail=$((fail + 1))
+        skill_bad=1
+      fi
+    done
+    [ "$skill_bad" = "0" ] && vok "$skill: SKILL.md and references clean"
   done
   return "$fail"
 }

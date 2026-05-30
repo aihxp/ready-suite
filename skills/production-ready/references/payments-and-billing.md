@@ -1,6 +1,6 @@
 # Payments & Billing
 
-This file covers the payment integration layer — how to charge customers, manage subscriptions, process refunds, handle webhooks, and build the billing UI in a dashboard. This applies to any dashboard that touches money: SaaS, e-commerce, marketplace, non-profit, legal, hospitality, entertainment, or anything with a "billing settings" page.
+This file covers the payment integration layer, how to charge customers, manage subscriptions, process refunds, handle webhooks, and build the billing UI in a dashboard. This applies to any dashboard that touches money: SaaS, e-commerce, marketplace, non-profit, legal, hospitality, entertainment, or anything with a "billing settings" page.
 
 The core principles: **webhooks are the source of truth** for payment state, **tokens are the only safe way** to handle card data, **integer cents are the only safe way** to handle money, and your billing UI is a read-optimized view of state managed by your payment provider + your webhook handlers.
 
@@ -42,11 +42,11 @@ This distinction matters for **who is legally responsible for collecting and rem
 
 For two-sided platforms (buyers and sellers):
 
-- **Standard accounts** — seller has their own Stripe dashboard. Least platform control, easiest onboarding.
-- **Express accounts** — simplified onboarding, you control the dashboard. Best for most marketplaces.
-- **Custom accounts** — you build everything. Full control, most work.
+- **Standard accounts**, seller has their own Stripe dashboard. Least platform control, easiest onboarding.
+- **Express accounts**, simplified onboarding, you control the dashboard. Best for most marketplaces.
+- **Custom accounts**, you build everything. Full control, most work.
 
-Split payments natively: charge buyer, take your platform fee, pay seller — all in one API call. Handles KYC, identity verification, and 1099 reporting.
+Split payments natively: charge buyer, take your platform fee, pay seller, all in one API call. Handles KYC, identity verification, and 1099 reporting.
 
 ---
 
@@ -74,12 +74,12 @@ The customer enters their card into a Stripe-hosted iframe (Element) or Stripe-h
 
 ### Practical PCI checklist
 
-- Use Stripe Elements or Checkout — card data never touches your server
+- Use Stripe Elements or Checkout, card data never touches your server
 - Serve your site over HTTPS always
 - Don't log request bodies that might contain card data
 - Don't store card data in analytics, error tracking, or logging tools
 - Set CSP headers on pages with payment forms to prevent script injection
-- Load Stripe.js from `js.stripe.com` — never self-host
+- Load Stripe.js from `js.stripe.com`, never self-host
 - Complete the SAQ annually via Stripe Dashboard
 
 ---
@@ -119,7 +119,7 @@ Update your database via webhooks, not API responses. The API tells you the curr
 
 Required for electronic card payments in the EEA. In practice:
 - Stripe triggers 3DS automatically when regulations require it or when the issuer requests it.
-- Using Payment Intents + Payment Element, 3DS is handled transparently — a modal appears.
+- Using Payment Intents + Payment Element, 3DS is handled transparently, a modal appears.
 - You don't build a 3DS flow manually. Just use `stripe.confirmPayment()`.
 - For recurring subscriptions: first payment triggers SCA, subsequent charges use the saved mandate.
 
@@ -134,9 +134,9 @@ Required for electronic card payments in the EEA. In practice:
 ### Tax calculation integration
 
 Three options:
-1. **Stripe Tax** — enable in Dashboard, add `automatic_tax: { enabled: true }` to Checkout/Invoice. Covers 50+ countries. Simplest.
-2. **TaxJar** — deeper US tax calculation. AutoFile for automated filing/remittance.
-3. **Avalara** — enterprise-grade, most comprehensive global coverage.
+1. **Stripe Tax**, enable in Dashboard, add `automatic_tax: { enabled: true }` to Checkout/Invoice. Covers 50+ countries. Simplest.
+2. **TaxJar**, deeper US tax calculation. AutoFile for automated filing/remittance.
+3. **Avalara**, enterprise-grade, most comprehensive global coverage.
 
 Tax is calculated at the line-item level before payment confirmation.
 
@@ -151,12 +151,12 @@ trialing > active > past_due > unpaid > canceled
                   > paused (if enabled)
 ```
 
-- **trialing** — free trial. Charges at trial end if payment method is on file.
-- **active** — payment succeeded, subscription running.
-- **past_due** — payment failed, retry window open (dunning in progress).
-- **unpaid** — all retries exhausted, not yet canceled (grace period).
-- **canceled** — terminated. Customer loses access.
-- **paused** — no invoices generated. Customer retains the subscription object.
+- **trialing**, free trial. Charges at trial end if payment method is on file.
+- **active**, payment succeeded, subscription running.
+- **past_due**, payment failed, retry window open (dunning in progress).
+- **unpaid**, all retries exhausted, not yet canceled (grace period).
+- **canceled**, terminated. Customer loses access.
+- **paused**, no invoices generated. Customer retains the subscription object.
 
 ### Trial-to-paid conversion
 
@@ -176,9 +176,9 @@ When trial ends, invoice is created. Prompt user to add payment method. If they 
 **Downgrade (end of period):** No proration. New price takes effect at next renewal.
 
 **Proration options:**
-- `create_prorations` (default) — line items added to next invoice
-- `always_invoice` — proration invoiced immediately
-- `none` — no proration, change at next renewal
+- `create_prorations` (default), line items added to next invoice
+- `always_invoice`, proration invoiced immediately
+- `none`, no proration, change at next renewal
 
 ### Dunning (failed payment handling)
 
@@ -264,7 +264,7 @@ draft > open > paid
 
 **Manual invoicing:** Create via API, set `collection_method: "send_invoice"` with `days_until_due: 30` (Net 30). Stripe sends the invoice with a hosted payment link.
 
-### Invoice PDF — legal requirements
+### Invoice PDF, legal requirements
 
 At minimum: your business name/address/tax ID, customer name/address, invoice number (unique, sequential), date and due date, line items with quantities/prices/amounts, tax breakdown by jurisdiction, total and currency, payment terms.
 
@@ -293,9 +293,9 @@ The credit is applied to the customer's balance or refunded to their payment met
 
 ### Refund types
 
-- **Full refund** — entire payment returned. Order canceled, product returned, service not delivered.
-- **Partial refund** — portion returned. One item returned, prorated credit.
-- **Account credit** — no money moves to payment method. Credit applied to customer's balance for future invoices. Use for service credit, goodwill.
+- **Full refund**, entire payment returned. Order canceled, product returned, service not delivered.
+- **Partial refund**, portion returned. One item returned, prorated credit.
+- **Account credit**, no money moves to payment method. Credit applied to customer's balance for future invoices. Use for service credit, goodwill.
 
 ### Refund timing
 
@@ -328,7 +328,7 @@ For every transaction, store these before a dispute happens:
 - Usage logs (IP addresses, timestamps proving the real cardholder used the product)
 - Customer communication (emails, chat transcripts, support tickets)
 - AVS/CVV match results
-- 3DS authentication result (if completed, liability shifts to issuer — strongest defense)
+- 3DS authentication result (if completed, liability shifts to issuer, strongest defense)
 - Terms of service / refund policy acknowledged at checkout
 - Customer IP address and device fingerprint
 
@@ -340,13 +340,13 @@ Track: `disputes this month / transactions this month`. Surface this in the admi
 
 ### Fraud prevention layers
 
-Stack these — don't rely on any single one:
-1. **AVS** — billing address matches issuer records. Block mismatches.
-2. **CVV** — always require for first-time payments. Block mismatches.
-3. **3D Secure** — bank authentication, shifts fraud liability to issuer.
-4. **Stripe Radar** — ML fraud scoring. Radar for Fraud Teams adds custom rules and blocklists.
-5. **Velocity checks** — block same card used N times in M minutes, same email/IP with multiple payment methods.
-6. **Device fingerprinting** — identify repeat fraudsters across accounts.
+Stack these, don't rely on any single one:
+1. **AVS**, billing address matches issuer records. Block mismatches.
+2. **CVV**, always require for first-time payments. Block mismatches.
+3. **3D Secure**, bank authentication, shifts fraud liability to issuer.
+4. **Stripe Radar**, ML fraud scoring. Radar for Fraud Teams adds custom rules and blocklists.
+5. **Velocity checks**, block same card used N times in M minutes, same email/IP with multiple payment methods.
+6. **Device fingerprinting**, identify repeat fraudsters across accounts.
 
 ---
 
@@ -377,7 +377,7 @@ Show which is default with a visual indicator. Allow one-click switching. When u
 
 ### Regional payment methods
 
-Use Stripe's Payment Element — it dynamically shows relevant methods by customer country:
+Use Stripe's Payment Element, it dynamically shows relevant methods by customer country:
 
 | Region | Key methods |
 |---|---|
@@ -455,14 +455,14 @@ Fetch recent subscriptions/payments from Stripe, compare status with your databa
 
 ## Money handling
 
-### Integer cents — non-negotiable
+### Integer cents, non-negotiable
 
 Never use floating-point for money. Use integers in the smallest currency unit.
 
 ```javascript
 // WRONG
 const price = 19.99;
-const tax = price * 0.0825;  // 1.649175 — floating point horror
+const tax = price * 0.0825;  // 1.649175, floating point horror
 
 // RIGHT
 const priceInCents = 1999;
@@ -498,7 +498,7 @@ Never implicitly convert between currencies. Use explicit exchange rates, store 
 
 ### Display formatting
 
-Use `Intl.NumberFormat` — it knows minor units per ISO 4217:
+Use `Intl.NumberFormat`, it knows minor units per ISO 4217:
 
 ```javascript
 function formatMoney(cents, currency) {
@@ -530,7 +530,7 @@ Only count active, paying subscriptions. Not trialing, not canceled, not past_du
 
 ### MRR movements
 
-Track these separately — they tell different stories:
+Track these separately, they tell different stories:
 
 | Movement | What it measures |
 |---|---|
@@ -544,7 +544,7 @@ Track these separately — they tell different stories:
 Net New MRR = New + Expansion + Reactivation - Contraction - Churn
 ```
 
-### Churn rates — they're different
+### Churn rates, they're different
 
 | Metric | Formula | What it tells you |
 |---|---|---|
@@ -614,10 +614,10 @@ Show current usage and projected cost before the period closes: "Your current us
 
 The billing page has four sections in this order:
 
-1. **Current plan** — plan name, price, next billing date. Buttons: Change Plan, Cancel Subscription.
-2. **Payment method** — card brand icon, last 4, expiry, default indicator. Buttons: Update, Remove, Add New.
-3. **Usage this period** (if metered) — progress bars showing usage vs limits. Projected cost.
-4. **Billing history** — table of invoices with date, amount, status, PDF download link.
+1. **Current plan**, plan name, price, next billing date. Buttons: Change Plan, Cancel Subscription.
+2. **Payment method**, card brand icon, last 4, expiry, default indicator. Buttons: Update, Remove, Add New.
+3. **Usage this period** (if metered), progress bars showing usage vs limits. Projected cost.
+4. **Billing history**, table of invoices with date, amount, status, PDF download link.
 
 ### Upgrade flow
 
@@ -670,7 +670,7 @@ Columns: Date, Invoice Number, Amount, Status (Paid/Open/Overdue/Void), Actions 
 - **Don't hard-code tax rates.** They change, they vary by jurisdiction. Use a tax service.
 - **Don't store currency amounts without the currency code.** Amount + currency is a pair.
 - **Don't let users remove their last payment method** while a subscription is active.
-- **Don't show "Submit" on payment buttons.** Show the amount: "Pay $49.00" or "Subscribe — $49/mo."
+- **Don't show "Submit" on payment buttons.** Show the amount: "Pay $49.00" or "Subscribe, $49/mo."
 - **Don't silently fail on payment errors.** Show the specific error and what to do about it.
 - **Don't build your own subscription billing engine.** Use Stripe Billing, Paddle, or a dedicated platform. The edge cases will eat you alive.
 - **Don't ignore your chargeback rate.** Monitor it. 1% is the cliff.

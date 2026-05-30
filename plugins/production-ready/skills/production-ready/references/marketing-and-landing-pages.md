@@ -1,6 +1,6 @@
 # Marketing and Landing Page Patterns
 
-This file covers the public-facing pages that sell the product — landing pages, pricing, social proof, CTAs, and the performance optimizations that make them convert. This is not dashboard UI. Marketing pages optimize for **clarity, persuasion, and speed** — every element exists to move a visitor toward signup.
+This file covers the public-facing pages that sell the product, landing pages, pricing, social proof, CTAs, and the performance optimizations that make them convert. This is not dashboard UI. Marketing pages optimize for **clarity, persuasion, and speed**, every element exists to move a visitor toward signup.
 
 The structure here follows the scroll order of a typical SaaS landing page: hero, social proof, features, pricing, FAQ, final CTA, footer.
 
@@ -101,7 +101,7 @@ Two buttons maximum. One primary, one secondary.
 
 - **Product screenshot:** Show the actual product, not an illustration. Use a browser frame or device mockup for context. Slight perspective tilt (3-5deg rotateY, 2deg rotateX) adds depth.
 - **Video:** Autoplay muted, loop, no controls. Keep under 15 seconds. Use `<video>` tag, not a YouTube embed. Provide poster image for instant render.
-- **Dimensions:** Hero image should be at minimum 600px wide. Use `fetchpriority="high"` and `loading="eager"` — this is above the fold, it must load immediately.
+- **Dimensions:** Hero image should be at minimum 600px wide. Use `fetchpriority="high"` and `loading="eager"`, this is above the fold, it must load immediately.
 
 ---
 
@@ -115,8 +115,8 @@ Display logos of recognizable customers. This is the single highest-impact socia
 
 - **Count:** 6-8 logos. Fewer than 5 looks thin; more than 10 is clutter.
 - **Grayscale.** All logos in grayscale (CSS `filter: grayscale(100%) opacity(0.6)`). Color logos compete with your brand and look messy. Optionally color on hover.
-- **Heading:** "Trusted by 1,000+ teams" or "Powering teams at" — always include a number if you can.
-- **Size:** Logos 32-40px tall, auto width. Consistent visual weight — scale so the tallest and widest logos appear balanced.
+- **Heading:** "Trusted by 1,000+ teams" or "Powering teams at", always include a number if you can.
+- **Size:** Logos 32-40px tall, auto width. Consistent visual weight, scale so the tallest and widest logos appear balanced.
 - **Layout:** Horizontal row, centered, `gap: 40-64px`. On mobile, wrap to 2 rows or use horizontal scroll.
 
 ```css
@@ -203,7 +203,7 @@ Show real humans saying real things about your product.
 
 ## Feature sections
 
-Feature sections explain what the product does. Multiple layout patterns exist — vary them for visual rhythm.
+Feature sections explain what the product does. Multiple layout patterns exist, vary them for visual rhythm.
 
 ### Feature grid
 
@@ -292,7 +292,7 @@ Pricing is where visitors decide to convert or leave. Clarity is everything.
 
 ### Pricing cards
 
-**The 3-tier standard:** Free/Starter, Pro, Enterprise. Three options is optimal — two feels limited, four causes decision paralysis.
+**The 3-tier standard:** Free/Starter, Pro, Enterprise. Three options is optimal, two feels limited, four causes decision paralysis.
 
 - **Card layout:** 3-column grid, equal width. Center card (usually Pro) is the recommended plan.
 - **Highlighted plan:** "Most Popular" badge on the recommended tier. Visually emphasize with: primary-color border (2px), slightly raised (`scale(1.02)` or `box-shadow`), or a distinct background color.
@@ -335,7 +335,7 @@ Pricing is where visitors decide to convert or leave. Clarity is everything.
 ### Monthly/annual toggle
 
 - Position: centered above the pricing cards.
-- Use a **segmented control** (not a toggle switch — users need to see both options simultaneously).
+- Use a **segmented control** (not a toggle switch, users need to see both options simultaneously).
 - Annual shows the discounted price. Display the discount: "Save 20%" badge next to the Annual option, or show the monthly price crossed out with the annual price below.
 - Default selection: **Annual.** Most SaaS companies default to annual because it converts higher LTV.
 
@@ -350,7 +350,7 @@ Below the pricing cards, include a detailed feature comparison table.
 
 ### Enterprise CTA
 
-Enterprise tier doesn't show a price — it shows "Contact Sales" or "Talk to us."
+Enterprise tier doesn't show a price, it shows "Contact Sales" or "Talk to us."
 
 - The CTA opens a **demo booking form** (Calendly embed, HubSpot meetings, or a custom form).
 - Include "Custom pricing", "Dedicated support", "SSO/SAML" in the feature list to signal enterprise readiness.
@@ -404,7 +404,7 @@ CTAs are distributed throughout the page, not just in the hero.
 Insert a CTA section between major content blocks (e.g., between features and pricing). Pattern:
 
 - **Centered text:** Heading (28-32px, bold) + subtext (16px, muted) + primary CTA button.
-- **Background:** Subtle contrast from surrounding sections — slightly tinted bg or a bordered container.
+- **Background:** Subtle contrast from surrounding sections, slightly tinted bg or a bordered container.
 - **Padding:** 64-80px vertical. Keep it visually distinct but not jarring.
 
 ### Final CTA section (before footer)
@@ -430,9 +430,9 @@ The last persuasion attempt before the visitor leaves.
 
 For gated content (ebooks, webinars) or newsletter signups.
 
-- **Inline form:** Single input (email) + submit button in a horizontal row. No name, no company — reduce friction.
+- **Inline form:** Single input (email) + submit button in a horizontal row. No name, no company, reduce friction.
 - **Width:** 400-480px max. Center on page.
-- **Button text:** "Subscribe", "Get the guide", "Join free" — not "Submit."
+- **Button text:** "Subscribe", "Get the guide", "Join free", not "Submit."
 - **Privacy note:** Tiny text below (12px, muted): "No spam. Unsubscribe anytime."
 
 ### Demo booking
@@ -449,17 +449,17 @@ Embed Calendly, HubSpot Meetings, or Cal.com inline or in a modal.
 
 The standard high-converting SaaS landing page follows this order:
 
-1. **Sticky header** — logo, nav links (Product, Pricing, Docs), CTA button ("Start free trial"). Height 64px. Transparent over hero, solid bg on scroll. Show after 100px of scroll.
-2. **Hero section** — headline + subheadline + CTA + product image.
-3. **Social proof** — logo bar + optional metric counters. Immediately below hero, above the fold on desktop.
-4. **Feature overview** — 3-column feature grid (quick scan) or alternating rows (detailed).
-5. **Mid-page CTA** — brief reinforcement CTA.
-6. **Detailed features** — tabbed showcase, screenshots, comparison.
-7. **Testimonials** — quote cards or video testimonials.
-8. **Pricing** — cards + toggle + feature matrix.
-9. **FAQ** — accordion, 5-8 questions.
-10. **Final CTA** — "Ready to get started?" section.
-11. **Footer** — links (product, company, legal, resources), social icons, copyright.
+1. **Sticky header**, logo, nav links (Product, Pricing, Docs), CTA button ("Start free trial"). Height 64px. Transparent over hero, solid bg on scroll. Show after 100px of scroll.
+2. **Hero section**, headline + subheadline + CTA + product image.
+3. **Social proof**, logo bar + optional metric counters. Immediately below hero, above the fold on desktop.
+4. **Feature overview**, 3-column feature grid (quick scan) or alternating rows (detailed).
+5. **Mid-page CTA**, brief reinforcement CTA.
+6. **Detailed features**, tabbed showcase, screenshots, comparison.
+7. **Testimonials**, quote cards or video testimonials.
+8. **Pricing**, cards + toggle + feature matrix.
+9. **FAQ**, accordion, 5-8 questions.
+10. **Final CTA**, "Ready to get started?" section.
+11. **Footer**, links (product, company, legal, resources), social icons, copyright.
 
 ### Sticky header with CTA
 
@@ -533,7 +533,7 @@ Landing page speed is a conversion factor. Every 100ms of load time costs ~1% in
 ### Font loading
 
 - **`font-display: swap`** on all `@font-face` declarations. Shows fallback font immediately, swaps when custom font loads. Prevents invisible text (FOIT).
-- **Preload critical fonts:** `<link rel="preload" href="/font.woff2" as="font" type="font/woff2" crossorigin>` — but only 1-2 weights (regular + bold). Don't preload every weight.
+- **Preload critical fonts:** `<link rel="preload" href="/font.woff2" as="font" type="font/woff2" crossorigin>`, but only 1-2 weights (regular + bold). Don't preload every weight.
 - **Subset fonts.** If you only use Latin characters, subset to Latin. Reduces file size 50-80%.
 - **Use `woff2` exclusively.** Browser support is universal. Don't serve `woff`, `ttf`, or `eot`.
 - **Match fallback metrics.** Use `size-adjust`, `ascent-override`, `descent-override` in `@font-face` to make the fallback font match the custom font's metrics, minimizing layout shift on swap.
@@ -567,7 +567,7 @@ Trigger when the cursor moves toward the browser chrome (desktop) or after scrol
 
 - **Use sparingly.** One per session, max. Don't show on return visits within 7 days (use localStorage/cookies).
 - **Offer value:** Discount code, free resource, or newsletter signup. Never show a popup that just says "Don't leave!"
-- **Timing:** Desktop — trigger on mouse leaving viewport toward the top. Mobile — trigger on rapid scroll-up or after 30 seconds + 50% scroll depth.
+- **Timing:** Desktop, trigger on mouse leaving viewport toward the top. Mobile, trigger on rapid scroll-up or after 30 seconds + 50% scroll depth.
 - **Average conversion rate:** ~3.9% of displaying visitors. The top 10% of campaigns reach ~27%.
 - **Design:** Centered modal, backdrop blur, single CTA, prominent close button. Max width 480px. Keep copy to headline + 1 sentence + CTA + close.
 
@@ -577,7 +577,7 @@ A fixed bottom bar with a CTA button that stays visible while scrolling.
 
 - **Height:** 56-64px. Background: solid, matches site bg. Top border or shadow for separation.
 - **Content:** Short text label + primary CTA button. Or just the CTA button full-width.
-- **Show after:** 300px of scroll (don't show on initial viewport — let the hero CTA do its job).
+- **Show after:** 300px of scroll (don't show on initial viewport, let the hero CTA do its job).
 - **Conversion impact:** Sticky bottom CTAs improve mobile conversion by 12-27%.
 
 ```css
